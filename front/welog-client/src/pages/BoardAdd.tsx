@@ -17,7 +17,6 @@ const BoardAdd = () => {
         } else {
             try {
                 const { data } = await axios.post("/boardAdd", { title, contents });
-                console.log(data);
                 
                 if (data === "OK") {
                     navigate("/");

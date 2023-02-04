@@ -16,7 +16,7 @@ app.post("/boardAdd", async (req, res) => {
             VALUES(?, ?, ?, now())
         `, [2, title, contents]);
 
-        res.send(200);
+        res.send(200); 
     } catch (e) {
         console.error(e);
     }

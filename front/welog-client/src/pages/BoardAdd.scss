@@ -1,0 +1,40 @@
+.boardAdd-container {
+    display: flex;
+    flex-direction: column;
+    font-size: 20px;
+    font-weight: bold;
+}
+
+.boardAdd-titleBlock {
+    display: flex;
+    align-items: center;
+    border-bottom: 1px solid black;
+    margin-bottom: 40px;
+
+    .boardAdd-titleLabel {
+        width: 50px;
+        text-align: center;
+    }
+
+    input {
+        box-sizing: border-box;
+        font-size: 20px;
+        padding: 20px;
+        width: 100%;
+        border: none;
+    }
+}
+
+.boardAdd-contentsLabel {
+    width: 50px;
+    text-align: center;
+    margin-bottom: 10px;
+}
+
+.boardAdd-button {
+    margin-top: 50px;
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}

@@ -4,6 +4,9 @@ import ReactQuill from "react-quill";
 import 'react-quill/dist/quill.snow.css';
 import { useNavigate } from "react-router-dom";
 import Button from "../components/button/Button";
+import Input from "../components/input/Input";
+import Label from "../components/label/Label";
+import Line from "../components/line/Line";
 import "./BoardAdd.scss"
 
 const BoardAdd = () => {
@@ -17,7 +20,7 @@ const BoardAdd = () => {
         } else {
             try {
                 const { data } = await axios.post("/boardAdd", { title, contents });
-                
+
                 if (data === "OK") {
                     navigate("/");
                 } else {
@@ -32,14 +35,13 @@ const BoardAdd = () => {
     return (
         <div className="boardAdd-container">
             <div className="boardAdd-titleBlock">
-                <div className="boardAdd-titleLabel">제목</div>
-                <input placeholder="제목을 입력하세요" onChange={e => setTitle(e.target.value)} />
+                <Label text="제목" />
+                <Input placeholder="제목을 입력하세요" onChange={e => setTitle(e.target.value)} />
             </div>
-            <div className="boardAdd-contentsLabel">내용</div>
+            <Label text="내용" />
+            <Line />
             <ReactQuill onChange={setContents} />
-            <div className="boardAdd-button">
-                <Button onClick={boardAddApi} text="글쓰기" />
-            </div>
+            <div className="boardAdd-button"><Button onClick={boardAddApi} text="글쓰기" /></div>
         </div>
     )
 }

@@ -5,6 +5,7 @@ import './App.scss'
 import Header from './components/header/Header'
 import Board from './pages/Board'
 import BoardAdd from './pages/BoardAdd'
+import BoardDetail from './pages/BoardDetail'
 import Login from './pages/Login'
 import SignUp from './pages/SignUp'
 
@@ -17,6 +18,7 @@ function App() {
       <div className='app-block'>
         <Routes>
           <Route path='/' element={<Board />} />
+          <Route path='/:boardNo' element={<BoardDetail />} />
           <Route path='/BoardAdd' element={<BoardAdd />} />
           <Route path='/Login' element={<Login />} />
           <Route path='/SignUp' element={<SignUp />} />

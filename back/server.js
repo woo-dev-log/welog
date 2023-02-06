@@ -7,6 +7,22 @@ app.use(cors());
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 
+app.post("/boardDetail", async (req, res) => {
+    try {
+        const { boardNo } = req.body;
+        const [rows] = await mysql.query(`
+        SELECT * FROM board b 
+        LEFT OUTER JOIN user u 
+        ON b.userNo = u.userNo 
+        WHERE b.boardNo = ?
+        `, [boardNo]);
+
+        res.send(rows);
+    } catch (e) {
+        console.error(e);
+    }
+})
+
 app.post("/boardAdd", async (req, res) => {
     try {
         const { title, contents } = req.body;
@@ -16,7 +32,7 @@ app.post("/boardAdd", async (req, res) => {
             VALUES(?, ?, ?, now())
         `, [2, title, contents]);
 
-        res.send(200); 
+        res.send(200);
     } catch (e) {
         console.error(e);
     }
@@ -24,7 +40,7 @@ app.post("/boardAdd", async (req, res) => {
 
 app.get("/board", async (req, res) => {
     try {
-        const [rows] = await mysql.query("SELECT * FROM board b LEFT OUTER JOIN user u ON b.userNo = u.no ORDER BY b.rgstrDate DESC");
+        const [rows] = await mysql.query("SELECT * FROM board b LEFT OUTER JOIN user u ON b.userNo = u.userNo ORDER BY b.rgstrDate DESC");
         res.send(rows);
     } catch (e) {
         console.error(e);

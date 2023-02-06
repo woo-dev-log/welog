@@ -1,5 +1,4 @@
 import React from 'react';
-import './Input.scss';
 
 interface Props {
     placeholder: string;

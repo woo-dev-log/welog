@@ -1,9 +1,33 @@
-.board-container {
+.board-button {
+    display: flex;
+    justify-content: center;
+
+    button {
+        cursor: pointer;
+        background-color: black;
+        margin-bottom: 20px;
+        width: 200px;
+        height: 40px;
+        border-width: 1px;
+        border-radius: 10px;
+        font-size: 16px;
+        font-weight: bold;
+        color: white;
+
+        &:hover {
+            background-color: white;
+            color: black;
+        }
+    }
+}
+
+.board-flexWrap {
     display: flex;
     flex-wrap: wrap;
     justify-content: space-evenly;
 
     .board-block {
+        cursor: pointer;
         box-sizing: border-box;
         border: 1px solid black;
         border-radius: 10px;
@@ -20,7 +44,7 @@
         font-size: 20px;
         margin-bottom: 20px;
     }
-    
+
     .board-title {
         font-size: 20px;
         font-weight: bold;

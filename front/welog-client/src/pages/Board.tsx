@@ -1,10 +1,11 @@
 import axios from "axios";
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
+import Button from "../components/button/Button";
 import './Board.scss';
 
 interface BoardType {
-    no: number;
+    boardNo: number;
     userNo: number;
     title: string;
     contents: string;
@@ -26,19 +27,27 @@ const Board = () => {
     }, []);
 
     return (
-        <div className="board-container">
-            <button onClick={() => navigate("/BoardAdd")}>글쓰기</button>
-            {boardInfo.map((board, i) => (
-                <div key={i} className="board-block">
-                    <div>
-                        <div className="board-nickname">{board.nickname}</div>
-                        <div className="board-title">{board.title}</div>
-                        <div className="board-contents">{board.contents}</div>
+        <>
+            <div className="board-button">
+                <Button onClick={() => navigate("/BoardAdd")} text="글쓰기" />
+            </div>
+            <div className="board-flexWrap">
+                {boardInfo.map((board, i) => (
+                    <div key={i} className="board-block" onClick={() => navigate("/" + board.boardNo)}>
+                        <div>
+                            <div className="board-nickname">{board.nickname}</div>
+                            <div className="board-title">{board.title}</div>
+                            <div className="board-contents">
+                                {board.contents.replace(/<[^>]*>?/g, '').length < 95
+                                    ? board.contents.replace(/<[^>]*>?/g, '')
+                                    : board.contents.replace(/<[^>]*>?/g, '').substring(0, 95) + " ..."}
+                            </div>
+                        </div>
+                        <div className="board-rgstrDate">{board.rgstrDate}</div>
                     </div>
-                    <div className="board-rgstrDate">{board.rgstrDate}</div>
-                </div>
-            ))}
-        </div>
+                ))}
+            </div>
+        </>
     )
 };
 

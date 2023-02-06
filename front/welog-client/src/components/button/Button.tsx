@@ -1,5 +1,4 @@
 import React from "react";
-import './Button.scss';
 
 interface Props {
     onClick: React.MouseEventHandler<HTMLButtonElement>;

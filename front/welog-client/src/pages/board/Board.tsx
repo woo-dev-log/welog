@@ -19,13 +19,10 @@ const Board = () => {
 
     const getBoardApi = async () => {
         try {
-            const { data, status } = await axios.get("/board");
-            if (status == 200) {
-                setBoardInfo(data);
-            } else {
-                alert("글 조회 실패");
-            }
+            const { data } = await axios.get("/board");
+            setBoardInfo(data);
         } catch (e) {
+            alert("글 조회 실패");
             console.error(e);
         }
     }

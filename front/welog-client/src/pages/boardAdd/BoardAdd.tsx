@@ -19,14 +19,10 @@ const BoardAdd = () => {
             alert("모두 입력");
         } else {
             try {
-                const { data } = await axios.post("/boardAdd", { title, contents });
-
-                if (data === "OK") {
-                    navigate("/");
-                } else {
-                    alert("작성 실패");
-                }
+                await axios.post("/boardAdd", { title, contents });
+                navigate("/");
             } catch (e) {
+                alert("작성 실패");
                 console.error(e);
             }
         }

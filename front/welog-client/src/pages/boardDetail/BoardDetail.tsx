@@ -31,42 +31,30 @@ const BoardDetail = () => {
 
     const boardCommentAddApi = async () => {
         try {
-            const { data, status } = await axios.post("/boardCommentAdd", { boardNo, boardCommentAdd });
-            
-            if (status == 200) {
-                boardCommentApi();
-            } else {
-                alert("댓글 등록 실패");
-            }
+            await axios.post("/boardCommentAdd", { boardNo, boardCommentAdd });
+            boardCommentApi();
         } catch (e) {
+            alert("댓글 등록 실패");
             console.error(e);
         }
     }
 
     const boardCommentApi = async () => {
         try {
-            const { data, status } = await axios.post("/boardComment", { boardNo });
-
-            if (status == 200) {
-                setBoardComment(data);
-            } else {
-                alert("댓글 조회 실패");
-            }
+            const { data } = await axios.post("/boardComment", { boardNo });
+            setBoardComment(data);
         } catch (e) {
+            alert("댓글 조회 실패");
             console.error(e);
         }
     }
 
     const boardDetailApi = async () => {
         try {
-            const { data, status } = await axios.post("/boardDetail", { boardNo });
-            
-            if (status == 200) {
-                setBoardDetail(data);
-            } else {
-                alert("상세 글 조회 실패");
-            }
+            const { data } = await axios.post("/boardDetail", { boardNo });
+            setBoardDetail(data);
         } catch (e) {
+            alert("상세 글 조회 실패");
             console.error(e);
         }
     }
@@ -106,7 +94,7 @@ const BoardDetail = () => {
                         <div className="boardDetail-commentNickname">{boardC.nickname}</div>
                         <div className="boardDetail-commentRgstrDate">{boardC.rgstrDate}</div>
                     </div>
-                    <div>{boardC.contents}</div>
+                    <div dangerouslySetInnerHTML={{ __html: boardC.contents.replaceAll(/(\n|\r\n)/g, '<br>') }} />
                     <Line />
                 </div>
             ))}

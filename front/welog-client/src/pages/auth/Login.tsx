@@ -1,5 +1,6 @@
 import axios from "axios";
 import { useState } from "react";
+import { useCookies } from "react-cookie";
 import { useNavigate } from "react-router-dom";
 import { useRecoilState } from "recoil";
 import { loginUser } from "../../components/atoms";
@@ -9,6 +10,7 @@ import './Sign.scss';
 
 const SignUp = () => {
     const [userInfo, setUserInfo] = useRecoilState(loginUser);
+    const [cookies, setCookies] = useCookies();
     const navigate = useNavigate();
     const [id, setId] = useState('');
     const [pw, setPw] = useState('');
@@ -18,16 +20,12 @@ const SignUp = () => {
             alert("모두 입력");
         } else {
             try {
-                const { data, status } = await axios.post("/login", { id, pw });
-                console.log(data);
-                if (status == 200) {
-                    axios.defaults.headers.common['Authorization'] = `Bearer ${data.accessToken}`;
-                    setUserInfo(data);
-                    navigate("/");
-                } else {
-                    alert("로그인 실패");
-                }
+                const { data } = await axios.post("/login", { id, pw });
+                setCookies("welogJWT", data, { httpOnly: true });
+                setUserInfo(data);
+                navigate("/");
             } catch (e) {
+                alert("로그인 실패");
                 console.error(e);
             }
         }

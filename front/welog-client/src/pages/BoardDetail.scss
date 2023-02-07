@@ -12,15 +12,14 @@
     }
 
     .boardDetail-contentsBlock {
-        margin-top: 40px;
-        padding-bottom: 20px;
+        margin: 50px 0 100px 0;
 
         .boardDetail-contents {
             box-sizing: border-box;
         }
     }
 
-    input {
+    textarea {
         box-sizing: border-box;
         width: 100%;
         height: 100px;
@@ -30,22 +29,41 @@
         font-size: 18px;
     }
 
-    button {
-        cursor: pointer;
-        float: right;
-        margin-top: 30px;
-        background-color: black;
-        width: 200px;
-        height: 40px;
-        border-width: 1px;
-        border-radius: 10px;
-        font-size: 16px;
-        font-weight: bold;
-        color: white;
+    .boardDetail-button {
+        text-align: end;
+        margin-top: 20px;
+        margin-bottom: 50px;
 
-        &:hover {
-            background-color: white;
-            color: black;
+        button {
+            cursor: pointer;
+            background-color: black;
+            width: 200px;
+            height: 40px;
+            border-width: 1px;
+            border-radius: 10px;
+            font-size: 16px;
+            font-weight: bold;
+            color: white;
+
+            &:hover {
+                background-color: white;
+                color: black;
+            }
+        }
+    }
+
+    .boardDetail-commentContainer {
+        font-size: 18px;
+
+        .boardDetail-commentBlock {
+            margin-bottom: 20px;
+
+            .boardDetail-commentNickname {
+            }
+
+            .boardDetail-commentRgstrDate {
+                color: gray;
+            }
         }
     }
 }

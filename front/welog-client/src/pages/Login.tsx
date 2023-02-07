@@ -18,9 +18,12 @@ const SignUp = () => {
             alert("모두 입력");
         } else {
             try {
-                const { data } = await axios.post("/login", { id, pw })
-                if (data.length > 0) {
+                const { data, status } = await axios.post("/login", { id, pw });
+                console.log(status);
+                console.log(status == 200);
+                if (status == 200) {
                     alert("로그인 성공");
+                    axios.defaults.headers.common['Authorization'] = `Bearer ${data.accessToken}`;
                     setUserInfo(data);
                     navigate("/");
                 } else {

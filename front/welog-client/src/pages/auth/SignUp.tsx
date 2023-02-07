@@ -1,8 +1,8 @@
 import axios from "axios";
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import Button from "../components/button/Button";
-import Input from "../components/input/Input";
+import Button from "../../components/button/Button";
+import Input from "../../components/input/Input";
 import './Sign.scss';
 
 const SignUp = () => {
@@ -16,11 +16,15 @@ const SignUp = () => {
             alert("모두 입력");
         } else {
             try {
-                const { data } = await axios.post("/signUp", { nickname, id, pw });
-                alert(data);
-                navigate("/Login");
+                const { data, status } = await axios.post("/signUp", { nickname, id, pw });
+
+                if (status == 200) {
+                    navigate("/Login");
+                } else {
+                    alert("회원가입 실패");
+                }
             } catch (e) {
-                console.log(e);
+                console.error(e);
             }
         }
     }

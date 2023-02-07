@@ -1,9 +1,9 @@
 import axios from "axios";
 import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
-import Button from "../components/button/Button";
-import Label from "../components/label/Label";
-import Line from "../components/line/Line";
+import Button from "../../components/button/Button";
+import Label from "../../components/label/Label";
+import Line from "../../components/line/Line";
 import "./BoardDetail.scss";
 
 interface BoardDetailType {
@@ -31,8 +31,13 @@ const BoardDetail = () => {
 
     const boardCommentAddApi = async () => {
         try {
-            await axios.post("/boardCommentAdd", { boardNo, boardCommentAdd });
-            boardCommentApi();
+            const { data, status } = await axios.post("/boardCommentAdd", { boardNo, boardCommentAdd });
+            
+            if (status == 200) {
+                boardCommentApi();
+            } else {
+                alert("댓글 등록 실패");
+            }
         } catch (e) {
             console.error(e);
         }
@@ -40,8 +45,13 @@ const BoardDetail = () => {
 
     const boardCommentApi = async () => {
         try {
-            const { data } = await axios.post("/boardComment", { boardNo });
-            setBoardComment(data);
+            const { data, status } = await axios.post("/boardComment", { boardNo });
+
+            if (status == 200) {
+                setBoardComment(data);
+            } else {
+                alert("댓글 조회 실패");
+            }
         } catch (e) {
             console.error(e);
         }
@@ -49,8 +59,13 @@ const BoardDetail = () => {
 
     const boardDetailApi = async () => {
         try {
-            const { data } = await axios.post("/boardDetail", { boardNo });
-            setBoardDetail(data);
+            const { data, status } = await axios.post("/boardDetail", { boardNo });
+            
+            if (status == 200) {
+                setBoardDetail(data);
+            } else {
+                alert("상세 글 조회 실패");
+            }
         } catch (e) {
             console.error(e);
         }

@@ -17,8 +17,9 @@ app.post("/boardCommentAdd", async (req, res) => {
         VALUES(?, ?, ?, now())
         `, [boardNo, 1, boardCommentAdd]);
 
-        res.status(200).send(rows);
+        res.status(200).send("success")
     } catch (e) {
+        res.status(400).send("fail");
         console.error(e);
     }
 })
@@ -33,7 +34,7 @@ app.post("/boardComment", async (req, res) => {
         WHERE boardNo = ? 
         ORDER BY rgstrDate DESC
         `, [boardNo]);
-        res.status(200).send(rows);
+        rows.length > 0 ? res.status(200).send(rows) : res.status(400).send("fail");
     } catch (e) {
         console.error(e);
     }
@@ -48,8 +49,7 @@ app.post("/boardDetail", async (req, res) => {
         ON b.userNo = u.userNo 
         WHERE b.boardNo = ?
         `, [boardNo]);
-
-        res.status(200).send(rows);
+        rows.length > 0 ? res.status(200).send(rows) : res.status(400).send("fail");
     } catch (e) {
         console.error(e);
     }
@@ -59,21 +59,26 @@ app.post("/boardAdd", async (req, res) => {
     try {
         const { title, contents } = req.body;
         const [rows] = await mysql.query(`
-            INSERT INTO
-            board(userNo, title, contents, rgstrDate)
-            VALUES(?, ?, ?, now())
+        INSERT INTO
+        board(userNo, title, contents, rgstrDate)
+        VALUES(?, ?, ?, now())
         `, [2, title, contents]);
-
-        res.status(200).send(200);
+        res.status(200).send("success");
     } catch (e) {
+        res.status(400).send("fail");
         console.error(e);
     }
 })
 
 app.get("/board", async (req, res) => {
     try {
-        const [rows] = await mysql.query("SELECT * FROM board b LEFT OUTER JOIN user u ON b.userNo = u.userNo ORDER BY b.rgstrDate DESC");
-        res.status(200).send(rows);
+        const [rows] = await mysql.query(`
+        SELECT * FROM board b 
+        LEFT OUTER JOIN user u 
+        ON b.userNo = u.userNo 
+        ORDER BY b.rgstrDate DESC
+        `);
+        rows.length > 0 ? res.status(200).send(rows) : res.status(400).send("fail");
     } catch (e) {
         console.error(e);
     }
@@ -87,10 +92,10 @@ app.post("/signUp", async (req, res) => {
         user(id, password, nickname) 
         VALUES(?, ?, ?)
         `, [id, pw, nickname]);
-        res.status(200).send(rows);
+        res.status(200).send("success");
     } catch (e) {
+        res.status(400).send("fail");
         console.error(e);
-        res.send("오류");
     }
 })
 
@@ -101,7 +106,26 @@ app.post("/login", async (req, res) => {
         SELECT * FROM user WHERE id = ? AND password = ?
         `, [id, pw]);
         console.log(id, pw);
-        rows.length > 0 ? res.status(200).send(rows) : res.status(400);
+
+        if (rows.length > 0) {
+            const token = jwt.sign(
+                {
+                    type: "JWT",
+                    userNo: rows.userNo,
+                    id: rows.id,
+                    nickname: rows.nickname
+                },
+                "welogJWT",
+                {
+                    expiresIn: "30m",
+                    issuer: "test"
+                }
+            );
+
+            res.status(200).send(token);
+        } else {
+            res.status(400).send("fail");
+        }
     } catch (e) {
         console.error(e);
     }

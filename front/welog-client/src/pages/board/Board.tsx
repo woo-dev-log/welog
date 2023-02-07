@@ -1,7 +1,7 @@
 import axios from "axios";
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import Button from "../components/button/Button";
+import Button from "../../components/button/Button";
 import './Board.scss';
 
 interface BoardType {
@@ -18,8 +18,16 @@ const Board = () => {
     const navigate = useNavigate();
 
     const getBoardApi = async () => {
-        const { data } = await axios.get("/board");
-        setBoardInfo(data);
+        try {
+            const { data, status } = await axios.get("/board");
+            if (status == 200) {
+                setBoardInfo(data);
+            } else {
+                alert("글 조회 실패");
+            }
+        } catch (e) {
+            console.error(e);
+        }
     }
 
     useEffect(() => {

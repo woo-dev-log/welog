@@ -2,9 +2,9 @@ import axios from "axios";
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useRecoilState } from "recoil";
-import { loginUser } from "../components/atoms";
-import Button from "../components/button/Button";
-import Input from "../components/input/Input";
+import { loginUser } from "../../components/atoms";
+import Button from "../../components/button/Button";
+import Input from "../../components/input/Input";
 import './Sign.scss';
 
 const SignUp = () => {
@@ -19,10 +19,8 @@ const SignUp = () => {
         } else {
             try {
                 const { data, status } = await axios.post("/login", { id, pw });
-                console.log(status);
-                console.log(status == 200);
+                console.log(data);
                 if (status == 200) {
-                    alert("로그인 성공");
                     axios.defaults.headers.common['Authorization'] = `Bearer ${data.accessToken}`;
                     setUserInfo(data);
                     navigate("/");

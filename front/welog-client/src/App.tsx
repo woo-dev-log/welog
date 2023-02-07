@@ -3,11 +3,11 @@ import { Route, Routes } from 'react-router-dom'
 import { RecoilRoot } from 'recoil'
 import './App.scss'
 import Header from './components/header/Header'
-import Board from './pages/Board'
-import BoardAdd from './pages/BoardAdd'
-import BoardDetail from './pages/BoardDetail'
-import Login from './pages/Login'
-import SignUp from './pages/SignUp'
+import Board from './pages/board/Board'
+import BoardAdd from './pages/boardAdd/BoardAdd'
+import BoardDetail from './pages/boardDetail/BoardDetail'
+import Login from './pages/auth/Login'
+import SignUp from './pages/auth/SignUp'
 
 axios.defaults.baseURL = "http://localhost:3690";
 

@@ -3,10 +3,10 @@ import { useState } from "react";
 import ReactQuill from "react-quill";
 import 'react-quill/dist/quill.snow.css';
 import { useNavigate } from "react-router-dom";
-import Button from "../components/button/Button";
-import Input from "../components/input/Input";
-import Label from "../components/label/Label";
-import Line from "../components/line/Line";
+import Button from "../../components/button/Button";
+import Input from "../../components/input/Input";
+import Label from "../../components/label/Label";
+import Line from "../../components/line/Line";
 import "./BoardAdd.scss"
 
 const BoardAdd = () => {

@@ -11,7 +11,11 @@ const Header = () => {
         <div className="header-container">
             <div onClick={() => navigate("/")}>홈</div>
             <div className='header-box'>
-                {userInfo.length > 0 ? <div>{userInfo[0].nickname}님</div>
+                {userInfo.length > 0 ? 
+                <>
+                    <img src="" />
+                    <div>{userInfo[0].nickname}님</div>
+                </>
                     :
                     <>
                         <div onClick={() => navigate("/Login")}>로그인</div>

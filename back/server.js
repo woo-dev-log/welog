@@ -3,6 +3,7 @@ const app = express();
 const port = 3690;
 const mysql = require('./mysql');
 const jwt = require("jsonwebtoken");
+const multer = require('multer');
 const cors = require('cors');
 // app.use(cors({
 //     origin: 'http://localhost:5173/',
@@ -11,6 +12,29 @@ const cors = require('cors');
 app.use(cors());
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
+app.use('/images', express.static('images'));
+
+var imageName = [];
+const imageUpload = multer({
+  limits: { fieldSize: 25 * 1024 * 1024 },
+  storage: multer.diskStorage({
+    destination: (req, file, cb) => cb(null, 'images/'),
+    filename: (req, file, cb) => {
+      let fileName = new Date().valueOf() + '_' + file.originalname;
+      cb(null, fileName);
+      imageName.push(fileName);
+    }
+  })
+});
+
+app.post("/test", imageUpload.array('thumbnail'),   async(req, res) => {
+    try {
+        imageName = [];
+        res.send("d");
+    } catch (e) {
+        console.error(e);
+    }
+})
 
 app.post("/loginToken", async (req, res) => {
     try {
@@ -100,7 +124,7 @@ app.get("/board", async (req, res) => {
     }
 })
 
-app.post("/signUp", async (req, res) => {
+app.post("/signUp", imageUpload.array('photo'), async (req, res) => {
     try {
         const { nickname, id, pw } = req.body;
         const [rows] = await mysql.query(`
@@ -109,6 +133,7 @@ app.post("/signUp", async (req, res) => {
         VALUES(?, ?, ?)
         `, [id, pw, nickname]);
         res.status(200).send("success");
+        imageName = [];
     } catch (e) {
         res.status(400).send("fail");
         console.error(e);

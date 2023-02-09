@@ -16,6 +16,24 @@
     align-items: center;
     flex-direction: column;
 
+    img {
+        width: 300px;
+        height: 300px;
+    }
+
+    .signup-profileImg-label {
+        margin: 5px 0 20px 0;
+        font-weight: bold;
+        font-size: 13px;
+        color: #0095f6;
+        display: inline-block;
+        cursor: pointer;
+    }
+
+    input[type="file"] {
+        display: none;
+    }
+
     input {
         @include btn-block;
         box-sizing: border-box;

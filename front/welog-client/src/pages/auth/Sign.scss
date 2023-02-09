@@ -1,5 +1,4 @@
 @mixin btn-block {
-    cursor: pointer;
     background-color: white;
     margin-bottom: 20px;
     width: 300px;
@@ -16,18 +15,32 @@
     align-items: center;
     flex-direction: column;
 
-    img {
-        width: 300px;
-        height: 300px;
+    .signUp-img {
+        border: 3px solid lightgray;
+        border-radius: 1000px;
+        width: 200px;
+        height: 200px;
     }
 
-    .signup-profileImg-label {
-        margin: 5px 0 20px 0;
-        font-weight: bold;
-        font-size: 13px;
-        color: #0095f6;
-        display: inline-block;
+    img {
+        border-radius: 1000px;
+        width: 200px;
+        height: 200px;
+    }
+
+    .signUp-imgSelect {
         cursor: pointer;
+        margin: 10px 0 20px 0;
+        display: flex;
+        justify-content: center;
+        align-items: center;        
+        background-color: black;
+        width: 100px;
+        height: 30px;
+        color: white;
+        font-weight: bold;
+        font-size: 14px;
+        border-radius: 15px;
     }
 
     input[type="file"] {
@@ -40,8 +53,19 @@
         padding: 0 10px 0 10px;
     }
 
+    .signUp-checkId {
+        font-size: 14px;
+        color: red;
+    }
+
+    .signUp-checkNickname {
+        font-size: 14px;
+        color: red;
+    }
+
     button {
         @include btn-block;
+        cursor: pointer;
         font-weight: bold;
 
         &:hover {

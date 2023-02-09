@@ -20,11 +20,13 @@ function App() {
   // axios.defaults.headers.common["Access-Control-Allow-Origin"] = "http://localhost:5173/Login";
   // axios.defaults.headers.common["Access-Control-Allow-Credentials"] = "true";
   // axios.defaults.withCredentials = true;
+  // axios.defaults.headers.common['Authorization'] = `Bearer ${data}`;
 
   const silentRefresh = async () => {
-    const { data } = await axios.post("loginToken", { welogJWT: cookies.welogJWT });
-    setUserInfo([{ id: data.id, nickname: data.nickname }]);
-    // axios.defaults.headers.common['Authorization'] = `Bearer ${data}`;
+    if(cookies.welogJWT) {
+      const { data } = await axios.post("loginToken", { welogJWT: cookies.welogJWT });
+      setUserInfo([{ userNo: data.userNo, id: data.id, nickname: data.nickname, imgUrl: data.imgUrl }]);
+    }
   };
 
   useEffect(() => {

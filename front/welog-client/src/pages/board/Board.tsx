@@ -1,6 +1,8 @@
 import axios from "axios";
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
+import { useRecoilState } from "recoil";
+import { loginUser } from "../../components/atoms";
 import Button from "../../components/button/Button";
 import './Board.scss';
 
@@ -15,6 +17,7 @@ interface BoardType {
 
 const Board = () => {
     const [boardInfo, setBoardInfo] = useState<BoardType[]>([]);
+    const [userInfo, setUserInfo] = useRecoilState(loginUser);
     const navigate = useNavigate();
 
     const getBoardApi = async () => {
@@ -34,7 +37,7 @@ const Board = () => {
     return (
         <>
             <div className="board-button">
-                <Button onClick={() => navigate("/BoardAdd")} text="글쓰기" />
+                <Button onClick={() => { userInfo[0] ? navigate("/BoardAdd") : alert("로그인 해주세요")}} text="글쓰기" />
             </div>
             <div className="board-flexWrap">
                 {boardInfo.map((board, i) => (

@@ -1,6 +1,8 @@
 import axios from "axios";
 import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
+import { useRecoilState } from "recoil";
+import { loginUser } from "../../components/atoms";
 import Button from "../../components/button/Button";
 import Label from "../../components/label/Label";
 import Line from "../../components/line/Line";
@@ -21,17 +23,23 @@ interface BoardCommentType {
     contents: string;
     rgstrDate: string;
     nickname: string;
+    imgUrl: string;
 }
 
 const BoardDetail = () => {
     const [boardDetail, setBoardDetail] = useState<BoardDetailType[]>([]);
     const [boardComment, setBoardComment] = useState<BoardCommentType[]>([]);
     const [boardCommentAdd, setBoardCommentAdd] = useState("");
+    const [userInfo, setUserInfo] = useRecoilState(loginUser);
     const { boardNo } = useParams();
 
     const boardCommentAddApi = async () => {
+        if (!userInfo[0]) {
+            alert("로그인 해주세요");
+            return;
+        }
         try {
-            await axios.post("/boardCommentAdd", { boardNo, boardCommentAdd });
+            await axios.post("/boardCommentAdd", { boardNo, boardCommentAdd, userNo: userInfo[0].userNo });
             boardCommentApi();
         } catch (e) {
             alert("댓글 등록 실패");
@@ -91,8 +99,11 @@ const BoardDetail = () => {
             {boardComment.map((boardC, j) => (
                 <div key={j} className="boardDetail-commentContainer">
                     <div className="boardDetail-commentBlock">
-                        <div className="boardDetail-commentNickname">{boardC.nickname}</div>
-                        <div className="boardDetail-commentRgstrDate">{boardC.rgstrDate}</div>
+                        <img src={`http://localhost:3690/images/${boardC.imgUrl}`} />
+                        <div className="boardDetail-commentLabel">
+                            <div className="boardDetail-commentNickname">{boardC.nickname}</div>
+                            <div className="boardDetail-commentRgstrDate">{boardC.rgstrDate}</div>
+                        </div>
                     </div>
                     <div dangerouslySetInnerHTML={{ __html: boardC.contents.replaceAll(/(\n|\r\n)/g, '<br>') }} />
                     <Line />

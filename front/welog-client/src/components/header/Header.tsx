@@ -1,30 +1,39 @@
+import { useState } from 'react';
+import { useCookies } from 'react-cookie';
 import { useNavigate } from 'react-router-dom';
-import { useRecoilValue } from 'recoil';
+import { useRecoilState } from 'recoil';
 import { loginUser } from '../atoms';
 import './Header.scss';
 
 const Header = () => {
     const navigate = useNavigate();
-    const userInfo = useRecoilValue(loginUser);
+    const [userInfo, setUserInfo] = useRecoilState(loginUser);
+    const [cookies, setCookie, removeCookie] = useCookies(['welogJWT']);
+
+    const logOut = () => {
+        removeCookie("welogJWT");
+        setUserInfo([]);
+    }
 
     return (
         <div className="header-container">
             <div onClick={() => navigate("/")}>홈</div>
             <div className='header-box'>
-                {userInfo.length > 0 ? 
-                <>
-                    <img src="" />
-                    <div>{userInfo[0].nickname}님</div>
-                </>
+                {userInfo.length > 0 ?
+                    <div className="header-block">
+                        <img src={`http://localhost:3690/images/${userInfo[0].imgUrl}`} />
+                        {userInfo[0].nickname}
+                        <ul><li onClick={logOut}>로그아웃</li></ul>
+                    </div>
                     :
-                    <>
+                    <div className="header-block">
                         <div onClick={() => navigate("/Login")}>로그인</div>
                         <div onClick={() => navigate("/SignUp")}>회원가입</div>
-                    </>
+                    </div >
                 }
-                </div>
+            </div>
         </div>
-            )
+    )
 }
 
-            export default Header;
+export default Header;

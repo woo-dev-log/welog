@@ -14,26 +14,33 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 app.use('/images', express.static('images'));
 
-var imageName = [];
+let imageName = [];
 const imageUpload = multer({
-  limits: { fieldSize: 25 * 1024 * 1024 },
-  storage: multer.diskStorage({
-    destination: (req, file, cb) => cb(null, 'images/'),
-    filename: (req, file, cb) => {
-      let fileName = new Date().valueOf() + '_' + file.originalname;
-      cb(null, fileName);
-      imageName.push(fileName);
-    }
-  })
+    limits: { fieldSize: 25 * 1024 * 1024 },
+    storage: multer.diskStorage({
+        destination: (req, file, cb) => cb(null, 'images/'),
+        filename: (req, file, cb) => {
+            let fileName = new Date().valueOf() + '_' + file.originalname.replace(" ", "");
+            cb(null, fileName);
+            imageName.push(fileName);
+        }
+    })
 });
 
-app.post("/test", imageUpload.array('thumbnail'),   async(req, res) => {
-    try {
-        imageName = [];
-        res.send("d");
-    } catch (e) {
-        console.error(e);
-    }
+app.post("/idCheck", async (req, res) => {
+    const { id } = req.body;
+
+    const [rows] = await mysql.query("SELECT EXISTS (SELECT * FROM user WHERE id = ?) as cnt", [id]);
+
+    rows[0].cnt === 1 ? res.send("no") : res.send("yes");
+})
+
+app.post("/nicknameCheck", async (req, res) => {
+    const { nickname } = req.body;
+
+    const [rows] = await mysql.query("SELECT EXISTS (SELECT * FROM user WHERE nickname = ?) as cnt", [nickname]);
+
+    rows[0].cnt === 1 ? res.send("no") : res.send("yes");
 })
 
 app.post("/loginToken", async (req, res) => {
@@ -48,12 +55,12 @@ app.post("/loginToken", async (req, res) => {
 
 app.post("/boardCommentAdd", async (req, res) => {
     try {
-        const { boardNo, boardCommentAdd } = req.body;
+        const { boardNo, boardCommentAdd, userNo } = req.body;
         const [rows] = await mysql.query(`
         INSERT INTO
         comment(boardNo, userNo, contents, rgstrDate)   
         VALUES(?, ?, ?, now())
-        `, [boardNo, 1, boardCommentAdd]);
+        `, [boardNo, userNo, boardCommentAdd]);
 
         res.status(200).send("success");
     } catch (e) {
@@ -97,12 +104,12 @@ app.post("/boardDetail", async (req, res) => {
 
 app.post("/boardAdd", async (req, res) => {
     try {
-        const { title, contents } = req.body;
+        const { title, contents, userNo } = req.body;
         const [rows] = await mysql.query(`
         INSERT INTO
         board(userNo, title, contents, rgstrDate)
         VALUES(?, ?, ?, now())
-        `, [2, title, contents]);
+        `, [userNo, title, contents]);
         res.status(200).send("success");
     } catch (e) {
         res.status(400).send("fail");
@@ -124,14 +131,14 @@ app.get("/board", async (req, res) => {
     }
 })
 
-app.post("/signUp", imageUpload.array('photo'), async (req, res) => {
+app.post("/signUp", imageUpload.array('thumbnail'), async (req, res) => {
     try {
         const { nickname, id, pw } = req.body;
         const [rows] = await mysql.query(`
         INSERT INTO 
-        user(id, password, nickname) 
-        VALUES(?, ?, ?)
-        `, [id, pw, nickname]);
+        user(id, password, nickname, imgUrl) 
+        VALUES(?, ?, ?, ?)
+        `, [id, pw, nickname, imageName]);
         res.status(200).send("success");
         imageName = [];
     } catch (e) {
@@ -150,13 +157,14 @@ app.post("/login", async (req, res) => {
 
         if (rows.length > 0) {
 
-            const user = [{ id: rows[0].id, nickname: rows[0].nickname }];
+            const user = [{ userNo: rows[0].userNo, id: rows[0].id, nickname: rows[0].nickname, imgUrl: rows[0].imgUrl }];
             const token = await jwt.sign(
                 {
                     type: "JWT",
-                    userNo: rows.userNo,
+                    userNo: rows[0].userNo,
                     id: rows[0].id,
-                    nickname: rows[0].nickname
+                    nickname: rows[0].nickname,
+                    imgUrl: rows[0].imgUrl
                 },
                 "welogJWT",
                 {
@@ -164,15 +172,15 @@ app.post("/login", async (req, res) => {
                     issuer: "test"
                 }
             );
-            
+
             res.status(200).send({ user, token });
         } else {
-    res.status(400).send("fail");
-}
+            res.status(400).send("fail");
+        }
     } catch (e) {
-    res.status(400).send("fail");
-    console.error(e);
-}
+        res.status(400).send("fail");
+        console.error(e);
+    }
 })
 
 app.listen(port, () => {

@@ -11,7 +11,7 @@ import './Sign.scss';
 const SignUp = () => {
     const [userInfo, setUserInfo] = useRecoilState(loginUser);
     // const cookies = new Cookies();
-    const [setCookie] = useCookies(['welogJWT']);
+    const [cookies, setCookie] = useCookies(['welogJWT']);
     const navigate = useNavigate();
     const [id, setId] = useState('');
     const [pw, setPw] = useState('');
@@ -21,11 +21,14 @@ const SignUp = () => {
             alert("모두 입력");
         } else {
             try {
-                const { data } = await axios.post("/login", { id, pw });
-                // setCookie("welogJWT", data.token, { httpOnly: true });
-                setCookie("welogJWT", data.token);
-                setUserInfo(data.user);
-                navigate("/");
+                const { data, status } = await axios.post("/login", { id, pw });
+
+                if (status == 200) {
+                    // setCookie("welogJWT", data.token, { httpOnly: true });
+                    setCookie("welogJWT", data.token);
+                    setUserInfo(data.user);
+                    navigate("/");
+                }
             } catch (e) {
                 alert("로그인 실패");
                 console.error(e);

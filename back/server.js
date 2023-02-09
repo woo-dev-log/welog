@@ -4,12 +4,23 @@ const port = 3690;
 const mysql = require('./mysql');
 const jwt = require("jsonwebtoken");
 const cors = require('cors');
-app.use(cors({
-    origin: 'http://localhost:5173/Login',
-    credential: 'true'
-}));
+// app.use(cors({
+//     origin: 'http://localhost:5173/',
+//     credential: 'true'
+// }));
+app.use(cors());
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
+
+app.post("/loginToken", async (req, res) => {
+    try {
+        const { welogJWT } = req.body;
+        const user = await jwt.verify(welogJWT, "welogJWT");
+        res.send(user);
+    } catch (e) {
+        console.error(e);
+    }
+})
 
 app.post("/boardCommentAdd", async (req, res) => {
     try {
@@ -20,7 +31,7 @@ app.post("/boardCommentAdd", async (req, res) => {
         VALUES(?, ?, ?, now())
         `, [boardNo, 1, boardCommentAdd]);
 
-        res.status(200).send("success")
+        res.status(200).send("success");
     } catch (e) {
         res.status(400).send("fail");
         console.error(e);
@@ -37,8 +48,9 @@ app.post("/boardComment", async (req, res) => {
         WHERE boardNo = ? 
         ORDER BY rgstrDate DESC
         `, [boardNo]);
-        rows.length > 0 ? res.status(200).send(rows) : res.status(400).send("fail");
+        res.status(200).send(rows);
     } catch (e) {
+        res.status(400).send("fail");
         console.error(e);
     }
 })
@@ -52,8 +64,9 @@ app.post("/boardDetail", async (req, res) => {
         ON b.userNo = u.userNo 
         WHERE b.boardNo = ?
         `, [boardNo]);
-        rows.length > 0 ? res.status(200).send(rows) : res.status(400).send("fail");
+        res.status(200).send(rows);
     } catch (e) {
+        res.status(400).send("fail");
         console.error(e);
     }
 })
@@ -111,27 +124,30 @@ app.post("/login", async (req, res) => {
         console.log(id, pw);
 
         if (rows.length > 0) {
-            const token = jwt.sign(
+
+            const user = [{ id: rows[0].id, nickname: rows[0].nickname }];
+            const token = await jwt.sign(
                 {
                     type: "JWT",
                     userNo: rows.userNo,
-                    id: rows.id,
-                    nickname: rows.nickname
+                    id: rows[0].id,
+                    nickname: rows[0].nickname
                 },
                 "welogJWT",
                 {
-                    expiresIn: "30m",
+                    expiresIn: "30d",
                     issuer: "test"
                 }
             );
-
-            res.status(200).send(token);
+            
+            res.status(200).send({ user, token });
         } else {
-            res.status(400).send("fail");
-        }
+    res.status(400).send("fail");
+}
     } catch (e) {
-        console.error(e);
-    }
+    res.status(400).send("fail");
+    console.error(e);
+}
 })
 
 app.listen(port, () => {

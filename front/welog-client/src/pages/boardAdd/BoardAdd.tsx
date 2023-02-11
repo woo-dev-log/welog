@@ -20,6 +20,10 @@ const BoardAdd = () => {
     const boardAddApi = async () => {
         if (title === "" || contents === "") {
             alert("모두 입력");
+            return;
+        } else if (title.length > 30) {
+            alert("제목을 30자 이내로 작성해주세요");
+            return;
         } else {
             try {
                 await axios.post("/boardAdd", { title, contents, userNo: userInfo[0].userNo });
@@ -35,7 +39,7 @@ const BoardAdd = () => {
         <div className="boardAdd-container">
             <div className="boardAdd-titleBlock">
                 <Label text="제목" />
-                <Input placeholder="제목을 입력하세요" onChange={e => setTitle(e.target.value)} />
+                <Input placeholder="제목을 입력해주세요" onChange={e => setTitle(e.target.value)} value={title} />
             </div>
             <Label text="내용" />
             <Line />

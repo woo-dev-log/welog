@@ -20,7 +20,8 @@ const imageUpload = multer({
     storage: multer.diskStorage({
         destination: (req, file, cb) => cb(null, 'images/'),
         filename: (req, file, cb) => {
-            let fileName = new Date().valueOf() + '_' + file.originalname.replace(" ", "");
+            const originalName = file.originalname.replace(" ", "");
+            let fileName = new Date().valueOf() + '_' + Buffer.from(originalName, 'latin1').toString('utf8');
             cb(null, fileName);
             imageName.push(fileName);
         }
@@ -53,6 +54,18 @@ app.post("/loginToken", async (req, res) => {
     }
 })
 
+app.post("/boardCommentDelete", async (req, res) => {
+    try {
+        const { commentNo } = req.body;
+        const [rows] = await mysql.query("DELETE FROM comment WHERE commentNo = ?", [commentNo]);
+
+        res.status(200).send("success");
+    } catch (e) {
+        res.status(400).send("fail");
+        console.error(e);
+    }
+})
+
 app.post("/boardCommentAdd", async (req, res) => {
     try {
         const { boardNo, boardCommentAdd, userNo } = req.body;
@@ -73,7 +86,8 @@ app.post("/boardComment", async (req, res) => {
     try {
         const { boardNo } = req.body;
         const [rows] = await mysql.query(`
-        SELECT * FROM comment c
+        SELECT c.commentNo, c.boardNo, c.userNo, c.contents, u.nickname, u.imgUrl 
+        FROM comment c 
         LEFT OUTER JOIN user u
         ON c.userNo = u.userNo
         WHERE boardNo = ? 
@@ -86,11 +100,24 @@ app.post("/boardComment", async (req, res) => {
     }
 })
 
+app.post("/boardDelete", async (req, res) => {
+    try {
+        const { boardNo } = req.body;
+        const [rows] = await mysql.query("DELETE FROM board WHERE boardNo = ?", [boardNo]);
+
+        res.status(200).send("success");
+    } catch (e) {
+        res.status(400).send("fail");
+        console.error(e);
+    }
+})
+
 app.post("/boardDetail", async (req, res) => {
     try {
         const { boardNo } = req.body;
         const [rows] = await mysql.query(`
-        SELECT * FROM board b 
+        SELECT b.boardNo, b.userNo, b.title, b.contents, u.nickname, u.imgUrl 
+        FROM board b 
         LEFT OUTER JOIN user u 
         ON b.userNo = u.userNo 
         WHERE b.boardNo = ?
@@ -120,7 +147,9 @@ app.post("/boardAdd", async (req, res) => {
 app.get("/board", async (req, res) => {
     try {
         const [rows] = await mysql.query(`
-        SELECT * FROM board b 
+        SELECT b.boardNo, b.userNo, b.title, b.contents, u.nickname, u.imgUrl, 
+        (SELECT count(*) FROM comment c WHERE c.boardNo = b.boardNo) commentCnt 
+        FROM board b 
         LEFT OUTER JOIN user u 
         ON b.userNo = u.userNo 
         ORDER BY b.rgstrDate DESC
@@ -156,7 +185,6 @@ app.post("/login", async (req, res) => {
         console.log(id, pw);
 
         if (rows.length > 0) {
-
             const user = [{ userNo: rows[0].userNo, id: rows[0].id, nickname: rows[0].nickname, imgUrl: rows[0].imgUrl }];
             const token = await jwt.sign(
                 {
@@ -175,7 +203,7 @@ app.post("/login", async (req, res) => {
 
             res.status(200).send({ user, token });
         } else {
-            res.status(400).send("fail");
+            res.status(200).send("no");
         }
     } catch (e) {
         res.status(400).send("fail");

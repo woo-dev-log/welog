@@ -1,6 +1,6 @@
 @mixin btn-block {
     background-color: white;
-    margin-bottom: 20px;
+    margin-top: 20px;
     width: 300px;
     height: 40px;
     border-width: 2px;
@@ -30,7 +30,7 @@
 
     .signUp-imgSelect {
         cursor: pointer;
-        margin: 10px 0 20px 0;
+        margin-top: 10px;
         display: flex;
         justify-content: center;
         align-items: center;        
@@ -51,16 +51,6 @@
         @include btn-block;
         box-sizing: border-box;
         padding: 0 10px 0 10px;
-    }
-
-    .signUp-checkId {
-        font-size: 14px;
-        color: red;
-    }
-
-    .signUp-checkNickname {
-        font-size: 14px;
-        color: red;
     }
 
     button {

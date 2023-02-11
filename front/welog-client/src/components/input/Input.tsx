@@ -4,6 +4,7 @@ interface Props {
     placeholder: string;
     type?: string;
     onChange: (e: React.ChangeEvent<HTMLInputElement>) => void
+    value: string;
 }
 
 const Input = ({ placeholder, type, onChange }: Props) => {

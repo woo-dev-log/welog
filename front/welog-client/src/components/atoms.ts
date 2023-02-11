@@ -10,5 +10,5 @@ export interface Props {
 export const loginUser = atom<Props[]>({
 // export const loginUser = atom({
     key: 'loginUser',
-    default: []
+    default: [{ userNo: 0, nickname: "", id: "", imgUrl: ""}]
 });

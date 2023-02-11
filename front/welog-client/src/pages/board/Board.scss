@@ -38,21 +38,40 @@
         display: flex;
         flex-direction: column;
         justify-content: space-between;
-    }
 
-    .board-nickname {
-        font-size: 20px;
-        margin-bottom: 20px;
-    }
+        .board-userBlock {
+            display: flex;
+            align-items: center;
+            
+            img {
+                width: 40px;
+                height: 40px;
+                border: 1px solid gray;
+                border-radius: 1000px;
+                margin-right: 10px;
+            }
 
-    .board-title {
-        font-size: 20px;
-        font-weight: bold;
-        margin-bottom: 10px;
-    }
-
-    .board-contents {
-        font-size: 18px;
-        margin-bottom: 10px;
+            .board-nickname {
+                font-weight: bold;
+                font-size: 18px;
+            }
+        }
+            
+        
+        .board-title {
+            font-size: 18px;
+            font-weight: bold;
+            margin-bottom: 10px;
+        }
+        
+        .board-contents {
+            font-size: 16px;
+            margin-bottom: 10px;
+        }
+        
+        .board-rgstrDate {
+            font-size: 16px;
+            color: gray;
+        }
     }
 }

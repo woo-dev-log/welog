@@ -1,6 +1,6 @@
 import axios from 'axios'
 import { Route, Routes } from 'react-router-dom'
-import { RecoilRoot, useRecoilState } from 'recoil'
+import { useRecoilState } from 'recoil'
 import './App.scss'
 import Header from './components/header/Header'
 import Board from './pages/board/Board'

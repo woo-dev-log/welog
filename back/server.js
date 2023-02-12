@@ -56,8 +56,8 @@ app.post("/loginToken", async (req, res) => {
 
 app.post("/boardCommentDelete", async (req, res) => {
     try {
-        const { commentNo } = req.body;
-        const [rows] = await mysql.query("DELETE FROM comment WHERE commentNo = ?", [commentNo]);
+        const { boardNo, commentNo } = req.body;
+        const [rows] = await mysql.query("DELETE FROM comment WHERE boardNo = ? AND commentNo = ?", [boardNo, commentNo]);
 
         res.status(200).send("success");
     } catch (e) {

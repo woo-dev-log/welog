@@ -8,6 +8,7 @@ import { loginUser } from "../../components/atoms";
 import Button from "../../components/button/Button";
 import Label from "../../components/label/Label";
 import Line from "../../components/line/Line";
+import { ToastError, ToastSuccess, ToastWarn } from "../../components/Toast";
 import "./BoardDetail.scss";
 
 interface BoardDetailType {
@@ -46,31 +47,32 @@ const BoardDetail = () => {
         }
     };
 
-    // const boardCommentDeleteApi = async (commentNo: number) => {
-    const boardCommentDeleteApi = async (e) => {
-        console.log(e);
-        // try {
-        //     await axios.post("/boardCommentDelete", { commentNo });
-        //     boardCommentApi();
-        // } catch (e) {
-        //     alert("글 삭제 실패");
-        //     console.error(e);
-        // }
+    const boardCommentDeleteApi = async (boardNo: number, commentNo: number) => {
+        try {
+            await axios.post("/boardCommentDelete", { boardNo, commentNo });
+            ToastSuccess("댓글이 삭제되었어요!");
+            boardCommentApi();
+        } catch (e) {
+            ToastError("댓글 삭제를 실패했어요");
+            console.error(e);
+        }
     }
 
     const boardCommentAddApi = async () => {
         if (userInfo[0].userNo === 0) {
-            alert("로그인 해주세요");
+            ToastWarn("로그인을 해주세요");
             return;
         } else if (boardCommentAdd === "") {
-            alert("댓글을 입력해주세요");
+            ToastWarn("댓글을 입력해주세요");
             return;
         } else {
             try {
                 await axios.post("/boardCommentAdd", { boardNo, boardCommentAdd, userNo: userInfo[0].userNo });
+                setBoardCommentAdd("");
+                ToastSuccess("댓글이 등록되었어요!");
                 boardCommentApi();
             } catch (e) {
-                alert("댓글 등록 실패");
+                ToastError("댓글 등록을 실패했어요");
                 console.error(e);
             }
         }
@@ -81,7 +83,7 @@ const BoardDetail = () => {
             const { data } = await axios.post("/boardComment", { boardNo });
             setBoardComment(data);
         } catch (e) {
-            alert("댓글 조회 실패");
+            ToastError("댓글 조회를 실패했어요");
             console.error(e);
         }
     }
@@ -98,13 +100,14 @@ const BoardDetail = () => {
                 cancelButtonText: '아니요'
             })
 
-            if (result.isConfirmed) {                
+            if (result.isConfirmed) {
                 await axios.post("/boardDelete", { boardNo });
+                ToastSuccess("글이 삭제되었어요!");
                 navigate("/");
             }
-    
+
         } catch (e) {
-            alert("글 삭제 실패");
+            ToastError("글 삭제를 실패했어요");
             console.error(e);
         }
     }
@@ -114,7 +117,7 @@ const BoardDetail = () => {
             const { data } = await axios.post("/boardDetail", { boardNo });
             setBoardDetail(data);
         } catch (e) {
-            alert("상세 글 조회 실패");
+            ToastError("상세 글 조회를 실패했어요");
             console.error(e);
         }
     }
@@ -156,7 +159,8 @@ const BoardDetail = () => {
 
                     {boardComment && <Label text={boardComment.length + "개의 댓글이 있어요"} />}
                     <Line />
-                    <textarea ref={textRef} onInput={autoHeight} placeholder="댓글을 입력해주세요" onChange={e => setBoardCommentAdd(e.target.value)} />
+                    <textarea ref={textRef} value={boardCommentAdd} placeholder="댓글을 입력해주세요"
+                        onInput={autoHeight} onChange={e => setBoardCommentAdd(e.target.value)} />
                     <div className="boardDetail-commentAddBtn">
                         <Button onClick={boardCommentAddApi} text="댓글 등록" />
                     </div>
@@ -174,7 +178,8 @@ const BoardDetail = () => {
 
                         <div className="boardDetail-commentDeleteBtn">
                             {userInfo[0].userNo === boardC.userNo &&
-                                <Button onClick={boardCommentDeleteApi} text="댓글 삭제" />
+                                <Button onClick={() =>
+                                    boardCommentDeleteApi(boardC.boardNo, boardC.commentNo)} text="댓글 삭제" />
                             }
                         </div>
                     </div>

@@ -11,6 +11,7 @@ import SignUp from './pages/auth/SignUp'
 import { useEffect } from 'react'
 import { useCookies } from 'react-cookie'
 import { loginUser } from './components/atoms'
+import { Toast } from './components/Toast'
 
 
 function App() {
@@ -35,6 +36,7 @@ function App() {
 
   return (
     <>
+      <Toast />
       <Header />
       <div className='app-block'>
         <Routes>

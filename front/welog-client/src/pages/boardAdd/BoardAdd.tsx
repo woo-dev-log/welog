@@ -9,6 +9,8 @@ import Button from "../../components/button/Button";
 import Input from "../../components/input/Input";
 import Label from "../../components/label/Label";
 import Line from "../../components/line/Line";
+import Swal from "sweetalert2";
+import { ToastError, ToastSuccess, ToastWarn } from "../../components/Toast";
 import "./BoardAdd.scss"
 
 const BoardAdd = () => {
@@ -19,18 +21,31 @@ const BoardAdd = () => {
 
     const boardAddApi = async () => {
         if (title === "" || contents === "") {
-            alert("모두 입력");
+            ToastWarn("모두 입력해주세요");
             return;
         } else if (title.length > 30) {
-            alert("제목을 30자 이내로 작성해주세요");
+            ToastWarn("제목을 30자 이내로 작성해주세요");
             return;
         } else {
-            try {
-                await axios.post("/boardAdd", { title, contents, userNo: userInfo[0].userNo });
-                navigate("/");
-            } catch (e) {
-                alert("작성 실패");
-                console.error(e);
+            const result = await Swal.fire({
+                title: '글을 등록하시겠어요?',
+                icon: 'question',
+                showCancelButton: true,
+                confirmButtonColor: 'black',
+                cancelButtonColor: 'red',
+                confirmButtonText: '네',
+                cancelButtonText: '아니요'
+            })
+
+            if (result.isConfirmed) {
+                try {
+                    await axios.post("/boardAdd", { title, contents, userNo: userInfo[0].userNo });
+                    ToastSuccess("글이 등록되었어요!");
+                    navigate("/");
+                } catch (e) {
+                    ToastError("등록을 실패했어요");
+                    console.error(e);
+                }
             }
         }
     }

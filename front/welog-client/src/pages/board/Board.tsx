@@ -6,6 +6,7 @@ import { useRecoilState } from "recoil";
 import { loginUser } from "../../components/atoms";
 import Button from "../../components/button/Button";
 import Line from "../../components/line/Line";
+import { ToastError, ToastWarn } from "../../components/Toast";
 import './Board.scss';
 
 interface BoardType {
@@ -29,7 +30,7 @@ const Board = () => {
             const { data } = await axios.get("/board");
             setBoardInfo(data);
         } catch (e) {
-            alert("글 조회 실패");
+            ToastError("글 조회를 실패했어요");
             console.error(e);
         }
     }
@@ -41,7 +42,7 @@ const Board = () => {
     return (
         <>
             <div className="board-button">
-                <Button onClick={() => { userInfo[0].userNo !== 0 ? navigate("/BoardAdd") : alert("로그인 해주세요")}} text="글쓰기" />
+                <Button onClick={() => { userInfo[0].userNo !== 0 ? navigate("/BoardAdd") : ToastWarn("로그인을 해주세요")}} text="글쓰기" />
             </div>
             <div className="board-flexWrap">
                 {boardInfo.map((board, i) => (

@@ -1,9 +1,9 @@
-import { useState } from 'react';
 import { useCookies } from 'react-cookie';
 import { useNavigate } from 'react-router-dom';
 import { useRecoilState } from 'recoil';
 import Swal from 'sweetalert2';
 import { loginUser } from '../atoms';
+import { ToastWarn } from '../Toast';
 import './Header.scss';
 
 const Header = () => {
@@ -13,8 +13,8 @@ const Header = () => {
 
     const logOut = async () => {
         const result = await Swal.fire({
-            title: '로그아웃 하시겠어요?',
-            icon: 'warning',
+            title: '로그아웃을 하시겠어요?',
+            icon: 'question',
             showCancelButton: true,
             confirmButtonColor: 'black',
             cancelButtonColor: 'red',
@@ -22,9 +22,10 @@ const Header = () => {
             cancelButtonText: '아니요'
         })
 
-        if (result.isConfirmed) {                
+        if (result.isConfirmed) {
+            ToastWarn(userInfo[0].nickname + "님 안녕히가세요!");
             removeCookie("welogJWT");
-            setUserInfo([{ userNo: 0, nickname: "", id: "", imgUrl: ""}]);
+            setUserInfo([{ userNo: 0, nickname: "", id: "", imgUrl: "" }]);
         }
     }
 

@@ -3,8 +3,9 @@ import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import Button from "../../components/button/Button";
 import Input from "../../components/input/Input";
-import Label from "../../components/label/Label";
+import { ToastError, ToastSuccess, ToastWarn } from "../../components/Toast";
 import './Sign.scss';
+import Swal from "sweetalert2";
 
 const SignUp = () => {
     const navigate = useNavigate();
@@ -20,14 +21,14 @@ const SignUp = () => {
 
     const pwCheck = (e: React.ChangeEvent<HTMLInputElement>) => {
         if (pw.length > 15) {
-            alert("비밀번호를 15자 이내로 생성해주세요");
+            ToastWarn("비밀번호를 15자 이내로 생성해주세요");
             return;
         } else setPw(e.target.value);
     }
 
     const idCheck = async (e: React.ChangeEvent<HTMLInputElement>) => {
         if (e.target.value.length > 15) {
-            alert("아이디를 15자 이내로 생성해주세요");
+            ToastWarn("아이디를 15자 이내로 생성해주세요");
             return;
         } else setId(e.target.value);
 
@@ -56,7 +57,7 @@ const SignUp = () => {
 
     const nicknameCheck = async (e: React.ChangeEvent<HTMLInputElement>) => {
         if (e.target.value.length > 10) {
-            alert("닉네임을 10자 이내로 생성해주세요");
+            ToastWarn("닉네임을 10자 이내로 생성해주세요");
             return;
         } else setNickname(e.target.value);
 
@@ -86,29 +87,41 @@ const SignUp = () => {
 
     const signUpApi = async () => {
         if (nickname === "" || id === "" || pw === "" || !image) {
-            alert("모두 입력해주세요");
+            ToastWarn("모두 입력해주세요");
             return;
         } else if (dupCheckNickname === false || dupCheckId === false) {
-            alert("중복된 정보를 변경해주세요");
+            ToastWarn("중복된 정보를 변경해주세요");
             return;
         } else {
-            try {
-                let formData = new FormData();
-                formData.append('nickname', nickname);
-                formData.append('id', id);
-                formData.append('pw', pw);
-                formData.append('thumbnail', image);
+            const result = await Swal.fire({
+                title: '회원가입을 하시겠어요?',
+                icon: 'question',
+                showCancelButton: true,
+                confirmButtonColor: 'black',
+                cancelButtonColor: 'red',
+                confirmButtonText: '네',
+                cancelButtonText: '아니요'
+            })
 
-                const { data, status } = await axios.post("/signUp", formData);
+            if (result.isConfirmed) {
+                try {
+                    let formData = new FormData();
+                    formData.append('nickname', nickname);
+                    formData.append('id', id);
+                    formData.append('pw', pw);
+                    formData.append('thumbnail', image);
 
-                if (status === 200) {
-                    URL.revokeObjectURL(blobImg);
-                    alert("회원가입 완료");
-                    navigate("/Login");
+                    const { data, status } = await axios.post("/signUp", formData);
+
+                    if (status === 200) {
+                        URL.revokeObjectURL(blobImg);
+                        ToastSuccess("회원가입을 성공했어요!");
+                        navigate("/Login");
+                    }
+                } catch (e) {
+                    ToastError("회원가입을 실패했어요");
+                    console.error(e);
                 }
-            } catch (e) {
-                alert("회원가입 실패");
-                console.error(e);
             }
         }
     }

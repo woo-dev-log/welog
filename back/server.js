@@ -86,7 +86,7 @@ app.post("/boardComment", async (req, res) => {
     try {
         const { boardNo } = req.body;
         const [rows] = await mysql.query(`
-        SELECT c.commentNo, c.boardNo, c.userNo, c.contents, u.nickname, u.imgUrl 
+        SELECT c.commentNo, c.boardNo, c.userNo, c.contents, c.rgstrDate, u.nickname, u.imgUrl 
         FROM comment c 
         LEFT OUTER JOIN user u
         ON c.userNo = u.userNo
@@ -116,7 +116,7 @@ app.post("/boardDetail", async (req, res) => {
     try {
         const { boardNo } = req.body;
         const [rows] = await mysql.query(`
-        SELECT b.boardNo, b.userNo, b.title, b.contents, u.nickname, u.imgUrl 
+        SELECT b.boardNo, b.userNo, b.title, b.contents, b.rgstrDate, u.nickname, u.imgUrl 
         FROM board b 
         LEFT OUTER JOIN user u 
         ON b.userNo = u.userNo 
@@ -147,7 +147,7 @@ app.post("/boardAdd", async (req, res) => {
 app.get("/board", async (req, res) => {
     try {
         const [rows] = await mysql.query(`
-        SELECT b.boardNo, b.userNo, b.title, b.contents, u.nickname, u.imgUrl, 
+        SELECT b.boardNo, b.userNo, b.title, b.contents, b.rgstrDate, u.nickname, u.imgUrl, 
         (SELECT count(*) FROM comment c WHERE c.boardNo = b.boardNo) commentCnt 
         FROM board b 
         LEFT OUTER JOIN user u 

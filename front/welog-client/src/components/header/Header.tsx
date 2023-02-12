@@ -31,18 +31,18 @@ const Header = () => {
 
     return (
         <div className="header-container">
-            <div onClick={() => navigate("/")}>홈</div>
+            <p onClick={() => navigate("/")}>홈</p>
             <div className='header-box'>
                 {userInfo[0].userNo !== 0 ?
                     <div className="header-block">
                         <img src={`http://localhost:3690/images/${userInfo[0].imgUrl}`} />
-                        {userInfo[0].nickname}
+                        <p>{userInfo[0].nickname}</p>
                         <ul><li onClick={logOut}>로그아웃</li></ul>
                     </div>
                     :
                     <div className="header-block">
-                        <div onClick={() => navigate("/Login")}>로그인</div>
-                        <div onClick={() => navigate("/SignUp")}>회원가입</div>
+                        <p onClick={() => navigate("/Login")}>로그인</p>
+                        <p onClick={() => navigate("/SignUp")}>회원가입</p>
                     </div >
                 }
             </div>

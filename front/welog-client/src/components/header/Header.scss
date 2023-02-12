@@ -7,9 +7,9 @@
     justify-content: space-between;
     padding: 0 100px 0 100px;
     font-size: 20px;
-    font-weight: bold;
+    font-family: "NanumSquareRoundEB";
 
-    div {
+    p {
         cursor: pointer;
     }
 
@@ -19,10 +19,12 @@
         .header-block {
             display: flex;
             align-items: center;
-            height: 70px;
+            cursor: pointer;
 
-            div {
-                margin-left: 20px;
+            &:hover {
+                ul {
+                    display: block;
+                }
             }
 
             img {
@@ -32,26 +34,20 @@
                 border-radius: 1000px;
                 margin-right: 20px;
             }
-
-            &:hover {
-                ul {
-                    display: block;
-                }
-            }
     
             ul {
                 display: none;
                 position: absolute;
                 list-style: none;
                 background-color: black;
-                top: 52px;
+                top: 45px;
                 right: 0px;
                 width: 130px;
-                padding: 10px 10px 0 20px;
+                padding: 10px 20px 0 20px;
                 font-size: 18px;
     
                 li {
-                    margin-bottom: 10px;
+                    margin-bottom: 15px;
                 }
             }
         }

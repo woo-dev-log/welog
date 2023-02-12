@@ -14,7 +14,7 @@
     border-width: 1px;
     border-radius: 10px;
     font-size: $font-size;
-    font-weight: bold;
+    font-family: "NanumSquareRoundEB";
     color: white;
 
     &:hover {
@@ -41,7 +41,7 @@
         display: flex;
 
         .boardDetail-title {
-            font-weight: bold;
+            font-family: "NanumSquareRoundEB";
             font-size: 20px;
             margin-left: 20px;
         }
@@ -57,7 +57,7 @@
         }
 
         .boardDetail-nickname {
-            font-weight: bold;
+            font-family: "NanumSquareRoundEB";
         }
 
         .boardDetail-rgstrDate {
@@ -107,7 +107,7 @@
                 align-items: center;
 
                 .boardDetail-commentNickname {
-                    font-weight: bold;
+                    font-family: "NanumSquareRoundEB";
                     margin-right: 10px;
                 }
 

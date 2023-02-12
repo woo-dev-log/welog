@@ -60,7 +60,10 @@ const Board = () => {
                                     : board.contents.replace(/<[^>]*>?/g, "").substring(0, 60) + " ..."}
                             </div>
                         </div>
-                        <div className="board-rgstrDate">{dayjs(board.rgstrDate).format('YYYY.MM.DD HH:mm') }</div>
+                        <div className="board-footer">
+                            <div>{dayjs(board.rgstrDate).format('YYYY.MM.DD HH:mm') }</div>
+                            <div>댓글 {board.commentCnt}개</div>
+                        </div>
                     </div>
                 ))}
             </div>

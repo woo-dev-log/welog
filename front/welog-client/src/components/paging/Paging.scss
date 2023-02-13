@@ -1,0 +1,21 @@
+.paging-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+    button {
+        cursor: pointer;
+        border: none;
+        padding: 10px;
+        margin: 0 5px 0 5px;
+    }
+
+    .paging-currentpageNum {
+        display: flex;
+
+        button {
+            background-color: black;
+            color: white;
+        }
+    }
+}

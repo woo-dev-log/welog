@@ -1,12 +1,11 @@
 .board-button {
-    display: flex;
-    justify-content: center;
+    text-align: center;
 
     button {
         cursor: pointer;
         background-color: black;
-        margin-bottom: 20px;
-        width: 200px;
+        margin-top: 20px;
+        width: 150px;
         height: 40px;
         border-width: 1px;
         border-radius: 10px;
@@ -42,7 +41,7 @@
         .board-userBlock {
             display: flex;
             align-items: center;
-            
+
             img {
                 width: 40px;
                 height: 40px;
@@ -56,19 +55,18 @@
                 font-size: 18px;
             }
         }
-            
-        
+
         .board-title {
             font-size: 18px;
             font-family: "NanumSquareRoundEB";
             margin-bottom: 10px;
         }
-        
+
         .board-contents {
             font-size: 16px;
             margin-bottom: 10px;
         }
-        
+
         .board-footer {
             display: flex;
             justify-content: space-between;

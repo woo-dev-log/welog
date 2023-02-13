@@ -1,6 +1,6 @@
 import axios from "axios";
 import dayjs from "dayjs";
-import { ButtonHTMLAttributes, useEffect, useRef, useState } from "react";
+import { ButtonHTMLAttributes, useCallback, useEffect, useRef, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import { useRecoilState } from "recoil";
 import Swal from "sweetalert2";
@@ -8,6 +8,7 @@ import { loginUser } from "../../components/atoms";
 import Button from "../../components/button/Button";
 import Label from "../../components/label/Label";
 import Line from "../../components/line/Line";
+import Paging from "../../components/paging/Paging";
 import { ToastError, ToastSuccess, ToastWarn } from "../../components/Toast";
 import "./BoardDetail.scss";
 
@@ -35,10 +36,13 @@ const BoardDetail = () => {
     const [boardDetail, setBoardDetail] = useState<BoardDetailType[]>([]);
     const [boardComment, setBoardComment] = useState<BoardCommentType[]>([]);
     const [boardCommentAdd, setBoardCommentAdd] = useState("");
+    const [currentPage, setcurrentPage] = useState(1);
     const [userInfo, setUserInfo] = useRecoilState(loginUser);
     const { boardNo } = useParams();
     const textRef = useRef<HTMLTextAreaElement>(null);
     const navigate = useNavigate();
+    const limit = 5;
+    const offset = (currentPage - 1) * limit;
 
     const autoHeight = () => {
         if (textRef.current) {
@@ -47,7 +51,7 @@ const BoardDetail = () => {
         }
     };
 
-    const boardCommentDeleteApi = async (boardNo: number, commentNo: number) => {
+    const boardCommentDeleteApi = useCallback(async (boardNo: number, commentNo: number) => {
         try {
             await axios.post("/boardCommentDelete", { boardNo, commentNo });
             ToastSuccess("댓글이 삭제되었어요!");
@@ -56,9 +60,9 @@ const BoardDetail = () => {
             ToastError("댓글 삭제를 실패했어요");
             console.error(e);
         }
-    }
+    }, []);
 
-    const boardCommentAddApi = async () => {
+    const boardCommentAddApi = useCallback(async () => {
         if (userInfo[0].userNo === 0) {
             ToastWarn("로그인을 해주세요");
             return;
@@ -76,7 +80,7 @@ const BoardDetail = () => {
                 console.error(e);
             }
         }
-    }
+    }, []);
 
     const boardCommentApi = async () => {
         try {
@@ -166,7 +170,13 @@ const BoardDetail = () => {
                     </div>
                 </div>
             ))}
-            {boardComment.map((boardC, j) => (
+            <Paging
+                total={boardComment.length}
+                limit={limit}
+                page={currentPage}
+                setCurrentPage={setcurrentPage}
+            />
+            {boardComment.slice(offset, offset + limit).map((boardC, j) => (
                 <div key={j} className="boardDetail-commentContainer">
                     <Line />
                     <div className="boardDetail-commentBlock">

@@ -9,7 +9,7 @@
     font-size: 20px;
     font-family: "NanumSquareRoundEB";
 
-    p {
+    .header-home {
         cursor: pointer;
     }
 
@@ -20,6 +20,15 @@
             display: flex;
             align-items: center;
             cursor: pointer;
+
+            .header-login {
+                margin-right: 20px;
+                cursor: pointer;
+            }
+
+            .header-signUp {
+                cursor: pointer;
+            }
 
             &:hover {
                 ul {
@@ -40,10 +49,10 @@
                 position: absolute;
                 list-style: none;
                 background-color: black;
-                top: 45px;
+                top: 23px;
                 right: 0px;
                 width: 130px;
-                padding: 10px 20px 0 20px;
+                padding: 27px 20px 0 20px;
                 font-size: 18px;
     
                 li {

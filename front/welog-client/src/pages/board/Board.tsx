@@ -6,6 +6,7 @@ import { useRecoilState } from "recoil";
 import { loginUser } from "../../components/atoms";
 import Button from "../../components/button/Button";
 import Line from "../../components/line/Line";
+import Paging from "../../components/paging/Paging";
 import { ToastError, ToastWarn } from "../../components/Toast";
 import './Board.scss';
 
@@ -23,7 +24,10 @@ interface BoardType {
 const Board = () => {
     const [boardInfo, setBoardInfo] = useState<BoardType[]>([]);
     const [userInfo, setUserInfo] = useRecoilState(loginUser);
+    const [currentPage, setcurrentPage] = useState(1);
     const navigate = useNavigate();
+    const limit = 5;
+    const offset = (currentPage - 1) * limit;
 
     const getBoardApi = async () => {
         try {
@@ -41,11 +45,15 @@ const Board = () => {
 
     return (
         <>
-            <div className="board-button">
-                <Button onClick={() => { userInfo[0].userNo !== 0 ? navigate("/BoardAdd") : ToastWarn("로그인을 해주세요")}} text="글쓰기" />
-            </div>
+            <Paging
+                total={boardInfo.length}
+                limit={limit}
+                page={currentPage}
+                setCurrentPage={setcurrentPage}
+            />
+
             <div className="board-flexWrap">
-                {boardInfo.map((board, i) => (
+                {boardInfo.slice(offset, offset + limit).map((board, i) => (
                     <div key={i} className="board-block" onClick={() => navigate("/" + board.boardNo)}>
                         <div>
                             <div className="board-userBlock">
@@ -61,11 +69,14 @@ const Board = () => {
                             </div>
                         </div>
                         <div className="board-footer">
-                            <div>{dayjs(board.rgstrDate).format('YYYY.MM.DD HH:mm') }</div>
+                            <div>{dayjs(board.rgstrDate).format('YYYY.MM.DD HH:mm')}</div>
                             <div>댓글 {board.commentCnt}개</div>
                         </div>
                     </div>
                 ))}
+            </div>
+            <div className="board-button">
+                <Button onClick={() => { userInfo[0].userNo !== 0 ? navigate("/BoardAdd") : ToastWarn("로그인을 해주세요") }} text="글쓰기" />
             </div>
         </>
     )

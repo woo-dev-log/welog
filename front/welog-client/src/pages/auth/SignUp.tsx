@@ -20,10 +20,19 @@ const SignUp = () => {
     const [checkId, setCheckId] = useState("");
 
     const pwCheck = (e: React.ChangeEvent<HTMLInputElement>) => {
+        const hangul = /[ㄱ-ㅎ|ㅏ-ㅣ|가-힣]/g;
+        let value = e.target.value;
+
         if (pw.length > 15) {
             ToastWarn("비밀번호를 15자 이내로 생성해주세요");
             return;
-        } else setPw(e.target.value);
+        } else if (hangul.test(value)) {
+            value = value.replace(hangul, "");
+            setPw(value);
+            return;
+        } else {
+            setPw(value);
+        }
     }
 
     const idCheck = async (e: React.ChangeEvent<HTMLInputElement>) => {

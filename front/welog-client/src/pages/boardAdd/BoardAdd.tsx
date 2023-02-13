@@ -1,10 +1,10 @@
 import axios from "axios";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import ReactQuill from "react-quill";
 import 'react-quill/dist/quill.snow.css';
 import { useNavigate } from "react-router-dom";
 import { useRecoilState, useRecoilValue } from "recoil";
-import { loginUser } from "../../components/atoms";
+import { boardUpdate, loginUser } from "../../components/atoms";
 import Button from "../../components/button/Button";
 import Input from "../../components/input/Input";
 import Label from "../../components/label/Label";
@@ -17,9 +17,10 @@ const BoardAdd = () => {
     const [title, setTitle] = useState("");
     const [contents, setContents] = useState("");
     const [userInfo, setUserInfo] = useRecoilState(loginUser);
+    const [updateValue, setUpdateValue] = useRecoilState(boardUpdate);
     const navigate = useNavigate();
 
-    const boardAddApi = async () => {
+    const boardAddApi = async (type: number) => {
         if (title === "" || contents === "") {
             ToastWarn("모두 입력해주세요");
             return;
@@ -27,8 +28,18 @@ const BoardAdd = () => {
             ToastWarn("제목을 30자 이내로 작성해주세요");
             return;
         } else {
+            let typeTitle = "글을 등록하시겠어요?";
+            let typeUrl = "/boardAdd";
+            let typeData = { title, contents, userNo: userInfo[0].userNo, boardNo: 0 };
+
+            if (type === 1) {
+                typeTitle = "글을 수정하시겠어요?"
+                typeUrl = "/boardUpdate";
+                typeData.boardNo = updateValue.boardNo;
+            }
+
             const result = await Swal.fire({
-                title: '글을 등록하시겠어요?',
+                title: typeTitle,
                 icon: 'question',
                 showCancelButton: true,
                 confirmButtonColor: 'black',
@@ -39,16 +50,32 @@ const BoardAdd = () => {
 
             if (result.isConfirmed) {
                 try {
-                    await axios.post("/boardAdd", { title, contents, userNo: userInfo[0].userNo });
-                    ToastSuccess("글이 등록되었어요!");
+                    await axios.post(typeUrl, typeData);
+                    if (type === 1) {
+                        ToastSuccess("글이 수정되었어요!");
+                    } else ToastSuccess("글이 등록되었어요!");
+                    setUpdateValue({ titleValue: "", contentsValue: "", boardNo: 0 });
                     navigate("/");
                 } catch (e) {
-                    ToastError("등록을 실패했어요");
+                    if (type === 1) {
+                        ToastError("수정을 실패했어요");
+                    } else ToastError("등록을 실패했어요");
                     console.error(e);
                 }
             }
         }
     }
+
+    // 수정시
+    useEffect(() => {
+        if (updateValue.titleValue) {
+            setTitle(updateValue.titleValue);
+        } else setTitle("");
+
+        if (updateValue.contentsValue) {
+            setContents(updateValue.contentsValue);
+        } else setContents("");
+    }, [updateValue.titleValue, updateValue.contentsValue]);
 
     return (
         <div className="boardAdd-container">
@@ -58,8 +85,11 @@ const BoardAdd = () => {
             </div>
             <Label text="내용" />
             <Line />
-            <ReactQuill onChange={setContents} />
-            <div className="boardAdd-button"><Button onClick={boardAddApi} text="글쓰기" /></div>
+            <ReactQuill onChange={setContents} value={contents} />
+            <div className="boardAdd-button">
+                {updateValue.titleValue ? <Button onClick={() => boardAddApi(1)} text="글 수정" />
+                    : <Button onClick={() => boardAddApi(0)} text="글 등록" />}
+            </div>
         </div>
     )
 }

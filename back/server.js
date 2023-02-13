@@ -116,7 +116,8 @@ app.post("/boardDetail", async (req, res) => {
     try {
         const { boardNo } = req.body;
         const [rows] = await mysql.query(`
-        SELECT b.boardNo, b.userNo, b.title, b.contents, b.rgstrDate, u.nickname, u.imgUrl 
+        SELECT b.boardNo, b.userNo, b.title, b.contents, b.rgstrDate, b.updateDate, 
+        u.nickname, u.imgUrl 
         FROM board b 
         LEFT OUTER JOIN user u 
         ON b.userNo = u.userNo 
@@ -129,15 +130,38 @@ app.post("/boardDetail", async (req, res) => {
     }
 })
 
+app.post("/boardUpdate", async (req, res) => {
+    try {
+        const { title, contents, boardNo, userNo } = req.body;
+        if (userNo === 0) {
+            res.status(400).send("fail");
+        } else {
+            const [rows] = await mysql.query(`
+            UPDATE board 
+            SET title = ?, contents = ?, updateDate = now() 
+            WHERE boardNo = ? AND userNo = ?
+            `, [title, contents, boardNo, userNo]);
+            res.status(200).send("success");
+        }
+    } catch (e) {
+        res.status(400).send("fail");
+        console.error(e);
+    }
+})
+
 app.post("/boardAdd", async (req, res) => {
     try {
         const { title, contents, userNo } = req.body;
-        const [rows] = await mysql.query(`
-        INSERT INTO
-        board(userNo, title, contents, rgstrDate)
-        VALUES(?, ?, ?, now())
-        `, [userNo, title, contents]);
-        res.status(200).send("success");
+        if (userNo === 0) {
+            res.status(400).send("fail");
+        } else {
+            const [rows] = await mysql.query(`
+            INSERT INTO
+            board(userNo, title, contents, rgstrDate)
+            VALUES(?, ?, ?, now())
+            `, [userNo, title, contents]);
+            res.status(200).send("success");
+        }
     } catch (e) {
         res.status(400).send("fail");
         console.error(e);

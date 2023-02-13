@@ -8,8 +8,8 @@ interface Props {
     onKeyUp?: (e: React.KeyboardEvent<HTMLInputElement>) => void
 }
 
-const Input = ({ placeholder, type, onChange, onKeyUp }: Props) => {
-    return <input className="input" placeholder={placeholder} type={type} onChange={onChange} onKeyUp={onKeyUp}/>
+const Input = ({ placeholder, type, value, onChange, onKeyUp }: Props) => {
+    return <input value={value} className="input" placeholder={placeholder} type={type} onChange={onChange} onKeyUp={onKeyUp}/>
 }
 
 export default Input;

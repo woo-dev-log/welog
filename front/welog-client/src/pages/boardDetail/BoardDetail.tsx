@@ -1,10 +1,10 @@
 import axios from "axios";
 import dayjs from "dayjs";
-import { ButtonHTMLAttributes, useCallback, useEffect, useRef, useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import { useRecoilState } from "recoil";
 import Swal from "sweetalert2";
-import { loginUser } from "../../components/atoms";
+import { boardUpdate, loginUser } from "../../components/atoms";
 import Button from "../../components/button/Button";
 import Label from "../../components/label/Label";
 import Line from "../../components/line/Line";
@@ -18,6 +18,7 @@ interface BoardDetailType {
     title: string;
     contents: string;
     rgstrDate: string;
+    updateDate: string;
     nickname: string;
     imgUrl: string;
 }
@@ -38,6 +39,7 @@ const BoardDetail = () => {
     const [boardCommentAdd, setBoardCommentAdd] = useState("");
     const [currentPage, setcurrentPage] = useState(1);
     const [userInfo, setUserInfo] = useRecoilState(loginUser);
+    const [updateValue, setUpdateValue] = useRecoilState(boardUpdate);
     const { boardNo } = useParams();
     const textRef = useRef<HTMLTextAreaElement>(null);
     const navigate = useNavigate();
@@ -80,7 +82,7 @@ const BoardDetail = () => {
                 console.error(e);
             }
         }
-    }, []);
+    }, [boardCommentAdd, userInfo]);
 
     const boardCommentApi = async () => {
         try {
@@ -116,6 +118,11 @@ const BoardDetail = () => {
         }
     }
 
+    const boardUpdateApi = () => {
+        setUpdateValue({ titleValue: boardDetail[0].title, contentsValue: boardDetail[0].contents, boardNo: boardDetail[0].boardNo });
+        navigate("/boardAdd");
+    }
+
     const boardDetailApi = async () => {
         try {
             const { data } = await axios.post("/boardDetail", { boardNo });
@@ -132,31 +139,32 @@ const BoardDetail = () => {
     }, []);
 
     return (
-        <div className="boardDetail-container">
-            {boardDetail.map((board, i) => (
-                <div key={i}>
+        <>
+            {boardDetail[0] &&
+                <div className="boardDetail-container">
                     <div className="boardDetail-titleContainer">
                         <Label text="제목" />
-                        <div className="boardDetail-title">{board.title}</div>
+                        <div className="boardDetail-title">{boardDetail[0].title}</div>
                     </div>
                     <Line />
 
                     <div className="boardDetail-writerContainer">
-                        <img src={`http://localhost:3690/images/${board.imgUrl}`} />
-                        <div className="boardDetail-nickname">{board.nickname}</div>
-                        <div className="boardDetail-rgstrDate">{dayjs(board.rgstrDate).format('YYYY.MM.DD HH:mm')}</div>
+                        <img src={`http://localhost:3690/images/${boardDetail[0].imgUrl}`} />
+                        <div className="boardDetail-nickname">{boardDetail[0].nickname}</div>
+                        <div className="boardDetail-rgstrDate">{dayjs(boardDetail[0].rgstrDate).format('YYYY.MM.DD HH:mm')} 등록</div>
+                        {boardDetail[0].updateDate && <div className="boardDetail-rgstrDate">{dayjs(boardDetail[0].updateDate).format('YYYY.MM.DD HH:mm')} 수정</div>}
                     </div>
                     <Line />
 
                     <div className="boardDetail-contentsContainer">
                         <Label text="내용" />
                         <Line />
-                        <div dangerouslySetInnerHTML={{ __html: board.contents }} />
+                        <div dangerouslySetInnerHTML={{ __html: boardDetail[0].contents }} />
                     </div>
 
-                    {userInfo[0].userNo === board.userNo &&
+                    {userInfo[0].userNo === boardDetail[0].userNo &&
                         <div className="boardDetail-deleteBtn">
-                            <Button onClick={boardDeleteApi} text="수정" />
+                            <Button onClick={boardUpdateApi} text="수정" />
                             <Button onClick={boardDeleteApi} text="삭제" />
                         </div>
                     }
@@ -168,35 +176,37 @@ const BoardDetail = () => {
                     <div className="boardDetail-commentAddBtn">
                         <Button onClick={boardCommentAddApi} text="댓글 등록" />
                     </div>
-                </div>
-            ))}
-            <Paging
-                total={boardComment.length}
-                limit={limit}
-                page={currentPage}
-                setCurrentPage={setcurrentPage}
-            />
-            {boardComment.slice(offset, offset + limit).map((boardC, j) => (
-                <div key={j} className="boardDetail-commentContainer">
-                    <Line />
-                    <div className="boardDetail-commentBlock">
-                        <div className="boardDetail-commentLabel">
-                            <img src={`http://localhost:3690/images/${boardC.imgUrl}`} />
-                            <div className="boardDetail-commentNickname">{boardC.nickname}</div>
-                            <div className="boardDetail-commentRgstrDate">{dayjs(boardC.rgstrDate).format('YYYY.MM.DD HH:mm')}</div>
-                        </div>
 
-                        <div className="boardDetail-commentDeleteBtn">
-                            {userInfo[0].userNo === boardC.userNo &&
-                                <Button onClick={() =>
-                                    boardCommentDeleteApi(boardC.boardNo, boardC.commentNo)} text="댓글 삭제" />
-                            }
+                    {boardComment.length > 0 && <Paging
+                        total={boardComment.length}
+                        limit={limit}
+                        page={currentPage}
+                        setCurrentPage={setcurrentPage} />
+                    }
+
+                    {boardComment.slice(offset, offset + limit).map((boardC, j) => (
+                        <div key={j} className="boardDetail-commentContainer">
+                            <Line />
+                            <div className="boardDetail-commentBlock">
+                                <div className="boardDetail-commentLabel">
+                                    <img src={`http://localhost:3690/images/${boardC.imgUrl}`} />
+                                    <div className="boardDetail-commentNickname">{boardC.nickname}</div>
+                                    <div className="boardDetail-commentRgstrDate">{dayjs(boardC.rgstrDate).format('YYYY.MM.DD HH:mm')}</div>
+                                </div>
+
+                                <div className="boardDetail-commentDeleteBtn">
+                                    {userInfo[0].userNo === boardC.userNo &&
+                                        <Button onClick={() =>
+                                            boardCommentDeleteApi(boardC.boardNo, boardC.commentNo)} text="댓글 삭제" />
+                                    }
+                                </div>
+                            </div>
+                            <div dangerouslySetInnerHTML={{ __html: boardC.contents.replaceAll(/(\n|\r\n)/g, '<br>') }} />
                         </div>
-                    </div>
-                    <div dangerouslySetInnerHTML={{ __html: boardC.contents.replaceAll(/(\n|\r\n)/g, '<br>') }} />
+                    ))}
                 </div>
-            ))}
-        </div>
+            }
+        </>
     )
 }
 

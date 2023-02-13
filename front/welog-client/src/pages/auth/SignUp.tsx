@@ -29,6 +29,7 @@ const SignUp = () => {
         } else if (hangul.test(value)) {
             value = value.replace(hangul, "");
             setPw(value);
+            ToastWarn("한글은 입력할 수 없어요");
             return;
         } else {
             setPw(value);
@@ -125,7 +126,7 @@ const SignUp = () => {
                     if (status === 200) {
                         URL.revokeObjectURL(blobImg);
                         ToastSuccess("회원가입을 성공했어요!");
-                        navigate("/Login");
+                        navigate("/");
                     }
                 } catch (e) {
                     ToastError("회원가입을 실패했어요");

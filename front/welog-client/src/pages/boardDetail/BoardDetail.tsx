@@ -40,6 +40,7 @@ const BoardDetail = () => {
     const [currentPage, setcurrentPage] = useState(1);
     const [userInfo, setUserInfo] = useRecoilState(loginUser);
     const [updateValue, setUpdateValue] = useRecoilState(boardUpdate);
+    const [commentBoolean, setCommentBoolean] = useState(false);
     const { boardNo } = useParams();
     const textRef = useRef<HTMLTextAreaElement>(null);
     const navigate = useNavigate();
@@ -53,6 +54,10 @@ const BoardDetail = () => {
         }
     };
 
+    const userBoardHandeler = useCallback((nickname: string) => {
+        navigate("/userBoard/" + nickname);
+    }, []);
+
     const boardCommentDeleteApi = useCallback(async (boardNo: number, commentNo: number) => {
         try {
             await axios.post("/boardCommentDelete", { boardNo, commentNo });
@@ -65,10 +70,7 @@ const BoardDetail = () => {
     }, []);
 
     const boardCommentAddApi = useCallback(async () => {
-        if (userInfo[0].userNo === 0) {
-            ToastWarn("로그인을 해주세요");
-            return;
-        } else if (boardCommentAdd === "") {
+        if (boardCommentAdd === "") {
             ToastWarn("댓글을 입력해주세요");
             return;
         } else {
@@ -83,6 +85,14 @@ const BoardDetail = () => {
             }
         }
     }, [boardCommentAdd, userInfo]);
+
+    const boardCommentLoginCheck = () => {
+        if (userInfo[0].userNo === 0) {
+            ToastWarn("로그인을 해주세요");
+            setCommentBoolean(true);
+            return;
+        }
+    }
 
     const boardCommentApi = async () => {
         try {
@@ -149,8 +159,10 @@ const BoardDetail = () => {
                     <Line />
 
                     <div className="boardDetail-writerContainer">
-                        <img src={`http://localhost:3690/images/${boardDetail[0].imgUrl}`} />
-                        <div className="boardDetail-nickname">{boardDetail[0].nickname}</div>
+                        <img src={`http://localhost:3690/images/${boardDetail[0].imgUrl}`} onClick={() => userBoardHandeler(boardDetail[0].nickname)} />
+                        <div className="boardDetail-nickname" onClick={() => userBoardHandeler(boardDetail[0].nickname)}>
+                            {boardDetail[0].nickname}
+                        </div>
                         <div className="boardDetail-rgstrDate">{dayjs(boardDetail[0].rgstrDate).format('YYYY.MM.DD HH:mm')} 등록</div>
                         {boardDetail[0].updateDate && <div className="boardDetail-rgstrDate">{dayjs(boardDetail[0].updateDate).format('YYYY.MM.DD HH:mm')} 수정</div>}
                     </div>
@@ -171,8 +183,8 @@ const BoardDetail = () => {
 
                     {boardComment && <Label text={boardComment.length + "개의 댓글이 있어요"} />}
                     <Line />
-                    <textarea ref={textRef} value={boardCommentAdd} placeholder="댓글을 입력해주세요"
-                        onInput={autoHeight} onChange={e => setBoardCommentAdd(e.target.value)} />
+                    <textarea ref={textRef} value={boardCommentAdd} placeholder="댓글을 입력해주세요" disabled={commentBoolean}
+                        onFocus={boardCommentLoginCheck} onInput={autoHeight} onChange={e => setBoardCommentAdd(e.target.value)} />
                     <div className="boardDetail-commentAddBtn">
                         <Button onClick={boardCommentAddApi} text="댓글 등록" />
                     </div>
@@ -189,8 +201,8 @@ const BoardDetail = () => {
                             <Line />
                             <div className="boardDetail-commentBlock">
                                 <div className="boardDetail-commentLabel">
-                                    <img src={`http://localhost:3690/images/${boardC.imgUrl}`} />
-                                    <div className="boardDetail-commentNickname">{boardC.nickname}</div>
+                                    <img src={`http://localhost:3690/images/${boardC.imgUrl}`} onClick={() => userBoardHandeler(boardC.nickname)} />
+                                    <div className="boardDetail-commentNickname" onClick={() => userBoardHandeler(boardC.nickname)}>{boardC.nickname}</div>
                                     <div className="boardDetail-commentRgstrDate">{dayjs(boardC.rgstrDate).format('YYYY.MM.DD HH:mm')}</div>
                                 </div>
 

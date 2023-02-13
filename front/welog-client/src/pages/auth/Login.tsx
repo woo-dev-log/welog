@@ -30,6 +30,7 @@ const SignUp = () => {
         if (hangul.test(value)) {
             value = value.replace(hangul, "");
             setPw(value);
+            ToastWarn("한글은 입력할 수 없어요");
             return;
         } else {
             setPw(value);

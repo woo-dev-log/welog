@@ -28,6 +28,24 @@ const imageUpload = multer({
     })
 });
 
+app.post("/userBoard", async (req, res) => {
+    try {
+        const { userNickname } = req.body;
+        const [rows] = await mysql.query(`
+            SELECT b.boardNo, b.userNo, b.title, b.contents, b.rgstrDate, u.nickname, u.imgUrl, 
+            (SELECT count(*) FROM comment c WHERE c.boardNo = b.boardNo) commentCnt 
+            FROM board b 
+            LEFT OUTER JOIN user u 
+            ON b.userNo = u.userNo 
+            where u.nickname = ?
+            ORDER BY b.rgstrDate DESC
+            `, [userNickname]);
+        rows.length > 0 ? res.status(200).send(rows) : res.status(400).send("fail");
+    } catch (e) {
+        console.error(e);
+    }
+})
+
 app.post("/idCheck", async (req, res) => {
     const { id } = req.body;
 

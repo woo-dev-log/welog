@@ -18,6 +18,7 @@ const BoardAdd = () => {
     const [contents, setContents] = useState("");
     const [userInfo, setUserInfo] = useRecoilState(loginUser);
     const [updateValue, setUpdateValue] = useRecoilState(boardUpdate);
+    const [boardBoolean, setBoardBoolean] = useState(false);
     const navigate = useNavigate();
 
     const boardAddApi = async (type: number) => {
@@ -66,6 +67,14 @@ const BoardAdd = () => {
         }
     }
 
+    const boardLoginCheck = () => {
+        if (userInfo[0].userNo === 0) {
+            ToastWarn("로그인을 해주세요");
+            setBoardBoolean(true);
+            return;
+        }
+    }
+
     // 수정시
     useEffect(() => {
         if (updateValue.titleValue) {
@@ -81,11 +90,12 @@ const BoardAdd = () => {
         <div className="boardAdd-container">
             <div className="boardAdd-titleBlock">
                 <Label text="제목" />
-                <Input placeholder="제목을 입력해주세요" onChange={e => setTitle(e.target.value)} value={title} />
+                <Input placeholder="제목을 입력해주세요" disabled={boardBoolean}
+                onFocus={boardLoginCheck} onChange={e => setTitle(e.target.value)} value={title} />
             </div>
             <Label text="내용" />
             <Line />
-            <ReactQuill onChange={setContents} value={contents} />
+            <ReactQuill onChange={setContents} value={contents} placeholder="내용을 입력해주세요" />
             <div className="boardAdd-button">
                 {updateValue.titleValue ? <Button onClick={() => boardAddApi(1)} text="글 수정" />
                     : <Button onClick={() => boardAddApi(0)} text="글 등록" />}

@@ -24,9 +24,8 @@
 }
 
 .boardDetail-container {
-    margin: 0 50px 0 50px;
-
     textarea {
+        font-family: "NanumSquareRoundR";
         box-sizing: border-box;
         width: 100%;
         overflow-y: hidden;
@@ -53,10 +52,12 @@
         font-size: 18px;
 
         img {
+            cursor: pointer;
             @include imgCss(50px, 50px);
         }
 
         .boardDetail-nickname {
+            cursor: pointer;
             font-family: "NanumSquareRoundEB";
         }
 
@@ -98,15 +99,17 @@
             justify-content: space-between;
             margin-bottom: 20px;
 
-            img {
-                @include imgCss(40px, 40px);
-            }
-
             .boardDetail-commentLabel {
                 display: flex;
                 align-items: center;
 
+                img {
+                    cursor: pointer;
+                    @include imgCss(40px, 40px);
+                }
+
                 .boardDetail-commentNickname {
+                    cursor: pointer;
                     font-family: "NanumSquareRoundEB";
                     margin-right: 10px;
                 }
@@ -119,7 +122,7 @@
             .boardDetail-commentDeleteBtn {
                 display: flex;
                 justify-content: space-between;
-        
+
                 button {
                     @include buttonCss(100px, 40px, 14px);
                 }

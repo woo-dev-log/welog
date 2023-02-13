@@ -12,6 +12,7 @@ import { useEffect } from 'react'
 import { useCookies } from 'react-cookie'
 import { loginUser } from './components/atoms'
 import { Toast } from './components/Toast'
+import UserBoard from './pages/userBoard/UserBoard'
 
 
 function App() {
@@ -24,7 +25,7 @@ function App() {
   // axios.defaults.headers.common['Authorization'] = `Bearer ${data}`;
 
   const silentRefresh = async () => {
-    if(cookies.welogJWT) {
+    if (cookies.welogJWT) {
       const { data } = await axios.post("loginToken", { welogJWT: cookies.welogJWT });
       setUserInfo([{ userNo: data.userNo, id: data.id, nickname: data.nickname, imgUrl: data.imgUrl }]);
     }
@@ -42,6 +43,7 @@ function App() {
         <Routes>
           <Route path='/' element={<Board />} />
           <Route path='/:boardNo' element={<BoardDetail />} />
+          <Route path='/userBoard/:userNickname' element={<UserBoard />} />
           <Route path='/BoardAdd' element={<BoardAdd />} />
           <Route path='/Login' element={<Login />} />
           <Route path='/SignUp' element={<SignUp />} />

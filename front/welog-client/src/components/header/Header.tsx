@@ -3,7 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import { useRecoilState } from 'recoil';
 import Swal from 'sweetalert2';
 import { loginUser } from '../atoms';
-import { ToastWarn } from '../Toast';
+import { ToastSuccess } from '../Toast';
 import './Header.scss';
 
 const Header = () => {
@@ -23,7 +23,7 @@ const Header = () => {
         })
 
         if (result.isConfirmed) {
-            ToastWarn(userInfo[0].nickname + "님 안녕히가세요!");
+            ToastSuccess(userInfo[0].nickname + "님 안녕히가세요!");
             removeCookie("welogJWT");
             setUserInfo([{ userNo: 0, nickname: "", id: "", imgUrl: "" }]);
         }
@@ -37,7 +37,10 @@ const Header = () => {
                     <div className="header-block">
                         <img src={`http://localhost:3690/images/${userInfo[0].imgUrl}`} />
                         <div>{userInfo[0].nickname}</div>
-                        <ul><li onClick={logOut}>로그아웃</li></ul>
+                        <ul>
+                            <li onClick={() => navigate("/userBoard/" + userInfo[0].nickname)}>내가 쓴 글</li>
+                            <li onClick={logOut}>로그아웃</li>
+                        </ul>
                     </div>
                     :
                     <div className="header-block">

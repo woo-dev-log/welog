@@ -63,9 +63,9 @@ const Board = () => {
                             <Line />
                             <div className="board-title">{board.title}</div>
                             <div className="board-contents">
-                                {board.contents.replace(/<[^>]*>?/g, "").length < 60
-                                    ? board.contents.replace(/<[^>]*>?/g, "")
-                                    : board.contents.replace(/<[^>]*>?/g, "").substring(0, 60) + " ..."}
+                                {board.contents.replaceAll(/<[^>]*>?/g, "").length < 60
+                                    ? board.contents.replaceAll(/<[^>]*>?/g, "")
+                                    : board.contents.replaceAll(/<[^>]*>?/g, "").substring(0, 60) + " ..."}
                             </div>
                         </div>
                         <div className="board-footer">

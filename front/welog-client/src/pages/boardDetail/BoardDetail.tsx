@@ -187,7 +187,7 @@ const BoardDetail = () => {
     useEffect(() => {
         boardDetailApi();
         boardCommentApi();
-    }, []);
+    }, [boardNo]);
 
     return (
         <>

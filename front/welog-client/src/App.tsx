@@ -33,7 +33,7 @@ function App() {
 
   useEffect(() => {
     silentRefresh();
-  }, []);
+  }, [cookies.welogJWT]);
 
   return (
     <>

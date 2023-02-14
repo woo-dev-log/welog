@@ -1,77 +1,79 @@
-.board-button {
-    text-align: center;
+.board-container {
+    .board-flexWrap {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 10px;
 
-    button {
-        cursor: pointer;
-        background-color: black;
-        margin-top: 20px;
-        width: 150px;
-        height: 40px;
-        border-width: 1px;
-        border-radius: 10px;
-        font-size: 16px;
-        font-family: "NanumSquareRoundEB";
-        color: white;
+        .board-block {
+            cursor: pointer;
+            box-sizing: border-box;
+            border: 1px solid black;
+            border-radius: 10px;
+            padding: 20px;
+            margin: 20px auto;
+            height: 250px;
+            width: 310px;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
 
-        &:hover {
-            background-color: white;
-            color: black;
+            .board-userBlock {
+                display: flex;
+                align-items: center;
+
+                img {
+                    width: 40px;
+                    height: 40px;
+                    border: 1px solid gray;
+                    border-radius: 1000px;
+                    margin-right: 10px;
+                }
+
+                .board-nickname {
+                    font-family: "NanumSquareRoundEB";
+                    font-size: 18px;
+                }
+            }
+
+            .board-title {
+                font-size: 18px;
+                font-family: "NanumSquareRoundEB";
+                margin-bottom: 10px;
+            }
+
+            .board-contents {
+                font-size: 16px;
+                margin-bottom: 10px;
+            }
+
+            .board-footer {
+                display: flex;
+                justify-content: space-between;
+                font-size: 16px;
+                color: gray;
+            }
         }
     }
-}
 
-.board-flexWrap {
-    display: flex;
-    flex-wrap: wrap;
-    justify-content: space-evenly;
+    .board-button {
+        text-align: center;
 
-    .board-block {
-        cursor: pointer;
-        box-sizing: border-box;
-        border: 1px solid black;
-        border-radius: 10px;
-        padding: 20px;
-        margin: 20px 0px 20px 0;
-        height: 310px;
-        width: 310px;
-        display: flex;
-        flex-direction: column;
-        justify-content: space-between;
-
-        .board-userBlock {
-            display: flex;
-            align-items: center;
-
-            img {
-                width: 40px;
-                height: 40px;
-                border: 1px solid gray;
-                border-radius: 1000px;
-                margin-right: 10px;
-            }
-
-            .board-nickname {
-                font-family: "NanumSquareRoundEB";
-                font-size: 18px;
-            }
-        }
-
-        .board-title {
-            font-size: 18px;
+        button {
+            cursor: pointer;
+            background-color: black;
+            margin-top: 20px;
+            width: 150px;
+            height: 40px;
+            border-width: 1px;
+            border-radius: 10px;
+            font-size: 16px;
             font-family: "NanumSquareRoundEB";
-            margin-bottom: 10px;
-        }
+            color: white;
 
-        .board-contents {
-            font-size: 16px;
-            margin-bottom: 10px;
-        }
-
-        .board-footer {
-            display: flex;
-            justify-content: space-between;
-            font-size: 16px;
-            color: gray;
+            &:hover {
+                background-color: white;
+                color: black;
+            }
         }
     }
 }

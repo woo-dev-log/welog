@@ -29,6 +29,7 @@ interface BoardCommentType {
     userNo: number;
     contents: string;
     rgstrDate: string;
+    updateDate: string;
     nickname: string;
     imgUrl: string;
 }
@@ -37,10 +38,13 @@ const BoardDetail = () => {
     const [boardDetail, setBoardDetail] = useState<BoardDetailType[]>([]);
     const [boardComment, setBoardComment] = useState<BoardCommentType[]>([]);
     const [boardCommentAdd, setBoardCommentAdd] = useState("");
+    const [boardCommentUpdate, setBoardCommentUpdate] = useState("");
     const [currentPage, setcurrentPage] = useState(1);
     const [userInfo, setUserInfo] = useRecoilState(loginUser);
     const [updateValue, setUpdateValue] = useRecoilState(boardUpdate);
     const [commentBoolean, setCommentBoolean] = useState(false);
+    const [commentUpdateBoolean, setCommentUpdateBoolean] = useState(false);
+    const [commentUpdateCheck, setCommentUpdateCheck] = useState(0);
     const { boardNo } = useParams();
     const textRef = useRef<HTMLTextAreaElement>(null);
     const navigate = useNavigate();
@@ -58,7 +62,7 @@ const BoardDetail = () => {
         navigate("/userBoard/" + nickname);
     }, []);
 
-    const boardCommentDeleteApi = useCallback(async (boardNo: number, commentNo: number) => {
+    const boardCommentDeleteApi = useCallback(async (commentNo: number) => {
         try {
             await axios.post("/boardCommentDelete", { boardNo, commentNo });
             ToastSuccess("댓글이 삭제되었어요!");
@@ -69,9 +73,46 @@ const BoardDetail = () => {
         }
     }, []);
 
+    const boardCommentUpdateApi = useCallback(async (commentContents: string, commentNo: number) => {
+        if (boardCommentUpdate === "") {
+            ToastWarn("댓글을 입력해주세요");
+            return;
+        } else if (commentContents === boardCommentUpdate) {
+            ToastWarn("수정된 내용이 없어요");
+            setBoardCommentAdd("");
+            setBoardCommentUpdate("");
+            setCommentUpdateCheck(0);
+            setCommentUpdateBoolean(false);
+            return;
+        } else {
+            try {
+                await axios.post("/boardCommentUpdate", { boardNo, boardCommentUpdate, userNo: userInfo[0].userNo, commentNo });
+                setBoardCommentAdd("");
+                setBoardCommentUpdate("");
+                setCommentUpdateCheck(0);
+                setCommentUpdateBoolean(false);
+                ToastSuccess("댓글이 수정되었어요!");
+                boardCommentApi();
+            } catch (e) {
+                ToastError("댓글 수정을 실패했어요");
+                console.error(e);
+            }
+        }
+    }, [boardCommentUpdate, userInfo]);
+
+    const boardCommentUpdateCheckApi = (boardCContents: string, boardCNo: number) => {
+        setBoardCommentUpdate(boardCContents);
+        setCommentUpdateCheck(boardCNo);
+        setCommentUpdateBoolean(true);
+    }
+
     const boardCommentAddApi = useCallback(async () => {
         if (boardCommentAdd === "") {
             ToastWarn("댓글을 입력해주세요");
+            return;
+        } else if (userInfo[0].userNo === 0) {
+            ToastWarn("로그인을 해주세요");
+            setCommentBoolean(true);
             return;
         } else {
             try {
@@ -203,17 +244,28 @@ const BoardDetail = () => {
                                 <div className="boardDetail-commentLabel">
                                     <img src={`http://localhost:3690/images/${boardC.imgUrl}`} onClick={() => userBoardHandeler(boardC.nickname)} />
                                     <div className="boardDetail-commentNickname" onClick={() => userBoardHandeler(boardC.nickname)}>{boardC.nickname}</div>
-                                    <div className="boardDetail-commentRgstrDate">{dayjs(boardC.rgstrDate).format('YYYY.MM.DD HH:mm')}</div>
+                                    <div className="boardDetail-commentRgstrDate">{dayjs(boardC.rgstrDate).format('YYYY.MM.DD HH:mm')} 등록</div>
+                                    {boardC.updateDate && 
+                                    <div className="boardDetail-commentRgstrDate">{dayjs(boardC.updateDate).format('YYYY.MM.DD HH:mm')} 수정</div>}
                                 </div>
 
                                 <div className="boardDetail-commentDeleteBtn">
                                     {userInfo[0].userNo === boardC.userNo &&
-                                        <Button onClick={() =>
-                                            boardCommentDeleteApi(boardC.boardNo, boardC.commentNo)} text="댓글 삭제" />
+                                        <>
+                                            {commentUpdateBoolean && commentUpdateCheck === boardC.commentNo &&
+                                                <Button onClick={() => boardCommentUpdateApi(boardC.contents, boardC.commentNo)} text="수정 완료" />}
+                                            {!commentUpdateBoolean && <Button onClick={() =>
+                                                boardCommentUpdateCheckApi(boardC.contents, boardC.commentNo)} text="수정" />}
+
+                                            <Button onClick={() => boardCommentDeleteApi(boardC.commentNo)} text="삭제" />
+                                        </>
                                     }
                                 </div>
                             </div>
-                            <div dangerouslySetInnerHTML={{ __html: boardC.contents.replaceAll(/(\n|\r\n)/g, '<br>') }} />
+                            {commentUpdateCheck === boardC.commentNo && userInfo[0].userNo !== 0
+                                ? <textarea ref={textRef} value={boardCommentUpdate} placeholder="댓글을 입력해주세요"
+                                    onInput={autoHeight} onChange={e => setBoardCommentUpdate(e.target.value)} />
+                                : <div dangerouslySetInnerHTML={{ __html: boardC.contents.replaceAll(/(\n|\r\n)/g, '<br>') }} />}
                         </div>
                     ))}
                 </div>

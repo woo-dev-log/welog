@@ -120,11 +120,12 @@
             }
 
             .boardDetail-commentDeleteBtn {
-                display: flex;
-                justify-content: space-between;
+                // display: flex;
+                // justify-content: space-between;
 
                 button {
-                    @include buttonCss(100px, 40px, 14px);
+                    margin-left: 10px;
+                    @include buttonCss(90px, 40px, 14px);
                 }
             }
         }

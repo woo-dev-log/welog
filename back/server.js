@@ -84,16 +84,40 @@ app.post("/boardCommentDelete", async (req, res) => {
     }
 })
 
+app.post("/boardCommentUpdate", async (req, res) => {
+    try {
+        const { boardNo, boardCommentUpdate, userNo, commentNo } = req.body;
+        if (userNo === 0) {
+            res.status(400).send("fail");
+        } else {
+            const [rows] = await mysql.query(`
+            UPDATE comment 
+            SET contents = ?, updateDate = now() 
+            WHERE boardNo = ? AND userNo = ? AND commentNo = ?
+            `, [boardCommentUpdate, boardNo, userNo, commentNo]);
+
+            res.status(200).send("success");
+        }
+    } catch (e) {
+        res.status(400).send("fail");
+        console.error(e);
+    }
+})
+
 app.post("/boardCommentAdd", async (req, res) => {
     try {
         const { boardNo, boardCommentAdd, userNo } = req.body;
-        const [rows] = await mysql.query(`
-        INSERT INTO
-        comment(boardNo, userNo, contents, rgstrDate)   
-        VALUES(?, ?, ?, now())
-        `, [boardNo, userNo, boardCommentAdd]);
+        if (userNo === 0) {
+            res.status(400).send("fail");
+        } else {
+            const [rows] = await mysql.query(`
+            INSERT INTO
+            comment(boardNo, userNo, contents, rgstrDate)   
+            VALUES(?, ?, ?, now())
+            `, [boardNo, userNo, boardCommentAdd]);
 
-        res.status(200).send("success");
+            res.status(200).send("success");
+        }
     } catch (e) {
         res.status(400).send("fail");
         console.error(e);
@@ -104,7 +128,8 @@ app.post("/boardComment", async (req, res) => {
     try {
         const { boardNo } = req.body;
         const [rows] = await mysql.query(`
-        SELECT c.commentNo, c.boardNo, c.userNo, c.contents, c.rgstrDate, u.nickname, u.imgUrl 
+        SELECT c.commentNo, c.boardNo, c.userNo, c.contents, c.rgstrDate, c.updateDate, 
+        u.nickname, u.imgUrl 
         FROM comment c 
         LEFT OUTER JOIN user u
         ON c.userNo = u.userNo

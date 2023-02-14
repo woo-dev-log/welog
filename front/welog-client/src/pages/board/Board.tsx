@@ -44,7 +44,7 @@ const Board = () => {
     }, []);
 
     return (
-        <>
+        <div className="board-container">
             <Paging
                 total={boardInfo.length}
                 limit={limit}
@@ -78,7 +78,7 @@ const Board = () => {
             <div className="board-button">
                 <Button onClick={() => { userInfo[0].userNo !== 0 ? navigate("/BoardAdd") : ToastWarn("로그인을 해주세요") }} text="글쓰기" />
             </div>
-        </>
+        </div>
     )
 };
 

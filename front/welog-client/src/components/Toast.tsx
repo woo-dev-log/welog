@@ -4,7 +4,7 @@ import 'react-toastify/dist/ReactToastify.css';
 export const ToastSuccess = (text: string) => {
     return (
         toast.success(text, {
-            position: "top-right",
+            position: "bottom-right",
             autoClose: 3000,
             hideProgressBar: false,
             closeOnClick: true,

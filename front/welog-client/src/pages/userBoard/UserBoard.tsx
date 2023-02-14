@@ -1,6 +1,9 @@
 import axios from "axios";
+import dayjs from "dayjs";
 import { useEffect, useState } from "react";
-import { useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
+import Paging from "../../components/paging/Paging";
+import './UserBoard.scss';
 
 interface BoardType {
     boardNo: number;
@@ -16,6 +19,10 @@ interface BoardType {
 const UserBoard = () => {
     const { userNickname } = useParams();
     const [userBoardList, setUserBoardList] = useState<BoardType[]>([]);
+    const [currentPage, setcurrentPage] = useState(1);
+    const navigate = useNavigate();
+    const limit = 10;
+    const offset = (currentPage - 1) * limit;
 
     const userBoardApi = async () => {
         const { data } = await axios.post("/userBoard", { userNickname: userNickname });
@@ -24,21 +31,35 @@ const UserBoard = () => {
 
     useEffect(() => {
         userBoardApi();
-    }, [])
+    }, [userNickname])
 
     return (
-        <div>
-            {userBoardList.map((boardList, i) => (
-                <div key={i}>
-                    {/* <img src={`http://localhost:3690/images/${boardList.imgUrl}`} /> */}
-                    <div>{boardList.nickname}</div>
-                    <div>{boardList.title}</div>
-                    <div>{boardList.contents}</div>
-                    <div>{boardList.rgstrDate}</div>
-                    <div>{boardList.commentCnt}</div>
+        <>
+            {userBoardList.length > 0 && <Paging
+                total={userBoardList.length}
+                limit={limit}
+                page={currentPage}
+                setCurrentPage={setcurrentPage} />
+            }
+            {userBoardList.slice(offset, offset + limit).map((boardList, i) => (
+                <div key={i} className="userBoard-block" onClick={() => navigate("/" + boardList.boardNo)}>
+                    <div className="userBoard-left">
+                        <img src={`http://localhost:3690/images/${boardList.imgUrl}`} />
+                        <div className="userBoard-nickname">{boardList.nickname}</div>
+                    </div>
+                    <div className="userBoard-title">{boardList.title}</div>
+                    {/* <div>내용
+                        {boardList.contents.replaceAll(/<[^>]*>?/g, "").length < 30
+                            ? boardList.contents.replaceAll(/<[^>]*>?/g, "")
+                            : boardList.contents.replaceAll(/<[^>]*>?/g, "").substring(0, 30) + " ..."}
+                    </div> */}
+                    <div className="userBoard-right">
+                        <div>{dayjs(boardList.rgstrDate).format('YYYY.MM.DD')}</div>
+                        <div>댓글 {boardList.commentCnt}</div>
+                    </div>
                 </div>
             ))}
-        </div>
+        </>
     )
 }
 

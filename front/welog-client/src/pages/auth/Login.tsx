@@ -11,7 +11,6 @@ import './Sign.scss';
 
 const SignUp = () => {
     const [userInfo, setUserInfo] = useRecoilState(loginUser);
-    // const cookies = new Cookies();
     const [cookies, setCookie] = useCookies(['welogJWT']);
     const navigate = useNavigate();
     const [id, setId] = useState("");
@@ -65,10 +64,10 @@ const SignUp = () => {
     return (
         <>
             <div className="container">
+                {checkLogin && <div style={{ color: "red" }}>{checkLogin}</div>}
                 <Input placeholder="아이디" onChange={e => setId(e.target.value)} value={id} />
                 <Input placeholder="비밀번호" type="password" value={pw}
                     onChange={onChangeHandler} onKeyUp={onKeyUpHandler} />
-                <div style={{ color: "red" }}>{checkLogin}</div>
                 <Button onClick={loginApi} text="로그인" />
             </div>
         </>

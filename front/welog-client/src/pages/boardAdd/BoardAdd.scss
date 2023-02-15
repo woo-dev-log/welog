@@ -46,3 +46,20 @@
         }
     }
 }
+
+@media (max-width: 767px) {
+    .boardAdd-container {
+        .boardAdd-titleBlock {
+            input {
+                font-size: 18px;
+            }
+        }
+    
+        .boardAdd-button {
+            button {
+                width: 110px;
+                font-size: 14px;
+            }
+        }
+    }
+}

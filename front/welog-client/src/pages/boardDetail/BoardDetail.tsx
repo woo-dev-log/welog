@@ -204,8 +204,10 @@ const BoardDetail = () => {
                         <div className="boardDetail-nickname" onClick={() => userBoardHandeler(boardDetail[0].nickname)}>
                             {boardDetail[0].nickname}
                         </div>
-                        <div className="boardDetail-rgstrDate">{dayjs(boardDetail[0].rgstrDate).format('YYYY.MM.DD HH:mm')} 등록</div>
-                        {boardDetail[0].updateDate && <div className="boardDetail-rgstrDate">{dayjs(boardDetail[0].updateDate).format('YYYY.MM.DD HH:mm')} 수정</div>}
+                        <div className="boardDetail-date">
+                            <div className="boardDetail-rgstrDate">{dayjs(boardDetail[0].rgstrDate).format('YYYY.MM.DD HH:mm')} 등록</div>
+                            {boardDetail[0].updateDate && <div className="boardDetail-rgstrDate">{dayjs(boardDetail[0].updateDate).format('YYYY.MM.DD HH:mm')} 수정</div>}
+                        </div>
                     </div>
                     <Line />
 
@@ -213,14 +215,15 @@ const BoardDetail = () => {
                         <Label text="내용" />
                         <Line />
                         <div dangerouslySetInnerHTML={{ __html: boardDetail[0].contents }} />
-                    </div>
 
-                    {userInfo[0].userNo === boardDetail[0].userNo &&
-                        <div className="boardDetail-deleteBtn">
-                            <Button onClick={boardUpdateApi} text="수정" />
-                            <Button onClick={boardDeleteApi} text="삭제" />
-                        </div>
-                    }
+                        {userInfo[0].userNo === boardDetail[0].userNo &&
+                            <div className="boardDetail-deleteBtn">
+                                <Button onClick={boardUpdateApi} text="수정" />
+                                <Button onClick={boardDeleteApi} text="삭제" />
+                            </div>
+                        }
+                        <Line />
+                    </div>
 
                     {boardComment && <Label text={boardComment.length + "개의 댓글이 있어요"} />}
                     <Line />
@@ -244,28 +247,30 @@ const BoardDetail = () => {
                                 <div className="boardDetail-commentLabel">
                                     <img src={`http://localhost:3690/images/${boardC.imgUrl}`} onClick={() => userBoardHandeler(boardC.nickname)} />
                                     <div className="boardDetail-commentNickname" onClick={() => userBoardHandeler(boardC.nickname)}>{boardC.nickname}</div>
-                                    <div className="boardDetail-commentRgstrDate">{dayjs(boardC.rgstrDate).format('YYYY.MM.DD HH:mm')} 등록</div>
-                                    {boardC.updateDate && 
-                                    <div className="boardDetail-commentRgstrDate">{dayjs(boardC.updateDate).format('YYYY.MM.DD HH:mm')} 수정</div>}
-                                </div>
-
-                                <div className="boardDetail-commentDeleteBtn">
-                                    {userInfo[0].userNo === boardC.userNo &&
-                                        <>
-                                            {commentUpdateBoolean && commentUpdateCheck === boardC.commentNo &&
-                                                <Button onClick={() => boardCommentUpdateApi(boardC.contents, boardC.commentNo)} text="수정 완료" />}
-                                            {!commentUpdateBoolean && <Button onClick={() =>
-                                                boardCommentUpdateCheckApi(boardC.contents, boardC.commentNo)} text="수정" />}
-
-                                            <Button onClick={() => boardCommentDeleteApi(boardC.commentNo)} text="삭제" />
-                                        </>
-                                    }
+                                    <div className="boardDetail-date">
+                                        <div className="boardDetail-commentRgstrDate">{dayjs(boardC.rgstrDate).format('YYYY.MM.DD HH:mm')} 등록</div>
+                                        {boardC.updateDate &&
+                                            <div className="boardDetail-commentRgstrDate">{dayjs(boardC.updateDate).format('YYYY.MM.DD HH:mm')} 수정</div>}
+                                    </div>
                                 </div>
                             </div>
                             {commentUpdateCheck === boardC.commentNo && userInfo[0].userNo !== 0
                                 ? <textarea ref={textRef} value={boardCommentUpdate} placeholder="댓글을 입력해주세요"
                                     onInput={autoHeight} onChange={e => setBoardCommentUpdate(e.target.value)} />
                                 : <div dangerouslySetInnerHTML={{ __html: boardC.contents.replaceAll(/(\n|\r\n)/g, '<br>') }} />}
+
+                            <div className="boardDetail-commentDeleteBtn">
+                                {userInfo[0].userNo === boardC.userNo &&
+                                    <>
+                                        {commentUpdateBoolean && commentUpdateCheck === boardC.commentNo &&
+                                            <Button onClick={() => boardCommentUpdateApi(boardC.contents, boardC.commentNo)} text="수정 완료" />}
+                                        {!commentUpdateBoolean && <Button onClick={() =>
+                                            boardCommentUpdateCheckApi(boardC.contents, boardC.commentNo)} text="수정" />}
+
+                                        <Button onClick={() => boardCommentDeleteApi(boardC.commentNo)} text="삭제" />
+                                    </>
+                                }
+                            </div>
                         </div>
                     ))}
                 </div>

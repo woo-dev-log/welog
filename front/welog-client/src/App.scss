@@ -1,24 +1,30 @@
 .app-block {
-    margin: 50px 100px 50px 100px;
+    margin: 50px 200px;
     font-family: "NanumSquareRoundR";
+}
+
+@media (max-width: 767px) {
+    .app-block {
+        margin: 30px 20px;
+    }
 }
 
 @font-face {
     font-family: "NanumSquareRoundB";
-    src: url("./fonts/NanumSquareRoundB.ttf");
+    src: url("./fonts/NanumSquareRound.woff2");
 }
 
 @font-face {
     font-family: "NanumSquareRoundEB";
-    src: url("./fonts/NanumSquareRoundEB.ttf");
+    src: url("./fonts/NanumSquareRoundEB.woff2");
 }
 
 @font-face {
     font-family: "NanumSquareRoundL";
-    src: url("./fonts/NanumSquareRoundL.ttf");
+    src: url("./fonts/NanumSquareRoundL.woff2");
 }
 
 @font-face {
     font-family: "NanumSquareRoundR";
-    src: url("./fonts/NanumSquareRoundR.ttf");
+    src: url("./fonts/NanumSquareRoundR.woff2");
 }

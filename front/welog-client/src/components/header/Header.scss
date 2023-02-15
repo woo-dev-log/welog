@@ -5,7 +5,7 @@
     display: flex;
     align-items: center;
     justify-content: space-between;
-    padding: 0 100px 0 100px;
+    padding: 0 200px;
     font-size: 20px;
     font-family: "NanumSquareRoundEB";
 
@@ -43,7 +43,7 @@
                 border-radius: 1000px;
                 margin-right: 20px;
             }
-    
+
             ul {
                 display: none;
                 position: absolute;
@@ -54,11 +54,19 @@
                 width: 130px;
                 padding: 27px 20px 0 20px;
                 font-size: 18px;
-    
+
                 li {
                     margin-bottom: 15px;
                 }
             }
         }
+    }
+}
+
+@media (max-width: 767px) {
+    .header-container {
+        height: 60px;
+        padding: 0 20px;
+        font-size: 18px;
     }
 }

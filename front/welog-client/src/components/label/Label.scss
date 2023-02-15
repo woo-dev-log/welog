@@ -3,3 +3,10 @@
     font-size: 20px;
     font-family: "NanumSquareRoundEB";
 }
+
+@media (max-width: 767px) {
+    .label{
+        min-width: 40px;
+        font-size: 18px;
+    }
+}

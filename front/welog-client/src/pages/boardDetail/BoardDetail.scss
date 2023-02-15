@@ -73,6 +73,7 @@
 
     .boardDetail-deleteBtn {
         text-align: right;
+        margin-top: 20px;
 
         button {
             margin-left: 10px;
@@ -96,7 +97,6 @@
         .boardDetail-commentBlock {
             display: flex;
             align-items: center;
-            justify-content: space-between;
             margin-bottom: 20px;
 
             .boardDetail-commentLabel {
@@ -118,14 +118,69 @@
                     color: gray;
                 }
             }
+        }
 
+        .boardDetail-commentDeleteBtn {
+            display: flex;
+            align-items: center;
+            justify-content: end;
+            margin-top: 10px;
+
+            button {
+                margin-left: 10px;
+                @include buttonCss(90px, 40px, 14px);
+            }
+        }
+    }
+}
+
+@media (max-width: 767px) {
+    .boardDetail-container {
+        textarea {
+            padding: 10px;
+            font-size: 14px;
+        }
+    
+        .boardDetail-titleContainer {
+            .boardDetail-title {
+                font-size: 18px;
+                margin-left: 10px;
+            }
+        }
+    
+        .boardDetail-writerContainer {
+            font-size: 16px;
+    
+            img {
+                @include imgCss(40px, 40px);
+            }
+        }
+    
+        .boardDetail-contentsContainer {
+            margin: 20px 0 50px 0;
+        }
+    
+        .boardDetail-deleteBtn {
+            button {
+                margin-left: 10px;
+                @include buttonCss(70px, 30px, 14px);
+            }
+        }
+    
+        .boardDetail-commentAddBtn {
+            margin-top: 10px;
+    
+            button {
+                @include buttonCss(120px, 30px, 14px);
+            }
+        }
+    
+        .boardDetail-commentContainer {
+            font-size: 14px;
+    
             .boardDetail-commentDeleteBtn {
-                // display: flex;
-                // justify-content: space-between;
-
                 button {
-                    margin-left: 10px;
-                    @include buttonCss(90px, 40px, 14px);
+                    @include buttonCss(60px, 30px, 12px);
                 }
             }
         }

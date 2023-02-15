@@ -4,6 +4,7 @@ const port = 3690;
 const mysql = require('./mysql');
 const jwt = require("jsonwebtoken");
 const multer = require('multer');
+const sharp = require('sharp');
 const cors = require('cors');
 // app.use(cors({
 //     origin: 'http://localhost:5173/',
@@ -40,8 +41,9 @@ app.post("/userBoard", async (req, res) => {
             where u.nickname = ?
             ORDER BY b.rgstrDate DESC
             `, [userNickname]);
-        rows.length > 0 ? res.status(200).send(rows) : res.status(400).send("fail");
+        res.status(200).send(rows);
     } catch (e) {
+        res.status(400).send("fail");
         console.error(e);
     }
 })
@@ -221,20 +223,22 @@ app.get("/board", async (req, res) => {
         ON b.userNo = u.userNo 
         ORDER BY b.rgstrDate DESC
         `);
-        rows.length > 0 ? res.status(200).send(rows) : res.status(400).send("fail");
+        res.status(200).send(rows);
     } catch (e) {
+        res.status(400).send("fail");
         console.error(e);
     }
 })
 
 app.post("/signUp", imageUpload.array('thumbnail'), async (req, res) => {
     try {
-        const { nickname, id, pw } = req.body;
+        const { nickname, id, pw, thumbnail } = req.body;
         const [rows] = await mysql.query(`
         INSERT INTO 
         user(id, password, nickname, imgUrl) 
         VALUES(?, ?, ?, ?)
         `, [id, pw, nickname, imageName]);
+
         res.status(200).send("success");
         imageName = [];
     } catch (e) {

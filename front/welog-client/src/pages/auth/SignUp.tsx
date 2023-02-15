@@ -85,7 +85,7 @@ const SignUp = () => {
                     return;
                 } else {
                     setCheckNickName("사용가능한 닉네임이에요");
-                    document.getElementsByClassName("signUp-checkNickname")[0];
+                    // document.getElementsByClassName("signUp-checkNickname")[0];
                     setDupCheckNickname(true);
                     return;
                 }
@@ -121,7 +121,11 @@ const SignUp = () => {
                     formData.append('pw', pw);
                     formData.append('thumbnail', image);
 
-                    const { data, status } = await axios.post("/signUp", formData);
+                    const { data, status } = await axios.post("/signUp", formData, {
+                        headers: {
+                            'Content-Type': 'multipart/form-data'
+                        }
+                    });
 
                     if (status === 200) {
                         URL.revokeObjectURL(blobImg);

@@ -1,10 +1,29 @@
 .board-container {
-    .board-flexWrap {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+
+    .board-top {
         display: flex;
-        flex-wrap: wrap;
+        justify-content: space-between;
+        align-items: center;
+
+        .board-boardList {
+            text-align: center;
+            button {
+                margin-right: 10px;
+            }
+        }
+    }
+
+    .board-flexWrap {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(310px, 1fr));
+        justify-content: center;
 
         .board-block {
             cursor: pointer;
+            transition: .3s ease-in;
             box-sizing: border-box;
             border: 1px solid black;
             border-radius: 10px;
@@ -79,6 +98,15 @@
 
 @media (max-width: 767px) {
     .board-container {
+        .board-top {
+            display: block;
+
+            .board-boardList {
+                text-align: center;
+                margin-bottom: 10px;
+            }
+        }
+
         .board-flexWrap {
             .board-block {
                 height: 220px;

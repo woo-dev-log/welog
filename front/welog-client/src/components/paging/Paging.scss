@@ -4,10 +4,17 @@
     align-items: center;
 
     button {
+        display: flex;
+        align-items: center;
+        justify-content: center;
         cursor: pointer;
         border: none;
+        border-radius: 10px;
+        width: 40px;
+        height: 40px;
+        font-size: 16px;
         padding: 10px;
-        margin: 0 5px 0 5px;
+        margin: 0 5px;
     }
 
     .paging-currentpageNum {
@@ -16,6 +23,16 @@
         button {
             background-color: black;
             color: white;
+        }
+    }
+}
+
+@media (max-width: 767px) {
+    .paging-container {
+        button {
+            width: 30px;
+            height: 30px;
+            font-size: 14px;
         }
     }
 }

@@ -1,3 +1,20 @@
+@mixin buttonCss($width, $height) {
+    cursor: pointer;
+    background-color: black;
+    width: $width;
+    height: $height;
+    border-width: 1px;
+    border-radius: 10px;
+    font-size: 16px;
+    font-family: "NanumSquareRoundEB";
+    color: white;
+
+    &:hover {
+        background-color: white;
+        color: black;
+    }
+}
+
 .board-container {
     display: flex;
     flex-direction: column;
@@ -5,21 +22,26 @@
 
     .board-top {
         display: flex;
+        flex-wrap: wrap;
+        // align-items: center;
         justify-content: space-between;
-        align-items: center;
+        margin: 0 10px;
 
         .board-boardList {
-            text-align: center;
             button {
-                margin-right: 10px;
+                transition: .3s ease-in;
+                // margin: 0 10px 20px 0;
+                margin: 0 10px 0 0;
+                @include buttonCss(140px, 40px);
             }
         }
     }
 
     .board-flexWrap {
+        // display: flex;
+        // flex-wrap: wrap;
         display: grid;
-        grid-template-columns: repeat(auto-fit, minmax(310px, 1fr));
-        justify-content: center;
+        grid-template-columns: repeat(auto-fit, minmax(20rem, 1fr));
 
         .board-block {
             cursor: pointer;
@@ -28,9 +50,9 @@
             border: 1px solid black;
             border-radius: 10px;
             padding: 20px;
-            margin: 20px auto;
+            margin: 10px auto;
             height: 260px;
-            width: 310px;
+            width: 24rem;
             display: flex;
             flex-direction: column;
             justify-content: space-between;
@@ -77,21 +99,8 @@
         text-align: center;
 
         button {
-            cursor: pointer;
-            background-color: black;
             margin-top: 20px;
-            width: 150px;
-            height: 40px;
-            border-width: 1px;
-            border-radius: 10px;
-            font-size: 16px;
-            font-family: "NanumSquareRoundEB";
-            color: white;
-
-            &:hover {
-                background-color: white;
-                color: black;
-            }
+            @include buttonCss(150px, 40px);
         }
     }
 }
@@ -100,17 +109,25 @@
     .board-container {
         .board-top {
             display: block;
+            margin-bottom: 10px;
 
             .board-boardList {
                 text-align: center;
-                margin-bottom: 10px;
+                button {
+                    margin: 20px 10px;
+                    width: 100px;
+                    height: 30px;
+                    font-size: 14px;
+                }
             }
         }
 
         .board-flexWrap {
             .board-block {
+                width: 18rem;
                 height: 220px;
                 padding: 10px;
+
                 .board-userBlock {
                     .board-nickname {
                         font-size: 16px;
@@ -133,7 +150,6 @@
 
         .board-button {
             button {
-                margin-top: 10px;
                 width: 110px;
                 font-size: 14px;
             }

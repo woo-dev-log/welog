@@ -26,7 +26,7 @@ const Board = () => {
     const [userInfo, setUserInfo] = useRecoilState(loginUser);
     const [currentPage, setcurrentPage] = useState(1);
     const navigate = useNavigate();
-    const limit = 8;
+    const limit = 6;
     const offset = (currentPage - 1) * limit;
 
     const getUserBoardApi = useCallback(async () => {
@@ -40,7 +40,7 @@ const Board = () => {
         }
     }, [userInfo]);
 
-    const getBoardApi = async () => {
+    const getBoardApi = useCallback(async () => {
         try {
             const { data } = await axios.get("/board");
             setBoardInfo(data);
@@ -49,7 +49,7 @@ const Board = () => {
             ToastError("글 조회를 실패했어요");
             console.error(e);
         }
-    }
+    }, []);
 
     useEffect(() => {
         getBoardApi();
@@ -64,7 +64,6 @@ const Board = () => {
                             <Button onClick={getBoardApi} text="전체 글" />
                             {userInfo[0].userNo !== 0 && <Button onClick={getUserBoardApi} text="내 글" />}
                         </div>
-
                         <Paging
                             total={boardInfo.length}
                             limit={limit}

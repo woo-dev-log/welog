@@ -1,11 +1,14 @@
 .boardAdd-container {
     display: flex;
     flex-direction: column;
+    box-shadow: lightgray 0 3px 10px;
+    border-radius: 10px;
+    padding: 20px;
 
     .boardAdd-titleBlock {
         display: flex;
         align-items: center;
-        border-bottom: 3px solid lightgray;
+        border-bottom: 1px solid lightgray;
         margin-bottom: 40px;
 
         input {
@@ -33,15 +36,17 @@
             background-color: black;
             width: 200px;
             height: 40px;
-            border-width: 1px;
+            border: none;
             border-radius: 10px;
             font-size: 16px;
             font-family: "NanumSquareRoundEB";
             color: white;
+            transition: .2s ease-in;
 
             &:hover {
                 background-color: white;
                 color: black;
+                box-shadow: lightgray 0 3px 10px;
             }
         }
     }
@@ -51,8 +56,12 @@
     .boardAdd-container {
         .boardAdd-titleBlock {
             input {
-                font-size: 18px;
+                font-size: 16px;
             }
+        }
+
+        .ql-container {
+            font-size: 14px;
         }
     
         .boardAdd-button {

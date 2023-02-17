@@ -1,10 +1,4 @@
 .line {
-    margin: 20px 0;
-    border-top: 3px solid lightgray;
-}
-
-@media (max-width: 767px) {
-    .line {
-        margin: 10px 0;
-    }
+    margin: 10px 0;
+    border-top: 1px solid lightgray;
 }

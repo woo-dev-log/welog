@@ -6,6 +6,7 @@ import { useRecoilState } from "recoil";
 import { loginUser } from "../../components/atoms";
 import Button from "../../components/button/Button";
 import Input from "../../components/input/Input";
+import SEO from "../../components/SEO";
 import { ToastError, ToastSuccess, ToastWarn } from "../../components/Toast";
 import './Sign.scss';
 
@@ -48,7 +49,7 @@ const SignUp = () => {
                     setCheckLogin("유저 정보와 일치하지 않아요");
                 } else {
                     // setCookie("welogJWT", data.token, { httpOnly: true });
-                    setCookie("welogJWT", data.token);
+                    setCookie("welogJWT", data.token, { sameSite: 'strict' });
                     setUserInfo(data.user);
                     ToastSuccess(data.user[0].nickname + "님 안녕하세요!");
                     navigate(-1);
@@ -63,6 +64,7 @@ const SignUp = () => {
 
     return (
         <>
+            <SEO title="로그인" contents="로그인" />
             <div className="container">
                 {checkLogin && <div style={{ color: "red" }}>{checkLogin}</div>}
                 <Input placeholder="아이디" onChange={e => setId(e.target.value)} value={id} />

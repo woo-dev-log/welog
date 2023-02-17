@@ -35,7 +35,7 @@ const Header = () => {
             <div className='header-box'>
                 {userInfo[0].userNo !== 0 ?
                     <div className="header-block">
-                        <img src={`http://localhost:3690/images/${userInfo[0].imgUrl}`} />
+                        <img src={`http://localhost:3690/images/${userInfo[0].imgUrl}`} alt={userInfo[0].imgUrl} />
                         <div>{userInfo[0].nickname}</div>
                         <ul>
                             <li onClick={() => navigate("/userBoard/" + userInfo[0].nickname)}>내가 쓴 글</li>

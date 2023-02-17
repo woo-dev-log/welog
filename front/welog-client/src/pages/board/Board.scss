@@ -3,7 +3,7 @@
     background-color: black;
     width: $width;
     height: $height;
-    border-width: 1px;
+    border: none;
     border-radius: 10px;
     font-size: 16px;
     font-family: "NanumSquareRoundEB";
@@ -12,6 +12,7 @@
     &:hover {
         background-color: white;
         color: black;
+        box-shadow: lightgray 0 3px 10px;
     }
 }
 
@@ -23,14 +24,11 @@
     .board-top {
         display: flex;
         flex-wrap: wrap;
-        // align-items: center;
         justify-content: space-between;
-        margin: 0 10px;
 
         .board-boardList {
             button {
-                transition: .3s ease-in;
-                // margin: 0 10px 20px 0;
+                transition: .2s ease-in;
                 margin: 0 10px 0 0;
                 @include buttonCss(140px, 40px);
             }
@@ -42,29 +40,37 @@
         // flex-wrap: wrap;
         display: grid;
         grid-template-columns: repeat(auto-fit, minmax(20rem, 1fr));
+        gap: 10px;
+        margin: 20px 0;
 
         .board-block {
-            cursor: pointer;
-            transition: .3s ease-in;
-            box-sizing: border-box;
-            border: 1px solid black;
-            border-radius: 10px;
-            padding: 20px;
-            margin: 10px auto;
-            height: 260px;
-            width: 24rem;
             display: flex;
             flex-direction: column;
             justify-content: space-between;
+            cursor: pointer;
+            box-sizing: border-box;
+            box-shadow: lightgray 0 5px 10px;
+            border-radius: 10px;
+            padding: 20px;
+            height: 260px;
+            width: 100%;
+            background-color: white;
+            // transition: transform 0.35s ease-in 0.3s;
+            transition: .2s ease-in;
+
+            &:hover {
+                transform: scale(1.03);
+            }
 
             .board-userBlock {
                 display: flex;
                 align-items: center;
 
                 img {
+                    background-color: white;
                     width: 40px;
                     height: 40px;
-                    border: 1px solid gray;
+                    box-shadow: lightgray 0 3px 10px;
                     border-radius: 1000px;
                     margin-right: 10px;
                 }
@@ -90,7 +96,7 @@
                 display: flex;
                 justify-content: space-between;
                 font-size: 16px;
-                color: gray;
+                color: black;
             }
         }
     }
@@ -99,6 +105,7 @@
         text-align: center;
 
         button {
+            transition: .2s ease-in;
             margin-top: 20px;
             @include buttonCss(150px, 40px);
         }
@@ -113,6 +120,7 @@
 
             .board-boardList {
                 text-align: center;
+
                 button {
                     margin: 20px 10px;
                     width: 100px;
@@ -123,8 +131,9 @@
         }
 
         .board-flexWrap {
+            margin: 10px 0;
+
             .board-block {
-                width: 18rem;
                 height: 220px;
                 padding: 10px;
 

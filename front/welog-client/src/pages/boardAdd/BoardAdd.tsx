@@ -12,6 +12,7 @@ import Line from "../../components/line/Line";
 import Swal from "sweetalert2";
 import { ToastError, ToastSuccess, ToastWarn } from "../../components/Toast";
 import "./BoardAdd.scss"
+import SEO from "../../components/SEO";
 
 const BoardAdd = () => {
     const [title, setTitle] = useState("");
@@ -88,6 +89,7 @@ const BoardAdd = () => {
 
     return (
         <div className="boardAdd-container">
+            <SEO title="글쓰기" contents="글쓰기" />
             <div className="boardAdd-titleBlock">
                 <Label text="제목" />
                 <Input placeholder="제목을 입력해주세요" disabled={boardBoolean}

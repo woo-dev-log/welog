@@ -6,6 +6,7 @@ import Input from "../../components/input/Input";
 import { ToastError, ToastSuccess, ToastWarn } from "../../components/Toast";
 import './Sign.scss';
 import Swal from "sweetalert2";
+import SEO from "../../components/SEO";
 
 const SignUp = () => {
     const navigate = useNavigate();
@@ -150,6 +151,7 @@ const SignUp = () => {
 
     return (
         <div className="container">
+            <SEO title="회원가입" contents="회원가입" />
             <div className="signUp-img">
                 {image && <img src={blobImg} />}
             </div>
@@ -158,14 +160,18 @@ const SignUp = () => {
             <div className="signUp-nickname">
                 <Input placeholder='닉네임' onChange={nicknameCheck} value={nickname} />
                 {checkNickname &&
-                    <div style={dupCheckNickname ? { color: 'green', fontSize: '14px' } : { color: 'red', fontSize: '14px' }}>
+                    <div style={dupCheckNickname
+                        ? { marginTop: '10px', color: 'green', fontSize: '14px' }
+                        : { marginTop: '10px', color: 'red', fontSize: '14px' }}>
                         {checkNickname}
                     </div>}
             </div>
             <div className="signUp-id">
                 <Input placeholder="아이디" onChange={idCheck} value={id} />
                 {checkId &&
-                    <div style={dupCheckId ? { color: 'green', fontSize: '14px' } : { color: 'red', fontSize: '14px' }}>
+                    <div style={dupCheckId
+                        ? { marginTop: '10px', color: 'green', fontSize: '14px' }
+                        : { marginTop: '10px', color: 'red', fontSize: '14px' }}>
                         {checkId}
                     </div>}
             </div>

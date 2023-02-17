@@ -7,6 +7,7 @@ import { loginUser } from "../../components/atoms";
 import Button from "../../components/button/Button";
 import Line from "../../components/line/Line";
 import Paging from "../../components/paging/Paging";
+import SEO from "../../components/SEO";
 import { ToastError, ToastWarn } from "../../components/Toast";
 import './Board.scss';
 
@@ -57,6 +58,7 @@ const Board = () => {
 
     return (
         <>
+            <SEO title="메인" contents="리스트" />
             {boardInfo.length === 0 ? <h1>작성한 글이 없어요</h1> :
                 <div className="board-container">
                     <div className="board-top">
@@ -76,7 +78,7 @@ const Board = () => {
                             <div key={i} className="board-block" onClick={() => navigate("/" + board.boardNo)}>
                                 <div>
                                     <div className="board-userBlock">
-                                        <img src={`http://localhost:3690/images/${board.imgUrl}`} />
+                                        <img src={`http://localhost:3690/images/${board.imgUrl}`} alt={board.imgUrl} />
                                         <div className="board-nickname">{board.nickname}</div>
                                     </div>
                                     <Line />

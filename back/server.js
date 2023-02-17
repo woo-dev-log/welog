@@ -6,11 +6,11 @@ const jwt = require("jsonwebtoken");
 const multer = require('multer');
 const sharp = require('sharp');
 const cors = require('cors');
-// app.use(cors({
-//     origin: 'http://localhost:5173/',
-//     credential: 'true'
-// }));
-app.use(cors());
+app.use(cors({
+    origin: 'http://localhost:5173',
+    credential: 'true'
+}));
+// app.use(cors());
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 app.use('/images', express.static('images'));

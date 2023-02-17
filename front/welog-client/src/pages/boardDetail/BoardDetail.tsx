@@ -9,6 +9,7 @@ import Button from "../../components/button/Button";
 import Label from "../../components/label/Label";
 import Line from "../../components/line/Line";
 import Paging from "../../components/paging/Paging";
+import SEO from "../../components/SEO";
 import { ToastError, ToastSuccess, ToastWarn } from "../../components/Toast";
 import "./BoardDetail.scss";
 
@@ -191,6 +192,8 @@ const BoardDetail = () => {
 
     return (
         <>
+            <SEO title="상세 글" contents="상세 글" />
+            <button className="boardDetail-backbutton" onClick={() => navigate(-1)}>&lt;&nbsp;&nbsp;이전으로</button>
             {boardDetail[0] &&
                 <div className="boardDetail-container">
                     <div className="boardDetail-titleContainer">
@@ -200,7 +203,8 @@ const BoardDetail = () => {
                     <Line />
 
                     <div className="boardDetail-writerContainer">
-                        <img src={`http://localhost:3690/images/${boardDetail[0].imgUrl}`} onClick={() => userBoardHandeler(boardDetail[0].nickname)} />
+                        <img src={`http://localhost:3690/images/${boardDetail[0].imgUrl}`} alt={boardDetail[0].imgUrl}
+                            onClick={() => userBoardHandeler(boardDetail[0].nickname)} />
                         <div className="boardDetail-nickname" onClick={() => userBoardHandeler(boardDetail[0].nickname)}>
                             {boardDetail[0].nickname}
                         </div>
@@ -214,7 +218,7 @@ const BoardDetail = () => {
                     <div className="boardDetail-contentsContainer">
                         <Label text="내용" />
                         <Line />
-                        <div dangerouslySetInnerHTML={{ __html: boardDetail[0].contents }} />
+                        <div className="boardDetail-contents" dangerouslySetInnerHTML={{ __html: boardDetail[0].contents }} />
 
                         {userInfo[0].userNo === boardDetail[0].userNo &&
                             <div className="boardDetail-deleteBtn">
@@ -226,7 +230,6 @@ const BoardDetail = () => {
                     </div>
 
                     {boardComment && <Label text={boardComment.length + "개의 댓글이 있어요"} />}
-                    <Line />
                     <textarea ref={textRef} value={boardCommentAdd} placeholder="댓글을 입력해주세요" disabled={commentBoolean}
                         onFocus={boardCommentLoginCheck} onInput={autoHeight} onChange={e => setBoardCommentAdd(e.target.value)} />
                     <div className="boardDetail-commentAddBtn">
@@ -245,7 +248,8 @@ const BoardDetail = () => {
                             <Line />
                             <div className="boardDetail-commentBlock">
                                 <div className="boardDetail-commentLabel">
-                                    <img src={`http://localhost:3690/images/${boardC.imgUrl}`} onClick={() => userBoardHandeler(boardC.nickname)} />
+                                    <img src={`http://localhost:3690/images/${boardC.imgUrl}`} alt={boardC.imgUrl}
+                                        onClick={() => userBoardHandeler(boardC.nickname)} />
                                     <div className="boardDetail-commentNickname" onClick={() => userBoardHandeler(boardC.nickname)}>{boardC.nickname}</div>
                                     <div className="boardDetail-date">
                                         <div className="boardDetail-commentRgstrDate">{dayjs(boardC.rgstrDate).format('YYYY.MM.DD HH:mm')} 등록</div>

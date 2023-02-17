@@ -3,9 +3,15 @@
     font-family: "NanumSquareRoundR";
 }
 
+@media (max-width: 1199px) {
+    .app-block {
+        margin: 50px;
+    }
+}
+
 @media (max-width: 767px) {
     .app-block {
-        margin: 30px 20px;
+        margin: 30px;
     }
 }
 

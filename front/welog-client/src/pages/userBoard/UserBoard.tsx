@@ -3,6 +3,7 @@ import dayjs from "dayjs";
 import { useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import Paging from "../../components/paging/Paging";
+import SEO from "../../components/SEO";
 import './UserBoard.scss';
 
 interface BoardType {
@@ -34,6 +35,7 @@ const UserBoard = () => {
 
     return (
         <>
+            <SEO title="유저보드" contents="유저보드" />
             {userBoardList.length === 0 ? <h1>작성한 글이 없어요</h1> :
                 <>
                     <Paging

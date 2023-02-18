@@ -1,6 +1,7 @@
 import axios from "axios";
 import dayjs from "dayjs";
 import { useCallback, useEffect, useState } from "react";
+import { useCookies } from "react-cookie";
 import { useNavigate } from "react-router-dom";
 import { useRecoilState } from "recoil";
 import { loginUser } from "../../components/atoms";
@@ -17,6 +18,7 @@ interface BoardType {
     title: string;
     contents: string;
     rgstrDate: string;
+    views: number;
     nickname: string;
     imgUrl: string;
     commentCnt: number;
@@ -26,9 +28,25 @@ const Board = () => {
     const [boardInfo, setBoardInfo] = useState<BoardType[]>([]);
     const [userInfo, setUserInfo] = useRecoilState(loginUser);
     const [currentPage, setcurrentPage] = useState(1);
+    const [cookies, setCookie] = useCookies(['viewPost']);
     const navigate = useNavigate();
     const limit = 6;
     const offset = (currentPage - 1) * limit;
+
+    const onClickHandeler = async (boardNo: number, views: number) => {
+        if (Array.isArray(cookies.viewPost) && !cookies.viewPost.includes(boardNo)) {
+            console.log(cookies.viewPost);
+            try {
+                await axios.post("/boardViews", { boardNo, views: views + 1 });
+            }
+            catch (e) {
+                console.error(e);
+            }
+        }
+
+        setCookie("viewPost", [cookies.viewPost, boardNo], { sameSite: 'strict' });
+        navigate("/" + boardNo);
+    }
 
     const getUserBoardApi = useCallback(async () => {
         try {
@@ -75,7 +93,7 @@ const Board = () => {
                     </div>
                     <div className="board-flexWrap">
                         {boardInfo.slice(offset, offset + limit).map((board, i) => (
-                            <div key={i} className="board-block" onClick={() => navigate("/" + board.boardNo)}>
+                            <div key={i} className="board-block" onClick={() => onClickHandeler(board.boardNo, board.views)}>
                                 <div>
                                     <div className="board-userBlock">
                                         <img src={`http://localhost:3690/images/${board.imgUrl}`} alt={board.imgUrl} />
@@ -91,7 +109,14 @@ const Board = () => {
                                 </div>
                                 <div className="board-footer">
                                     <div>{dayjs(board.rgstrDate).format('YYYY.MM.DD HH:mm')}</div>
-                                    <div>댓글 {board.commentCnt}개</div>
+                                    <div className="board-click">
+                                        <img src="./public/click.svg" alt="click" />
+                                        <div>{board.views}</div>
+                                    </div>
+                                    <div className="board-comment">
+                                        <img src="./public/comment.svg" alt="comment" />
+                                        <div>{board.commentCnt}</div>
+                                    </div>
                                 </div>
                             </div>
                         ))}

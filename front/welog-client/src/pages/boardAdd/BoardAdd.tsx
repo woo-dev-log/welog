@@ -88,21 +88,24 @@ const BoardAdd = () => {
     }, [updateValue.titleValue, updateValue.contentsValue]);
 
     return (
-        <div className="boardAdd-container">
+        <>
+            <button className="boardDetail-backbutton" onClick={() => navigate(-1)}>&lt;&nbsp;&nbsp;이전으로</button>
             <SEO title="글쓰기" contents="글쓰기" />
-            <div className="boardAdd-titleBlock">
-                <Label text="제목" />
-                <Input placeholder="제목을 입력해주세요" disabled={boardBoolean}
-                onFocus={boardLoginCheck} onChange={e => setTitle(e.target.value)} value={title} />
+            <div className="boardAdd-container">
+                <div className="boardAdd-titleBlock">
+                    <Label text="제목" />
+                    <Input placeholder="제목을 입력해주세요" disabled={boardBoolean}
+                        onFocus={boardLoginCheck} onChange={e => setTitle(e.target.value)} value={title} />
+                </div>
+                <Label text="내용" />
+                <Line />
+                <ReactQuill onChange={setContents} value={contents} placeholder="내용을 입력해주세요" />
+                <div className="boardAdd-button">
+                    {updateValue.titleValue ? <Button onClick={() => boardAddApi(1)} text="글 수정" />
+                        : <Button onClick={() => boardAddApi(0)} text="글 등록" />}
+                </div>
             </div>
-            <Label text="내용" />
-            <Line />
-            <ReactQuill onChange={setContents} value={contents} placeholder="내용을 입력해주세요" />
-            <div className="boardAdd-button">
-                {updateValue.titleValue ? <Button onClick={() => boardAddApi(1)} text="글 수정" />
-                    : <Button onClick={() => boardAddApi(0)} text="글 등록" />}
-            </div>
-        </div>
+        </>
     )
 }
 

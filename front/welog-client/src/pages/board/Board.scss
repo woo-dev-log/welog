@@ -95,8 +95,26 @@
             .board-footer {
                 display: flex;
                 justify-content: space-between;
+                align-items: center;
                 font-size: 16px;
                 color: black;
+
+                img {
+                    width: 25px;
+                    height: 25px;
+                }
+
+                .board-click {
+                    display: flex;
+                    align-items: center;
+                    gap: 5px;
+                }
+
+                .board-comment {
+                    display: flex;
+                    align-items: center;
+                    gap: 5px;
+                }
             }
         }
     }

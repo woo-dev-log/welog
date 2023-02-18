@@ -33,7 +33,7 @@ app.post("/userBoard", async (req, res) => {
     try {
         const { userNickname } = req.body;
         const [rows] = await mysql.query(`
-            SELECT b.boardNo, b.userNo, b.title, b.contents, b.rgstrDate, u.nickname, u.imgUrl, 
+            SELECT b.boardNo, b.userNo, b.title, b.contents, b.rgstrDate, b.views, u.nickname, u.imgUrl, 
             (SELECT count(*) FROM comment c WHERE c.boardNo = b.boardNo) commentCnt 
             FROM board b 
             LEFT OUTER JOIN user u 
@@ -161,7 +161,7 @@ app.post("/boardDetail", async (req, res) => {
     try {
         const { boardNo } = req.body;
         const [rows] = await mysql.query(`
-        SELECT b.boardNo, b.userNo, b.title, b.contents, b.rgstrDate, b.updateDate, 
+        SELECT b.boardNo, b.userNo, b.title, b.contents, b.rgstrDate, b.updateDate, b.views, 
         u.nickname, u.imgUrl 
         FROM board b 
         LEFT OUTER JOIN user u 
@@ -213,10 +213,22 @@ app.post("/boardAdd", async (req, res) => {
     }
 })
 
+app.post("/boardViews", async(req, res) => {
+    try {
+        const { boardNo, views } = req.body;
+        const [rows] = await mysql.query("UPDATE board SET views = ? WHERE boardNo = ?", [boardNo, views]);
+
+        res.status(200).send("success");
+    } catch (e) {
+        res.status(400).send("fail");
+        console.error(e);
+    }
+})
+
 app.get("/board", async (req, res) => {
     try {
         const [rows] = await mysql.query(`
-        SELECT b.boardNo, b.userNo, b.title, b.contents, b.rgstrDate, u.nickname, u.imgUrl, 
+        SELECT b.boardNo, b.userNo, b.title, b.contents, b.rgstrDate, b.views, u.nickname, u.imgUrl, 
         (SELECT count(*) FROM comment c WHERE c.boardNo = b.boardNo) commentCnt 
         FROM board b 
         LEFT OUTER JOIN user u 

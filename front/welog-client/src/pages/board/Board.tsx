@@ -33,20 +33,24 @@ const Board = () => {
     const limit = 6;
     const offset = (currentPage - 1) * limit;
 
-    const onClickHandeler = async (boardNo: number, views: number) => {
-        if (Array.isArray(cookies.viewPost) && !cookies.viewPost.includes(boardNo)) {
-            console.log(cookies.viewPost);
-            try {
-                await axios.post("/boardViews", { boardNo, views: views + 1 });
+    const onClickHandeler = useCallback(async (boardNo: number, views: number) => {
+        if (cookies.viewPost) {
+            if (!cookies.viewPost.includes(boardNo)) {
+                try {
+                    await axios.post("/boardViews", { boardNo, views: views + 1 });
+                    setCookie("viewPost", [...cookies.viewPost, boardNo], { sameSite: 'strict' });
+                }
+                catch (e) {
+                    console.error(e);
+                }
             }
-            catch (e) {
-                console.error(e);
-            }
+        } else {
+            await axios.post("/boardViews", { boardNo, views: views + 1 });
+            setCookie("viewPost", [boardNo], { sameSite: 'strict' });
         }
 
-        setCookie("viewPost", [cookies.viewPost, boardNo], { sameSite: 'strict' });
         navigate("/" + boardNo);
-    }
+    }, [cookies.viewPost]);
 
     const getUserBoardApi = useCallback(async () => {
         try {
@@ -109,13 +113,15 @@ const Board = () => {
                                 </div>
                                 <div className="board-footer">
                                     <div>{dayjs(board.rgstrDate).format('YYYY.MM.DD HH:mm')}</div>
-                                    <div className="board-click">
-                                        <img src="./public/click.svg" alt="click" />
-                                        <div>{board.views}</div>
-                                    </div>
-                                    <div className="board-comment">
-                                        <img src="./public/comment.svg" alt="comment" />
-                                        <div>{board.commentCnt}</div>
+                                    <div className="board-postInfo">
+                                        <div className="board-click">
+                                            <img src="/click.svg" alt="click" />
+                                            <div>{board.views}</div>
+                                        </div>
+                                        <div className="board-comment">
+                                            <img src="/comment.svg" alt="comment" />
+                                            <div>{board.commentCnt}</div>
+                                        </div>
                                     </div>
                                 </div>
                             </div>

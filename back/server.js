@@ -216,7 +216,7 @@ app.post("/boardAdd", async (req, res) => {
 app.post("/boardViews", async(req, res) => {
     try {
         const { boardNo, views } = req.body;
-        const [rows] = await mysql.query("UPDATE board SET views = ? WHERE boardNo = ?", [boardNo, views]);
+        const [rows] = await mysql.query("UPDATE board SET views = ? WHERE boardNo = ?", [views, boardNo]);
 
         res.status(200).send("success");
     } catch (e) {

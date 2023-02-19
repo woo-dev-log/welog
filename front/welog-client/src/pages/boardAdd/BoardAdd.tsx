@@ -13,6 +13,7 @@ import Swal from "sweetalert2";
 import { ToastError, ToastSuccess, ToastWarn } from "../../components/Toast";
 import "./BoardAdd.scss"
 import SEO from "../../components/SEO";
+import { postBoardWriteApi } from "../../api/board";
 
 const BoardAdd = () => {
     const [title, setTitle] = useState("");
@@ -52,7 +53,7 @@ const BoardAdd = () => {
 
             if (result.isConfirmed) {
                 try {
-                    await axios.post(typeUrl, typeData);
+                    postBoardWriteApi(typeUrl, typeData);
                     if (type === 1) {
                         ToastSuccess("글이 수정되었어요!");
                     } else ToastSuccess("글이 등록되었어요!");

@@ -10,11 +10,11 @@
 }
 
 .container {
-    height: 80vh;
+    height: 70vh;
     display: flex;
+    flex-direction: column;
     justify-content: center;
     align-items: center;
-    flex-direction: column;
 
     .signUp-img {
         border: 3px solid lightgray;
@@ -27,6 +27,7 @@
         border-radius: 1000px;
         width: 200px;
         height: 200px;
+        object-fit: cover;
     }
 
     .signUp-imgSelect {

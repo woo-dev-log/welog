@@ -13,11 +13,13 @@ import { useCookies } from 'react-cookie'
 import { loginUser } from './components/atoms'
 import { Toast } from './components/Toast'
 import UserBoard from './pages/userBoard/UserBoard'
+import { QueryClient, QueryClientProvider } from 'react-query'
 
 
 function App() {
   const [cookies] = useCookies(['welogJWT']);
   const [userInfo, setUserInfo] = useRecoilState(loginUser);
+  const queryClient = new QueryClient();
   axios.defaults.baseURL = "http://localhost:3690";
   // axios.defaults.headers.common["Access-Control-Allow-Origin"] = "http://localhost:5173/Login";
   // axios.defaults.headers.common["Access-Control-Allow-Credentials"] = "true";
@@ -40,6 +42,7 @@ function App() {
       <Toast />
       <Header />
       <div className='app-block'>
+        <QueryClientProvider client={queryClient}>
         <Routes>
           <Route path='/' element={<Board />} />
           <Route path='/:boardNo' element={<BoardDetail />} />
@@ -48,6 +51,7 @@ function App() {
           <Route path='/Login' element={<Login />} />
           <Route path='/SignUp' element={<SignUp />} />
         </Routes>
+        </QueryClientProvider>
       </div>
     </>
   )

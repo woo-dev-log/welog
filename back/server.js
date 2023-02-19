@@ -5,6 +5,8 @@ const mysql = require('./mysql');
 const jwt = require("jsonwebtoken");
 const multer = require('multer');
 const sharp = require('sharp');
+const path = require('path');
+const fs = require('fs');
 const cors = require('cors');
 app.use(cors({
     origin: 'http://localhost:5173',
@@ -213,7 +215,7 @@ app.post("/boardAdd", async (req, res) => {
     }
 })
 
-app.post("/boardViews", async(req, res) => {
+app.post("/boardViews", async (req, res) => {
     try {
         const { boardNo, views } = req.body;
         const [rows] = await mysql.query("UPDATE board SET views = ? WHERE boardNo = ?", [views, boardNo]);
@@ -242,14 +244,34 @@ app.get("/board", async (req, res) => {
     }
 })
 
-app.post("/signUp", imageUpload.array('thumbnail'), async (req, res) => {
+app.post("/signUp", imageUpload.single('thumbnail'), async (req, res) => {
     try {
         const { nickname, id, pw, thumbnail } = req.body;
+
+        let reImage = '';
+        const newFilePath = new Date().valueOf() + '_' + Buffer.from(req.file.originalname, 'latin1').toString('utf8');
+        if (req.file.size <= 500 * 1024) {
+            reImage = await sharp(req.file.path).toFile("./images/" + newFilePath);
+        } else {
+            if (req.file.originalname.split(".").reverse()[0] === "png") {
+                reImage = await sharp(req.file.path).resize({ width: 500 }).png({ quality: 80 }).toFile("./images/" + newFilePath);
+            } else {
+                reImage = await sharp(req.file.path).resize({ width: 500 }).jpeg({ quality: 80 }).toFile("./images/" + newFilePath);
+            }
+        }
+
+        fs.unlink("./images/" + imageName, (err) => {
+            if (err) {
+                console.error(err);
+                return res.status(400).send("fail");
+            }
+        });
+
         const [rows] = await mysql.query(`
         INSERT INTO 
         user(id, password, nickname, imgUrl) 
         VALUES(?, ?, ?, ?)
-        `, [id, pw, nickname, imageName]);
+        `, [id, pw, nickname, newFilePath]);
 
         res.status(200).send("success");
         imageName = [];

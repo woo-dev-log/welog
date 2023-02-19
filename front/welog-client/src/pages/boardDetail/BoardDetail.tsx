@@ -40,7 +40,7 @@ const BoardDetail = () => {
     const [boardComment, setBoardComment] = useState<BoardCommentType[]>([]);
     const [boardCommentAdd, setBoardCommentAdd] = useState("");
     const [boardCommentUpdate, setBoardCommentUpdate] = useState("");
-    const [currentPage, setcurrentPage] = useState(1);
+    const [currentPage, setCurrentPage] = useState(1);
     const [userInfo, setUserInfo] = useRecoilState(loginUser);
     const [updateValue, setUpdateValue] = useRecoilState(boardUpdate);
     const [commentBoolean, setCommentBoolean] = useState(false);
@@ -240,7 +240,8 @@ const BoardDetail = () => {
                         total={boardComment.length}
                         limit={limit}
                         page={currentPage}
-                        setCurrentPage={setcurrentPage} />
+                        setCurrentPage={setCurrentPage}
+                        type="boardComment" />
                     }
 
                     {boardComment.slice(offset, offset + limit).map((boardC, j) => (

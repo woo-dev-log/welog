@@ -1,4 +1,5 @@
 @mixin imgCss($width, $height) {
+    object-fit: cover;
     background-color: white;
     width: $width;
     height: $height;

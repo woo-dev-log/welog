@@ -1,4 +1,5 @@
 import { useEffect, useState } from 'react';
+import { useCookies } from 'react-cookie';
 import Button from '../button/Button';
 import './Paging.scss';
 
@@ -7,9 +8,11 @@ interface Props {
   limit: number
   page: number,
   setCurrentPage: (setCurrentPage: number) => void;
+  type : string
 }
 
-const Paging = ({ total, limit, page, setCurrentPage }: Props) => {
+const Paging = ({ total, limit, page, setCurrentPage, type }: Props) => {
+  const [cookies, setCookie] = useCookies(['boardCurrentPage', 'boardCommentCurrentPage']);
   const [totalPageArray, setTotalPageArray] = useState<number[][]>([]);
   const [currentPageArray, setCurrentPageArray] = useState<number[]>([]);
   const numPages = Math.ceil(total / limit);
@@ -29,13 +32,20 @@ const Paging = ({ total, limit, page, setCurrentPage }: Props) => {
   //   }
   // }, [page])
 
+  const handleOnClickPageChange = (page: number) => {
+    setCurrentPage(page);
+    if(type === "board") {
+      setCookie("boardCurrentPage", page);
+    }
+  };
+
   return (
     <div className='paging-container'>
       <Button text={"<"} onClick={() => setCurrentPage(page - 1)} disabled={page === 1} />
       {/* {totalPageArray && totalPageArray.map((d, i) => ( */}
       {Array(numPages).fill(undefined).map((_, i) => (
         <div key={i} className={page === i + 1 ? "paging-currentpageNum" : ""}>
-          <Button text={String(i + 1)} onClick={() => setCurrentPage(i + 1)} />
+          <Button text={String(i + 1)} onClick={() => handleOnClickPageChange(i + 1)} />
           {/* aria-current={page === i + 1 ? "page" : null} /> */}
         </div>
       ))}

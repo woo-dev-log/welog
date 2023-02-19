@@ -11,7 +11,7 @@ import SEO from "../../components/SEO";
 import { ToastError, ToastSuccess } from "../../components/Toast";
 import "./BoardDetail.scss";
 import { deleteBoardApi, getBoardDetailApi } from "../../api/board";
-import BoardComment from "../boardComment/boardComment";
+import BoardComment from "../boardComment/BoardComment";
 
 interface BoardDetailType {
     boardNo: number;

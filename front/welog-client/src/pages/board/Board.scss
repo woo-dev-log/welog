@@ -22,19 +22,7 @@
     justify-content: center;
 
     .board-top {
-        display: flex;
-        flex-wrap: wrap;
-        justify-content: space-between;
-
-        .board-boardList {
-            display: flex;
-            gap: 10px;
-
-            button {
-                transition: .2s ease-in;
-                @include buttonCss(140px, 40px);
-            }
-        }
+        text-align: center;
     }
 
     .board-flexWrap {
@@ -140,25 +128,7 @@
 
 @media (max-width: 767px) {
     .board-container {
-        .board-top {
-            display: block;
-            margin-bottom: 10px;
-
-            .board-boardList {
-                justify-content: center;
-
-                button {
-                    margin: 20px 0;
-                    width: 100px;
-                    height: 30px;
-                    font-size: 14px;
-                }
-            }
-        }
-
         .board-flexWrap {
-            margin: 10px 0;
-
             .board-block {
                 height: 220px;
                 padding: 10px;

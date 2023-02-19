@@ -1,0 +1,115 @@
+@mixin buttonCss($width, $height, $font-size) {
+    cursor: pointer;
+    background-color: black;
+    width: $width;
+    height: $height;
+    border: none;
+    border-radius: 10px;
+    font-size: $font-size;
+    font-family: "NanumSquareRoundEB";
+    color: white;
+    transition: .2s ease-in;
+
+    &:hover {
+        background-color: white;
+        color: black;
+        box-shadow: lightgray 0 3px 10px;
+    }
+}
+
+textarea {
+    font-family: "NanumSquareRoundR";
+    box-sizing: border-box;
+    width: 100%;
+    overflow-y: hidden;
+    min-height: 100px;
+    border: 2px solid lightgray;
+    border-radius: 15px;
+    padding: 20px;
+    margin-top: 10px;
+    font-size: 16px;
+}
+
+.boardComment-commentAddBtn {
+    text-align: end;
+    margin-top: 20px;
+    margin-bottom: 50px;
+
+    button {
+        @include buttonCss(190px, 40px, 16px);
+    }
+}
+
+.boardComment-commentContainer {
+    transition: .2s ease-in;
+    font-size: 16px;
+
+    .boardComment-commentBlock {
+        display: flex;
+        align-items: center;
+        margin-bottom: 20px;
+
+        .boardComment-commentLabel {
+            display: flex;
+            align-items: center;
+
+            img {
+                cursor: pointer;
+                object-fit: cover;
+                background-color: white;
+                width: 40px;
+                height: 40px;
+                box-shadow: lightgray 0 3px 10px;
+                border-radius: 1000px;
+                margin-right: 20px;
+            }
+
+            .boardComment-commentNickname {
+                cursor: pointer;
+                font-family: "NanumSquareRoundEB";
+                margin-right: 10px;
+            }
+
+            .boardComment-commentRgstrDate {
+                color: gray;
+            }
+        }
+    }
+
+    .boardComment-commentDeleteBtn {
+        display: flex;
+        align-items: center;
+        justify-content: end;
+        margin-top: 10px;
+
+        button {
+            margin-left: 10px;
+            @include buttonCss(90px, 40px, 14px);
+        }
+    }
+}
+
+@media (max-width: 767px) {
+    textarea {
+        padding: 10px;
+        font-size: 14px;
+    }
+
+    .boardComment-commentAddBtn {
+        margin-top: 10px;
+
+        button {
+            @include buttonCss(120px, 30px, 12px);
+        }
+    }
+
+    .boardComment-commentContainer {
+        font-size: 14px;
+
+        .boardComment-commentDeleteBtn {
+            button {
+                @include buttonCss(70px, 30px, 12px);
+            }
+        }
+    }
+}

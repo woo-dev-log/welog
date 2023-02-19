@@ -13,14 +13,18 @@ interface boardUpdateProps {
     boardNo: number
 }
 
+export const loginCheckCnt = atom({
+    key: 'loginCheckCntKey',
+    default: 0
+});
+
 export const loginUser = atom<loginProps[]>({
-    // export const loginUser = atom({
-    key: 'loginUser',
+    key: 'loginUserKey',
     default: [{ userNo: 0, nickname: "", id: "", imgUrl: "" }]
 });
 
 export const boardUpdate = atom<boardUpdateProps>({
-    key: 'boardUpdate',
+    key: 'boardUpdateKey',
     default: {
         titleValue: "",
         contentsValue: "",

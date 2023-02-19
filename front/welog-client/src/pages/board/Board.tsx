@@ -4,8 +4,8 @@ import { useCookies } from "react-cookie";
 import { useQuery } from "react-query";
 import { useNavigate } from "react-router-dom";
 import { useRecoilState } from "recoil";
-import { getBoardApi, getUserBoardApi, handleUpdateBoardViewsApi } from "../../api/board";
-import { loginUser } from "../../components/atoms";
+import { getBoardApi, updateBoardViewsApi } from "../../api/board";
+import { loginUser } from "../../store/atoms";
 import Button from "../../components/button/Button";
 import Line from "../../components/line/Line";
 import Paging from "../../components/paging/Paging";
@@ -33,28 +33,30 @@ const Board = () => {
     const limit = 6;
     const offset = (currentPage - 1) * limit;
 
-    const { data: boardInfo, isLoading } = useQuery<BoardType[]>(['boardInfo'], async () => {
-        try{
-             return await getBoardApi();
+    const { data: boardList, isLoading } = useQuery<BoardType[]>(['userBoardList'], async () => {
+        try {
+            const data = await getBoardApi();
+            return data;
         } catch (e) {
             ToastError("글 조회를 실패했어요");
             console.error(e);
-        }}, 
+        }
+    },
         {
             keepPreviousData: true, // 이전 데이터를 유지하여 페이지 이동 시 로딩이 빠르게 됨
             cacheTime: 1000 * 60 * 10, // 캐시 유지 시간 10분
         }
     );
 
-    const handleOnClickUpdateBoardViews = useCallback(async (boardNo: number, views: number) => {
+    const updateBoardViewsOnClick = useCallback(async (boardNo: number, views: number) => {
         try {
             if (cookies.viewPost) {
                 if (!cookies.viewPost.includes(boardNo)) {
-                    await handleUpdateBoardViewsApi(boardNo, views);
+                    await updateBoardViewsApi(boardNo, views);
                     setCookie("viewPost", [...cookies.viewPost, boardNo], { sameSite: 'strict' });
                 }
             } else {
-                handleUpdateBoardViewsApi(boardNo, views);
+                await updateBoardViewsApi(boardNo, views);
                 setCookie("viewPost", [boardNo], { sameSite: 'strict' });
             }
             navigate("/" + boardNo);
@@ -63,18 +65,6 @@ const Board = () => {
             console.error(e);
         }
     }, []);
-
-    const handleOnClickGetUserBoard = () => {
-        useQuery(['userBoard', userInfo[0].nickname], async () => {
-        try{
-            return await getUserBoardApi(userInfo[0].nickname);
-            // boardInfo 저장해야함 or useState를 생성
-        } catch (e) {
-            ToastError("유저글 조회를 실패했어요");
-            console.error(e);
-        }});
-        setCurrentPage(1);
-    }
 
     useEffect(() => {
         if (cookies.boardCurrentPage) {
@@ -87,16 +77,12 @@ const Board = () => {
             <SEO title="메인" contents="리스트" />
             {isLoading
                 ? <h1>글을 불러오는 중입니다!</h1>
-                : boardInfo === undefined
+                : boardList === undefined
                     ? <h1>작성한 글이 없어요</h1>
                     : <div className="board-container">
                         <div className="board-top">
-                            <div className="board-boardList">
-                                <Button onClick={() => setCurrentPage(1)} text="전체 글" />
-                                {userInfo[0].userNo !== 0 && <Button onClick={handleOnClickGetUserBoard} text="내 글" />}
-                            </div>
                             <Paging
-                                total={boardInfo.length}
+                                total={boardList.length}
                                 limit={limit}
                                 page={currentPage}
                                 setCurrentPage={setCurrentPage}
@@ -104,8 +90,8 @@ const Board = () => {
                             />
                         </div>
                         <div className="board-flexWrap">
-                            {boardInfo.slice(offset, offset + limit).map((board, i) => (
-                                <div key={i} className="board-block" onClick={() => handleOnClickUpdateBoardViews(board.boardNo, board.views)}>
+                            {boardList.slice(offset, offset + limit).map((board, i) => (
+                                <div key={i} className="board-block" onClick={() => updateBoardViewsOnClick(board.boardNo, board.views)}>
                                     <div>
                                         <div className="board-userBlock">
                                             <img src={`http://localhost:3690/images/${board.imgUrl}`} alt={board.imgUrl} />
@@ -137,7 +123,7 @@ const Board = () => {
                         </div>
 
                         <div className="board-button">
-                            <Button onClick={() => { userInfo[0].userNo !== 0 ? navigate("/BoardAdd") : ToastWarn("로그인을 해주세요") }} text="글쓰기" />
+                            <Button onClick={() => { userInfo[0].userNo !== 0 ? navigate("/BoardWrite") : ToastWarn("로그인을 해주세요") }} text="글쓰기" />
                         </div>
                     </div>
             }

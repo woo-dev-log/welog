@@ -42,19 +42,6 @@
     box-shadow: lightgray 0 3px 10px;
     border-radius: 15px;
 
-    textarea {
-        font-family: "NanumSquareRoundR";
-        box-sizing: border-box;
-        width: 100%;
-        overflow-y: hidden;
-        min-height: 100px;
-        border: 2px solid lightgray;
-        border-radius: 15px;
-        padding: 20px;
-        margin-top: 10px;
-        font-size: 16px;
-    }
-
     .boardDetail-titleContainer {
         display: flex;
 
@@ -100,59 +87,6 @@
             @include buttonCss(90px, 40px, 16px);
         }
     }
-
-    .boardDetail-commentAddBtn {
-        text-align: end;
-        margin-top: 20px;
-        margin-bottom: 50px;
-
-        button {
-            @include buttonCss(190px, 40px, 16px);
-        }
-    }
-
-    .boardDetail-commentContainer {
-        transition: .2s ease-in;
-        font-size: 16px;
-
-        .boardDetail-commentBlock {
-            display: flex;
-            align-items: center;
-            margin-bottom: 20px;
-
-            .boardDetail-commentLabel {
-                display: flex;
-                align-items: center;
-
-                img {
-                    cursor: pointer;
-                    @include imgCss(40px, 40px);
-                }
-
-                .boardDetail-commentNickname {
-                    cursor: pointer;
-                    font-family: "NanumSquareRoundEB";
-                    margin-right: 10px;
-                }
-
-                .boardDetail-commentRgstrDate {
-                    color: gray;
-                }
-            }
-        }
-
-        .boardDetail-commentDeleteBtn {
-            display: flex;
-            align-items: center;
-            justify-content: end;
-            margin-top: 10px;
-
-            button {
-                margin-left: 10px;
-                @include buttonCss(90px, 40px, 14px);
-            }
-        }
-    }
 }
 
 @media (max-width: 767px) {
@@ -162,11 +96,6 @@
     }
 
     .boardDetail-container {
-        textarea {
-            padding: 10px;
-            font-size: 14px;
-        }
-
         .boardDetail-titleContainer {
             .boardDetail-title {
                 font-size: 16px;
@@ -198,24 +127,6 @@
             button {
                 margin-left: 10px;
                 @include buttonCss(70px, 30px, 12px);
-            }
-        }
-
-        .boardDetail-commentAddBtn {
-            margin-top: 10px;
-
-            button {
-                @include buttonCss(120px, 30px, 12px);
-            }
-        }
-
-        .boardDetail-commentContainer {
-            font-size: 14px;
-
-            .boardDetail-commentDeleteBtn {
-                button {
-                    @include buttonCss(70px, 30px, 12px);
-                }
             }
         }
     }

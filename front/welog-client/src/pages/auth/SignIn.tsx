@@ -1,30 +1,31 @@
-import axios from "axios";
 import { useState } from "react";
 import { useCookies } from "react-cookie";
 import { useNavigate } from "react-router-dom";
 import { useRecoilState } from "recoil";
-import { loginUser } from "../../components/atoms";
 import Button from "../../components/button/Button";
 import Input from "../../components/input/Input";
 import SEO from "../../components/SEO";
 import { ToastError, ToastSuccess, ToastWarn } from "../../components/Toast";
 import './Sign.scss';
+import { postSignInApi } from "../../api/sign";
+import { loginCheckCnt, loginUser } from "../../store/atoms";
 
 const SignUp = () => {
     const [userInfo, setUserInfo] = useRecoilState(loginUser);
+    const [checkCnt, setCheckCnt] = useRecoilState(loginCheckCnt);
     const [cookies, setCookie] = useCookies(['welogJWT']);
     const navigate = useNavigate();
     const [id, setId] = useState("");
     const [pw, setPw] = useState("");
     const [checkLogin, setCheckLogin] = useState("");
 
-    const onKeyUpHandler = (e: React.KeyboardEvent<HTMLInputElement>) => {
+    const enterCheckOnKeyUp = (e: React.KeyboardEvent<HTMLInputElement>) => {
         if (e.key === "Enter") {
-            loginApi();
+            postLoginOnClick();
         }
     }
 
-    const onChangeHandler = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const pwCheckOnChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         const hangul = /[ㄱ-ㅎ|ㅏ-ㅣ|가-힣]/g;
         let value = e.target.value;
         if (hangul.test(value)) {
@@ -37,16 +38,20 @@ const SignUp = () => {
         }
     }
 
-    const loginApi = async () => {
+    const postLoginOnClick = async () => {
         if (id === "" || pw === "") {
             ToastWarn("모두 입력해주세요");
             return;
         } else {
             try {
-                const { data } = await axios.post("/login", { id, pw });
+                const data = await postSignInApi(id, pw);;
 
                 if (data === "no") {
-                    setCheckLogin("유저 정보와 일치하지 않아요");
+                    if (checkLogin === "유저 정보와 일치하지 않아요"
+                        || checkLogin === "유저 정보와 일치하지 않아요 x " + (checkCnt)) {
+                        setCheckLogin("유저 정보와 일치하지 않아요 x " + (checkCnt + 1));
+                        setCheckCnt(checkCnt+1);
+                    } else setCheckLogin("유저 정보와 일치하지 않아요");
                 } else {
                     // setCookie("welogJWT", data.token, { httpOnly: true });
                     setCookie("welogJWT", data.token, { sameSite: 'strict' });
@@ -69,8 +74,8 @@ const SignUp = () => {
                 {checkLogin && <div style={{ color: "red" }}>{checkLogin}</div>}
                 <Input placeholder="아이디" onChange={e => setId(e.target.value)} value={id} />
                 <Input placeholder="비밀번호" type="password" value={pw}
-                    onChange={onChangeHandler} onKeyUp={onKeyUpHandler} />
-                <Button onClick={loginApi} text="로그인" />
+                    onChange={pwCheckOnChange} onKeyUp={enterCheckOnKeyUp} />
+                <Button onClick={postLoginOnClick} text="로그인" />
             </div>
         </>
     )

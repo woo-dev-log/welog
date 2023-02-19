@@ -1,4 +1,3 @@
-import axios from "axios";
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import Button from "../../components/button/Button";
@@ -7,6 +6,7 @@ import { ToastError, ToastSuccess, ToastWarn } from "../../components/Toast";
 import './Sign.scss';
 import Swal from "sweetalert2";
 import SEO from "../../components/SEO";
+import { postSignUpApi, checkSignUpIdApi, checkSignUpNicknameApi } from "../../api/sign";
 
 const SignUp = () => {
     const navigate = useNavigate();
@@ -20,7 +20,7 @@ const SignUp = () => {
     const [checkNickname, setCheckNickName] = useState("");
     const [checkId, setCheckId] = useState("");
 
-    const pwCheck = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const pwCheckOnChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         const hangul = /[ㄱ-ㅎ|ㅏ-ㅣ|가-힣]/g;
         let value = e.target.value;
 
@@ -37,7 +37,7 @@ const SignUp = () => {
         }
     }
 
-    const idCheck = async (e: React.ChangeEvent<HTMLInputElement>) => {
+    const idCheckOnChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
         if (e.target.value.length > 15) {
             ToastWarn("아이디를 15자 이내로 생성해주세요");
             return;
@@ -49,7 +49,7 @@ const SignUp = () => {
             return;
         } else {
             try {
-                const { data } = await axios.post("/idCheck", { id: e.target.value });
+                const data = await checkSignUpIdApi(e.target.value);
 
                 if (data === "no") {
                     setCheckId("중복된 아이디예요");
@@ -66,7 +66,7 @@ const SignUp = () => {
         }
     };
 
-    const nicknameCheck = async (e: React.ChangeEvent<HTMLInputElement>) => {
+    const nicknameCheckOnChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
         if (e.target.value.length > 10) {
             ToastWarn("닉네임을 10자 이내로 생성해주세요");
             return;
@@ -78,7 +78,7 @@ const SignUp = () => {
             return;
         } else {
             try {
-                const { data } = await axios.post("/nicknameCheck", { nickname: e.target.value });
+                const data = await checkSignUpNicknameApi(e.target.value);
 
                 if (data === "no") {
                     setCheckNickName("중복된 닉네임이에요");
@@ -96,7 +96,7 @@ const SignUp = () => {
         }
     }
 
-    const signUpApi = async () => {
+    const postSignUpOnClick = async () => {
         if (nickname === "" || id === "" || pw === "" || !image) {
             ToastWarn("모두 입력해주세요");
             return;
@@ -122,13 +122,9 @@ const SignUp = () => {
                     formData.append('pw', pw);
                     formData.append('thumbnail', image);
 
-                    const { data, status } = await axios.post("/signUp", formData, {
-                        headers: {
-                            'Content-Type': 'multipart/form-data'
-                        }
-                    });
+                    const data = await postSignUpApi(formData);
 
-                    if (status === 200) {
+                    if (data.status === 200) {
                         URL.revokeObjectURL(blobImg);
                         ToastSuccess("회원가입을 성공했어요!");
                         navigate("/");
@@ -141,7 +137,7 @@ const SignUp = () => {
         }
     }
 
-    const onUploadImage = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const uploadImageOnChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         if (!e.target.files) {
             return;
         }
@@ -156,9 +152,9 @@ const SignUp = () => {
                 {image && <img src={blobImg} />}
             </div>
             <label className="signUp-imgSelect" htmlFor="profileImg">사진 선택</label>
-            <input type="file" accept="image/*" onChange={onUploadImage} id="profileImg" />
+            <input type="file" accept="image/*" onChange={uploadImageOnChange} id="profileImg" />
             <div className="signUp-nickname">
-                <Input placeholder='닉네임' onChange={nicknameCheck} value={nickname} />
+                <Input placeholder='닉네임' onChange={nicknameCheckOnChange} value={nickname} />
                 {checkNickname &&
                     <div style={dupCheckNickname
                         ? { marginTop: '10px', color: 'green', fontSize: '14px' }
@@ -167,7 +163,7 @@ const SignUp = () => {
                     </div>}
             </div>
             <div className="signUp-id">
-                <Input placeholder="아이디" onChange={idCheck} value={id} />
+                <Input placeholder="아이디" onChange={idCheckOnChange} value={id} />
                 {checkId &&
                     <div style={dupCheckId
                         ? { marginTop: '10px', color: 'green', fontSize: '14px' }
@@ -175,8 +171,8 @@ const SignUp = () => {
                         {checkId}
                     </div>}
             </div>
-            <Input type="password" placeholder='비밀번호' onChange={pwCheck} value={pw} />
-            <Button onClick={signUpApi} text="회원가입" />
+            <Input type="password" placeholder='비밀번호' onChange={pwCheckOnChange} value={pw} />
+            <Button onClick={postSignUpOnClick} text="회원가입" />
         </div>
     )
 }

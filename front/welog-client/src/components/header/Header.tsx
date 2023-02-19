@@ -2,7 +2,7 @@ import { useCookies } from 'react-cookie';
 import { useNavigate } from 'react-router-dom';
 import { useRecoilState } from 'recoil';
 import Swal from 'sweetalert2';
-import { loginUser } from '../atoms';
+import { loginUser } from '../../store/atoms';
 import { ToastSuccess } from '../Toast';
 import './Header.scss';
 

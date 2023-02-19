@@ -1,7 +1,7 @@
-import axios from "axios";
 import dayjs from "dayjs";
 import { useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
+import { getUserBoardApi } from "../../api/board";
 import Paging from "../../components/paging/Paging";
 import SEO from "../../components/SEO";
 import './UserBoard.scss';
@@ -24,13 +24,17 @@ const UserBoard = () => {
     const limit = 10;
     const offset = (currentPage - 1) * limit;
 
-    const userBoardApi = async () => {
-        const { data } = await axios.post("/userBoard", { userNickname: userNickname });
-        setUserBoardList(data);
+    const getUserBoard = async () => {
+        try {
+            const data = await getUserBoardApi(userNickname);
+            setUserBoardList(data);
+        } catch (e) {
+            console.error(e);
+        }
     }
 
     useEffect(() => {
-        userBoardApi();
+        getUserBoard();
     }, [userNickname])
 
     return (
@@ -42,7 +46,9 @@ const UserBoard = () => {
                         total={userBoardList.length}
                         limit={limit}
                         page={currentPage}
-                        setCurrentPage={setcurrentPage} />
+                        setCurrentPage={setcurrentPage}
+                        type="userBoard"
+                    />
 
                     {userBoardList.slice(offset, offset + limit).map((boardList, i) => (
                         <div key={i} className="userBoard-block" onClick={() => navigate("/" + boardList.boardNo)}>

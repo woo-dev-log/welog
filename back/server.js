@@ -50,7 +50,7 @@ app.post("/userBoard", async (req, res) => {
     }
 })
 
-app.post("/idCheck", async (req, res) => {
+app.post("/checkSignUpId", async (req, res) => {
     const { id } = req.body;
 
     const [rows] = await mysql.query("SELECT EXISTS (SELECT * FROM user WHERE id = ?) as cnt", [id]);
@@ -58,7 +58,7 @@ app.post("/idCheck", async (req, res) => {
     rows[0].cnt === 1 ? res.send("no") : res.send("yes");
 })
 
-app.post("/nicknameCheck", async (req, res) => {
+app.post("/checkSignUpNickname", async (req, res) => {
     const { nickname } = req.body;
 
     const [rows] = await mysql.query("SELECT EXISTS (SELECT * FROM user WHERE nickname = ?) as cnt", [nickname]);
@@ -76,7 +76,7 @@ app.post("/loginToken", async (req, res) => {
     }
 })
 
-app.post("/boardCommentDelete", async (req, res) => {
+app.post("/deleteBoardComment", async (req, res) => {
     try {
         const { boardNo, commentNo } = req.body;
         const [rows] = await mysql.query("DELETE FROM comment WHERE boardNo = ? AND commentNo = ?", [boardNo, commentNo]);
@@ -88,7 +88,7 @@ app.post("/boardCommentDelete", async (req, res) => {
     }
 })
 
-app.post("/boardCommentUpdate", async (req, res) => {
+app.post("/updateBoardComment", async (req, res) => {
     try {
         const { boardNo, boardCommentUpdate, userNo, commentNo } = req.body;
         if (userNo === 0) {
@@ -108,7 +108,7 @@ app.post("/boardCommentUpdate", async (req, res) => {
     }
 })
 
-app.post("/boardCommentAdd", async (req, res) => {
+app.post("/writeBoardComment", async (req, res) => {
     try {
         const { boardNo, boardCommentAdd, userNo } = req.body;
         if (userNo === 0) {
@@ -147,7 +147,7 @@ app.post("/boardComment", async (req, res) => {
     }
 })
 
-app.post("/boardDelete", async (req, res) => {
+app.post("/deleteBoard", async (req, res) => {
     try {
         const { boardNo } = req.body;
         const [rows] = await mysql.query("DELETE FROM board WHERE boardNo = ?", [boardNo]);
@@ -159,25 +159,7 @@ app.post("/boardDelete", async (req, res) => {
     }
 })
 
-app.post("/boardDetail", async (req, res) => {
-    try {
-        const { boardNo } = req.body;
-        const [rows] = await mysql.query(`
-        SELECT b.boardNo, b.userNo, b.title, b.contents, b.rgstrDate, b.updateDate, b.views, 
-        u.nickname, u.imgUrl 
-        FROM board b 
-        LEFT OUTER JOIN user u 
-        ON b.userNo = u.userNo 
-        WHERE b.boardNo = ?
-        `, [boardNo]);
-        res.status(200).send(rows);
-    } catch (e) {
-        res.status(400).send("fail");
-        console.error(e);
-    }
-})
-
-app.post("/boardUpdate", async (req, res) => {
+app.post("/updateBoard", async (req, res) => {
     try {
         const { title, contents, boardNo, userNo } = req.body;
         if (userNo === 0) {
@@ -196,7 +178,7 @@ app.post("/boardUpdate", async (req, res) => {
     }
 })
 
-app.post("/boardAdd", async (req, res) => {
+app.post("/writeBoard", async (req, res) => {
     try {
         const { title, contents, userNo } = req.body;
         if (userNo === 0) {
@@ -221,6 +203,24 @@ app.post("/boardViews", async (req, res) => {
         const [rows] = await mysql.query("UPDATE board SET views = ? WHERE boardNo = ?", [views, boardNo]);
 
         res.status(200).send("success");
+    } catch (e) {
+        res.status(400).send("fail");
+        console.error(e);
+    }
+})
+
+app.post("/boardDetail", async (req, res) => {
+    try {
+        const { boardNo } = req.body;
+        const [rows] = await mysql.query(`
+        SELECT b.boardNo, b.userNo, b.title, b.contents, b.rgstrDate, b.updateDate, b.views, 
+        u.nickname, u.imgUrl 
+        FROM board b 
+        LEFT OUTER JOIN user u 
+        ON b.userNo = u.userNo 
+        WHERE b.boardNo = ?
+        `, [boardNo]);
+        res.status(200).send(rows);
     } catch (e) {
         res.status(400).send("fail");
         console.error(e);
@@ -281,7 +281,7 @@ app.post("/signUp", imageUpload.single('thumbnail'), async (req, res) => {
     }
 })
 
-app.post("/login", async (req, res) => {
+app.post("/signIn", async (req, res) => {
     try {
         const { id, pw } = req.body;
         const [rows] = await mysql.query(`

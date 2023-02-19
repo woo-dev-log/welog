@@ -4,13 +4,13 @@ import { useRecoilState } from 'recoil'
 import './App.scss'
 import Header from './components/header/Header'
 import Board from './pages/board/Board'
-import BoardAdd from './pages/boardAdd/BoardAdd'
+import BoardWrite from './pages/boardWrite/BoardWrite'
 import BoardDetail from './pages/boardDetail/BoardDetail'
-import Login from './pages/auth/Login'
+import Login from './pages/auth/SignIn'
 import SignUp from './pages/auth/SignUp'
 import { useEffect } from 'react'
 import { useCookies } from 'react-cookie'
-import { loginUser } from './components/atoms'
+import { loginUser } from './store/atoms'
 import { Toast } from './components/Toast'
 import UserBoard from './pages/userBoard/UserBoard'
 import { QueryClient, QueryClientProvider } from 'react-query'
@@ -43,14 +43,14 @@ function App() {
       <Header />
       <div className='app-block'>
         <QueryClientProvider client={queryClient}>
-        <Routes>
-          <Route path='/' element={<Board />} />
-          <Route path='/:boardNo' element={<BoardDetail />} />
-          <Route path='/userBoard/:userNickname' element={<UserBoard />} />
-          <Route path='/BoardAdd' element={<BoardAdd />} />
-          <Route path='/Login' element={<Login />} />
-          <Route path='/SignUp' element={<SignUp />} />
-        </Routes>
+          <Routes>
+            <Route path='/' element={<Board />} />
+            <Route path='/:boardNo' element={<BoardDetail />} />
+            <Route path='/userBoard/:userNickname' element={<UserBoard />} />
+            <Route path='/BoardWrite' element={<BoardWrite />} />
+            <Route path='/Login' element={<Login />} />
+            <Route path='/SignUp' element={<SignUp />} />
+          </Routes>
         </QueryClientProvider>
       </div>
     </>

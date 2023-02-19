@@ -1,21 +1,20 @@
-import axios from "axios";
 import { useEffect, useState } from "react";
 import ReactQuill from "react-quill";
 import 'react-quill/dist/quill.snow.css';
 import { useNavigate } from "react-router-dom";
-import { useRecoilState, useRecoilValue } from "recoil";
-import { boardUpdate, loginUser } from "../../components/atoms";
+import { useRecoilState } from "recoil";
+import { boardUpdate, loginUser } from "../../store/atoms";
 import Button from "../../components/button/Button";
 import Input from "../../components/input/Input";
 import Label from "../../components/label/Label";
 import Line from "../../components/line/Line";
 import Swal from "sweetalert2";
 import { ToastError, ToastSuccess, ToastWarn } from "../../components/Toast";
-import "./BoardAdd.scss"
+import "./BoardWrite.scss"
 import SEO from "../../components/SEO";
-import { postBoardWriteApi } from "../../api/board";
+import { writeBoardApi } from "../../api/board";
 
-const BoardAdd = () => {
+const BoardWrite = () => {
     const [title, setTitle] = useState("");
     const [contents, setContents] = useState("");
     const [userInfo, setUserInfo] = useRecoilState(loginUser);
@@ -23,7 +22,7 @@ const BoardAdd = () => {
     const [boardBoolean, setBoardBoolean] = useState(false);
     const navigate = useNavigate();
 
-    const boardAddApi = async (type: number) => {
+    const WriteBoardOnClick = async (type: number) => {
         if (title === "" || contents === "") {
             ToastWarn("모두 입력해주세요");
             return;
@@ -32,12 +31,12 @@ const BoardAdd = () => {
             return;
         } else {
             let typeTitle = "글을 등록하시겠어요?";
-            let typeUrl = "/boardAdd";
+            let typeUrl = "/writeBoard";
             let typeData = { title, contents, userNo: userInfo[0].userNo, boardNo: 0 };
 
             if (type === 1) {
                 typeTitle = "글을 수정하시겠어요?"
-                typeUrl = "/boardUpdate";
+                typeUrl = "/updateBoard";
                 typeData.boardNo = updateValue.boardNo;
             }
 
@@ -53,7 +52,7 @@ const BoardAdd = () => {
 
             if (result.isConfirmed) {
                 try {
-                    postBoardWriteApi(typeUrl, typeData);
+                    await writeBoardApi(typeUrl, typeData);
                     if (type === 1) {
                         ToastSuccess("글이 수정되었어요!");
                     } else ToastSuccess("글이 등록되었어요!");
@@ -69,7 +68,7 @@ const BoardAdd = () => {
         }
     }
 
-    const boardLoginCheck = () => {
+    const CheckBoardLoginOnFocus = () => {
         if (userInfo[0].userNo === 0) {
             ToastWarn("로그인을 해주세요");
             setBoardBoolean(true);
@@ -92,22 +91,22 @@ const BoardAdd = () => {
         <>
             <button className="boardDetail-backbutton" onClick={() => navigate(-1)}>&lt;&nbsp;&nbsp;이전으로</button>
             <SEO title="글쓰기" contents="글쓰기" />
-            <div className="boardAdd-container">
-                <div className="boardAdd-titleBlock">
+            <div className="boardWrite-container">
+                <div className="boardWrite-titleBlock">
                     <Label text="제목" />
                     <Input placeholder="제목을 입력해주세요" disabled={boardBoolean}
-                        onFocus={boardLoginCheck} onChange={e => setTitle(e.target.value)} value={title} />
+                        onFocus={CheckBoardLoginOnFocus} onChange={e => setTitle(e.target.value)} value={title} />
                 </div>
                 <Label text="내용" />
                 <Line />
                 <ReactQuill onChange={setContents} value={contents} placeholder="내용을 입력해주세요" />
-                <div className="boardAdd-button">
-                    {updateValue.titleValue ? <Button onClick={() => boardAddApi(1)} text="글 수정" />
-                        : <Button onClick={() => boardAddApi(0)} text="글 등록" />}
+                <div className="boardWrite-button">
+                    {updateValue.titleValue ? <Button onClick={() => WriteBoardOnClick(1)} text="글 수정" />
+                        : <Button onClick={() => WriteBoardOnClick(0)} text="글 등록" />}
                 </div>
             </div>
         </>
     )
 }
 
-export default BoardAdd;
+export default BoardWrite;

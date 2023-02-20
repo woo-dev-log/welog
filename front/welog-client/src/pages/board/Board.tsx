@@ -4,13 +4,13 @@ import { useCookies } from "react-cookie";
 import { useQuery } from "react-query";
 import { useNavigate } from "react-router-dom";
 import { useRecoilState } from "recoil";
-import { getBoardApi, updateBoardViewsApi } from "../../api/board";
 import { loginUser } from "../../store/atoms";
-import Button from "../../components/button/Button";
+import { getBoardApi, updateBoardViewsApi } from "../../api/board";
+import { ToastError, ToastWarn } from "../../components/Toast";
+import SEO from "../../components/SEO";
 import Line from "../../components/line/Line";
 import Paging from "../../components/paging/Paging";
-import SEO from "../../components/SEO";
-import { ToastError, ToastWarn } from "../../components/Toast";
+import Button from "../../components/button/Button";
 import './Board.scss';
 
 interface BoardType {

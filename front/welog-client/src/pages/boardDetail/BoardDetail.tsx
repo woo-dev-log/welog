@@ -1,17 +1,17 @@
+import Swal from "sweetalert2";
 import dayjs from "dayjs";
 import { useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import { useRecoilState } from "recoil";
-import Swal from "sweetalert2";
 import { boardUpdate, loginUser } from "../../store/atoms";
-import Button from "../../components/button/Button";
-import Label from "../../components/label/Label";
-import Line from "../../components/line/Line";
-import SEO from "../../components/SEO";
 import { ToastError, ToastSuccess } from "../../components/Toast";
-import "./BoardDetail.scss";
 import { deleteBoardApi, getBoardDetailApi } from "../../api/board";
+import SEO from "../../components/SEO";
+import Line from "../../components/line/Line";
+import Label from "../../components/label/Label";
+import Button from "../../components/button/Button";
 import BoardComment from "../boardComment/BoardComment";
+import "./BoardDetail.scss";
 
 interface BoardDetailType {
     boardNo: number;

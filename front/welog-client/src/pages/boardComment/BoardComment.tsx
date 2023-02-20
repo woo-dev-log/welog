@@ -3,12 +3,12 @@ import { useCallback, useEffect, useRef, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useRecoilState } from "recoil";
 import { deleteBoardCommentApi, getBoardCommentApi, updateBoardCommentApi, writeBoardCommentApi } from "../../api/board";
-import Button from "../../components/button/Button";
-import Label from "../../components/label/Label";
-import Line from "../../components/line/Line";
-import Paging from "../../components/paging/Paging";
 import { ToastError, ToastSuccess, ToastWarn } from "../../components/Toast";
 import { loginUser } from "../../store/atoms";
+import Line from "../../components/line/Line";
+import Label from "../../components/label/Label";
+import Button from "../../components/button/Button";
+import Paging from "../../components/paging/Paging";
 import "./BoardComment.scss";
 
 interface BoardCommentType {

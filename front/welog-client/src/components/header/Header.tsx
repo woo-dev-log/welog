@@ -44,7 +44,7 @@ const Header = () => {
                     </div>
                     :
                     <div className="header-block">
-                        <div className="header-login" onClick={() => navigate("/Login")}>로그인</div>
+                        <div className="header-signIn" onClick={() => navigate("/SignIn")}>로그인</div>
                         <div className="header-signUp" onClick={() => navigate("/SignUp")}>회원가입</div>
                     </div >
                 }

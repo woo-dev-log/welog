@@ -1,18 +1,18 @@
-import { useEffect, useState } from "react";
-import ReactQuill from "react-quill";
-import 'react-quill/dist/quill.snow.css';
+import Swal from "sweetalert2";
+import { lazy, Suspense, useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useRecoilState } from "recoil";
 import { boardUpdate, loginUser } from "../../store/atoms";
-import Button from "../../components/button/Button";
-import Input from "../../components/input/Input";
-import Label from "../../components/label/Label";
-import Line from "../../components/line/Line";
-import Swal from "sweetalert2";
 import { ToastError, ToastSuccess, ToastWarn } from "../../components/Toast";
-import "./BoardWrite.scss"
-import SEO from "../../components/SEO";
 import { writeBoardApi } from "../../api/board";
+import SEO from "../../components/SEO";
+import Line from "../../components/line/Line";
+import Label from "../../components/label/Label";
+import Input from "../../components/input/Input";
+import Button from "../../components/button/Button";
+import "./BoardWrite.scss"
+import 'react-quill/dist/quill.snow.css';
+const ReactQuill = lazy(() => import('react-quill'));
 
 const BoardWrite = () => {
     const [title, setTitle] = useState("");
@@ -99,7 +99,9 @@ const BoardWrite = () => {
                 </div>
                 <Label text="내용" />
                 <Line />
-                <ReactQuill onChange={setContents} value={contents} placeholder="내용을 입력해주세요" />
+                <Suspense fallback={<div>Loading...</div>}>
+                    <ReactQuill onChange={setContents} value={contents} placeholder="내용을 입력해주세요" />
+                </Suspense>
                 <div className="boardWrite-button">
                     {updateValue.titleValue ? <Button onClick={() => WriteBoardOnClick(1)} text="글 수정" />
                         : <Button onClick={() => WriteBoardOnClick(0)} text="글 등록" />}

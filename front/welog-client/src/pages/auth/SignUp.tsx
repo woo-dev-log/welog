@@ -1,12 +1,12 @@
+import Swal from "sweetalert2";
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
+import { ToastError, ToastSuccess, ToastWarn } from "../../components/Toast";
+import { postSignUpApi, checkSignUpIdApi, checkSignUpNicknameApi } from "../../api/sign";
+import SEO from "../../components/SEO";
 import Button from "../../components/button/Button";
 import Input from "../../components/input/Input";
-import { ToastError, ToastSuccess, ToastWarn } from "../../components/Toast";
 import './Sign.scss';
-import Swal from "sweetalert2";
-import SEO from "../../components/SEO";
-import { postSignUpApi, checkSignUpIdApi, checkSignUpNicknameApi } from "../../api/sign";
 
 const SignUp = () => {
     const navigate = useNavigate();
@@ -61,6 +61,7 @@ const SignUp = () => {
                     return;
                 }
             } catch (e) {
+                ToastError("아이디 확인을 실패했어요");
                 console.error(e);;
             }
         }
@@ -91,6 +92,7 @@ const SignUp = () => {
                     return;
                 }
             } catch (e) {
+                ToastError("닉네임 확인을 실패했어요");
                 console.error(e);;
             }
         }

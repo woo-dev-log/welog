@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import { useCookies } from 'react-cookie';
 import Button from '../button/Button';
 import './Paging.scss';
@@ -13,8 +13,8 @@ interface Props {
 
 const Paging = ({ total, limit, page, setCurrentPage, type }: Props) => {
   const [cookies, setCookie] = useCookies(['boardCurrentPage', 'boardCommentCurrentPage']);
-  const [totalPageArray, setTotalPageArray] = useState<number[][]>([]);
-  const [currentPageArray, setCurrentPageArray] = useState<number[]>([]);
+  // const [totalPageArray, setTotalPageArray] = useState<number[][]>([]);
+  // const [currentPageArray, setCurrentPageArray] = useState<number[]>([]);
   const numPages = Math.ceil(total / limit);
 
   // useEffect(() => {

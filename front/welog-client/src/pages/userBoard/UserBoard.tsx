@@ -2,8 +2,8 @@ import dayjs from "dayjs";
 import { useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import { getUserBoardApi } from "../../api/board";
-import Paging from "../../components/paging/Paging";
 import SEO from "../../components/SEO";
+import Paging from "../../components/paging/Paging";
 import './UserBoard.scss';
 
 interface BoardType {

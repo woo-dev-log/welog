@@ -2,15 +2,15 @@ import { useState } from "react";
 import { useCookies } from "react-cookie";
 import { useNavigate } from "react-router-dom";
 import { useRecoilState } from "recoil";
-import Button from "../../components/button/Button";
-import Input from "../../components/input/Input";
-import SEO from "../../components/SEO";
-import { ToastError, ToastSuccess, ToastWarn } from "../../components/Toast";
-import './Sign.scss';
 import { postSignInApi } from "../../api/sign";
 import { loginCheckCnt, loginUser } from "../../store/atoms";
+import { ToastError, ToastSuccess, ToastWarn } from "../../components/Toast";
+import SEO from "../../components/SEO";
+import Button from "../../components/button/Button";
+import Input from "../../components/input/Input";
+import './Sign.scss';
 
-const SignUp = () => {
+const SignIn = () => {
     const [userInfo, setUserInfo] = useRecoilState(loginUser);
     const [checkCnt, setCheckCnt] = useRecoilState(loginCheckCnt);
     const [cookies, setCookie] = useCookies(['welogJWT']);
@@ -81,4 +81,4 @@ const SignUp = () => {
     )
 }
 
-export default SignUp;
+export default SignIn;

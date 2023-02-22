@@ -1,4 +1,5 @@
 import Swal from "sweetalert2";
+import { debounce } from "lodash-es";
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { ToastError, ToastSuccess, ToastWarn } from "../../components/Toast";
@@ -7,7 +8,6 @@ import SEO from "../../components/SEO";
 import Button from "../../components/button/Button";
 import Input from "../../components/input/Input";
 import './Sign.scss';
-import { debounce } from "lodash-es";
 
 const SignUp = () => {
     const navigate = useNavigate();
@@ -25,7 +25,7 @@ const SignUp = () => {
         const hangul = /[ㄱ-ㅎ|ㅏ-ㅣ|가-힣]/g;
         let value = e.target.value;
 
-        if (pw.length > 15) {
+        if (value.length > 15) {
             ToastWarn("비밀번호를 15자 이내로 생성해주세요");
             return;
         } else if (hangul.test(value)) {
@@ -40,7 +40,8 @@ const SignUp = () => {
 
     const idCheckOnChange = debounce(async (e: React.ChangeEvent<HTMLInputElement>) => {
         if (e.target.value.length > 15) {
-            ToastWarn("아이디를 15자 이내로 생성해주세요");
+            setCheckId("아이디를 15자 이내로 생성해주세요");
+            setDupCheckId(false);
             return;
         } else setId(e.target.value);
 
@@ -71,7 +72,8 @@ const SignUp = () => {
 
     const nicknameCheckOnChange = debounce(async (e: React.ChangeEvent<HTMLInputElement>) => {
         if (e.target.value.length > 10) {
-            ToastWarn("닉네임을 10자 이내로 생성해주세요");
+            setCheckNickName("닉네임을 10자 이내로 생성해주세요");
+            setDupCheckNickname(false);
             return;
         } else setNickname(e.target.value);
 

@@ -7,6 +7,7 @@ import SEO from "../../components/SEO";
 import Button from "../../components/button/Button";
 import Input from "../../components/input/Input";
 import './Sign.scss';
+import { debounce } from "lodash-es";
 
 const SignUp = () => {
     const navigate = useNavigate();
@@ -37,7 +38,7 @@ const SignUp = () => {
         }
     }
 
-    const idCheckOnChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
+    const idCheckOnChange = debounce(async (e: React.ChangeEvent<HTMLInputElement>) => {
         if (e.target.value.length > 15) {
             ToastWarn("아이디를 15자 이내로 생성해주세요");
             return;
@@ -65,9 +66,10 @@ const SignUp = () => {
                 console.error(e);;
             }
         }
-    };
+    }, 500);
 
-    const nicknameCheckOnChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
+
+    const nicknameCheckOnChange = debounce(async (e: React.ChangeEvent<HTMLInputElement>) => {
         if (e.target.value.length > 10) {
             ToastWarn("닉네임을 10자 이내로 생성해주세요");
             return;
@@ -87,7 +89,6 @@ const SignUp = () => {
                     return;
                 } else {
                     setCheckNickName("사용가능한 닉네임이에요");
-                    // document.getElementsByClassName("signUp-checkNickname")[0];
                     setDupCheckNickname(true);
                     return;
                 }
@@ -96,7 +97,7 @@ const SignUp = () => {
                 console.error(e);;
             }
         }
-    }
+    }, 500);
 
     const postSignUpOnClick = async () => {
         if (nickname === "" || id === "" || pw === "" || !image) {
@@ -156,7 +157,7 @@ const SignUp = () => {
             <label className="signUp-imgSelect" htmlFor="profileImg">사진 선택</label>
             <input type="file" accept="image/*" onChange={uploadImageOnChange} id="profileImg" />
             <div className="signUp-nickname">
-                <Input placeholder='닉네임' onChange={nicknameCheckOnChange} value={nickname} />
+                <Input placeholder='닉네임' onChange={nicknameCheckOnChange} />
                 {checkNickname &&
                     <div style={dupCheckNickname
                         ? { marginTop: '10px', color: 'green', fontSize: '14px' }
@@ -165,7 +166,7 @@ const SignUp = () => {
                     </div>}
             </div>
             <div className="signUp-id">
-                <Input placeholder="아이디" onChange={idCheckOnChange} value={id} />
+                <Input placeholder="아이디" onChange={idCheckOnChange} />
                 {checkId &&
                     <div style={dupCheckId
                         ? { marginTop: '10px', color: 'green', fontSize: '14px' }

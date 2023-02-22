@@ -54,7 +54,7 @@ app.post("/checkSignUpId", async (req, res) => {
     const { id } = req.body;
 
     const [rows] = await mysql.query("SELECT EXISTS (SELECT * FROM user WHERE id = ?) as cnt", [id]);
-
+    
     rows[0].cnt === 1 ? res.send("no") : res.send("yes");
 })
 

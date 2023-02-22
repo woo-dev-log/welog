@@ -9,7 +9,7 @@ const SEO = ({ title, contents }: Props) => {
     return (
         <HelmetProvider>
             <Helmet>
-                <title>{title} | 우리들의 일지</title>
+                <title>{title} | 우리의 하루</title>
                 <meta name="description" content={contents} />
             </Helmet>
         </HelmetProvider>

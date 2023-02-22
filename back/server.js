@@ -227,6 +227,26 @@ app.post("/boardDetail", async (req, res) => {
     }
 })
 
+app.post("/boardSearch", async (req, res) => {
+    try {
+        const { search } = req.body;
+        const [rows] = await mysql.query(`
+            SELECT b.boardNo, b.userNo, b.title, b.contents, b.rgstrDate, b.views, u.nickname, u.imgUrl, 
+            (SELECT count(*) FROM comment c WHERE c.boardNo = b.boardNo) commentCnt 
+            FROM board b 
+            LEFT OUTER JOIN user u 
+            ON b.userNo = u.userNo 
+            WHERE b.title LIKE "%?%" OR b.contents LIKE "%?%" OR u.nickname LIKE "%?%" 
+            ORDER BY b.rgstrDate DESC
+            `, [search, search, search]);
+            
+        res.status(200).send(rows);
+    } catch (e) {
+        res.status(400).send("fail");
+        console.error(e);
+    }
+})
+
 app.get("/board", async (req, res) => {
     try {
         const [rows] = await mysql.query(`

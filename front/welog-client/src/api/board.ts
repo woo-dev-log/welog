@@ -40,6 +40,11 @@ export const getUserBoardApi = async (userNickname: string | undefined) => {
     return data;
 };
 
+export const postBoardAPi = async (search: string) => {
+    const { data } = await axios.post("/boardSearch", { search });
+    return data;
+}
+
 export const getBoardDetailApi = async (boardNo: number) => {
     const { data } = await axios.post("/boardDetail", { boardNo });
     return data;

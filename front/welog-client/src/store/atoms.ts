@@ -1,5 +1,17 @@
 import { atom } from "recoil";
 
+interface BoardType {
+    boardNo: number;
+    userNo: number;
+    title: string;
+    contents: string;
+    rgstrDate: string;
+    views: number;
+    nickname: string;
+    imgUrl: string;
+    commentCnt: number;
+}
+
 interface loginProps {
     userNo: number;
     nickname: string;
@@ -12,6 +24,11 @@ interface boardUpdateProps {
     contentsValue: string,
     boardNo: number
 }
+
+export const board = atom<BoardType[]>({
+    key: 'boardKey',
+    default: []
+});
 
 export const loginCheckCnt = atom({
     key: 'loginCheckCntKey',

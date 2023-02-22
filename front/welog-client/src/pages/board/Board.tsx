@@ -4,14 +4,16 @@ import { useCookies } from "react-cookie";
 import { useQuery } from "react-query";
 import { useNavigate } from "react-router-dom";
 import { useRecoilState } from "recoil";
-import { loginUser } from "../../store/atoms";
-import { getBoardApi, updateBoardViewsApi } from "../../api/board";
+import { board, loginUser } from "../../store/atoms";
+import { getBoardApi, postBoardAPi, updateBoardViewsApi } from "../../api/board";
 import { ToastError, ToastWarn } from "../../components/Toast";
 import SEO from "../../components/SEO";
 import Line from "../../components/line/Line";
 import Paging from "../../components/paging/Paging";
 import Button from "../../components/button/Button";
 import './Board.scss';
+import Input from "../../components/input/Input";
+import { debounce } from "lodash-es";
 
 interface BoardType {
     boardNo: number;
@@ -27,13 +29,14 @@ interface BoardType {
 
 const Board = () => {
     const [userInfo, setUserInfo] = useRecoilState(loginUser);
+    const [boardList, setBoardList] = useRecoilState(board);
     const [currentPage, setCurrentPage] = useState(1);
     const [cookies, setCookie] = useCookies(['viewPost', 'boardCurrentPage']);
     const navigate = useNavigate();
     const limit = 6;
     const offset = (currentPage - 1) * limit;
 
-    const { data: boardList, isLoading } = useQuery<BoardType[]>(['userBoardList'], async () => {
+    const { data, isLoading } = useQuery<BoardType[]>(['userBoardList'], async () => {
         try {
             const data = await getBoardApi();
             return data;
@@ -47,6 +50,17 @@ const Board = () => {
             cacheTime: 1000 * 60 * 10, // 캐시 유지 시간 10분
         }
     );
+
+    const searchBoardListOnChange = debounce(async (e: React.ChangeEvent<HTMLInputElement>) => {
+        try {
+            const data = await postBoardAPi(e.target.value);
+            if(data) {
+                setBoardList(data);
+            }
+        } catch (e) {
+            console.error(e);
+        }
+    }, 500);
 
     const updateBoardViewsOnClick = useCallback(async (boardNo: number, views: number) => {
         try {
@@ -67,6 +81,12 @@ const Board = () => {
     }, []);
 
     useEffect(() => {
+        if (data) {
+            setBoardList(data);
+        }
+    }, [data]);
+
+    useEffect(() => {
         if (cookies.boardCurrentPage) {
             setCurrentPage(Number(cookies.boardCurrentPage));
         }
@@ -81,6 +101,7 @@ const Board = () => {
                     ? <h1>작성한 글이 없어요</h1>
                     : <div className="board-container">
                         <div className="board-top">
+                            <Input placeholder="검색어를 입력해주세요" onChange={searchBoardListOnChange} />
                             <Paging
                                 total={boardList.length}
                                 limit={limit}

@@ -16,14 +16,29 @@
     }
 }
 
+input {
+    font-size: 16px;
+    width: 360px;
+    padding: 10px;
+    border: 1px solid lightgray;
+    border-radius: 5px;
+}
+
+.board-top {
+    display: flex;
+    justify-content: space-between;
+
+    p {
+        font-size: 18px;
+        font-family: "NanumSquareRoundEB";
+        margin-bottom: 0;
+    }
+}
+
 .board-container {
     display: flex;
     flex-direction: column;
     justify-content: center;
-
-    .board-top {
-        text-align: center;
-    }
 
     .board-flexWrap {
         // display: flex;
@@ -104,7 +119,7 @@
                         align-items: center;
                         gap: 5px;
                     }
-                    
+
                     .board-comment {
                         display: flex;
                         align-items: center;
@@ -127,6 +142,21 @@
 }
 
 @media (max-width: 767px) {
+    input {
+        width: 100%;
+        margin-bottom: 10px;
+    }
+
+    .board-top {
+        display: block;
+
+        p {
+            font-size: 16px;
+            margin-top: 0px;
+            margin-bottom: 20px;
+        }
+    }
+
     .board-container {
         .board-flexWrap {
             .board-block {

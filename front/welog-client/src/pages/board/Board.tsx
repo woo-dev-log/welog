@@ -2,7 +2,7 @@ import dayjs from "dayjs";
 import { useCallback, useEffect, useState } from "react";
 import { useCookies } from "react-cookie";
 import { useQuery } from "react-query";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import { useRecoilState } from "recoil";
 import { board, loginUser } from "../../store/atoms";
 import { getBoardApi, postBoardAPi, updateBoardViewsApi } from "../../api/board";
@@ -31,12 +31,14 @@ const Board = () => {
     const [userInfo, setUserInfo] = useRecoilState(loginUser);
     const [boardList, setBoardList] = useRecoilState(board);
     const [currentPage, setCurrentPage] = useState(1);
+    const [searchWord, setSearchWord] = useState("");
     const [cookies, setCookie] = useCookies(['viewPost', 'boardCurrentPage']);
+    const { keyword } = useParams();
     const navigate = useNavigate();
     const limit = 6;
     const offset = (currentPage - 1) * limit;
 
-    const { data, isLoading } = useQuery<BoardType[]>(['userBoardList'], async () => {
+    const { data: post, isLoading } = useQuery<BoardType[]>(['userBoardList'], async () => {
         try {
             const data = await getBoardApi();
             return data;
@@ -52,11 +54,14 @@ const Board = () => {
     );
 
     const searchBoardListOnChange = debounce(async (e: React.ChangeEvent<HTMLInputElement>) => {
+        if(e.target.value === "") navigate("/");
+        if(e.target.value === searchWord) return;
         try {
+            setSearchWord(e.target.value);
             const data = await postBoardAPi(e.target.value);
-            if(data) {
-                setBoardList(data);
-            }
+            setBoardList(data);
+            navigate("/search/" + e.target.value);
+            setCurrentPage(1);
         } catch (e) {
             console.error(e);
         }
@@ -81,10 +86,10 @@ const Board = () => {
     }, []);
 
     useEffect(() => {
-        if (data) {
-            setBoardList(data);
+        if (post) {
+            setBoardList(post);
         }
-    }, [data]);
+    }, [post]);
 
     useEffect(() => {
         if (cookies.boardCurrentPage) {
@@ -97,56 +102,61 @@ const Board = () => {
             <SEO title="메인" contents="리스트" />
             {isLoading
                 ? <h1>글을 불러오는 중입니다!</h1>
-                : boardList === undefined
-                    ? <h1>작성한 글이 없어요</h1>
-                    : <div className="board-container">
-                        <div className="board-top">
-                            <Input placeholder="검색어를 입력해주세요" onChange={searchBoardListOnChange} />
-                            <Paging
-                                total={boardList.length}
-                                limit={limit}
-                                page={currentPage}
-                                setCurrentPage={setCurrentPage}
-                                type="board"
-                            />
-                        </div>
-                        <div className="board-flexWrap">
-                            {boardList.slice(offset, offset + limit).map((board, i) => (
-                                <div key={i} className="board-block" onClick={() => updateBoardViewsOnClick(board.boardNo, board.views)}>
-                                    <div>
-                                        <div className="board-userBlock">
-                                            <img src={`http://localhost:3690/images/${board.imgUrl}`} alt={board.imgUrl} />
-                                            <div className="board-nickname">{board.nickname}</div>
-                                        </div>
-                                        <Line />
-                                        <div className="board-title">{board.title}</div>
-                                        <div className="board-contents">
-                                            {board.contents.replaceAll(/<[^>]*>?/g, "").length < 60
-                                                ? board.contents.replaceAll(/<[^>]*>?/g, "")
-                                                : board.contents.replaceAll(/<[^>]*>?/g, "").substring(0, 60) + " ..."}
-                                        </div>
-                                    </div>
-                                    <div className="board-footer">
-                                        <div>{dayjs(board.rgstrDate).format('YYYY.MM.DD HH:mm')}</div>
-                                        <div className="board-postInfo">
-                                            <div className="board-click">
-                                                <img src="/click.svg" alt="click" />
-                                                <div>{board.views}</div>
-                                            </div>
-                                            <div className="board-comment">
-                                                <img src="/comment.svg" alt="comment" />
-                                                <div>{board.commentCnt}</div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            ))}
-                        </div>
-
-                        <div className="board-button">
-                            <Button onClick={() => { userInfo[0].userNo !== 0 ? navigate("/BoardWrite") : ToastWarn("로그인을 해주세요") }} text="글쓰기" />
-                        </div>
+                : <>
+                    <Input placeholder="제목, 내용, 닉네임을 입력해주세요" onChange={searchBoardListOnChange} />
+                    <div className="board-top">
+                        {searchWord
+                            ? <p>{searchWord} 검색 결과 총 {boardList.length}개의 포스트를 찾았어요</p>
+                            : <p>총 {boardList.length}개의 포스트가 있어요</p>}
+                        <Paging
+                            total={boardList.length}
+                            limit={limit}
+                            page={currentPage}
+                            setCurrentPage={setCurrentPage}
+                            type="board"
+                        />
                     </div>
+                    {boardList.length === 0
+                        ? <h2>작성한 글이 없어요</h2>
+                        : <div className="board-container">
+                            <div className="board-flexWrap">
+                                {boardList.slice(offset, offset + limit).map((board, i) => (
+                                    <div key={i} className="board-block" onClick={() => updateBoardViewsOnClick(board.boardNo, board.views)}>
+                                        <div>
+                                            <div className="board-userBlock">
+                                                <img src={`http://localhost:3690/images/${board.imgUrl}`} alt={board.imgUrl} />
+                                                <div className="board-nickname">{board.nickname}</div>
+                                            </div>
+                                            <Line />
+                                            <div className="board-title">{board.title}</div>
+                                            <div className="board-contents">
+                                                {board.contents.replaceAll(/<[^>]*>?/g, "").length < 60
+                                                    ? board.contents.replaceAll(/<[^>]*>?/g, "")
+                                                    : board.contents.replaceAll(/<[^>]*>?/g, "").substring(0, 60) + " ..."}
+                                            </div>
+                                        </div>
+                                        <div className="board-footer">
+                                            <div>{dayjs(board.rgstrDate).format('YYYY.MM.DD HH:mm')}</div>
+                                            <div className="board-postInfo">
+                                                <div className="board-click">
+                                                    <img src="/click.svg" alt="click" />
+                                                    <div>{board.views}</div>
+                                                </div>
+                                                <div className="board-comment">
+                                                    <img src="/comment.svg" alt="comment" />
+                                                    <div>{board.commentCnt}</div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                ))}
+                            </div>
+
+                            <div className="board-button">
+                                <Button onClick={() => { userInfo[0].userNo !== 0 ? navigate("/BoardWrite") : ToastWarn("로그인을 해주세요") }} text="글쓰기" />
+                            </div>
+                        </div>}
+                </>
             }
         </>
     )

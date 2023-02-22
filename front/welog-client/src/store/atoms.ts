@@ -32,7 +32,7 @@ export const board = atom<BoardType[]>({
 
 export const loginCheckCnt = atom({
     key: 'loginCheckCntKey',
-    default: 0
+    default: 1
 });
 
 export const loginUser = atom<loginProps[]>({

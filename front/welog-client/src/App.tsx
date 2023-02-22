@@ -41,6 +41,7 @@ function App() {
       <div className='app-block'>
         <Routes>
           <Route path='/' element={<Board />} />
+          <Route path='/search/:keyword' element={<Board />} />
           <Route path='/:boardNo' element={<BoardDetail />} />
           <Route path='/userBoard/:userNickname' element={<UserBoard />} />
           <Route path='/BoardWrite' element={<BoardWrite />} />

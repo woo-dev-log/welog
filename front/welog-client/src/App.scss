@@ -3,6 +3,11 @@
     font-family: "NanumSquareRoundR";
 }
 
+input {
+    font-family: "NanumSquareRoundR";
+    box-sizing: border-box;
+}
+
 @media (max-width: 1199px) {
     .app-block {
         margin: 50px;

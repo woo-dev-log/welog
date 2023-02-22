@@ -14,7 +14,7 @@
 | Back-end       | Express, Node.js                                 |
 | Database       | Mysql                                            |
 | Cloud Services | 생각중                                             |
-| Tool           | VsCod, GitHub                                    |
+| Tool           | VsCode, GitHub                                   |
 
 ## 사용 모듈
 

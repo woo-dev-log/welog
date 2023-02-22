@@ -8,13 +8,13 @@
 
 ## 기술 스택
 
-| 분야            | 사용 기술                                        | 비고  |
-| -------------- | ---------------------------------------------- | ---- |
-| Front-end      | React, TypeScript, Recoil, React-Query, Scs    |
-| Back-end       | Express, Node.js                               |
-| Database       | Mysql                                          |
-| Cloud Services | 생각중                                           |
-| Tool           | VsCod, GitHub                                  |
+| 분야            | 사용 기술                                          | 비고  |
+| -------------- | ------------------------------------------------ | ---- |
+| Front-end      | React, TypeScript, Recoil, React-Query, Scss     |
+| Back-end       | Express, Node.js                                 |
+| Database       | Mysql                                            |
+| Cloud Services | 생각중                                             |
+| Tool           | VsCod, GitHub                                    |
 
 ## 사용 모듈
 

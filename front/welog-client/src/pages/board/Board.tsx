@@ -31,7 +31,6 @@ const Board = () => {
     const [userInfo, setUserInfo] = useRecoilState(loginUser);
     const [boardList, setBoardList] = useRecoilState(board);
     const [currentPage, setCurrentPage] = useState(1);
-    const [searchWord, setSearchWord] = useState("");
     const [cookies, setCookie] = useCookies(['viewPost', 'boardCurrentPage']);
     const { keyword } = useParams();
     const navigate = useNavigate();
@@ -53,19 +52,26 @@ const Board = () => {
         }
     );
 
-    const searchBoardListOnChange = debounce(async (e: React.ChangeEvent<HTMLInputElement>) => {
-        if(e.target.value === "") navigate("/");
-        if(e.target.value === searchWord) return;
-        try {
-            setSearchWord(e.target.value);
-            const data = await postBoardAPi(e.target.value);
-            setBoardList(data);
+    const searchBoardListOnChange = useCallback(debounce((e: React.ChangeEvent<HTMLInputElement>) => {
+        if(e.target.value === keyword) return;
+
+        searchBoardListApi(e.target.value);
+        if(e.target.value === "") {
+            navigate("/");
+        } else {
             navigate("/search/" + e.target.value);
+        }
+    }, 500), [keyword]);
+
+    const searchBoardListApi = async(value: string) => {
+        try {
+            const data = await postBoardAPi(value);
+            setBoardList(data);
             setCurrentPage(1);
         } catch (e) {
             console.error(e);
         }
-    }, 500);
+    }
 
     const updateBoardViewsOnClick = useCallback(async (boardNo: number, views: number) => {
         try {
@@ -86,10 +92,12 @@ const Board = () => {
     }, []);
 
     useEffect(() => {
-        if (post) {
+        if (post && keyword === undefined) {
             setBoardList(post);
+        } else if(keyword !== undefined) {
+            searchBoardListApi(keyword);
         }
-    }, [post]);
+    }, [post, keyword]);
 
     useEffect(() => {
         if (cookies.boardCurrentPage) {
@@ -105,8 +113,8 @@ const Board = () => {
                 : <>
                     <Input placeholder="제목, 내용, 닉네임을 입력해주세요" onChange={searchBoardListOnChange} />
                     <div className="board-top">
-                        {searchWord
-                            ? <p>{searchWord} 검색 결과 총 {boardList.length}개의 포스트를 찾았어요</p>
+                        {keyword
+                            ? <p>{keyword} 검색 결과 총 {boardList.length}개의 포스트를 찾았어요</p>
                             : <p>총 {boardList.length}개의 포스트가 있어요</p>}
                         <Paging
                             total={boardList.length}

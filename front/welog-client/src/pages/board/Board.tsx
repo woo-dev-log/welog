@@ -52,22 +52,21 @@ const Board = () => {
         }
     );
 
-    const searchBoardListOnChange = useCallback(debounce((e: React.ChangeEvent<HTMLInputElement>) => {
+    const searchBoardListOnChange = debounce((e: React.ChangeEvent<HTMLInputElement>) => {
         if(e.target.value === keyword) return;
 
-        searchBoardListApi(e.target.value);
+        setCurrentPage(1);
         if(e.target.value === "") {
             navigate("/");
         } else {
             navigate("/search/" + e.target.value);
         }
-    }, 500), [keyword]);
+    }, 500);
 
     const searchBoardListApi = async(value: string) => {
         try {
             const data = await postBoardAPi(value);
             setBoardList(data);
-            setCurrentPage(1);
         } catch (e) {
             console.error(e);
         }

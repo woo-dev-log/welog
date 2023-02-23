@@ -20,6 +20,7 @@ interface BoardDetailType {
     contents: string;
     rgstrDate: string;
     updateDate: string;
+    views: number;
     nickname: string;
     imgUrl: string;
 }
@@ -86,8 +87,14 @@ const BoardDetail = () => {
             {boardDetail[0] &&
                 <div className="boardDetail-container">
                     <div className="boardDetail-titleContainer">
-                        <Label text="제목" />
-                        <div className="boardDetail-title">{boardDetail[0].title}</div>
+                        <div className="boardDetail-titleBlock">
+                            <Label text="제목" />
+                            <div className="boardDetail-title">{boardDetail[0].title}</div>
+                        </div>
+                        <div className="board-click">
+                            <img src="/click.svg" alt="click" />
+                            <div>{boardDetail[0].views}</div>
+                        </div>
                     </div>
                     <Line />
 

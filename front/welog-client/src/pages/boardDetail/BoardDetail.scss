@@ -44,11 +44,29 @@
 
     .boardDetail-titleContainer {
         display: flex;
+        justify-content: space-between;
 
-        .boardDetail-title {
-            font-family: "NanumSquareRoundEB";
-            font-size: 20px;
-            margin-left: 20px;
+        .boardDetail-titleBlock {
+            display: flex;
+
+            .boardDetail-title {
+                font-family: "NanumSquareRoundEB";
+                font-size: 20px;
+                margin-left: 20px;
+            }
+        }
+
+        .board-click {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 5px;
+            width: 90px;
+
+            img {
+                width: 25px;
+                height: 25px;
+            }
         }
     }
 
@@ -97,9 +115,21 @@
 
     .boardDetail-container {
         .boardDetail-titleContainer {
-            .boardDetail-title {
-                font-size: 16px;
-                margin-left: 10px;
+            .boardDetail-titleBlock {
+                .boardDetail-title {
+                    font-size: 16px;
+                    margin-left: 10px;
+                }
+            }
+
+            .board-click {
+                width: auto;
+                justify-content: center;
+
+                img {
+                    width: 20px;
+                    height: 20px;
+                }
             }
         }
 

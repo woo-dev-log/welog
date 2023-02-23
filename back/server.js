@@ -309,7 +309,6 @@ app.post("/signIn", async (req, res) => {
         const [rows] = await mysql.query(`
         SELECT * FROM user WHERE id = ? AND password = ?
         `, [id, pw]);
-        console.log(id, pw);
 
         if (rows.length > 0) {
             const user = [{ userNo: rows[0].userNo, id: rows[0].id, nickname: rows[0].nickname, imgUrl: rows[0].imgUrl }];

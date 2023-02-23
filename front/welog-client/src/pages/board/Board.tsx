@@ -34,7 +34,7 @@ const Board = () => {
     const [cookies, setCookie] = useCookies(['viewPost', 'boardCurrentPage']);
     const { keyword } = useParams();
     const navigate = useNavigate();
-    const limit = 6;
+    const limit = 8;
     const offset = (currentPage - 1) * limit;
 
     const { data: post, isLoading } = useQuery<BoardType[]>(['userBoardList'], async () => {
@@ -47,8 +47,8 @@ const Board = () => {
         }
     },
         {
-            keepPreviousData: true, // 이전 데이터를 유지하여 페이지 이동 시 로딩이 빠르게 됨
-            cacheTime: 1000 * 60 * 10, // 캐시 유지 시간 10분
+            keepPreviousData: true,
+            cacheTime: 1000 * 60 * 10,
         }
     );
 

@@ -40,7 +40,12 @@ export const getUserBoardApi = async (userNickname: string | undefined) => {
     return data;
 };
 
-export const postBoardAPi = async (search: string) => {
+export const getBoardDailyApi = async () => {
+    const { data } = await axios.get("/boardDaily");
+    return data;
+}
+
+export const postBoardApi = async (search: string) => {
     const { data } = await axios.post("/boardSearch", { search });
     return data;
 }

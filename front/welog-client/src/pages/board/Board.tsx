@@ -5,7 +5,7 @@ import { useQuery } from "react-query";
 import { useNavigate, useParams } from "react-router-dom";
 import { useRecoilState } from "recoil";
 import { board, loginUser } from "../../store/atoms";
-import { getBoardApi, postBoardAPi, updateBoardViewsApi } from "../../api/board";
+import { getBoardApi, postBoardApi, updateBoardViewsApi } from "../../api/board";
 import { ToastError, ToastWarn } from "../../components/Toast";
 import SEO from "../../components/SEO";
 import Line from "../../components/line/Line";
@@ -14,6 +14,7 @@ import Button from "../../components/button/Button";
 import './Board.scss';
 import Input from "../../components/input/Input";
 import { debounce } from "lodash-es";
+import BoardDaily from "../boardDaily/boardDaily";
 
 interface BoardType {
     boardNo: number;
@@ -65,7 +66,7 @@ const Board = () => {
 
     const searchBoardListApi = async(value: string) => {
         try {
-            const data = await postBoardAPi(value);
+            const data = await postBoardApi(value);
             setBoardList(data);
         } catch (e) {
             console.error(e);
@@ -110,6 +111,7 @@ const Board = () => {
             {isLoading
                 ? <h1>글을 불러오는 중입니다!</h1>
                 : <>
+                    <BoardDaily />
                     <Input placeholder="제목, 내용, 닉네임을 입력해주세요" onChange={searchBoardListOnChange} />
                     <div className="board-top">
                         {keyword

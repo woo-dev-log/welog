@@ -87,14 +87,8 @@ const BoardDetail = () => {
             {boardDetail[0] &&
                 <div className="boardDetail-container">
                     <div className="boardDetail-titleContainer">
-                        <div className="boardDetail-titleBlock">
-                            <Label text="제목" />
-                            <div className="boardDetail-title">{boardDetail[0].title}</div>
-                        </div>
-                        <div className="board-click">
-                            <img src="/click.svg" alt="click" />
-                            <div>{boardDetail[0].views}</div>
-                        </div>
+                        <Label text="제목" />
+                        <div className="boardDetail-title">{boardDetail[0].title}</div>
                     </div>
                     <Line />
 
@@ -112,7 +106,13 @@ const BoardDetail = () => {
                     <Line />
 
                     <div className="boardDetail-contentsContainer">
-                        <Label text="내용" />
+                        <div className="boardDetail-contentsBlock">
+                            <Label text="내용" />
+                            <div className="board-views">
+                                <img src="/views.svg" alt="click" />
+                                <div>{boardDetail[0].views}</div>
+                            </div>
+                        </div>
                         <Line />
                         <div className="boardDetail-contents" dangerouslySetInnerHTML={{ __html: boardDetail[0].contents }} />
 

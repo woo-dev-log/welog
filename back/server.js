@@ -235,7 +235,7 @@ app.get("/boardDaily", async (req, res) => {
         FROM board b 
         LEFT OUTER JOIN user u 
         ON b.userNo = u.userNo 
-        ORDER BY b.views DESC
+        ORDER BY commentCnt DESC
         LIMIT 4;
         `);
         res.status(200).send(rows);

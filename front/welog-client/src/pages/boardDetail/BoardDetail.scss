@@ -44,29 +44,12 @@
 
     .boardDetail-titleContainer {
         display: flex;
-        justify-content: space-between;
+        align-items: center;
 
-        .boardDetail-titleBlock {
-            display: flex;
-
-            .boardDetail-title {
-                font-family: "NanumSquareRoundEB";
-                font-size: 20px;
-                margin-left: 20px;
-            }
-        }
-
-        .board-click {
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 5px;
-            width: 90px;
-
-            img {
-                width: 25px;
-                height: 25px;
-            }
+        .boardDetail-title {
+            font-family: "NanumSquareRoundEB";
+            font-size: 20px;
+            margin-left: 20px;
         }
     }
 
@@ -94,6 +77,25 @@
     .boardDetail-contentsContainer {
         margin: 50px 0 100px 0;
         transition: .2s ease-in;
+
+        .boardDetail-contentsBlock {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+
+            .board-views {
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                gap: 5px;
+                width: 90px;
+                
+                img {
+                    width: 25px;
+                    height: 25px;
+                }
+            }
+        }
     }
 
     .boardDetail-deleteBtn {
@@ -115,21 +117,9 @@
 
     .boardDetail-container {
         .boardDetail-titleContainer {
-            .boardDetail-titleBlock {
-                .boardDetail-title {
-                    font-size: 16px;
-                    margin-left: 10px;
-                }
-            }
-
-            .board-click {
-                width: auto;
-                justify-content: center;
-
-                img {
-                    width: 20px;
-                    height: 20px;
-                }
+            .boardDetail-title {
+                font-size: 16px;
+                margin-left: 10px;
             }
         }
 
@@ -147,6 +137,15 @@
 
         .boardDetail-contentsContainer {
             margin: 20px 0 50px 0;
+
+            .boardDetail-contentsBlock {
+                .board-views {
+                    img {
+                        width: 20px;
+                        height: 20px;
+                    }
+                }
+            }
 
             .boardDetail-contents {
                 font-size: 14px;

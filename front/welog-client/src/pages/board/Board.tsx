@@ -5,16 +5,15 @@ import { useQuery } from "react-query";
 import { useNavigate, useParams } from "react-router-dom";
 import { useRecoilState } from "recoil";
 import { board, loginUser } from "../../store/atoms";
-import { getBoardApi, postBoardApi, updateBoardViewsApi } from "../../api/board";
+import { getBoardApi, getBoardDailyApi, postBoardApi, updateBoardViewsApi } from "../../api/board";
 import { ToastError, ToastWarn } from "../../components/Toast";
+import { debounce } from "lodash-es";
 import SEO from "../../components/SEO";
 import Line from "../../components/line/Line";
 import Paging from "../../components/paging/Paging";
 import Button from "../../components/button/Button";
-import './Board.scss';
 import Input from "../../components/input/Input";
-import { debounce } from "lodash-es";
-import BoardDaily from "../boardDaily/boardDaily";
+import './Board.scss';
 
 interface BoardType {
     boardNo: number;
@@ -35,8 +34,20 @@ const Board = () => {
     const [cookies, setCookie] = useCookies(['viewPost', 'boardCurrentPage']);
     const { keyword } = useParams();
     const navigate = useNavigate();
-    const limit = 8;
+    const limit = 6;
     const offset = (currentPage - 1) * limit;
+    const titleWordLength = window.innerWidth < 768 ? 17 : 80;
+    const contentsWordLength = window.innerWidth < 768 ? 27 : 80;
+
+    const { data: boardDailyList, isLoading: boardDailyLoading } = useQuery<BoardType[]>("boardDailyList", async () => {
+        try {
+            const data = await getBoardDailyApi();
+            return data;
+        } catch (e) {
+            ToastError("데일리 글 조회를 실패했어요");
+            console.error(e);
+        }
+    })
 
     const { data: post, isLoading } = useQuery<BoardType[]>(['userBoardList'], async () => {
         try {
@@ -54,17 +65,17 @@ const Board = () => {
     );
 
     const searchBoardListOnChange = debounce((e: React.ChangeEvent<HTMLInputElement>) => {
-        if(e.target.value === keyword) return;
+        if (e.target.value === keyword) return;
 
         setCurrentPage(1);
-        if(e.target.value === "") {
+        if (e.target.value === "") {
             navigate("/");
         } else {
             navigate("/search/" + e.target.value);
         }
     }, 500);
 
-    const searchBoardListApi = async(value: string) => {
+    const searchBoardListApi = async (value: string) => {
         try {
             const data = await postBoardApi(value);
             setBoardList(data);
@@ -92,9 +103,13 @@ const Board = () => {
     }, []);
 
     useEffect(() => {
+        console.log(window.innerWidth);
+    }, [window.innerWidth]);
+
+    useEffect(() => {
         if (post && keyword === undefined) {
             setBoardList(post);
-        } else if(keyword !== undefined) {
+        } else if (keyword !== undefined) {
             searchBoardListApi(keyword);
         }
     }, [post, keyword]);
@@ -108,15 +123,59 @@ const Board = () => {
     return (
         <>
             <SEO title="메인" contents="리스트" />
+            {boardDailyLoading
+                ? <h2>이번주 댓글이 많이 달린 글을 불러오는 중이에요</h2>
+                : boardDailyList === undefined
+                    ? <h2>이번주 댓글이 많이 달린 글이 없어요</h2>
+                    : <>
+                        <h2>이번주 댓글이 많이 달린 글이에요</h2>
+                        <div className="boardDaily-flexWrap">
+                            {boardDailyList.map((boardDaily, i) => (
+                                <div key={i} className="board-block" onClick={() => updateBoardViewsOnClick(boardDaily.boardNo, boardDaily.views)}>
+                                    <div>
+                                        <div className="board-userBlock">
+                                            <img src={`http://localhost:3690/images/${boardDaily.imgUrl}`} alt={boardDaily.imgUrl} />
+                                            <div className="board-nickname">{boardDaily.nickname}</div>
+                                        </div>
+                                        <Line />
+                                        <div className="board-title">
+                                            {boardDaily.title.length < titleWordLength
+                                                ? boardDaily.title
+                                                : boardDaily.title.substring(0, titleWordLength) + " ..."}
+                                        </div>
+                                        <div className="board-contents">
+                                            {boardDaily.contents.replaceAll(/<[^>]*>?/g, "").length < contentsWordLength
+                                                ? boardDaily.contents.replaceAll(/<[^>]*>?/g, "")
+                                                : boardDaily.contents.replaceAll(/<[^>]*>?/g, "").substring(0, contentsWordLength) + " ..."}
+                                        </div>
+                                    </div>
+                                    <div className="board-footer">
+                                        <div>{dayjs(boardDaily.rgstrDate).format('YYYY.MM.DD HH:mm')}</div>
+                                        <div className="board-postInfo">
+                                            <div className="board-views">
+                                                <img src="/views.svg" alt="views" />
+                                                <div>{boardDaily.views}</div>
+                                            </div>
+                                            <div className="board-comment">
+                                                <img src="/comment.svg" alt="comment" />
+                                                <div>{boardDaily.commentCnt}</div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            ))}
+                        </div>
+                    </>
+            }
+
             {isLoading
-                ? <h1>글을 불러오는 중입니다!</h1>
+                ? <h2>글을 불러오는 중이에요</h2>
                 : <>
-                    <BoardDaily />
                     <Input placeholder="제목, 내용, 닉네임을 입력해주세요" onChange={searchBoardListOnChange} />
                     <div className="board-top">
                         {keyword
-                            ? <p>{keyword} 검색 결과 총 {boardList.length}개의 포스트를 찾았어요</p>
-                            : <p>총 {boardList.length}개의 포스트가 있어요</p>}
+                            ? <p>{keyword} 검색 결과 총 {boardList.length}개의 글을 찾았어요</p>
+                            : <p>총 {boardList.length}개의 글이 있어요</p>}
                         <Paging
                             total={boardList.length}
                             limit={limit}
@@ -127,7 +186,7 @@ const Board = () => {
                     </div>
                     {boardList.length === 0
                         ? <h2>작성한 글이 없어요</h2>
-                        : <div className="board-container">
+                        : <>
                             <div className="board-flexWrap">
                                 {boardList.slice(offset, offset + limit).map((board, i) => (
                                     <div key={i} className="board-block" onClick={() => updateBoardViewsOnClick(board.boardNo, board.views)}>
@@ -137,18 +196,22 @@ const Board = () => {
                                                 <div className="board-nickname">{board.nickname}</div>
                                             </div>
                                             <Line />
-                                            <div className="board-title">{board.title}</div>
+                                            <div className="board-title">
+                                            {board.title.length < titleWordLength
+                                                ? board.title
+                                                : board.title.substring(0, titleWordLength) + " ..."}
+                                        </div>
                                             <div className="board-contents">
-                                                {board.contents.replaceAll(/<[^>]*>?/g, "").length < 60
+                                                {board.contents.replaceAll(/<[^>]*>?/g, "").length < contentsWordLength
                                                     ? board.contents.replaceAll(/<[^>]*>?/g, "")
-                                                    : board.contents.replaceAll(/<[^>]*>?/g, "").substring(0, 60) + " ..."}
+                                                    : board.contents.replaceAll(/<[^>]*>?/g, "").substring(0, contentsWordLength) + " ..."}
                                             </div>
                                         </div>
                                         <div className="board-footer">
                                             <div>{dayjs(board.rgstrDate).format('YYYY.MM.DD HH:mm')}</div>
                                             <div className="board-postInfo">
-                                                <div className="board-click">
-                                                    <img src="/click.svg" alt="click" />
+                                                <div className="board-views">
+                                                    <img src="/views.svg" alt="views" />
                                                     <div>{board.views}</div>
                                                 </div>
                                                 <div className="board-comment">
@@ -164,7 +227,7 @@ const Board = () => {
                             <div className="board-button">
                                 <Button onClick={() => { userInfo[0].userNo !== 0 ? navigate("/BoardWrite") : ToastWarn("로그인을 해주세요") }} text="글쓰기" />
                             </div>
-                        </div>}
+                        </>}
                 </>
             }
         </>

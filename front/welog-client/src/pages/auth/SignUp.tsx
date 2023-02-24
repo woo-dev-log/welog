@@ -71,8 +71,8 @@ const SignUp = () => {
 
 
     const nicknameCheckOnChange = debounce(async (e: React.ChangeEvent<HTMLInputElement>) => {
-        if (e.target.value.length > 10) {
-            setCheckNickName("닉네임을 10자 이내로 생성해주세요");
+        if (e.target.value.length > 8) {
+            setCheckNickName("닉네임을 8자 이내로 생성해주세요");
             setDupCheckNickname(false);
             return;
         } else setNickname(e.target.value);

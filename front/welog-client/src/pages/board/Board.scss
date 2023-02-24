@@ -47,6 +47,16 @@ input {
 
     .board-block {
         height: 300px;
+
+        .board-userBlock {
+            display: flex;
+            justify-content: space-between;
+
+            .board-userProfile{
+                display: flex;
+                align-items: center;
+            }
+        }
     }
 }
 
@@ -82,7 +92,7 @@ input {
         display: flex;
         align-items: center;
 
-        img {
+        .board-userProfileImg {
             object-fit: cover;
             background-color: white;
             width: 40px;
@@ -189,13 +199,15 @@ input {
         padding: 10px;
 
         .board-userBlock {
-            img {
+            font-size: 14px;
+            
+            .board-userProfileImg {
                 width: 35px;
                 height: 35px;
             }
 
             .board-nickname {
-                font-size: 16px;
+                font-size: 14px;
             }
         }
 

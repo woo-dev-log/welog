@@ -25,6 +25,7 @@ interface BoardType {
     nickname: string;
     imgUrl: string;
     commentCnt: number;
+    weekCommentCnt?: number;
 }
 
 const Board = () => {
@@ -124,18 +125,22 @@ const Board = () => {
         <>
             <SEO title="메인" contents="리스트" />
             {boardDailyLoading
-                ? <h2>이번주 댓글이 많이 달린 글을 불러오는 중이에요</h2>
+                ? <h2>이번주에 댓글이 많이 달린 글을 불러오는 중이에요</h2>
                 : boardDailyList === undefined
-                    ? <h2>이번주 댓글이 많이 달린 글이 없어요</h2>
+                    ? <h2>이번주에 댓글이 많이 달린 글이 없어요</h2>
                     : <>
-                        <h2>이번주 댓글이 많이 달린 글이에요</h2>
+                        <h2>이번주에 댓글이 많이 달린 글이에요</h2>
                         <div className="boardDaily-flexWrap">
                             {boardDailyList.map((boardDaily, i) => (
                                 <div key={i} className="board-block" onClick={() => updateBoardViewsOnClick(boardDaily.boardNo, boardDaily.views)}>
                                     <div>
                                         <div className="board-userBlock">
-                                            <img src={`http://localhost:3690/images/${boardDaily.imgUrl}`} alt={boardDaily.imgUrl} />
-                                            <div className="board-nickname">{boardDaily.nickname}</div>
+                                            <div className="board-userProfile">
+                                                <img src={`http://localhost:3690/images/${boardDaily.imgUrl}`} alt={boardDaily.imgUrl}
+                                                    className="board-userProfileImg" />
+                                                <div className="board-nickname">{boardDaily.nickname}</div>
+                                            </div>
+                                            <div style={{ color: "red" }}>New {boardDaily.weekCommentCnt}</div>
                                         </div>
                                         <Line />
                                         <div className="board-title">
@@ -192,15 +197,16 @@ const Board = () => {
                                     <div key={i} className="board-block" onClick={() => updateBoardViewsOnClick(board.boardNo, board.views)}>
                                         <div>
                                             <div className="board-userBlock">
-                                                <img src={`http://localhost:3690/images/${board.imgUrl}`} alt={board.imgUrl} />
+                                                <img src={`http://localhost:3690/images/${board.imgUrl}`} alt={board.imgUrl}
+                                                    className="board-userProfileImg" />
                                                 <div className="board-nickname">{board.nickname}</div>
                                             </div>
                                             <Line />
                                             <div className="board-title">
-                                            {board.title.length < titleWordLength
-                                                ? board.title
-                                                : board.title.substring(0, titleWordLength) + " ..."}
-                                        </div>
+                                                {board.title.length < titleWordLength
+                                                    ? board.title
+                                                    : board.title.substring(0, titleWordLength) + " ..."}
+                                            </div>
                                             <div className="board-contents">
                                                 {board.contents.replaceAll(/<[^>]*>?/g, "").length < contentsWordLength
                                                     ? board.contents.replaceAll(/<[^>]*>?/g, "")

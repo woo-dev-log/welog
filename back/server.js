@@ -38,7 +38,7 @@ app.post("/userBoard", async (req, res) => {
             SELECT b.boardNo, b.userNo, b.title, b.contents, b.rgstrDate, b.views, u.nickname, u.imgUrl, 
             (SELECT count(*) FROM comment c WHERE c.boardNo = b.boardNo) commentCnt 
             FROM board b 
-            LEFT OUTER JOIN user u 
+            INNER JOIN user u 
             ON b.userNo = u.userNo 
             where u.nickname = ?
             ORDER BY b.rgstrDate DESC
@@ -135,7 +135,7 @@ app.post("/boardComment", async (req, res) => {
         SELECT c.commentNo, c.boardNo, c.userNo, c.contents, c.rgstrDate, c.updateDate, 
         u.nickname, u.imgUrl 
         FROM comment c 
-        LEFT OUTER JOIN user u
+        INNER JOIN user u
         ON c.userNo = u.userNo
         WHERE boardNo = ? 
         ORDER BY rgstrDate DESC
@@ -216,7 +216,7 @@ app.post("/boardDetail", async (req, res) => {
         SELECT b.boardNo, b.userNo, b.title, b.contents, b.rgstrDate, b.updateDate, b.views, 
         u.nickname, u.imgUrl 
         FROM board b 
-        LEFT OUTER JOIN user u 
+        INNER JOIN user u 
         ON b.userNo = u.userNo 
         WHERE b.boardNo = ?
         `, [boardNo]);
@@ -230,12 +230,15 @@ app.post("/boardDetail", async (req, res) => {
 app.get("/boardDaily", async (req, res) => {
     try {
         const [rows] = await mysql.query(`
-        SELECT b.boardNo, b.userNo, b.title, b.contents, b.rgstrDate, b.views, u.nickname, u.imgUrl, 
-        (SELECT count(*) FROM comment c WHERE c.boardNo = b.boardNo) commentCnt 
+        SELECT b.boardNo, b.userNo, b.title, b.contents, b.rgstrDate, b.views, 
+        u.nickname, u.imgUrl, (SELECT count(*) FROM comment c WHERE c.boardNo = b.boardNo) commentCnt, 
+        COUNT(*) AS weekCommentCnt 
         FROM board b 
-        LEFT OUTER JOIN user u 
-        ON b.userNo = u.userNo 
-        ORDER BY commentCnt DESC
+        INNER JOIN comment c ON b.boardNo = c.boardNo 
+        INNER JOIN user u ON u.userNo = b.userNo 
+        WHERE c.rgstrDate BETWEEN DATE_SUB(NOW(), INTERVAL 1 WEEK) AND NOW() 
+        GROUP BY c.boardNo  
+        ORDER BY weekCommentCnt DESC
         LIMIT 4;
         `);
         res.status(200).send(rows);
@@ -273,7 +276,7 @@ app.get("/board", async (req, res) => {
         SELECT b.boardNo, b.userNo, b.title, b.contents, b.rgstrDate, b.views, u.nickname, u.imgUrl, 
         (SELECT count(*) FROM comment c WHERE c.boardNo = b.boardNo) commentCnt 
         FROM board b 
-        LEFT OUTER JOIN user u 
+        INNER JOIN user u 
         ON b.userNo = u.userNo 
         ORDER BY b.rgstrDate DESC
         `);

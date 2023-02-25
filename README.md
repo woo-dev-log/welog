@@ -2,8 +2,6 @@
 오늘 하루는 무슨 일이 있으셨나요<br>
 다른 사람들은 무슨 일이 있었는지 구경해봐요<br>
 
-<img width="767" alt="welog-main" src="https://user-images.githubusercontent.com/110772642/221354648-c9d2ab94-b08e-4a86-9916-dbb7fafb5fd7.png">
-
 <!-- ## 📒 목차
 - [기술스택](#-기술스택)
 - [사용모듈](#-사용모듈)
@@ -45,3 +43,6 @@ multer & sharp
 lodash-es in debounce 
 회원가입시 중복 확인과 글 검색시 무분별한 호출을 제한하기 위해 사용했어요
 ```
+
+## 메인 화면
+<img width="767" alt="welog-main" src="https://user-images.githubusercontent.com/110772642/221354648-c9d2ab94-b08e-4a86-9916-dbb7fafb5fd7.png">

@@ -85,14 +85,14 @@ const BoardDetail = () => {
             <SEO title="상세 글" contents="상세 글" />
             <button className="boardDetail-backbutton" onClick={() => navigate(-1)}>&lt;&nbsp;&nbsp;이전으로</button>
             {boardDetail[0] &&
-                <div className="boardDetail-container">
-                    <div className="boardDetail-titleContainer">
+                <section className="boardDetail-container">
+                    <article className="boardDetail-titleContainer">
                         <Label text="제목" />
                         <div className="boardDetail-title">{boardDetail[0].title}</div>
-                    </div>
+                    </article>
                     <Line />
 
-                    <div className="boardDetail-writerContainer">
+                    <article className="boardDetail-writerContainer">
                         <img src={`http://localhost:3690/images/${boardDetail[0].imgUrl}`} alt={boardDetail[0].imgUrl}
                             onClick={() => userBoardOnClick(boardDetail[0].nickname)} />
                         <div className="boardDetail-nickname" onClick={() => userBoardOnClick(boardDetail[0].nickname)}>
@@ -102,10 +102,10 @@ const BoardDetail = () => {
                             <div className="boardDetail-rgstrDate">{dayjs(boardDetail[0].rgstrDate).format('YYYY.MM.DD HH:mm')} 등록</div>
                             {boardDetail[0].updateDate && <div className="boardDetail-rgstrDate">{dayjs(boardDetail[0].updateDate).format('YYYY.MM.DD HH:mm')} 수정</div>}
                         </div>
-                    </div>
+                    </article>
                     <Line />
 
-                    <div className="boardDetail-contentsContainer">
+                    <article className="boardDetail-contentsContainer">
                         <div className="boardDetail-contentsBlock">
                             <Label text="내용" />
                             <div className="board-views">
@@ -123,9 +123,9 @@ const BoardDetail = () => {
                             </div>
                         }
                         <Line />
-                    </div>
+                    </article>
                     <BoardComment IntBoardNo={IntBoardNo} />
-                </div>
+                </section>
             }
         </>
     )

@@ -104,10 +104,6 @@ const Board = () => {
     }, []);
 
     useEffect(() => {
-        console.log(window.innerWidth);
-    }, [window.innerWidth]);
-
-    useEffect(() => {
         if (post && keyword === undefined) {
             setBoardList(post);
         } else if (keyword !== undefined) {
@@ -130,10 +126,10 @@ const Board = () => {
                     ? <h2>이번주에 댓글이 많이 달린 글이 없어요</h2>
                     : <>
                         <h2>이번주에 댓글이 많이 달린 글이에요</h2>
-                        <div className="boardDaily-flexWrap">
+                        <section className="boardDaily-flexWrap">
                             {boardDailyList.map((boardDaily, i) => (
-                                <div key={i} className="board-block" onClick={() => updateBoardViewsOnClick(boardDaily.boardNo, boardDaily.views)}>
-                                    <div>
+                                <article key={i} className="board-block" onClick={() => updateBoardViewsOnClick(boardDaily.boardNo, boardDaily.views)}>
+                                    <header>
                                         <div className="board-userBlock">
                                             <div className="board-userProfile">
                                                 <img src={`http://localhost:3690/images/${boardDaily.imgUrl}`} alt={boardDaily.imgUrl}
@@ -153,8 +149,8 @@ const Board = () => {
                                                 ? boardDaily.contents.replaceAll(/<[^>]*>?/g, "")
                                                 : boardDaily.contents.replaceAll(/<[^>]*>?/g, "").substring(0, contentsWordLength) + " ..."}
                                         </div>
-                                    </div>
-                                    <div className="board-footer">
+                                    </header>
+                                    <footer className="board-footer">
                                         <div>{dayjs(boardDaily.rgstrDate).format('YYYY.MM.DD HH:mm')}</div>
                                         <div className="board-postInfo">
                                             <div className="board-views">
@@ -166,10 +162,10 @@ const Board = () => {
                                                 <div>{boardDaily.commentCnt}</div>
                                             </div>
                                         </div>
-                                    </div>
-                                </div>
+                                    </footer>
+                                </article>
                             ))}
-                        </div>
+                        </section>
                     </>
             }
 
@@ -192,10 +188,10 @@ const Board = () => {
                     {boardList.length === 0
                         ? <h2>작성한 글이 없어요</h2>
                         : <>
-                            <div className="board-flexWrap">
+                            <section className="board-flexWrap">
                                 {boardList.slice(offset, offset + limit).map((board, i) => (
-                                    <div key={i} className="board-block" onClick={() => updateBoardViewsOnClick(board.boardNo, board.views)}>
-                                        <div>
+                                    <article key={i} className="board-block" onClick={() => updateBoardViewsOnClick(board.boardNo, board.views)}>
+                                        <header>
                                             <div className="board-userBlock">
                                                 <img src={`http://localhost:3690/images/${board.imgUrl}`} alt={board.imgUrl}
                                                     className="board-userProfileImg" />
@@ -212,8 +208,8 @@ const Board = () => {
                                                     ? board.contents.replaceAll(/<[^>]*>?/g, "")
                                                     : board.contents.replaceAll(/<[^>]*>?/g, "").substring(0, contentsWordLength) + " ..."}
                                             </div>
-                                        </div>
-                                        <div className="board-footer">
+                                        </header>
+                                        <footer className="board-footer">
                                             <div>{dayjs(board.rgstrDate).format('YYYY.MM.DD HH:mm')}</div>
                                             <div className="board-postInfo">
                                                 <div className="board-views">
@@ -225,10 +221,10 @@ const Board = () => {
                                                     <div>{board.commentCnt}</div>
                                                 </div>
                                             </div>
-                                        </div>
-                                    </div>
+                                        </footer>
+                                    </article>
                                 ))}
-                            </div>
+                            </section>
 
                             <div className="board-button">
                                 <Button onClick={() => { userInfo[0].userNo !== 0 ? navigate("/BoardWrite") : ToastWarn("로그인을 해주세요") }} text="글쓰기" />

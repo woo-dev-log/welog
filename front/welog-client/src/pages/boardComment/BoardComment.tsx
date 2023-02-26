@@ -151,9 +151,9 @@ const BoardComment = ({ IntBoardNo }: { IntBoardNo: number }) => {
             }
 
             {boardCommentList.slice(offset, offset + limit).map((boardC, j) => (
-                <div key={j} className="boardComment-commentContainer">
+                <article key={j} className="boardComment-commentContainer">
                     <Line />
-                    <div className="boardComment-commentBlock">
+                    <header className="boardComment-commentBlock">
                         <div className="boardComment-commentLabel">
                             <img src={`http://localhost:3690/images/${boardC.imgUrl}`} alt={boardC.imgUrl}
                                 onClick={() => userBoardOnClick(boardC.nickname)} />
@@ -164,13 +164,13 @@ const BoardComment = ({ IntBoardNo }: { IntBoardNo: number }) => {
                                     <div className="boardComment-commentRgstrDate">{dayjs(boardC.updateDate).format('YYYY.MM.DD HH:mm')} 수정</div>}
                             </div>
                         </div>
-                    </div>
+                    </header>
                     {commentUpdateCheckNo === boardC.commentNo && userInfo[0].userNo !== 0
                         ? <textarea ref={textRef} value={boardCommentUpdate} placeholder="댓글을 입력해주세요"
                             onInput={autoHeightRef} onChange={e => setBoardCommentUpdate(e.target.value)} />
                         : <div dangerouslySetInnerHTML={{ __html: boardC.contents.replaceAll(/(\n|\r\n)/g, '<br>') }} />}
 
-                    <div className="boardComment-commentDeleteBtn">
+                    <footer className="boardComment-commentDeleteBtn">
                         {userInfo[0].userNo === boardC.userNo &&
                             <>
                                 {commentUpdateBoolean && commentUpdateCheckNo === boardC.commentNo &&
@@ -182,8 +182,8 @@ const BoardComment = ({ IntBoardNo }: { IntBoardNo: number }) => {
                                     </>}
                             </>
                         }
-                    </div>
-                </div>
+                    </footer>
+                </article>
             ))}
         </>
     )

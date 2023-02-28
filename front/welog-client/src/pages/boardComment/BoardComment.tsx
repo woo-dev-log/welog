@@ -157,7 +157,7 @@ const BoardComment = ({ IntBoardNo }: { IntBoardNo: number }) => {
                     <Line />
                     <header className="boardComment-commentBlock">
                         <div className="boardComment-commentLabel">
-                            <img src={`${ServerImgUrl}`} alt={boardC.imgUrl}
+                            <img src={`${ServerImgUrl}${boardC.imgUrl}`} alt={boardC.imgUrl}
                                 onClick={() => userBoardOnClick(boardC.nickname)} />
                             <div className="boardComment-commentNickname" onClick={() => userBoardOnClick(boardC.nickname)}>{boardC.nickname}</div>
                             <div className="boardComment-date">

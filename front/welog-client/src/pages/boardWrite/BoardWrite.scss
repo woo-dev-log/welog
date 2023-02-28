@@ -1,3 +1,13 @@
+.boardWrite-backbutton {
+    cursor: pointer;
+    border: none;
+    background-color: white;
+    color: black;
+    font-size: 24px;
+    margin-bottom: 20px;
+    font-family: "NanumSquareRoundEB";
+}
+
 .boardWrite-container {
     display: flex;
     flex-direction: column;
@@ -52,10 +62,16 @@
 }
 
 @media (max-width: 767px) {
+    .boardWrite-backbutton {
+        font-size: 18px;
+        margin-bottom: 10px;
+    }
+
     .boardWrite-container {
         .boardWrite-titleBlock {
             input {
                 font-size: 16px;
+                padding: 10px;
             }
         }
 

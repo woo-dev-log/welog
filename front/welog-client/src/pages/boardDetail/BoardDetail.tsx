@@ -85,7 +85,7 @@ const BoardDetail = () => {
     return (
         <>
             <SEO title="상세 글" contents="상세 글" />
-            <button className="boardDetail-backbutton" onClick={() => navigate(-1)}>&lt;&nbsp;&nbsp;이전으로</button>
+            <div className="boardDetail-backbutton" onClick={() => navigate(-1)}>&lt;&nbsp;&nbsp;이전으로</div>
             {boardDetail[0] &&
                 <section className="boardDetail-container">
                     <article className="boardDetail-titleContainer">
@@ -101,8 +101,8 @@ const BoardDetail = () => {
                             {boardDetail[0].nickname}
                         </div>
                         <div className="boardDetail-date">
-                            <div className="boardDetail-rgstrDate">{dayjs(boardDetail[0].rgstrDate).format('YYYY.MM.DD HH:mm')} 등록</div>
-                            {boardDetail[0].updateDate && <div className="boardDetail-rgstrDate">{dayjs(boardDetail[0].updateDate).format('YYYY.MM.DD HH:mm')} 수정</div>}
+                            <div className="boardDetail-rgstrDate">{dayjs(boardDetail[0].rgstrDate).format('YY.MM.DD HH:mm')} 등록</div>
+                            {boardDetail[0].updateDate && <div className="boardDetail-rgstrDate">{dayjs(boardDetail[0].updateDate).format('YY.MM.DD HH:mm')} 수정</div>}
                         </div>
                     </article>
                     <Line />

@@ -16,229 +16,234 @@
     }
 }
 
-h2 {
-    font-family: "NanumSquareRoundEB";
-}
-
-input {
-    font-size: 16px;
-    width: 360px;
-    padding: 10px;
-    border: 1px solid lightgray;
-    border-radius: 5px;
-}
-
-.board-top {
-    display: flex;
-    justify-content: space-between;
-
-    p {
-        font-size: 20px;
-        font-family: "NanumSquareRoundEB";
-        margin-bottom: 0;
-    }
-}
-
-.boardDaily-flexWrap {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(15rem, 1fr));
-    gap: 20px;
-    margin-bottom: 100px;
-
-    .board-block {
-        height: 300px;
-
-        .board-userBlock {
-            display: flex;
-            justify-content: space-between;
-
-            .board-userProfile{
-                display: flex;
-                align-items: center;
-            }
-        }
-    }
-}
-
-.board-flexWrap {
-    // display: flex;
-    // flex-wrap: wrap;
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(20rem, 1fr));
-    gap: 20px;
-    margin: 20px 0;
-}
-
-.board-block {
-    display: flex;
-    flex-direction: column;
-    justify-content: space-between;
-    cursor: pointer;
-    box-sizing: border-box;
-    box-shadow: lightgray 0 5px 10px;
-    border-radius: 10px;
-    padding: 20px;
-    height: 260px;
-    width: 100%;
-    background-color: white;
-    // transition: transform 0.35s ease-in 0.3s;
-    transition: .2s ease-in;
-
-    &:hover {
-        transform: scale(1.05);
-    }
-
-    .board-userBlock {
-        display: flex;
-        align-items: center;
-
-        .board-userProfileImg {
-            object-fit: cover;
-            background-color: white;
-            width: 40px;
-            height: 40px;
-            box-shadow: lightgray 0 3px 10px;
-            border-radius: 1000px;
-            margin-right: 10px;
-        }
-
-        .board-nickname {
-            font-family: "NanumSquareRoundEB";
-            font-size: 18px;
-        }
-    }
-
-    .board-title {
-        font-size: 18px;
-        font-family: "NanumSquareRoundEB";
-        margin-bottom: 10px;
-    }
-
-    .board-contents {
-        font-size: 16px;
-        margin-bottom: 10px;
-    }
-
-    .board-footer {
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
-        font-size: 16px;
-        color: black;
-
-        .board-postInfo {
-            display: flex;
-            gap: 10px;
-
-            img {
-                width: 25px;
-                height: 25px;
-            }
-
-            .board-views {
-                display: flex;
-                align-items: center;
-                gap: 5px;
-            }
-
-            .board-comment {
-                display: flex;
-                align-items: center;
-                gap: 5px;
-            }
-        }
-    }
-}
-
-.board-button {
-    text-align: center;
-
-    button {
-        transition: .2s ease-in;
-        margin-top: 20px;
-        @include buttonCss(150px, 40px);
-    }
-}
-
-@media (max-width: 767px) {
+.board-contentsContainer {
     h2 {
-        font-size: 1.2rem;    
+        font-family: "NanumSquareRoundEB";
     }
 
     input {
-        width: 100%;
-        margin-bottom: 10px;
+        font-size: 16px;
+        width: 360px;
+        padding: 10px;
+        border: 1px solid lightgray;
+        border-radius: 5px;
     }
 
     .board-top {
-        display: block;
+        display: flex;
+        justify-content: space-between;
 
         p {
-            font-size: 16px;
-            margin-top: 0px;
-            margin-bottom: 20px;
+            font-size: 20px;
+            font-family: "NanumSquareRoundEB";
+            margin-bottom: 0;
         }
     }
 
     .boardDaily-flexWrap {
-        grid-template-columns: repeat(auto-fit, minmax(8rem, 1fr));
-        gap: 10px;
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(15rem, 1fr));
+        gap: 20px;
+        margin-bottom: 100px;
 
         .board-block {
-            height: 220px;
+            height: 300px;
+
+            .board-userBlock {
+                display: flex;
+                justify-content: space-between;
+
+                .board-userProfile {
+                    display: flex;
+                    align-items: center;
+                }
+            }
         }
     }
 
     .board-flexWrap {
-        grid-template-columns: repeat(auto-fit, minmax(8rem, 1fr));
-        gap: 10px;
+        // display: flex;
+        // flex-wrap: wrap;
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(20rem, 1fr));
+        gap: 20px;
+        margin: 20px 0;
     }
 
     .board-block {
-        height: 220px;
-        padding: 10px;
+        display: flex;
+        flex-direction: column;
+        justify-content: space-between;
+        cursor: pointer;
+        box-sizing: border-box;
+        box-shadow: lightgray 0 5px 10px;
+        border-radius: 10px;
+        padding: 20px;
+        height: 260px;
+        width: 100%;
+        background-color: white;
+        // transition: transform 0.35s ease-in 0.3s;
+        transition: .2s ease-in;
+
+        &:hover {
+            transform: scale(1.05);
+        }
 
         .board-userBlock {
-            font-size: 14px;
+            display: flex;
+            align-items: center;
 
             .board-userProfileImg {
-                width: 35px;
-                height: 35px;
+                object-fit: cover;
+                background-color: white;
+                width: 40px;
+                height: 40px;
+                box-shadow: lightgray 0 3px 10px;
+                border-radius: 1000px;
+                margin-right: 10px;
             }
 
             .board-nickname {
-                font-size: 14px;
+                font-family: "NanumSquareRoundEB";
+                font-size: 18px;
             }
         }
 
         .board-title {
-            font-size: 14px;
+            font-size: 18px;
+            font-family: "NanumSquareRoundEB";
+            margin-bottom: 10px;
         }
 
         .board-contents {
-            font-size: 14px;
+            font-size: 16px;
+            margin-bottom: 10px;
         }
 
         .board-footer {
-            display: block;
-            text-align: center;
-            font-size: 14px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-size: 16px;
+            color: black;
 
             .board-postInfo {
-                justify-content: center;
+                display: flex;
+                gap: 10px;
 
                 img {
-                    width: 20px;
-                    height: 20px;
+                    width: 25px;
+                    height: 25px;
+                }
+
+                .board-views {
+                    display: flex;
+                    align-items: center;
+                    gap: 5px;
+                }
+
+                .board-comment {
+                    display: flex;
+                    align-items: center;
+                    gap: 5px;
                 }
             }
         }
     }
 
     .board-button {
+        text-align: center;
+
         button {
-            width: 110px;
-            font-size: 14px;
+            transition: .2s ease-in;
+            margin-top: 20px;
+            @include buttonCss(150px, 40px);
+        }
+    }
+}
+
+@media (max-width: 767px) {
+    .board-contentsContainer {
+        h2 {
+            font-size: 1.2rem;
+        }
+
+        input {
+            width: 100%;
+            margin-bottom: 10px;
+        }
+
+        .board-top {
+            display: block;
+
+            p {
+                font-size: 16px;
+                margin-top: 0px;
+                margin-bottom: 20px;
+            }
+        }
+
+        .boardDaily-flexWrap {
+            grid-template-columns: repeat(auto-fit, minmax(8rem, 1fr));
+            gap: 10px;
+
+            .board-block {
+                height: 220px;
+            }
+        }
+
+        .board-flexWrap {
+            grid-template-columns: repeat(auto-fit, minmax(8rem, 1fr));
+            gap: 10px;
+        }
+
+        .board-block {
+            height: 220px;
+            padding: 10px;
+
+            .board-userBlock {
+                font-size: 14px;
+
+                .board-userProfileImg {
+                    width: 35px;
+                    height: 35px;
+                }
+
+                .board-nickname {
+                    font-size: 14px;
+                }
+            }
+
+            .board-title {
+                font-size: 14px;
+            }
+
+            .board-contents {
+                font-size: 14px;
+            }
+
+            .board-footer {
+                display: block;
+                text-align: center;
+                font-size: 14px;
+
+                .board-postInfo {
+                    justify-content: center;
+                    margin-top: 5px;
+
+                    img {
+                        width: 20px;
+                        height: 20px;
+                    }
+                }
+            }
+        }
+
+        .board-button {
+            button {
+                width: 110px;
+                font-size: 14px;
+            }
         }
     }
 }

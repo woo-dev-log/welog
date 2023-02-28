@@ -120,7 +120,7 @@ const Board = () => {
     }, [setCurrentPage]);
 
     return (
-        <>
+        <div className="board-contentsContainer">
             <SEO title="메인" contents="리스트" />
             {boardDailyLoading
                 ? <h2>이번주에 댓글이 많이 달린 글을 불러오는 중이에요</h2>
@@ -153,7 +153,7 @@ const Board = () => {
                                         </div>
                                     </header>
                                     <footer className="board-footer">
-                                        <div>{dayjs(boardDaily.rgstrDate).format('YYYY.MM.DD HH:mm')}</div>
+                                        <div>{dayjs(boardDaily.rgstrDate).format('YY.MM.DD HH:mm')}</div>
                                         <div className="board-postInfo">
                                             <div className="board-views">
                                                 <img src="/views.svg" alt="views" />
@@ -212,7 +212,7 @@ const Board = () => {
                                             </div>
                                         </header>
                                         <footer className="board-footer">
-                                            <div>{dayjs(board.rgstrDate).format('YYYY.MM.DD HH:mm')}</div>
+                                            <div>{dayjs(board.rgstrDate).format('YY.MM.DD HH:mm')}</div>
                                             <div className="board-postInfo">
                                                 <div className="board-views">
                                                     <img src="/views.svg" alt="views" />
@@ -234,7 +234,7 @@ const Board = () => {
                         </>}
                 </>
             }
-        </>
+        </div>
     )
 };
 

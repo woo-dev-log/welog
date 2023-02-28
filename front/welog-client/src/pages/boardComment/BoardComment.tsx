@@ -161,9 +161,9 @@ const BoardComment = ({ IntBoardNo }: { IntBoardNo: number }) => {
                                 onClick={() => userBoardOnClick(boardC.nickname)} />
                             <div className="boardComment-commentNickname" onClick={() => userBoardOnClick(boardC.nickname)}>{boardC.nickname}</div>
                             <div className="boardComment-date">
-                                <div className="boardComment-commentRgstrDate">{dayjs(boardC.rgstrDate).format('YYYY.MM.DD HH:mm')} 등록</div>
+                                <div className="boardComment-commentRgstrDate">{dayjs(boardC.rgstrDate).format('YY.MM.DD HH:mm')} 등록</div>
                                 {boardC.updateDate &&
-                                    <div className="boardComment-commentRgstrDate">{dayjs(boardC.updateDate).format('YYYY.MM.DD HH:mm')} 수정</div>}
+                                    <div className="boardComment-commentRgstrDate">{dayjs(boardC.updateDate).format('YY.MM.DD HH:mm')} 수정</div>}
                             </div>
                         </div>
                     </header>

@@ -89,7 +89,7 @@ const BoardWrite = () => {
 
     return (
         <>
-            <button className="boardDetail-backbutton" onClick={() => navigate(-1)}>&lt;&nbsp;&nbsp;이전으로</button>
+            <div className="boardWrite-backbutton" onClick={() => navigate(-1)}>&lt;&nbsp;&nbsp;이전으로</div>
             <SEO title="글쓰기" contents="글쓰기" />
             <div className="boardWrite-container">
                 <div className="boardWrite-titleBlock">

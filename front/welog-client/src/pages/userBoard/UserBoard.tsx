@@ -21,6 +21,8 @@ const UserBoard = () => {
     const [userBoardList, setUserBoardList] = useState<BoardType[]>([]);
     const [currentPage, setcurrentPage] = useState(1);
     const navigate = useNavigate();
+    // const ServerImgUrl = "http://localhost:3690/images/";
+    const ServerImgUrl = "https://we-log.herokuapp.com/images/";
     const limit = 10;
     const offset = (currentPage - 1) * limit;
 
@@ -53,7 +55,7 @@ const UserBoard = () => {
                     {userBoardList.slice(offset, offset + limit).map((boardList, i) => (
                         <div key={i} className="userBoard-block" onClick={() => navigate("/" + boardList.boardNo)}>
                             <div className="userBoard-left">
-                                <img src={`http://localhost:3690/images/${boardList.imgUrl}`} />
+                                <img src={`${ServerImgUrl}${boardList.imgUrl}`} />
                                 <div className="userBoard-nickname">{boardList.nickname}</div>
                             </div>
                             <div className="userBoard-title">{boardList.title}</div>

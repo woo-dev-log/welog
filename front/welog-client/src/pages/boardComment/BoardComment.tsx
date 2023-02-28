@@ -32,6 +32,8 @@ const BoardComment = ({ IntBoardNo }: { IntBoardNo: number }) => {
     const [commentUpdateCheckNo, setCommentUpdateCheckNo] = useState(0);
     const [currentPage, setCurrentPage] = useState(1);
     const navigate = useNavigate();
+    // const ServerImgUrl = "http://localhost:3690/images/";
+    const ServerImgUrl = "https://we-log.herokuapp.com/images/";
     const textRef = useRef<HTMLTextAreaElement>(null);
     const limit = 5;
     const offset = (currentPage - 1) * limit;
@@ -155,7 +157,7 @@ const BoardComment = ({ IntBoardNo }: { IntBoardNo: number }) => {
                     <Line />
                     <header className="boardComment-commentBlock">
                         <div className="boardComment-commentLabel">
-                            <img src={`http://localhost:3690/images/${boardC.imgUrl}`} alt={boardC.imgUrl}
+                            <img src={`${ServerImgUrl}`} alt={boardC.imgUrl}
                                 onClick={() => userBoardOnClick(boardC.nickname)} />
                             <div className="boardComment-commentNickname" onClick={() => userBoardOnClick(boardC.nickname)}>{boardC.nickname}</div>
                             <div className="boardComment-date">

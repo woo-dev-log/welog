@@ -17,11 +17,8 @@ import './App.scss'
 function App() {
   const [cookies] = useCookies(['welogJWT']);
   const [userInfo, setUserInfo] = useRecoilState(loginUser);
-  axios.defaults.baseURL = "http://localhost:3690";
-  // axios.defaults.headers.common["Access-Control-Allow-Origin"] = "http://localhost:5173/SignIn";
-  // axios.defaults.headers.common["Access-Control-Allow-Credentials"] = "true";
-  // axios.defaults.withCredentials = true;
-  // axios.defaults.headers.common['Authorization'] = `Bearer ${data}`;
+  // axios.defaults.baseURL = "http://localhost:3690";
+  axios.defaults.baseURL = "https://we-log.herokuapp.com/";
 
   const silentRefresh = async () => {
     if (cookies.welogJWT) {

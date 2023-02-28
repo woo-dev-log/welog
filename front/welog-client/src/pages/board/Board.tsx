@@ -35,6 +35,8 @@ const Board = () => {
     const [cookies, setCookie] = useCookies(['viewPost', 'boardCurrentPage']);
     const { keyword } = useParams();
     const navigate = useNavigate();
+    // const ServerImgUrl = "http://localhost:3690/images/";
+    const ServerImgUrl = "https://we-log.herokuapp.com/images/";
     const limit = 6;
     const offset = (currentPage - 1) * limit;
     const titleWordLength = window.innerWidth < 768 ? 17 : 80;
@@ -132,7 +134,7 @@ const Board = () => {
                                     <header>
                                         <div className="board-userBlock">
                                             <div className="board-userProfile">
-                                                <img src={`http://localhost:3690/images/${boardDaily.imgUrl}`} alt={boardDaily.imgUrl}
+                                                <img src={`${ServerImgUrl}${boardDaily.imgUrl}`} alt={boardDaily.imgUrl}
                                                     className="board-userProfileImg" />
                                                 <div className="board-nickname">{boardDaily.nickname}</div>
                                             </div>
@@ -193,7 +195,7 @@ const Board = () => {
                                     <article key={i} className="board-block" onClick={() => updateBoardViewsOnClick(board.boardNo, board.views)}>
                                         <header>
                                             <div className="board-userBlock">
-                                                <img src={`http://localhost:3690/images/${board.imgUrl}`} alt={board.imgUrl}
+                                                <img src={`${ServerImgUrl}${board.imgUrl}`} alt={board.imgUrl}
                                                     className="board-userProfileImg" />
                                                 <div className="board-nickname">{board.nickname}</div>
                                             </div>

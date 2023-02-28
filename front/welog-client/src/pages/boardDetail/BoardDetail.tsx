@@ -32,6 +32,8 @@ const BoardDetail = () => {
     const { boardNo } = useParams();
     const IntBoardNo = Number(boardNo);
     const navigate = useNavigate();
+    // const ServerImgUrl = "http://localhost:3690/images/";
+    const ServerImgUrl = "https://we-log.herokuapp.com/images/";
 
     const userBoardOnClick = (nickname: string) => {
         navigate("/userBoard/" + nickname);
@@ -93,7 +95,7 @@ const BoardDetail = () => {
                     <Line />
 
                     <article className="boardDetail-writerContainer">
-                        <img src={`http://localhost:3690/images/${boardDetail[0].imgUrl}`} alt={boardDetail[0].imgUrl}
+                        <img src={`${ServerImgUrl}${boardDetail[0].imgUrl}`} alt={boardDetail[0].imgUrl}
                             onClick={() => userBoardOnClick(boardDetail[0].nickname)} />
                         <div className="boardDetail-nickname" onClick={() => userBoardOnClick(boardDetail[0].nickname)}>
                             {boardDetail[0].nickname}

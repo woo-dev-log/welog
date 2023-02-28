@@ -10,6 +10,7 @@
   },
   "dependencies": {
     "@types/lodash-es": "^4.17.6",
+    "@types/node": "^18.14.2",
     "axios": "^1.2.2",
     "dayjs": "^1.11.7",
     "lodash-es": "^4.17.21",

@@ -1,6 +1,6 @@
 const express = require('express');
 const app = express();
-const port = 3690;
+const port = process.env.PORT || 3690;
 const mysql = require('./mysql');
 const jwt = require("jsonwebtoken");
 const multer = require('multer');
@@ -16,6 +16,7 @@ app.use(cors({
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 app.use('/images', express.static('images'));
+app.use(express.static(path.join(__dirname, "../front/welog-client/dist")));
 
 let imageName = [];
 const imageUpload = multer({
@@ -357,6 +358,10 @@ app.post("/signIn", async (req, res) => {
         console.error(e);
     }
 })
+
+app.get('*', (req, res) => {
+res.sendFile(path.join(__dirname, '../front/welog-client/dist', 'index.html'));
+});
 
 app.listen(port, () => {
     console.log(port + " port listening on!!");

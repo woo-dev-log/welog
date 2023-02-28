@@ -4,11 +4,11 @@
   "main": "server.js",
   "license": "MIT",
   "engines": {
-    "node": "18.x"
+    "node": "18.x",
+    "npm": "8.19.3"
   },
   "scripts": {
-    "start": "node server.js",
-    "heroku-postbuild": "cd ../front/welog-client && yarn && yarn build"
+    "start": "node server.js"
   },
   "dependencies": {
     "cors": "^2.8.5",

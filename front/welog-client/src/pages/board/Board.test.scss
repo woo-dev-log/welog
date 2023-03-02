@@ -16,7 +16,7 @@
     }
 }
 
-.board-contentsContainer {
+.board-postContainer {
     h2 {
         font-family: "NanumSquareEB";
     }
@@ -61,91 +61,97 @@
         }
     }
 
-    .board-flexWrap {
-        // display: flex;
-        // flex-wrap: wrap;
-        display: grid;
-        grid-template-columns: repeat(auto-fit, minmax(20rem, 1fr));
-        gap: 20px;
+    .board-post {
         margin: 20px 0;
     }
 
     .board-block {
         display: flex;
-        flex-direction: column;
-        justify-content: space-between;
-        cursor: pointer;
-        box-sizing: border-box;
-        box-shadow: lightgray 0 5px 10px;
-        border-radius: 10px;
-        padding: 20px;
-        height: 260px;
-        width: 100%;
         background-color: white;
         // transition: transform 0.35s ease-in 0.3s;
         transition: .2s ease-in;
+        margin: 30px 0;
 
         &:hover {
-            transform: scale(1.05);
+            transform: scale(1.02);
         }
 
-        .board-userBlock {
-            display: flex;
-            align-items: center;
+        aside {
+            margin-left: 20px;
 
-            .board-userProfileImg {
+            img {
                 object-fit: cover;
-                background-color: white;
-                width: 40px;
-                height: 40px;
-                box-shadow: lightgray 0 3px 10px;
-                border-radius: 1000px;
-                margin-right: 10px;
-            }
-
-            .board-nickname {
-                font-family: "NanumSquareEB";
-                font-size: 18px;
+                width: 180px;
+                height: 180px;
+                border-radius: 20px;
             }
         }
 
-        .board-title {
-            font-size: 18px;
-            font-family: "NanumSquareEB";
-            margin-bottom: 10px;
-        }
-
-        .board-contents {
-            font-size: 16px;
-            margin-bottom: 10px;
-        }
-
-        .board-footer {
+        .board-contentsContainer{
+            width: 100%;
             display: flex;
+            flex-direction: column;
             justify-content: space-between;
-            align-items: center;
-            font-size: 16px;
-            color: black;
 
-            .board-postInfo {
+            .board-userBlock {
                 display: flex;
-                gap: 10px;
+                align-items: center;
+                margin-bottom: 20px;
 
-                img {
-                    width: 25px;
-                    height: 25px;
+                .board-userProfileImg {
+                    object-fit: cover;
+                    background-color: white;
+                    width: 30px;
+                    height: 30px;
+                    box-shadow: lightgray 0 3px 10px;
+                    border-radius: 1000px;
+                    margin-right: 10px;
                 }
 
-                .board-views {
-                    display: flex;
-                    align-items: center;
-                    gap: 5px;
+                .board-nickname {
+                    font-family: "NanumSquareEB";
+                    font-size: 18px;
                 }
+            }
 
-                .board-comment {
+            .board-title {
+                font-size: 20px;
+                font-family: "NanumSquareEB";
+                margin: 10px 0;
+            }
+
+            .board-contents {
+                font-size: 16px;
+                margin-bottom: 10px;
+            }
+
+            .board-footer {
+                display: flex;
+                justify-content: space-between;
+                align-items: center;
+                font-size: 16px;
+                color: gray;
+
+                .board-postInfo {
                     display: flex;
-                    align-items: center;
-                    gap: 5px;
+                    gap: 10px;
+
+                    img {
+                        width: 25px;
+                        height: 25px;
+                    }
+
+                    .board-views {
+                        display: flex;
+                        align-items: center;
+                        gap: 5px;
+                    }
+
+                    .board-comment {
+                        display: flex;
+                        align-items: center;
+                        gap: 5px;
+                    }
                 }
             }
         }
@@ -156,14 +162,13 @@
 
         button {
             transition: .2s ease-in;
-            margin-top: 20px;
-            @include buttonCss(150px, 40px);
+            @include buttonCss(120px, 40px);
         }
     }
 }
 
 @media (max-width: 767px) {
-    .board-contentsContainer {
+    .board-postContainer {
         h2 {
             font-size: 1.2rem;
         }
@@ -192,7 +197,7 @@
             }
         }
 
-        .board-flexWrap {
+        .board-post {
             grid-template-columns: repeat(auto-fit, minmax(8rem, 1fr));
             gap: 10px;
         }
@@ -200,6 +205,13 @@
         .board-block {
             height: 220px;
             padding: 10px;
+
+            aside {
+                img {
+                    width: 100px;
+                    height: 100px;
+                }
+            }
 
             .board-userBlock {
                 font-size: 14px;

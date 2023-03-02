@@ -1,14 +1,14 @@
 .app-block {
-    margin: 50px 200px;
-    font-family: "NanumSquareRoundR";
+    margin: 50px 400px;
+    font-family: "NanumSquareR";
 }
 
 h1 {
-    font-size: 2rem;
+    font-size: 1.8rem;
 }
 
 input {
-    font-family: "NanumSquareRoundR";
+    font-family: "NanumSquareR";
     box-sizing: border-box;
 }
 
@@ -25,21 +25,21 @@ input {
 }
 
 @font-face {
-    font-family: "NanumSquareRoundB";
-    src: url("./fonts/NanumSquareRound.woff2");
+    font-family: "NanumSquareB";
+    src: url("./fonts/NanumSquareB.woff2");
 }
 
 @font-face {
-    font-family: "NanumSquareRoundEB";
-    src: url("./fonts/NanumSquareRoundEB.woff2");
+    font-family: "NanumSquareEB";
+    src: url("./fonts/NanumSquareEB.woff2");
 }
 
 @font-face {
-    font-family: "NanumSquareRoundL";
-    src: url("./fonts/NanumSquareRoundL.woff2");
+    font-family: "NanumSquareL";
+    src: url("./fonts/NanumSquareL.woff2");
 }
 
 @font-face {
-    font-family: "NanumSquareRoundR";
-    src: url("./fonts/NanumSquareRoundR.woff2");
+    font-family: "NanumSquareR";
+    src: url("./fonts/NanumSquareR.woff2");
 }

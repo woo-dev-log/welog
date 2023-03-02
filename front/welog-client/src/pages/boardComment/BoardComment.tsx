@@ -32,8 +32,8 @@ const BoardComment = ({ IntBoardNo }: { IntBoardNo: number }) => {
     const [commentUpdateCheckNo, setCommentUpdateCheckNo] = useState(0);
     const [currentPage, setCurrentPage] = useState(1);
     const navigate = useNavigate();
-    // const ServerImgUrl = "http://localhost:3690/images/";
-    const ServerImgUrl = "https://we-log.herokuapp.com/images/";
+    const ServerImgUrl = "http://localhost:3690/images/";
+    // const ServerImgUrl = "https://we-log.herokuapp.com/images/";
     const textRef = useRef<HTMLTextAreaElement>(null);
     const limit = 5;
     const offset = (currentPage - 1) * limit;

@@ -10,8 +10,8 @@ const Header = () => {
     const navigate = useNavigate();
     const [userInfo, setUserInfo] = useRecoilState(loginUser);
     const [cookies, setCookie, removeCookie] = useCookies(['welogJWT']);
-    // const ServerImgUrl = "http://localhost:3690/images/";
-    const ServerImgUrl = "https://we-log.herokuapp.com/images/";
+    const ServerImgUrl = "http://localhost:3690/images/";
+    // const ServerImgUrl = "https://we-log.herokuapp.com/images/";
 
     const logOut = async () => {
         const result = await Swal.fire({

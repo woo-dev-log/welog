@@ -13,8 +13,7 @@ import Line from "../../components/line/Line";
 import Paging from "../../components/paging/Paging";
 import Button from "../../components/button/Button";
 import Input from "../../components/input/Input";
-// import './Board.scss';
-import './Board.test.scss';
+import './Board.scss';
 
 interface BoardType {
     boardNo: number;
@@ -121,9 +120,9 @@ const Board = () => {
     }, [setCurrentPage]);
 
     return (
-        <div className="board-postContainer">
+        <div className="board-contentsContainer">
             <SEO title="메인" contents="리스트" />
-            {/* {boardDailyLoading
+            {boardDailyLoading
                 ? <h2>이번주에 댓글이 많이 달린 글을 불러오는 중이에요</h2>
                 : boardDailyList === undefined
                     ? <h2>이번주에 댓글이 많이 달린 글이 없어요</h2>
@@ -170,7 +169,7 @@ const Board = () => {
                             ))}
                         </section>
                     </>
-            } */}
+            }
 
             {isLoading
                 ? <h2>글을 불러오는 중이에요</h2>
@@ -180,67 +179,58 @@ const Board = () => {
                         {keyword
                             ? <p>{keyword} 검색 결과 총 {boardList.length}개의 글을 찾았어요</p>
                             : <p>총 {boardList.length}개의 글이 있어요</p>}
-                        <div className="board-button">
-                            <Button onClick={() => { userInfo[0].userNo !== 0 ? navigate("/BoardWrite") : ToastWarn("로그인을 해주세요") }} text="글쓰기" />
-                        </div>
-                    </div>
-                    {boardList.length === 0
-                        ? <h2>작성한 글이 없어요</h2>
-                        : <>
-                            <section className="board-post">
-                                {boardList.slice(offset, offset + limit).map((board, i) => (
-                                    <div key={i}>
-                                        <article className="board-block" onClick={() => updateBoardViewsOnClick(board.boardNo, board.views)}>
-                                            <div className="board-contentsContainer">
-                                                <header>
-                                                    <div className="board-title">
-                                                        {board.title.length < titleWordLength
-                                                            ? board.title
-                                                            : board.title.substring(0, titleWordLength) + " ..."}
-                                                    </div>
-                                                    <div className="board-contents">
-                                                        {board.contents.replaceAll(/<[^>]*>?/g, "").length < contentsWordLength
-                                                            ? board.contents.replaceAll(/<[^>]*>?/g, "")
-                                                            : board.contents.replaceAll(/<[^>]*>?/g, "").substring(0, contentsWordLength) + " ..."}
-                                                    </div>
-                                                </header>
-                                                <footer>
-                                                    <div className="board-userBlock">
-                                                        <img src={`${ServerImgUrl}${board.imgUrl}`} alt={board.imgUrl}
-                                                            className="board-userProfileImg" />
-                                                        <div className="board-nickname">{board.nickname}</div>
-                                                    </div>
-                                                    <div className="board-footer">
-                                                        <div>{dayjs(board.rgstrDate).format('YY.MM.DD HH:mm')}</div>
-                                                        <div className="board-postInfo">
-                                                            <div className="board-views">
-                                                                <img src="/views.svg" alt="views" />
-                                                                <div>{board.views}</div>
-                                                            </div>
-                                                            <div className="board-comment">
-                                                                <img src="/comment.svg" alt="comment" />
-                                                                <div>{board.commentCnt}</div>
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                </footer>
-                                            </div>
-                                            <aside>
-                                                <img src={`${ServerImgUrl}React.png`} alt="React" />
-                                            </aside>
-                                        </article>
-                                        <Line />
-                                    </div>
-                                ))}
-                            </section>
-
-                            <Paging
+                        <Paging
                             total={boardList.length}
                             limit={limit}
                             page={currentPage}
                             setCurrentPage={setCurrentPage}
                             type="board"
-                            />
+                        />
+                    </div>
+                    {boardList.length === 0
+                        ? <h2>작성한 글이 없어요</h2>
+                        : <>
+                            <section className="board-flexWrap">
+                                {boardList.slice(offset, offset + limit).map((board, i) => (
+                                    <article key={i} className="board-block" onClick={() => updateBoardViewsOnClick(board.boardNo, board.views)}>
+                                        <header>
+                                            <div className="board-userBlock">
+                                                <img src={`${ServerImgUrl}${board.imgUrl}`} alt={board.imgUrl}
+                                                    className="board-userProfileImg" />
+                                                <div className="board-nickname">{board.nickname}</div>
+                                            </div>
+                                            <Line />
+                                            <div className="board-title">
+                                                {board.title.length < titleWordLength
+                                                    ? board.title
+                                                    : board.title.substring(0, titleWordLength) + " ..."}
+                                            </div>
+                                            <div className="board-contents">
+                                                {board.contents.replaceAll(/<[^>]*>?/g, "").length < contentsWordLength
+                                                    ? board.contents.replaceAll(/<[^>]*>?/g, "")
+                                                    : board.contents.replaceAll(/<[^>]*>?/g, "").substring(0, contentsWordLength) + " ..."}
+                                            </div>
+                                        </header>
+                                        <footer className="board-footer">
+                                            <div>{dayjs(board.rgstrDate).format('YY.MM.DD HH:mm')}</div>
+                                            <div className="board-postInfo">
+                                                <div className="board-views">
+                                                    <img src="/views.svg" alt="views" />
+                                                    <div>{board.views}</div>
+                                                </div>
+                                                <div className="board-comment">
+                                                    <img src="/comment.svg" alt="comment" />
+                                                    <div>{board.commentCnt}</div>
+                                                </div>
+                                            </div>
+                                        </footer>
+                                    </article>
+                                ))}
+                            </section>
+
+                            <div className="board-button">
+                                <Button onClick={() => { userInfo[0].userNo !== 0 ? navigate("/BoardWrite") : ToastWarn("로그인을 해주세요") }} text="글쓰기" />
+                            </div>
                         </>}
                 </>
             }

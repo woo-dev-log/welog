@@ -9,9 +9,14 @@ import './Header.scss';
 const Header = () => {
     const navigate = useNavigate();
     const [userInfo, setUserInfo] = useRecoilState(loginUser);
-    const [cookies, setCookie, removeCookie] = useCookies(['welogJWT']);
+    const [cookies, setCookie, removeCookie] = useCookies(['welogJWT', 'boardCurrentPage']);
     const ServerImgUrl = "http://localhost:3690/images/";
     // const ServerImgUrl = "https://we-log.herokuapp.com/images/";
+
+    const homeOnClick = () => {
+        removeCookie("boardCurrentPage");
+        navigate("/")
+    }
 
     const logOut = async () => {
         const result = await Swal.fire({
@@ -33,7 +38,7 @@ const Header = () => {
 
     return (
         <div className="header-container">
-            <div className="header-home" onClick={() => navigate("/")}>홈</div>
+            <div className="header-home" onClick={homeOnClick}>홈</div>
             <div className='header-box'>
                 {userInfo[0].userNo !== 0 ?
                     <div className="header-block">

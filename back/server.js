@@ -255,8 +255,9 @@ app.post("/boardDetail", async (req, res) => {
 app.get("/boardDaily", async (req, res) => {
     try {
         const [rows] = await mysql.query(`
-        SELECT b.boardNo, b.userNo, b.title, b.contents, b.rgstrDate, b.views, 
-        u.nickname, u.imgUrl, (SELECT count(*) FROM comment c WHERE c.boardNo = b.boardNo) commentCnt, 
+        SELECT b.boardNo, b.userNo, b.title, b.contents, b.rgstrDate, 
+        b.views, b.tags, b.boardImgUrl, u.nickname, u.imgUrl, 
+        (SELECT count(*) FROM comment c WHERE c.boardNo = b.boardNo) commentCnt, 
         COUNT(*) AS weekCommentCnt 
         FROM board b 
         INNER JOIN comment c ON b.boardNo = c.boardNo 

@@ -72,16 +72,14 @@ const Board = () => {
     );
 
     const writeBoardOnclick = () => {
-        {
-            if(userInfo[0].userNo !== 0) {
-                setUpdateValue({ 
-                    titleValue: "",
-                    contentsValue: "",
-                    boardNo: 0
-                })
-                navigate("/BoardWrite");
-            } else ToastWarn("로그인을 해주세요");
-        }
+        if(userInfo[0].userNo !== 0) {
+            setUpdateValue({ 
+                titleValue: "",
+                contentsValue: "",
+                boardNo: 0
+            })
+            navigate("/BoardWrite");
+        } else ToastWarn("로그인을 해주세요");
     }
 
     const searchBoardListOnChange = debounce((e: React.ChangeEvent<HTMLInputElement>) => {
@@ -139,54 +137,68 @@ const Board = () => {
     return (
         <div className="board-postContainer">
             <SEO title="메인" contents="리스트" />
-            {/* {boardDailyLoading
+            {boardDailyLoading
                 ? <h2>이번주에 댓글이 많이 달린 글을 불러오는 중이에요</h2>
                 : boardDailyList === undefined
                     ? <h2>이번주에 댓글이 많이 달린 글이 없어요</h2>
                     : <>
                         <h2>이번주에 댓글이 많이 달린 글이에요</h2>
-                        <section className="boardDaily-flexWrap">
+                        <section className="boardDaily-section">
                             {boardDailyList.map((boardDaily, i) => (
-                                <article key={i} className="board-block" onClick={() => updateBoardViewsOnClick(boardDaily.boardNo, boardDaily.views)}>
-                                    <header>
-                                        <div className="board-userBlock">
-                                            <div className="board-userProfile">
-                                                <img src={`${ServerImgUrl}${boardDaily.imgUrl}`} alt={boardDaily.imgUrl}
-                                                    className="board-userProfileImg" />
-                                                <div className="board-nickname">{boardDaily.nickname}</div>
+                                <article key={i} className="boardDaily-block" onClick={() => updateBoardViewsOnClick(boardDaily.boardNo, boardDaily.views)}>
+                                    <aside>
+                                        <img src={`${ServerImgUrl}${boardDaily.boardImgUrl}`} alt="boardDailyImgUrl" />
+                                    </aside>
+                                    <div className="board-contentsContainer">
+                                        <header>
+                                            <div className="board-title">
+                                                {boardDaily.title.length < titleWordLength
+                                                    ? boardDaily.title
+                                                    : boardDaily.title.substring(0, titleWordLength) + " ..."}
+                                                <div style={{ color: "red" }}>New {boardDaily.weekCommentCnt}</div>
                                             </div>
-                                            <div style={{ color: "red" }}>New {boardDaily.weekCommentCnt}</div>
-                                        </div>
-                                        <Line />
-                                        <div className="board-title">
-                                            {boardDaily.title.length < titleWordLength
-                                                ? boardDaily.title
-                                                : boardDaily.title.substring(0, titleWordLength) + " ..."}
-                                        </div>
-                                        <div className="board-contents">
-                                            {boardDaily.contents.replaceAll(/<[^>]*>?/g, "").length < contentsWordLength
-                                                ? boardDaily.contents.replaceAll(/<[^>]*>?/g, "")
-                                                : boardDaily.contents.replaceAll(/<[^>]*>?/g, "").substring(0, contentsWordLength) + " ..."}
-                                        </div>
-                                    </header>
-                                    <footer className="board-footer">
-                                        <div>{dayjs(boardDaily.rgstrDate).format('YY.MM.DD HH:mm')}</div>
-                                        <div className="board-postInfo">
-                                            <div className="board-views">
-                                                <img src="/views.svg" alt="views" />
-                                                <div>{boardDaily.views}</div>
+                                            <div className="board-contents">
+                                                {boardDaily.contents.replaceAll(/<[^>]*>?/g, "").length < contentsWordLength
+                                                    ? boardDaily.contents.replaceAll(/<[^>]*>?/g, "")
+                                                    : boardDaily.contents.replaceAll(/<[^>]*>?/g, "").substring(0, contentsWordLength) + " ..."}
                                             </div>
-                                            <div className="board-comment">
-                                                <img src="/comment.svg" alt="comment" />
-                                                <div>{boardDaily.commentCnt}</div>
+                                        </header>
+                                        <footer className="board-footer">
+                                            <div className="board-footerTop">
+                                                <div className="board-tagContainer">
+                                                    {boardDaily.tags && boardDaily.tags.split(",").map((v, i) => (
+                                                        <div key={i} className="board-tagBox">{v}</div>  
+                                                    ))}
+                                                </div>
+                                                <div className="board-userBlock">
+                                                    <div className="board-userProfile">
+                                                        <img src={`${ServerImgUrl}${boardDaily.imgUrl}`} alt={boardDaily.imgUrl}
+                                                            className="board-userProfileImg" />
+                                                        <div className="board-nickname">{boardDaily.nickname}</div>
+                                                    </div>
+                                                </div>
                                             </div>
-                                        </div>
-                                    </footer>
+                                            <div className="board-footer">
+                                                <div>{dayjs(boardDaily.rgstrDate).format('YY.MM.DD HH:mm')}</div>
+                                                <div className="board-postInfo">
+                                                    <div className="board-views">
+                                                        <img src="/views.svg" alt="views" />
+                                                        <div>{boardDaily.views}</div>
+                                                    </div>
+                                                    <div className="board-comment">
+                                                        <img src="/comment.svg" alt="comment" />
+                                                        <div>{boardDaily.commentCnt}</div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </footer>
+                                    </div>
+                                    <Line />
                                 </article>
                             ))}
                         </section>
                     </>
-            } */}
+            }
 
             {isLoading
                 ? <h2>글을 불러오는 중이에요</h2>

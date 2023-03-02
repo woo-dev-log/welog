@@ -25,8 +25,12 @@ export const deleteBoardApi = async (boardNo: number) => {
     return data;
 }
 
-export const writeBoardApi = async (typeUrl: string, typeData: {}) => {
-    const { data } = await axios.post(typeUrl, typeData);
+export const writeBoardApi = async (typeUrl: string, formData: FormData) => {
+    const { data } = await axios.post(typeUrl, formData, {
+        headers: {
+            'Content-Type': 'multipart/form-data'
+        }
+    });
     return data;
 }
 

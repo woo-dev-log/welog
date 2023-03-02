@@ -5,57 +5,134 @@
     color: black;
     font-size: 24px;
     margin-bottom: 20px;
-    font-family: "NanumSquareEB";
+    font-family: "LINESeedKR-Bd";
 }
 
 .boardWrite-container {
     display: flex;
-    flex-direction: column;
-    box-shadow: lightgray 0 3px 10px;
-    border-radius: 10px;
-    padding: 20px;
 
-    .boardWrite-titleBlock {
+    .boardWrite-titleContainer {
         display: flex;
-        align-items: center;
-        border-bottom: 1px solid lightgray;
-        margin-bottom: 40px;
+        flex-direction: column;
+        box-shadow: lightgray 0 3px 10px;
+        border-radius: 10px;
+        padding: 20px;
+        width: 100%;
+        height: 100%;
+        margin-right: 80px;
 
-        input {
-            font-family: "NanumSquareEB";
-            font-size: 20px;
-            padding: 20px;
-            width: 100%;
-            border: none;
+        .boardWrite-titleBlock {
+            display: flex;
+            align-items: center;
+            border-bottom: 1px solid lightgray;
+            margin-bottom: 40px;
+
+            input {
+                font-family: "LINESeedKR-Bd";
+                font-size: 20px;
+                padding: 20px;
+                width: 100%;
+                border: none;
+            }
         }
-    }
 
-    .ql-container {
-        font-family: "NanumSquareR";
-        font-size: 16px;
-    }
-
-    .boardWrite-button {
-        display: flex;
-        justify-content: center;
-
-        button {
-            cursor: pointer;
-            margin-top: 30px;
-            background-color: black;
-            width: 200px;
-            height: 40px;
-            border: none;
-            border-radius: 10px;
+        .ql-container {
+            font-family: "LINESeedKR-Rg";
             font-size: 16px;
-            font-family: "NanumSquareEB";
-            color: white;
-            transition: .2s ease-in;
+            min-height: 400px;
+        }
 
-            &:hover {
-                background-color: white;
-                color: black;
-                box-shadow: lightgray 0 3px 10px;
+    }
+
+    aside {
+        p {
+            font-Family: "LINESeedKR-Bd";
+            font-Size: 20px;
+        }
+
+        .boardWrite-button {
+            display: flex;
+            justify-content: center;
+
+            button {
+                cursor: pointer;
+                background-color: black;
+                width: 150px;
+                height: 40px;
+                margin-top: 30px;
+                border: none;
+                border-radius: 10px;
+                font-size: 16px;
+                font-family: "LINESeedKR-Bd";
+                color: white;
+
+                &:hover {
+                    background-color: white;
+                    color: black;
+                    box-shadow: lightgray 0 3px 10px;
+                }
+            }
+        }
+
+        .boardWrite-thumbnail {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+
+            img {
+                border: 1px solid lightgray;
+                object-fit: cover;
+                width: 280px;
+                height: 180px;
+                border-radius: 10px;
+            }
+
+            .boardWrite-imgSelect {
+                cursor: pointer;
+                margin-top: 20px;
+                display: flex;
+                justify-content: center;
+                align-items: center;
+                background-color: black;
+                width: 100px;
+                height: 30px;
+                color: white;
+                font-family: "LINESeedKR-Bd";
+                font-size: 14px;
+                border-radius: 10px;
+            }
+
+            input[type="file"] {
+                display: none;
+            }
+        }
+
+        .boardWrite-tagInput {
+            border: 1px solid lightgray;
+            border-radius: 5px;
+            padding: 10px;
+            width: 70%;
+            font-size: 14px;
+        }
+
+        .boardWrite-tagContainer {
+            display: flex;
+            flex-wrap: wrap;
+            min-height: 70px;
+            border: 1px solid lightgray;
+            border-radius: 5px;
+            padding: 10px;
+            gap: 10px;
+
+            .boardWrite-tagBox {
+                display: flex;
+                align-items: center;
+                padding: 0 10px;
+                height: 30px;
+                background-color: black;
+                color: white;
+                border-radius: 5px;
+                font-size: 14px;
             }
         }
     }
@@ -78,12 +155,13 @@
         .ql-container {
             font-size: 14px;
         }
-    
-        .boardWrite-button {
-            button {
-                width: 110px;
-                font-size: 14px;
-            }
+
+    }
+
+    .boardWrite-button {
+        button {
+            width: 110px;
+            font-size: 14px;
         }
     }
 }

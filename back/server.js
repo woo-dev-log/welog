@@ -55,7 +55,7 @@ app.post("/checkSignUpId", async (req, res) => {
     const { id } = req.body;
 
     const [rows] = await mysql.query("SELECT EXISTS (SELECT * FROM user WHERE id = ?) as cnt", [id]);
-    
+
     rows[0].cnt === 1 ? res.send("no") : res.send("yes");
 })
 
@@ -179,19 +179,43 @@ app.post("/updateBoard", async (req, res) => {
     }
 })
 
-app.post("/writeBoard", async (req, res) => {
+app.post("/writeBoard", imageUpload.single('thumbnail'), async (req, res) => {
     try {
-        const { title, contents, userNo } = req.body;
+        const { title, contents, userNo, tags } = req.body;
+
+        let newFilePath = "React.png";
+        if (req.file) {
+            let reImage = '';
+            newFilePath = new Date().valueOf() + '_' + Buffer.from(req.file.originalname, 'latin1').toString('utf8');
+            if (req.file.size <= 500 * 1024) {
+                reImage = await sharp(req.file.path).toFile("./images/" + newFilePath);
+            } else {
+                if (req.file.originalname.split(".").reverse()[0] === "png") {
+                    reImage = await sharp(req.file.path).resize({ width: 500 }).png({ quality: 80 }).toFile("./images/" + newFilePath);
+                } else {
+                    reImage = await sharp(req.file.path).resize({ width: 500 }).jpeg({ quality: 80 }).toFile("./images/" + newFilePath);
+                }
+            }
+
+            fs.unlink("./images/" + imageName, (err) => {
+                if (err) {
+                    console.error(err);
+                    return res.status(400).send("fail");
+                }
+            });
+        }
+
         if (userNo === 0) {
             res.status(400).send("fail");
         } else {
             const [rows] = await mysql.query(`
             INSERT INTO
-            board(userNo, title, contents, rgstrDate)
-            VALUES(?, ?, ?, now())
-            `, [userNo, title, contents]);
+            board(userNo, title, contents, rgstrDate, tags, boardImgUrl)
+            VALUES(?, ?, ?, now(), ?, ?)
+            `, [userNo, title, contents, tags, newFilePath]);
             res.status(200).send("success");
         }
+        imageName = [];
     } catch (e) {
         res.status(400).send("fail");
         console.error(e);
@@ -255,7 +279,8 @@ app.post("/boardSearch", async (req, res) => {
         const value = "%" + search + "%";
 
         const [rows] = await mysql.query(`
-            SELECT b.boardNo, b.userNo, b.title, b.contents, b.rgstrDate, b.views, u.nickname, u.imgUrl, 
+            SELECT b.boardNo, b.userNo, b.title, b.contents, b.rgstrDate, 
+            b.views, b.tags, b.boardImgUrl, u.nickname, u.imgUrl, 
             (SELECT count(*) FROM comment c WHERE c.boardNo = b.boardNo) commentCnt 
             FROM board b 
             INNER JOIN user u 
@@ -263,7 +288,7 @@ app.post("/boardSearch", async (req, res) => {
             WHERE b.title LIKE ? OR b.contents LIKE ? OR u.nickname LIKE ?
             ORDER BY b.rgstrDate DESC
             `, [value, value, value]);
-            
+
         res.status(200).send(rows);
     } catch (e) {
         res.status(400).send("fail");
@@ -274,7 +299,8 @@ app.post("/boardSearch", async (req, res) => {
 app.get("/board", async (req, res) => {
     try {
         const [rows] = await mysql.query(`
-        SELECT b.boardNo, b.userNo, b.title, b.contents, b.rgstrDate, b.views, u.nickname, u.imgUrl, 
+        SELECT b.boardNo, b.userNo, b.title, b.contents, b.rgstrDate, 
+        b.views, b.tags, b.boardImgUrl, u.nickname, u.imgUrl, 
         (SELECT count(*) FROM comment c WHERE c.boardNo = b.boardNo) commentCnt 
         FROM board b 
         INNER JOIN user u 
@@ -290,7 +316,7 @@ app.get("/board", async (req, res) => {
 
 app.post("/signUp", imageUpload.single('thumbnail'), async (req, res) => {
     try {
-        const { nickname, id, pw, thumbnail } = req.body;
+        const { nickname, id, pw } = req.body;
 
         let reImage = '';
         const newFilePath = new Date().valueOf() + '_' + Buffer.from(req.file.originalname, 'latin1').toString('utf8');
@@ -360,7 +386,7 @@ app.post("/signIn", async (req, res) => {
 })
 
 app.get('*', (req, res) => {
-res.sendFile(path.join(__dirname, './dist', 'index.html'));
+    res.sendFile(path.join(__dirname, './dist', 'index.html'));
 });
 
 app.listen(port, () => {

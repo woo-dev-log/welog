@@ -4,7 +4,7 @@ import { useCookies } from "react-cookie";
 import { useQuery } from "react-query";
 import { useNavigate, useParams } from "react-router-dom";
 import { useRecoilState } from "recoil";
-import { board, loginUser } from "../../store/atoms";
+import { board, boardUpdate, loginUser } from "../../store/atoms";
 import { getBoardApi, getBoardDailyApi, postBoardApi, updateBoardViewsApi } from "../../api/board";
 import { ToastError, ToastWarn } from "../../components/Toast";
 import { debounce } from "lodash-es";
@@ -23,6 +23,8 @@ interface BoardType {
     contents: string;
     rgstrDate: string;
     views: number;
+    tags: string;
+    boardImgUrl: string;
     nickname: string;
     imgUrl: string;
     commentCnt: number;
@@ -32,6 +34,7 @@ interface BoardType {
 const Board = () => {
     const [userInfo, setUserInfo] = useRecoilState(loginUser);
     const [boardList, setBoardList] = useRecoilState(board);
+    const [updateValue, setUpdateValue] = useRecoilState(boardUpdate);
     const [currentPage, setCurrentPage] = useState(1);
     const [cookies, setCookie] = useCookies(['viewPost', 'boardCurrentPage']);
     const { keyword } = useParams();
@@ -67,6 +70,19 @@ const Board = () => {
             cacheTime: 1000 * 60 * 10,
         }
     );
+
+    const writeBoardOnclick = () => {
+        {
+            if(userInfo[0].userNo !== 0) {
+                setUpdateValue({ 
+                    titleValue: "",
+                    contentsValue: "",
+                    boardNo: 0
+                })
+                navigate("/BoardWrite");
+            } else ToastWarn("로그인을 해주세요");
+        }
+    }
 
     const searchBoardListOnChange = debounce((e: React.ChangeEvent<HTMLInputElement>) => {
         if (e.target.value === keyword) return;
@@ -181,34 +197,41 @@ const Board = () => {
                             ? <p>{keyword} 검색 결과 총 {boardList.length}개의 글을 찾았어요</p>
                             : <p>총 {boardList.length}개의 글이 있어요</p>}
                         <div className="board-button">
-                            <Button onClick={() => { userInfo[0].userNo !== 0 ? navigate("/BoardWrite") : ToastWarn("로그인을 해주세요") }} text="글쓰기" />
+                            <Button onClick={writeBoardOnclick} text="글쓰기" />
                         </div>
                     </div>
                     {boardList.length === 0
                         ? <h2>작성한 글이 없어요</h2>
                         : <>
-                            <section className="board-post">
+                            <section>
                                 {boardList.slice(offset, offset + limit).map((board, i) => (
-                                    <div key={i}>
-                                        <article className="board-block" onClick={() => updateBoardViewsOnClick(board.boardNo, board.views)}>
+                                    <article key={i}>
+                                        <div className="board-block" onClick={() => updateBoardViewsOnClick(board.boardNo, board.views)}>
                                             <div className="board-contentsContainer">
                                                 <header>
-                                                    <div className="board-title">
+                                                    <h1 className="board-title">
                                                         {board.title.length < titleWordLength
                                                             ? board.title
                                                             : board.title.substring(0, titleWordLength) + " ..."}
-                                                    </div>
-                                                    <div className="board-contents">
+                                                    </h1>
+                                                    <p className="board-contents">
                                                         {board.contents.replaceAll(/<[^>]*>?/g, "").length < contentsWordLength
                                                             ? board.contents.replaceAll(/<[^>]*>?/g, "")
                                                             : board.contents.replaceAll(/<[^>]*>?/g, "").substring(0, contentsWordLength) + " ..."}
-                                                    </div>
+                                                    </p>
                                                 </header>
                                                 <footer>
-                                                    <div className="board-userBlock">
-                                                        <img src={`${ServerImgUrl}${board.imgUrl}`} alt={board.imgUrl}
-                                                            className="board-userProfileImg" />
-                                                        <div className="board-nickname">{board.nickname}</div>
+                                                    <div className="board-footerTop">
+                                                        <div className="board-tagContainer">
+                                                            {board.tags && board.tags.split(",").map((v, i) => (
+                                                                <div key={i} className="board-tagBox">{v}</div>  
+                                                            ))}
+                                                        </div>
+                                                        <div className="board-userBlock">
+                                                            <img src={`${ServerImgUrl}${board.imgUrl}`} alt="userImg"
+                                                                className="board-userProfileImg" />
+                                                            <div className="board-nickname">{board.nickname}</div>
+                                                        </div>
                                                     </div>
                                                     <div className="board-footer">
                                                         <div>{dayjs(board.rgstrDate).format('YY.MM.DD HH:mm')}</div>
@@ -226,11 +249,11 @@ const Board = () => {
                                                 </footer>
                                             </div>
                                             <aside>
-                                                <img src={`${ServerImgUrl}React.png`} alt="React" />
+                                                <img src={`${ServerImgUrl}${board.boardImgUrl}`} alt="boardImgUrl" />
                                             </aside>
-                                        </article>
+                                        </div>
                                         <Line />
-                                    </div>
+                                    </article>
                                 ))}
                             </section>
 

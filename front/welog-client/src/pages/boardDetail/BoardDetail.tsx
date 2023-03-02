@@ -85,7 +85,7 @@ const BoardDetail = () => {
     return (
         <>
             <SEO title="상세 글" contents="상세 글" />
-            <div className="boardDetail-backbutton" onClick={() => navigate(-1)}>&lt;&nbsp;&nbsp;이전으로</div>
+            <button className="boardDetail-backbutton" onClick={() => navigate(-1)}>&lt;&nbsp;&nbsp;이전으로</button>
             {boardDetail[0] &&
                 <section className="boardDetail-container">
                     <article className="boardDetail-titleContainer">

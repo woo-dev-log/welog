@@ -7,6 +7,8 @@ interface BoardType {
     contents: string;
     rgstrDate: string;
     views: number;
+    tags: string;
+    boardImgUrl: string;
     nickname: string;
     imgUrl: string;
     commentCnt: number;

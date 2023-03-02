@@ -1,5 +1,5 @@
 import Swal from "sweetalert2";
-import { lazy, Suspense, useEffect, useState } from "react";
+import { lazy, Suspense, useCallback, useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useRecoilState } from "recoil";
 import { boardUpdate, loginUser } from "../../store/atoms";
@@ -20,7 +20,41 @@ const BoardWrite = () => {
     const [userInfo, setUserInfo] = useRecoilState(loginUser);
     const [updateValue, setUpdateValue] = useRecoilState(boardUpdate);
     const [boardBoolean, setBoardBoolean] = useState(false);
+    const [tagName, setTagName] = useState("");
+    const [tags, setTags] = useState<String[]>([]);
+    const [image, setImage] = useState<File>();
+    const [blobImg, setBlobImg] = useState("");
     const navigate = useNavigate();
+    const ServerImgUrl = "http://localhost:3690/images/";
+
+    const tagOnClick = (index: number) => {
+        tags.splice(index, 1);
+        setTags([...tags]);
+    }
+
+    const tagNameOnChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+        if(e.target.value.includes(",")) return;
+
+        if (e.target.value.length > 8) {
+            ToastWarn("태그는 8글자 이내로 입력해주세요");
+        }
+
+        setTagName(e.target.value);
+    };
+
+    const tagNameOnKeyUp = (e: React.KeyboardEvent<HTMLInputElement>) => {
+        if (tagName === "") return;
+
+        if (e.key === "Enter" || e.key === ",") {
+            if (tags.length > 5) {
+                ToastWarn("태그는 6개까지 등록할 수 있어요");
+                return;
+            }
+
+            setTags([...tags, tagName]);
+            setTagName("");
+        }
+    };
 
     const WriteBoardOnClick = async (type: number) => {
         if (title === "" || contents === "") {
@@ -32,7 +66,7 @@ const BoardWrite = () => {
         } else {
             let typeTitle = "글을 등록하시겠어요?";
             let typeUrl = "/writeBoard";
-            let typeData = { title, contents, userNo: userInfo[0].userNo, boardNo: 0 };
+            let typeData = { title, contents, userNo: userInfo[0].userNo, boardNo: 0, tags: String(tags) };
 
             if (type === 1) {
                 typeTitle = "글을 수정하시겠어요?"
@@ -52,10 +86,21 @@ const BoardWrite = () => {
 
             if (result.isConfirmed) {
                 try {
-                    await writeBoardApi(typeUrl, typeData);
+                    let formData = new FormData();
+                    formData.append('title', typeData.title);
+                    formData.append('contents', typeData.contents);
+                    formData.append('boardNo', String(typeData.boardNo));
+                    formData.append('userNo', String(typeData.userNo));
+                    formData.append('tags', typeData.tags);
+                    image && formData.append('thumbnail', image);
+
+                    await writeBoardApi(typeUrl, formData);
+
                     if (type === 1) {
                         ToastSuccess("글이 수정되었어요!");
                     } else ToastSuccess("글이 등록되었어요!");
+                    
+                    URL.revokeObjectURL(blobImg);
                     setUpdateValue({ titleValue: "", contentsValue: "", boardNo: 0 });
                     navigate("/");
                 } catch (e) {
@@ -66,7 +111,7 @@ const BoardWrite = () => {
                 }
             }
         }
-    }
+    };
 
     const CheckBoardLoginOnFocus = () => {
         if (userInfo[0].userNo === 0) {
@@ -74,7 +119,15 @@ const BoardWrite = () => {
             setBoardBoolean(true);
             return;
         }
-    }
+    };
+
+    const uploadImageOnChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+        if (!e.target.files) {
+            return;
+        }
+        setImage(e.target.files[0]);
+        setBlobImg(URL.createObjectURL(e.target.files[0]));
+    };
 
     // 수정시
     useEffect(() => {
@@ -89,24 +142,47 @@ const BoardWrite = () => {
 
     return (
         <>
-            <div className="boardWrite-backbutton" onClick={() => navigate(-1)}>&lt;&nbsp;&nbsp;이전으로</div>
+            <button className="boardWrite-backbutton" onClick={() => navigate(-1)}>&lt;&nbsp;&nbsp;이전으로</button>
             <SEO title="글쓰기" contents="글쓰기" />
-            <div className="boardWrite-container">
-                <div className="boardWrite-titleBlock">
-                    <Label text="제목" />
-                    <Input placeholder="제목을 입력해주세요" disabled={boardBoolean}
-                        onFocus={CheckBoardLoginOnFocus} onChange={e => setTitle(e.target.value)} value={title} />
-                </div>
-                <Label text="내용" />
-                <Line />
-                <Suspense fallback={<div>Loading...</div>}>
-                    <ReactQuill onChange={setContents} value={contents} placeholder="내용을 입력해주세요" />
-                </Suspense>
-                <div className="boardWrite-button">
-                    {updateValue.titleValue ? <Button onClick={() => WriteBoardOnClick(1)} text="글 수정" />
-                        : <Button onClick={() => WriteBoardOnClick(0)} text="글 등록" />}
-                </div>
-            </div>
+            <section className="boardWrite-container">
+                <article className="boardWrite-titleContainer">
+                    <div className="boardWrite-titleBlock">
+                        <Label text="제목" />
+                        <Input placeholder="제목을 입력해주세요" disabled={boardBoolean}
+                            onFocus={CheckBoardLoginOnFocus} onChange={e => setTitle(e.target.value)} value={title} />
+                    </div>
+                    <Label text="내용" />
+                    <Line />
+                    <Suspense fallback={<div>Loading...</div>}>
+                        <ReactQuill onChange={setContents} value={contents} placeholder="내용을 입력해주세요" />
+                    </Suspense>
+                </article>
+                <aside>
+                    <p style={{ marginTop: "0" }}>썸네일</p>
+                    <div className="boardWrite-thumbnail">
+                        {image ? <img src={blobImg} /> : <img src={`${ServerImgUrl}React.png`} />}
+                        <label className="boardWrite-imgSelect" htmlFor="boardWriteImg">사진 선택</label>
+                        <input type="file" accept="image/*" onChange={uploadImageOnChange} id="boardWriteImg" />
+                    </div>
+
+                    <p>태그</p>
+                    <input className="boardWrite-tagInput" value={tagName} placeholder="태그를 입력하세요"
+                        onChange={tagNameOnChange} onKeyUp={tagNameOnKeyUp} />
+                    <h5 style={{ marginTop: "10px" }}>Enter 혹은 쉼표를 누르면 입력돼요</h5>
+                    <div className="boardWrite-tagContainer">
+                        {tags.map((v, i) => (
+                            <div key={i} className="boardWrite-tagBox" onClick={() => tagOnClick(i)}>
+                                {v}&nbsp;&nbsp;&nbsp;x
+                            </div>
+                        ))}
+                    </div>
+
+                    <div className="boardWrite-button">
+                        {updateValue.titleValue ? <Button onClick={() => WriteBoardOnClick(1)} text="글 수정" />
+                            : <Button onClick={() => WriteBoardOnClick(0)} text="글 등록" />}
+                    </div>
+                </aside>
+            </section>
         </>
     )
 }

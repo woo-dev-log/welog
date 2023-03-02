@@ -6,7 +6,7 @@
     border: none;
     border-radius: 10px;
     font-size: 16px;
-    font-family: "NanumSquareEB";
+    font-family: "LINESeedKR-Bd";
     color: white;
 
     &:hover {
@@ -17,10 +17,6 @@
 }
 
 .board-postContainer {
-    h2 {
-        font-family: "NanumSquareEB";
-    }
-
     input {
         font-size: 16px;
         width: 360px;
@@ -35,7 +31,7 @@
 
         p {
             font-size: 20px;
-            font-family: "NanumSquareEB";
+            font-family: "LINESeedKR-Bd";
             margin-bottom: 0;
         }
     }
@@ -61,23 +57,24 @@
         }
     }
 
-    .board-post {
-        margin: 20px 0;
+    section {
+        margin-bottom: 30px;
     }
 
     .board-block {
+        cursor: pointer;
         display: flex;
         background-color: white;
         // transition: transform 0.35s ease-in 0.3s;
         transition: .2s ease-in;
-        margin: 30px 0;
+        margin: 20px 0;
 
         &:hover {
             transform: scale(1.02);
         }
 
         aside {
-            margin-left: 20px;
+            margin-left: 50px;
 
             img {
                 object-fit: cover;
@@ -93,30 +90,9 @@
             flex-direction: column;
             justify-content: space-between;
 
-            .board-userBlock {
-                display: flex;
-                align-items: center;
-                margin-bottom: 20px;
-
-                .board-userProfileImg {
-                    object-fit: cover;
-                    background-color: white;
-                    width: 30px;
-                    height: 30px;
-                    box-shadow: lightgray 0 3px 10px;
-                    border-radius: 1000px;
-                    margin-right: 10px;
-                }
-
-                .board-nickname {
-                    font-family: "NanumSquareEB";
-                    font-size: 18px;
-                }
-            }
-
             .board-title {
                 font-size: 20px;
-                font-family: "NanumSquareEB";
+                font-family: "LINESeedKR-Bd";
                 margin: 10px 0;
             }
 
@@ -125,32 +101,77 @@
                 margin-bottom: 10px;
             }
 
-            .board-footer {
-                display: flex;
-                justify-content: space-between;
-                align-items: center;
-                font-size: 16px;
-                color: gray;
-
-                .board-postInfo {
+            footer {
+                .board-footerTop {
                     display: flex;
-                    gap: 10px;
+                    justify-content: space-between;
+                    margin-bottom: 10px;
 
-                    img {
-                        width: 25px;
-                        height: 25px;
-                    }
-
-                    .board-views {
+                    .board-tagContainer {
                         display: flex;
                         align-items: center;
-                        gap: 5px;
+                        gap: 10px;
+
+                        .board-tagBox {
+                            display: flex;
+                            align-items: center;
+                            padding: 0 10px;
+                            height: 30px;
+                            background-color: black;
+                            color: white;
+                            border-radius: 5px;
+                            font-size: 14px;
+                        }
                     }
 
-                    .board-comment {
+                    .board-userBlock {
                         display: flex;
                         align-items: center;
-                        gap: 5px;
+        
+                        .board-userProfileImg {
+                            object-fit: cover;
+                            background-color: white;
+                            width: 30px;
+                            height: 30px;
+                            box-shadow: lightgray 0 3px 10px;
+                            border-radius: 1000px;
+                            margin-right: 10px;
+                        }
+        
+                        .board-nickname {
+                            font-family: "LINESeedKR-Bd";
+                            font-size: 18px;
+                        }
+                    }
+                }
+
+                .board-footer {
+                    display: flex;
+                    justify-content: space-between;
+                    align-items: center;
+                    font-size: 16px;
+                    color: gray;
+
+                    .board-postInfo {
+                        display: flex;
+                        gap: 10px;
+
+                        img {
+                            width: 25px;
+                            height: 25px;
+                        }
+
+                        .board-views {
+                            display: flex;
+                            align-items: center;
+                            gap: 5px;
+                        }
+
+                        .board-comment {
+                            display: flex;
+                            align-items: center;
+                            gap: 5px;
+                        }
                     }
                 }
             }

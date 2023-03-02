@@ -6,7 +6,7 @@
     border: none;
     border-radius: 10px;
     font-size: $font-size;
-    font-family: "NanumSquareEB";
+    font-family: "LINESeedKR-Bd";
     color: white;
     transition: .2s ease-in;
 
@@ -22,7 +22,7 @@
 }
 
 textarea {
-    font-family: "NanumSquareR";
+    font-family: "LINESeedKR-Rg";
     box-sizing: border-box;
     width: 100%;
     overflow-y: hidden;
@@ -70,7 +70,7 @@ textarea {
 
             .boardComment-commentNickname {
                 cursor: pointer;
-                font-family: "NanumSquareEB";
+                font-family: "LINESeedKR-Bd";
                 margin-right: 10px;
             }
 

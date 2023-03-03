@@ -43,8 +43,8 @@ const Board = () => {
     // const ServerImgUrl = "https://we-log.herokuapp.com/images/";
     const limit = 5;
     const offset = (currentPage - 1) * limit;
-    const titleWordLength = window.innerWidth < 768 ? 17 : 40;
-    const contentsWordLength = window.innerWidth < 768 ? 27 : 40;
+    const titleWordLength = window.innerWidth < 768 ? 17 : 60;
+    const contentsWordLength = window.innerWidth < 768 ? 27 : 60;
 
     const { data: boardDailyList, isLoading: boardDailyLoading } = useQuery<BoardType[]>("boardDailyList", async () => {
         try {

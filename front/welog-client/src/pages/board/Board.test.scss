@@ -108,7 +108,6 @@
 
     .board-contentsContainer{
         width: 100%;
-        height: 200px;
         margin-bottom: 20px;
         display: flex;
         flex-direction: column;
@@ -122,14 +121,13 @@
 
         .board-contents {
             font-size: 16px;
-            max-height: 20px;
         }
 
         footer {
             .board-footerTop {
                 display: flex;
                 justify-content: space-between;
-                margin-bottom: 10px;
+                margin: 10px 0;
 
                 .board-tagContainer {
                     display: flex;

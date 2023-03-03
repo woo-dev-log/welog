@@ -33,7 +33,7 @@ const BoardWrite = () => {
     }
 
     const tagNameOnChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-        if(e.target.value.includes(",")) return;
+        if (e.target.value.includes(",")) return;
 
         if (e.target.value.length > 8) {
             ToastWarn("태그는 8글자 이내로 입력해주세요");
@@ -66,7 +66,7 @@ const BoardWrite = () => {
         } else {
             let typeTitle = "글을 등록하시겠어요?";
             let typeUrl = "/writeBoard";
-            let typeData = { title, contents, userNo: userInfo[0].userNo, boardNo: 0, tags: String(tags) };
+            let typeData = { title, contents, userNo: userInfo[0].userNo, boardNo: 0, tags };
 
             if (type === 1) {
                 typeTitle = "글을 수정하시겠어요?"
@@ -83,23 +83,25 @@ const BoardWrite = () => {
                 confirmButtonText: '네',
                 cancelButtonText: '아니요'
             })
-
+            
             if (result.isConfirmed) {
                 try {
+                    console.log(typeData.title);
                     let formData = new FormData();
                     formData.append('title', typeData.title);
                     formData.append('contents', typeData.contents);
                     formData.append('boardNo', String(typeData.boardNo));
                     formData.append('userNo', String(typeData.userNo));
-                    formData.append('tags', typeData.tags);
+                    formData.append('tags', String(typeData.tags));
                     image && formData.append('thumbnail', image);
+                    type === 1 && formData.append('boardImgUrl', String(updateValue.boardImgUrl));
 
                     await writeBoardApi(typeUrl, formData);
 
                     if (type === 1) {
                         ToastSuccess("글이 수정되었어요!");
                     } else ToastSuccess("글이 등록되었어요!");
-                    
+
                     URL.revokeObjectURL(blobImg);
                     setUpdateValue({ titleValue: "", contentsValue: "", boardNo: 0 });
                     navigate("/");
@@ -138,7 +140,14 @@ const BoardWrite = () => {
         if (updateValue.contentsValue) {
             setContents(updateValue.contentsValue);
         } else setContents("");
-    }, [updateValue.titleValue, updateValue.contentsValue]);
+
+        if (updateValue.tags) {
+            let tagsValue: string[] = []
+            updateValue.tags.split(",").map((v, i) => tagsValue.push(v));
+            setTags([...tagsValue]);
+            console.log(tags);
+        } else setTags([]);
+    }, [updateValue.titleValue, updateValue.contentsValue, updateValue.tags]);
 
     return (
         <>
@@ -160,7 +169,10 @@ const BoardWrite = () => {
                 <aside>
                     <p style={{ marginTop: "0" }}>썸네일</p>
                     <div className="boardWrite-thumbnail">
-                        {image ? <img src={blobImg} /> : <img src={`${ServerImgUrl}React.png`} />}
+                        {image ? <img src={blobImg} /> :
+                            updateValue.titleValue
+                                ? <img src={`${ServerImgUrl}${updateValue.boardImgUrl}`} />
+                                : <img src={`${ServerImgUrl}React.png`} />}
                         <label className="boardWrite-imgSelect" htmlFor="boardWriteImg">사진 선택</label>
                         <input type="file" accept="image/*" onChange={uploadImageOnChange} id="boardWriteImg" />
                     </div>

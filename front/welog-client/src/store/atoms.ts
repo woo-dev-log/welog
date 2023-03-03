@@ -24,7 +24,9 @@ interface loginProps {
 interface boardUpdateProps {
     titleValue: string,
     contentsValue: string,
-    boardNo: number
+    boardNo: number,
+    tags?: string,
+    boardImgUrl?: string
 }
 
 export const board = atom<BoardType[]>({
@@ -47,6 +49,8 @@ export const boardUpdate = atom<boardUpdateProps>({
     default: {
         titleValue: "",
         contentsValue: "",
-        boardNo: 0
+        boardNo: 0,
+        tags: "",
+        boardImgUrl: ""
     }
 });

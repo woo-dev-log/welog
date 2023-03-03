@@ -21,6 +21,8 @@ interface BoardDetailType {
     rgstrDate: string;
     updateDate: string;
     views: number;
+    tags: string,
+    boardImgUrl: string;
     nickname: string;
     imgUrl: string;
 }
@@ -64,7 +66,13 @@ const BoardDetail = () => {
     }
 
     const updateBoardOnClick = () => {
-        setUpdateValue({ titleValue: boardDetail[0].title, contentsValue: boardDetail[0].contents, boardNo: boardDetail[0].boardNo });
+        setUpdateValue({ 
+            titleValue: boardDetail[0].title, 
+            contentsValue: boardDetail[0].contents, 
+            boardNo: boardDetail[0].boardNo, 
+            tags: boardDetail[0].tags, 
+            boardImgUrl: boardDetail[0].boardImgUrl
+         });
         navigate("/BoardWrite");
     }
 

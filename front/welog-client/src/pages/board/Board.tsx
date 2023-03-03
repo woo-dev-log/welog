@@ -41,10 +41,10 @@ const Board = () => {
     const navigate = useNavigate();
     const ServerImgUrl = "http://localhost:3690/images/";
     // const ServerImgUrl = "https://we-log.herokuapp.com/images/";
-    const limit = 6;
+    const limit = 5;
     const offset = (currentPage - 1) * limit;
-    const titleWordLength = window.innerWidth < 768 ? 17 : 80;
-    const contentsWordLength = window.innerWidth < 768 ? 27 : 80;
+    const titleWordLength = window.innerWidth < 768 ? 17 : 40;
+    const contentsWordLength = window.innerWidth < 768 ? 27 : 40;
 
     const { data: boardDailyList, isLoading: boardDailyLoading } = useQuery<BoardType[]>("boardDailyList", async () => {
         try {
@@ -155,7 +155,7 @@ const Board = () => {
                                                 {boardDaily.title.length < titleWordLength
                                                     ? boardDaily.title
                                                     : boardDaily.title.substring(0, titleWordLength) + " ..."}
-                                                <div style={{ color: "red" }}>New {boardDaily.weekCommentCnt}</div>
+                                                <div className="boardDaily-weekComment">New {boardDaily.weekCommentCnt}</div>
                                             </div>
                                             <div className="board-contents">
                                                 {boardDaily.contents.replaceAll(/<[^>]*>?/g, "").length < contentsWordLength

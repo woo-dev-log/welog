@@ -160,17 +160,41 @@ app.post("/deleteBoard", async (req, res) => {
     }
 })
 
-app.post("/updateBoard", async (req, res) => {
+app.post("/updateBoard", imageUpload.single('thumbnail'), async (req, res) => {
     try {
-        const { title, contents, boardNo, userNo } = req.body;
+        const { title, contents, boardNo, userNo, tags, boardImgUrl } = req.body;
+
+        let newFilePath = boardImgUrl;
+        if (req.file) {
+            let reImage = '';
+            newFilePath = new Date().valueOf() + '_' + Buffer.from(req.file.originalname, 'latin1').toString('utf8');
+            if (req.file.size <= 500 * 1024) {
+                reImage = await sharp(req.file.path).toFile("./images/" + newFilePath);
+            } else {
+                if (req.file.originalname.split(".").reverse()[0] === "png") {
+                    reImage = await sharp(req.file.path).resize({ width: 500 }).png({ quality: 80 }).toFile("./images/" + newFilePath);
+                } else {
+                    reImage = await sharp(req.file.path).resize({ width: 500 }).jpeg({ quality: 80 }).toFile("./images/" + newFilePath);
+                }
+            }
+
+            fs.unlink("./images/" + imageName, (err) => {
+                if (err) {
+                    console.error(err);
+                    return res.status(400).send("fail");
+                }
+            });
+        }
+        
         if (userNo === 0) {
             res.status(400).send("fail");
         } else {
             const [rows] = await mysql.query(`
             UPDATE board 
-            SET title = ?, contents = ?, updateDate = now() 
+            SET title = ?, contents = ?, updateDate = now(), 
+            tags = ?, boardImgUrl = ?
             WHERE boardNo = ? AND userNo = ?
-            `, [title, contents, boardNo, userNo]);
+            `, [title, contents, tags, newFilePath, boardNo, userNo]);
             res.status(200).send("success");
         }
     } catch (e) {
@@ -238,7 +262,8 @@ app.post("/boardDetail", async (req, res) => {
     try {
         const { boardNo } = req.body;
         const [rows] = await mysql.query(`
-        SELECT b.boardNo, b.userNo, b.title, b.contents, b.rgstrDate, b.updateDate, b.views, 
+        SELECT b.boardNo, b.userNo, b.title, b.contents, b.rgstrDate, b.updateDate, 
+        b.views, b.tags, b.boardImgUrl, 
         u.nickname, u.imgUrl 
         FROM board b 
         INNER JOIN user u 

@@ -14,8 +14,8 @@ const Header = () => {
     // const ServerImgUrl = "https://we-log.herokuapp.com/images/";
 
     const homeOnClick = () => {
-        removeCookie("boardCurrentPage");
-        navigate("/")
+        setCookie("boardCurrentPage", 1);
+        navigate("/");
     }
 
     const logOut = async () => {

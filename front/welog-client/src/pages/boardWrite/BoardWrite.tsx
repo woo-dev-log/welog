@@ -86,7 +86,6 @@ const BoardWrite = () => {
             
             if (result.isConfirmed) {
                 try {
-                    console.log(typeData.title);
                     let formData = new FormData();
                     formData.append('title', typeData.title);
                     formData.append('contents', typeData.contents);
@@ -145,7 +144,6 @@ const BoardWrite = () => {
             let tagsValue: string[] = []
             updateValue.tags.split(",").map((v, i) => tagsValue.push(v));
             setTags([...tagsValue]);
-            console.log(tags);
         } else setTags([]);
     }, [updateValue.titleValue, updateValue.contentsValue, updateValue.tags]);
 

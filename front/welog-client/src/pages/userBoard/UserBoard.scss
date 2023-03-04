@@ -1,34 +1,84 @@
-.userBoard-block {
-    cursor: pointer;
+.userBoard-userContainer {
     display: flex;
     justify-content: space-between;
-    align-items: center;
-    font-size: 20px;
-    border: 1px solid black;
-    margin-top: 10px;
-    padding: 10px;
+    margin-bottom: 30px;
 
-    div {
-        margin-left: 20px;
-    }
-
-    .userBoard-left {
+    .userBoard-userProfile {
         display: flex;
         align-items: center;
-
+        
         img {
             object-fit: cover;
-            width: 60px;
-            height: 60px;
-            border: 1px solid gray;
+            width: 130px;
+            height: 130px;
             border-radius: 1000px;
+            margin-right: 20px;
+            box-shadow: lightgray 0 3px 10px;
         }
     }
 
-    .userBoard-right {
+    .userBoard-updateProfileContainer {
         display: flex;
         align-items: center;
+        
+        .userBoard-updateProfileBtn {
+            cursor: pointer;
+            border: none;
+            border-radius: 10px;
+            width: 150px;
+            height: 40px;
+            background-color: black;
+            color: white;
+        }
+    }
+}
 
-        margin-right: 20px;
+.userBoard-userWriteContainer {
+    display: flex;
+    gap: 10px;
+    margin-bottom: 50px;
+    
+    button {
+        cursor: pointer;
+        font-size: 16px;
+        width: 50%;
+        height: 100px;
+        border: 2px solid lightgray;
+        border-radius: 10px;
+        background-color: white;
+    }
+}
+
+@media (max-width: 767px) {
+    .userBoard-userContainer {
+        display: block;
+        
+        .userBoard-userProfile {
+            display: flex;
+            font-size: 14px;
+
+            img {
+                width: 120px;
+                height: 120px;
+            }
+        }
+
+        .userBoard-updateProfileContainer {
+            justify-content: center;
+            margin-top: 20px;
+            
+            .userBoard-updateProfileBtn {
+                font-size: 12px;
+                width: 110px;
+                height: 35px;
+            }
+        }
+    }
+
+    .userBoard-userWriteContainer {
+        button {
+            font-size: 14px;
+            height: 80px;
+        }
     }
 }

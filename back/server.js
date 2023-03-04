@@ -36,7 +36,8 @@ app.post("/userBoard", async (req, res) => {
     try {
         const { userNickname } = req.body;
         const [rows] = await mysql.query(`
-            SELECT b.boardNo, b.userNo, b.title, b.contents, b.rgstrDate, b.views, u.nickname, u.imgUrl, 
+            SELECT b.boardNo, b.userNo, b.title, b.contents, b.rgstrDate, b.views, 
+            b.tags, b.boardImgUrl, u.nickname, u.imgUrl, 
             (SELECT count(*) FROM comment c WHERE c.boardNo = b.boardNo) commentCnt 
             FROM board b 
             INNER JOIN user u 

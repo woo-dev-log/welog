@@ -1,70 +1,73 @@
-import dayjs from "dayjs";
-import { useEffect, useState } from "react";
-import { useNavigate, useParams } from "react-router-dom";
+import { useEffect } from "react";
+import { useParams } from "react-router-dom";
 import { getUserBoardApi } from "../../api/board";
 import SEO from "../../components/SEO";
-import Paging from "../../components/paging/Paging";
+import { useRecoilState } from "recoil";
+import { board, loginUser } from "../../store/atoms";
 import './UserBoard.scss';
-
-interface BoardType {
-    boardNo: number;
-    userNo: number;
-    title: string;
-    rgstrDate: string;
-    nickname: string;
-    imgUrl: string;
-    commentCnt: number;
-}
+import Post from "../../components/post/Post";
+import { useQuery } from "react-query";
+import { ToastError } from "../../components/Toast";
 
 const UserBoard = () => {
     const { userNickname } = useParams();
-    const [userBoardList, setUserBoardList] = useState<BoardType[]>([]);
-    const [currentPage, setcurrentPage] = useState(1);
-    const navigate = useNavigate();
+    const [userInfo, setUserInfo] = useRecoilState(loginUser);
+    const [boardList, setBoardList] = useRecoilState(board);
     const ServerImgUrl = "http://localhost:3690/images/";
-    const limit = 10;
-    const offset = (currentPage - 1) * limit;
 
-    const getUserBoard = async () => {
+    const { data: userBoardList, isLoading } = useQuery("boardDailyList", async () => {
         try {
             const data = await getUserBoardApi(userNickname);
-            setUserBoardList(data);
+            return data;
         } catch (e) {
+            ToastError("유저 글 조회를 실패했어요");
             console.error(e);
         }
-    }
+    })
 
     useEffect(() => {
-        getUserBoard();
-    }, [userNickname])
+        setBoardList(userBoardList);
+    }, [userBoardList, userNickname]);
 
     return (
         <>
             <SEO title="유저보드" contents="유저보드" />
-            {userBoardList.length === 0 ? <h1>작성한 글이 없어요</h1> :
-                <>
-                    <Paging
-                        total={userBoardList.length}
-                        limit={limit}
-                        page={currentPage}
-                        setCurrentPage={setcurrentPage}
-                        type="userBoard"
-                    />
+            {isLoading
+                ? <h2>유저 정보를 불러오는 중이에요</h2>
+                : boardList === undefined
+                    ? <h2>유저 정보가 없어요</h2>
+                    : <>
+                        <section className="userBoard-userContainer">
+                            <div className="userBoard-userProfile">
+                                <img src={`${ServerImgUrl}${boardList[0].imgUrl}`} />
+                                <div className="userBoard-introduce">
+                                    <h2>{boardList[0].nickname}</h2>
+                                    <p>안녕하세요 저는 1년 경력의 개발자</p>
+                                    <p>제 강점은 무엇일까요 궁금하시죠</p>
+                                    <p>면접시에 알려드릴게요</p>
+                                </div>
+                            </div>
+                            {userInfo[0].userNo === boardList[0].userNo &&
+                                <div className="userBoard-updateProfileContainer">
+                                    <button className="userBoard-updateProfileBtn"
+                                        onClick={() => console.log("test")}>내 정보 수정</button>
+                                </div>}
+                        </section>
 
-                    {userBoardList.slice(offset, offset + limit).map((boardList, i) => (
-                        <div key={i} className="userBoard-block" onClick={() => navigate("/" + boardList.boardNo)}>
-                            <div className="userBoard-left">
-                                <img src={`${ServerImgUrl}${boardList.imgUrl}`} />
-                                <div className="userBoard-nickname">{boardList.nickname}</div>
-                            </div>
-                            <div className="userBoard-title">{boardList.title}</div>
-                            <div className="userBoard-right">
-                                <div>{dayjs(boardList.rgstrDate).format('YYYY.MM.DD')}</div>
-                                <div>댓글 {boardList.commentCnt}</div>
-                            </div>
-                        </div>
-                    ))}
-                </>}
+                        <section className="userBoard-userWriteContainer">
+                            <button onClick={() => console.log("test")}>
+                                <p>작성한 글</p>
+                                <p style={{ fontWeight: "bold" }}>{boardList.length} 개</p>
+                            </button>
+                            <button onClick={() => console.log("test")}>
+                                <p>작성한 댓글</p>
+                                <p style={{ fontWeight: "bold" }}>비밀</p>
+                            </button>
+                        </section>
+
+                        <Post />
+                    </>
+            }
         </>
     )
 }

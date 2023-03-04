@@ -5,7 +5,7 @@
     height: $height;
     box-shadow: lightgray 0 3px 10px;
     border-radius: 1000px;
-    margin-right: 20px;
+    margin-right: 10px;
 }
 
 @mixin buttonCss($width, $height, $font-size) {
@@ -46,57 +46,76 @@
     .boardDetail-titleContainer {
         display: flex;
         align-items: center;
+        justify-content: space-between;
+        margin-bottom: 20px;
 
         .boardDetail-title {
             font-family: "LINESeedKR-Bd";
             font-size: 20px;
-            margin-left: 20px;
+            width: 85%;
+        }
+
+        .board-views {
+            display: flex;
+            justify-content: end;
+            gap: 5px;
+            width: 15%;
+
+            img {
+                width: 20px;
+                height: 20px;
+            }
         }
     }
 
     .boardDetail-writerContainer {
         display: flex;
         align-items: center;
-        font-size: 18px;
+        justify-content: space-between;
 
-        img {
-            cursor: pointer;
-            @include imgCss(50px, 50px);
+        .boardDetail-date {
+            display: flex;
+            gap: 10px;
+            color: gray;
+            margin-top: 10px;
         }
 
-        .boardDetail-nickname {
-            cursor: pointer;
-            font-family: "LINESeedKR-Bd";
-        }
+        .boardDetail-userProfile{
+            display: flex;
+            align-items: center;
 
-        .boardDetail-rgstrDate {
-            margin-left: 10px;
-            color: black;
+            img {
+                cursor: pointer;
+                @include imgCss(30px, 30px);
+            }
+            
+            .boardDetail-nickname {
+                cursor: pointer;
+                font-family: "LINESeedKR-Bd";
+            }
+        }
+    }
+
+    .boardDetail-tagContainer {
+        display: flex;
+        flex-wrap: wrap;
+        align-items: center;
+        gap: 10px;
+
+        .boardDetail-tagBox {
+            display: flex;
+            align-items: center;
+            padding: 0 10px;
+            height: 30px;
+            background-color: black;
+            color: white;
+            border-radius: 5px;
+            font-size: 14px;
         }
     }
 
     .boardDetail-contentsContainer {
         margin: 50px 0 100px 0;
-        transition: .2s ease-in;
-
-        .boardDetail-contentsBlock {
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-
-            .board-views {
-                display: flex;
-                align-items: center;
-                justify-content: center;
-                gap: 5px;
-                width: 90px;
-                
-                img {
-                    width: 25px;
-                    height: 25px;
-                }
-            }
-        }
     }
 
     .boardDetail-deleteBtn {
@@ -120,37 +139,27 @@
         .boardDetail-titleContainer {
             .boardDetail-title {
                 font-size: 16px;
-                margin-left: 10px;
+                width: 75%;
+            }
+
+            .board-views {
+                width: 25%;
             }
         }
 
         .boardDetail-writerContainer {
-            font-size: 16px;
+            font-size: 14px;
+        }
 
-            img {
-                @include imgCss(40px, 40px);
-            }
-
-            .boardDetail-rgstrDate {
-                font-size: 14px;
+        .boardDetail-tagContainer {
+            .boardDetail-tagBox {
+                font-size: 12px;
             }
         }
 
         .boardDetail-contentsContainer {
             margin: 20px 0 50px 0;
-
-            .boardDetail-contentsBlock {
-                .board-views {
-                    img {
-                        width: 20px;
-                        height: 20px;
-                    }
-                }
-            }
-
-            .boardDetail-contents {
-                font-size: 14px;
-            }
+            font-size: 14px;
         }
 
         .boardDetail-deleteBtn {

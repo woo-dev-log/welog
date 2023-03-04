@@ -65,13 +65,13 @@ const BoardDetail = () => {
     }
 
     const updateBoardOnClick = () => {
-        setUpdateValue({ 
-            titleValue: boardDetail[0].title, 
-            contentsValue: boardDetail[0].contents, 
-            boardNo: boardDetail[0].boardNo, 
-            tags: boardDetail[0].tags, 
+        setUpdateValue({
+            titleValue: boardDetail[0].title,
+            contentsValue: boardDetail[0].contents,
+            boardNo: boardDetail[0].boardNo,
+            tags: boardDetail[0].tags,
             boardImgUrl: boardDetail[0].boardImgUrl
-         });
+        });
         navigate("/BoardWrite");
     }
 
@@ -96,33 +96,34 @@ const BoardDetail = () => {
             {boardDetail[0] &&
                 <section className="boardDetail-container">
                     <article className="boardDetail-titleContainer">
-                        <Label text="제목" />
                         <div className="boardDetail-title">{boardDetail[0].title}</div>
+                        <div className="board-views">
+                            <img src="/views.svg" alt="click" />
+                            <div>{boardDetail[0].views}</div>
+                        </div>
                     </article>
-                    <Line />
 
                     <article className="boardDetail-writerContainer">
-                        <img src={`${ServerImgUrl}${boardDetail[0].imgUrl}`} alt={boardDetail[0].imgUrl}
-                            onClick={() => userBoardOnClick(boardDetail[0].nickname)} />
-                        <div className="boardDetail-nickname" onClick={() => userBoardOnClick(boardDetail[0].nickname)}>
-                            {boardDetail[0].nickname}
-                        </div>
                         <div className="boardDetail-date">
                             <div className="boardDetail-rgstrDate">{dayjs(boardDetail[0].rgstrDate).format('YY.MM.DD HH:mm')} 등록</div>
                             {boardDetail[0].updateDate && <div className="boardDetail-rgstrDate">{dayjs(boardDetail[0].updateDate).format('YY.MM.DD HH:mm')} 수정</div>}
                         </div>
-                    </article>
-                    <Line />
-
-                    <article className="boardDetail-contentsContainer">
-                        <div className="boardDetail-contentsBlock">
-                            <Label text="내용" />
-                            <div className="board-views">
-                                <img src="/views.svg" alt="click" />
-                                <div>{boardDetail[0].views}</div>
+                        <div className="boardDetail-userProfile">
+                            <img src={`${ServerImgUrl}${boardDetail[0].imgUrl}`} alt={boardDetail[0].imgUrl}
+                                onClick={() => userBoardOnClick(boardDetail[0].nickname)} />
+                            <div className="boardDetail-nickname" onClick={() => userBoardOnClick(boardDetail[0].nickname)}>
+                                {boardDetail[0].nickname}
                             </div>
                         </div>
-                        <Line />
+                    </article>
+                    <Line />
+                    <article className="boardDetail-tagContainer">
+                        {boardDetail[0].tags && boardDetail[0].tags.split(",").map((v, i) => (
+                            <div key={i} className="boardDetail-tagBox">{v}</div>
+                        ))}
+                    </article>
+
+                    <article className="boardDetail-contentsContainer">
                         <div className="boardDetail-contents" dangerouslySetInnerHTML={{ __html: boardDetail[0].contents }} />
 
                         {userInfo[0].userNo === boardDetail[0].userNo &&

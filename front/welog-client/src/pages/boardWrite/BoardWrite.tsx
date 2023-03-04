@@ -37,6 +37,7 @@ const BoardWrite = () => {
 
         if (e.target.value.length > 8) {
             ToastWarn("태그는 8글자 이내로 입력해주세요");
+            return;
         }
 
         setTagName(e.target.value);
@@ -178,7 +179,7 @@ const BoardWrite = () => {
                     <p>태그</p>
                     <input className="boardWrite-tagInput" value={tagName} placeholder="태그를 입력하세요"
                         onChange={tagNameOnChange} onKeyUp={tagNameOnKeyUp} />
-                    <h5 style={{ marginTop: "10px" }}>Enter 혹은 쉼표를 누르면 입력돼요</h5>
+                    <h5 style={{ margin: "10px 0 20px 0" }}>Enter 혹은 쉼표를 누르면 입력돼요</h5>
                     <div className="boardWrite-tagContainer">
                         {tags.map((v, i) => (
                             <div key={i} className="boardWrite-tagBox" onClick={() => tagOnClick(i)}>

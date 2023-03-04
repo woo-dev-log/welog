@@ -18,7 +18,6 @@ function App() {
   const [cookies] = useCookies(['welogJWT']);
   const [userInfo, setUserInfo] = useRecoilState(loginUser);
   axios.defaults.baseURL = "http://localhost:3690";
-  // axios.defaults.baseURL = "https://we-log.herokuapp.com/";
 
   const silentRefresh = async () => {
     if (cookies.welogJWT) {

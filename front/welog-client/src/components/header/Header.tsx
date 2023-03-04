@@ -11,7 +11,6 @@ const Header = () => {
     const [userInfo, setUserInfo] = useRecoilState(loginUser);
     const [cookies, setCookie, removeCookie] = useCookies(['welogJWT', 'boardCurrentPage']);
     const ServerImgUrl = "http://localhost:3690/images/";
-    // const ServerImgUrl = "https://we-log.herokuapp.com/images/";
 
     const homeOnClick = () => {
         setCookie("boardCurrentPage", 1);

@@ -22,7 +22,6 @@ const UserBoard = () => {
     const [currentPage, setcurrentPage] = useState(1);
     const navigate = useNavigate();
     const ServerImgUrl = "http://localhost:3690/images/";
-    // const ServerImgUrl = "https://we-log.herokuapp.com/images/";
     const limit = 10;
     const offset = (currentPage - 1) * limit;
 

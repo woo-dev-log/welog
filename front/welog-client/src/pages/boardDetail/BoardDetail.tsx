@@ -35,7 +35,6 @@ const BoardDetail = () => {
     const IntBoardNo = Number(boardNo);
     const navigate = useNavigate();
     const ServerImgUrl = "http://localhost:3690/images/";
-    // const ServerImgUrl = "https://we-log.herokuapp.com/images/";
 
     const userBoardOnClick = (nickname: string) => {
         navigate("/userBoard/" + nickname);

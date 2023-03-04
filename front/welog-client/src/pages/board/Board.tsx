@@ -40,7 +40,6 @@ const Board = () => {
     const { keyword } = useParams();
     const navigate = useNavigate();
     const ServerImgUrl = "http://localhost:3690/images/";
-    // const ServerImgUrl = "https://we-log.herokuapp.com/images/";
     const limit = 5;
     const offset = (currentPage - 1) * limit;
     const titleWordLength = window.innerWidth < 768 ? 15 : 60;

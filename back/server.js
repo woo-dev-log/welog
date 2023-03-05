@@ -16,7 +16,7 @@ app.use(cors());
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 app.use('/images', express.static('images'));
-app.use(express.static(path.join(__dirname, "./dist")));
+// app.use(express.static(path.join(__dirname, "./dist")));
 
 let imageName = [];
 const imageUpload = multer({
@@ -45,17 +45,32 @@ app.post("/updateProfileContents", async (req, res) => {
     }
 })
 
+app.post("/userProfile", async (req, res) => {
+    try {
+        const { userNickname } = req.body;
+        const [rows] = await mysql.query(`
+            SELECT u.userNo, u.nickname, u.imgUrl, u.profileContents 
+            FROM user u 
+            where u.nickname = ?
+            `, [userNickname]);
+        res.status(200).send(rows);
+    } catch (e) {
+        res.status(400).send("fail");
+        console.error(e);
+    }
+})
+
 app.post("/userBoard", async (req, res) => {
     try {
         const { userNickname } = req.body;
         const [rows] = await mysql.query(`
             SELECT b.boardNo, b.userNo, b.title, b.contents, b.rgstrDate, b.views, 
-            b.tags, b.boardImgUrl, u.nickname, u.imgUrl, u.profileContents, 
+            b.tags, b.boardImgUrl, u.nickname, u.imgUrl, 
             (SELECT count(*) FROM comment c WHERE c.boardNo = b.boardNo) commentCnt 
             FROM board b 
             INNER JOIN user u 
             ON b.userNo = u.userNo 
-            where u.nickname = ?
+            where u.nickname = ? 
             ORDER BY b.rgstrDate DESC
             `, [userNickname]);
         res.status(200).send(rows);
@@ -425,9 +440,9 @@ app.post("/signIn", async (req, res) => {
     }
 })
 
-app.get('*', (req, res) => {
-    res.sendFile(path.join(__dirname, './dist', 'index.html'));
-});
+// app.get('*', (req, res) => {
+//     res.sendFile(path.join(__dirname, './dist', 'index.html'));
+// });
 
 app.listen(port, () => {
     console.log(port + " port listening on!!");

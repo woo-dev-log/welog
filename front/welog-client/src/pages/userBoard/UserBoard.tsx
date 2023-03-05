@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
-import { getUserBoardApi, updateProfileContentsApi } from "../../api/board";
+import { getUserBoardApi, postUserProfileApi, updateProfileContentsApi } from "../../api/board";
 import SEO from "../../components/SEO";
 import { useRecoilState } from "recoil";
 import { board, loginUser } from "../../store/atoms";
@@ -10,17 +10,25 @@ import { useQuery } from "react-query";
 import { ToastError, ToastSuccess, ToastWarn } from "../../components/Toast";
 import { useCookies } from "react-cookie";
 
+interface UserProfileType {
+    userNo: number;
+    nickname: string;
+    imgUrl: string;
+    profileContents: string;
+}
+
 const UserBoard = () => {
     const { userNickname } = useParams();
     const [userInfo, setUserInfo] = useRecoilState(loginUser);
     const [boardList, setBoardList] = useRecoilState(board);
     const [updateProfileBoolean, setUpdateProfileBoolean] = useState(false);
+    const [userProfile, setUserProfile] = useState<UserProfileType[]>([]);
     const [updateProfileContents, setUpdateProfileContents] = useState("");
     const [cookies, setCookie] = useCookies(['boardCurrentPage']);
     const ServerImgUrl = "http://localhost:3690/images/";
     const textAreaCols = window.innerWidth < 1199 ? 30 : 50;
 
-    const { data: userBoardList, isLoading } = useQuery("boardDailyList", async () => {
+    const { data: userBoardList, isLoading } = useQuery("userBoardList", async () => {
         try {
             const data = await getUserBoardApi(userNickname);
             return data;
@@ -41,6 +49,7 @@ const UserBoard = () => {
         } else {
             try {
                 await updateProfileContentsApi(updateProfileContents, userInfo[0].userNo);
+                userProfileApi();
                 setUpdateProfileBoolean(false);
                 ToastSuccess("프로필이 수정되었어요!");
             } catch (e) {
@@ -50,7 +59,18 @@ const UserBoard = () => {
         }
     };
 
+    const userProfileApi = async () => {
+        try {
+            const data = await postUserProfileApi(userNickname ? userNickname : "");
+            setUserProfile(data);
+        } catch (e) {
+            ToastError("유저 정보 조회를 실패했어요");
+            console.error(e);
+        }
+    };
+
     useEffect(() => {
+        userProfileApi();
         setBoardList(userBoardList);
         setCookie("boardCurrentPage", 1);
     }, [userBoardList, userNickname]);
@@ -60,14 +80,14 @@ const UserBoard = () => {
             <SEO title="유저보드" contents="유저보드" />
             {isLoading
                 ? <h2>유저 정보를 불러오는 중이에요</h2>
-                : boardList === undefined
+                : boardList === undefined || userProfile.length === 0
                     ? <h2>유저 정보가 없어요</h2>
                     : <>
                         <section className="userBoard-userContainer">
                             <div className="userBoard-userProfile">
-                                <img src={`${ServerImgUrl}${boardList[0].imgUrl}`} />
+                                <img src={`${ServerImgUrl}${userProfile[0].imgUrl}`} />
                                 <div className="userBoard-introduce">
-                                    <h2>{boardList[0].nickname}</h2>
+                                    <h2>{userProfile[0].nickname}</h2>
                                     {updateProfileBoolean
                                         ? <textarea rows={3} cols={textAreaCols} placeholder="90자 이내로 본인을 소개해보세요!"
                                             value={updateProfileContents} onChange={e => {
@@ -77,20 +97,20 @@ const UserBoard = () => {
                                             }
                                             } />
                                         : <div dangerouslySetInnerHTML={{
-                                            __html: boardList[0].profileContents
-                                                ? boardList[0].profileContents.replaceAll(/(\n|\r\n)/g, '<br>')
+                                            __html: userProfile[0].profileContents
+                                                ? userProfile[0].profileContents.replaceAll(/(\n|\r\n)/g, '<br>')
                                                 : ""
                                         }} />}
                                 </div>
                             </div>
-                            {userInfo[0].userNo === boardList[0].userNo &&
+                            {userInfo[0].userNo === userProfile[0].userNo &&
                                 <div className="userBoard-updateProfileContainer">
                                     {updateProfileBoolean
                                         ? <button className="userBoard-updateProfileBtn"
                                             onClick={updateProfileContentsOnClick}>수정하기</button>
                                         : <button className="userBoard-updateProfileBtn"
                                             onClick={() => {
-                                                setUpdateProfileContents(boardList[0].profileContents ? boardList[0].profileContents : "");
+                                                setUpdateProfileContents(userProfile[0].profileContents);
                                                 setUpdateProfileBoolean(!updateProfileBoolean);
                                             }}>내 정보 수정</button>}
                                 </div>}

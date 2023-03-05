@@ -5,6 +5,11 @@ export const updateProfileContentsApi = async (profileContents: string, userNo: 
     return data;
 }
 
+export const postUserProfileApi = async (userNickname: string) => {
+    const { data } = await axios.post("/userProfile", { userNickname });
+    return data;
+}
+
 export const deleteBoardCommentApi = async (boardNo: number, commentNo: number) => {
     const { data } = await axios.post("/deleteBoardComment", { boardNo, commentNo });
     return data;

@@ -95,12 +95,22 @@ const BoardDetail = () => {
             <button className="boardDetail-backbutton" onClick={() => navigate(-1)}>&lt;&nbsp;&nbsp;이전으로</button>
             {boardDetail[0] &&
                 <section className="boardDetail-container">
+                    <div className="boarDetail-boardThumbnail">
+                        <img src={`${ServerImgUrl}${boardDetail[0].boardImgUrl}`} alt="boardThumbnail" />
+                    </div>
+
                     <article className="boardDetail-titleContainer">
-                        <div className="boardDetail-title">{boardDetail[0].title}</div>
+                        <h2 className="boardDetail-title">{boardDetail[0].title}</h2>
                         <div className="board-views">
                             <img src="/views.svg" alt="click" />
                             <div>{boardDetail[0].views}</div>
                         </div>
+                    </article>
+                    
+                    <article className="boardDetail-tagContainer">
+                        {boardDetail[0].tags && boardDetail[0].tags.split(",").map((v, i) => (
+                            <div key={i} className="boardDetail-tagBox">{v}</div>
+                        ))}
                     </article>
 
                     <article className="boardDetail-writerContainer">
@@ -109,7 +119,7 @@ const BoardDetail = () => {
                             {boardDetail[0].updateDate && <div className="boardDetail-rgstrDate">{dayjs(boardDetail[0].updateDate).format('YY.MM.DD HH:mm')} 수정</div>}
                         </div>
                         <div className="boardDetail-userProfile">
-                            <img src={`${ServerImgUrl}${boardDetail[0].imgUrl}`} alt={boardDetail[0].imgUrl}
+                            <img src={`${ServerImgUrl}${boardDetail[0].imgUrl}`} alt="userProfileImg"
                                 onClick={() => userBoardOnClick(boardDetail[0].nickname)} />
                             <div className="boardDetail-nickname" onClick={() => userBoardOnClick(boardDetail[0].nickname)}>
                                 {boardDetail[0].nickname}
@@ -117,11 +127,6 @@ const BoardDetail = () => {
                         </div>
                     </article>
                     <Line />
-                    <article className="boardDetail-tagContainer">
-                        {boardDetail[0].tags && boardDetail[0].tags.split(",").map((v, i) => (
-                            <div key={i} className="boardDetail-tagBox">{v}</div>
-                        ))}
-                    </article>
 
                     <article className="boardDetail-contentsContainer">
                         <div className="boardDetail-contents" dangerouslySetInnerHTML={{ __html: boardDetail[0].contents }} />

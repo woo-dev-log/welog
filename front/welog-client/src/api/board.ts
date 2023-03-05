@@ -1,5 +1,10 @@
 import axios from "axios";
 
+export const updateProfileContentsApi = async (profileContents: string, userNo: number) => {
+    const { data } = await axios.post("/updateProfileContents", { profileContents, userNo });
+    return data;
+}
+
 export const deleteBoardCommentApi = async (boardNo: number, commentNo: number) => {
     const { data } = await axios.post("/deleteBoardComment", { boardNo, commentNo });
     return data;

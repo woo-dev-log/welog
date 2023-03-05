@@ -41,7 +41,7 @@ const Board = () => {
     const { keyword } = useParams();
     const navigate = useNavigate();
     const ServerImgUrl = "http://localhost:3690/images/";
-    const titleWordLength = window.innerWidth < 768 ? 15 : 60;
+    const titleWordLength = window.innerWidth < 768 ? 20 : 60;
     const contentsWordLength = window.innerWidth < 768 ? 25 : 60;
 
     const { data: boardDailyList, isLoading: boardDailyLoading } = useQuery<BoardType[]>("boardDailyList", async () => {

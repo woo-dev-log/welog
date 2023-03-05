@@ -11,6 +11,7 @@ interface BoardType {
     boardImgUrl: string;
     nickname: string;
     imgUrl: string;
+    profileContents?: string;
     commentCnt: number;
 }
 

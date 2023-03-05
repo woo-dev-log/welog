@@ -19,6 +19,10 @@
         color: black;
     }
 
+    button[disabled] {
+        color: gray;
+    }
+
     .paging-currentpageNum {
         display: flex;
 

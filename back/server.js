@@ -32,12 +32,25 @@ const imageUpload = multer({
     })
 });
 
+app.post("/updateProfileContents", async (req, res) => {
+    try {
+        const { userNo, profileContents } = req.body;
+        const [rows] = await mysql.query(`
+            UPDATE user SET profileContents = ? WHERE userNo = ?
+            `, [profileContents, userNo]);
+        res.status(200).send("success");
+    } catch (e) {
+        res.status(400).send("fail");
+        console.error(e);
+    }
+})
+
 app.post("/userBoard", async (req, res) => {
     try {
         const { userNickname } = req.body;
         const [rows] = await mysql.query(`
             SELECT b.boardNo, b.userNo, b.title, b.contents, b.rgstrDate, b.views, 
-            b.tags, b.boardImgUrl, u.nickname, u.imgUrl, 
+            b.tags, b.boardImgUrl, u.nickname, u.imgUrl, u.profileContents, 
             (SELECT count(*) FROM comment c WHERE c.boardNo = b.boardNo) commentCnt 
             FROM board b 
             INNER JOIN user u 
@@ -186,7 +199,7 @@ app.post("/updateBoard", imageUpload.single('thumbnail'), async (req, res) => {
                 }
             });
         }
-        
+
         if (userNo === 0) {
             res.status(400).send("fail");
         } else {

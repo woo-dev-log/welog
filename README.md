@@ -55,12 +55,15 @@ lodash-es in debounce
 ```
 
 ## 스크린샷
-### 메인 예전
+### 예전 메인
 ![메인-예전](https://user-images.githubusercontent.com/110772642/221354648-c9d2ab94-b08e-4a86-9916-dbb7fafb5fd7.png)
 
-### 메인 화면 변경 작업중
+### 메인 화면 변경
 ![메인-상단](https://user-images.githubusercontent.com/110772642/222924168-a51fc9ce-ecda-4d9c-8f5c-2881a090eba0.png)
 ![메인-하단](https://user-images.githubusercontent.com/110772642/222924171-a63c189c-c91b-4a34-abb9-ec87562a86a4.png)
+
+### 유저 화면
+![유저보드](https://user-images.githubusercontent.com/110772642/223098689-11c54781-a21e-4f74-ac38-d7d3bd4e61c1.png)
 
 ### 모바일 & 태블릿 화면
 ![모바일](https://user-images.githubusercontent.com/110772642/222924176-9e550432-9c82-4d1e-a48f-9d118eeb5247.png)

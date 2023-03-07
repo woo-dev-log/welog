@@ -45,13 +45,30 @@ app.post("/updateProfileContents", async (req, res) => {
     }
 })
 
+app.post("/userComment", async (req, res) => {
+    try {
+        const { userNo } = req.body;
+        const [rows] = await mysql.query(`
+            SELECT *
+            FROM comment
+            WHERE userNo = ?
+            `, [userNo]);
+        res.status(200).send(rows);
+    } catch (e) {
+        res.status(400).send("fail");
+        console.error(e);
+    }
+})
+
 app.post("/userProfile", async (req, res) => {
     try {
         const { userNickname } = req.body;
         const [rows] = await mysql.query(`
-            SELECT u.userNo, u.nickname, u.imgUrl, u.profileContents 
+            SELECT u.userNo, u.nickname, u.imgUrl, u.profileContents, COUNT(c.userNo) AS userCommentCnt 
             FROM user u 
-            where u.nickname = ?
+            INNER JOIN comment c ON u.userNo = c.userNo
+            WHERE u.nickname = ?
+            GROUP BY u.userNo, u.nickname, u.imgUrl, u.profileContents
             `, [userNickname]);
         res.status(200).send(rows);
     } catch (e) {

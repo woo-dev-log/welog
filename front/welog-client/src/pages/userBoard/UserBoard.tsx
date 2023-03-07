@@ -9,12 +9,14 @@ import Post from "../../components/post/Post";
 import { useQuery } from "react-query";
 import { ToastError, ToastSuccess, ToastWarn } from "../../components/Toast";
 import { useCookies } from "react-cookie";
+import UserComment from "../../components/userComment/UserComment";
 
 interface UserProfileType {
     userNo: number;
     nickname: string;
     imgUrl: string;
     profileContents: string;
+    userCommentCnt: number;
 }
 
 const UserBoard = () => {
@@ -24,6 +26,7 @@ const UserBoard = () => {
     const [updateProfileBoolean, setUpdateProfileBoolean] = useState(false);
     const [userProfile, setUserProfile] = useState<UserProfileType[]>([]);
     const [updateProfileContents, setUpdateProfileContents] = useState("");
+    const [userPostType, setUserPostType] = useState("글");
     const [cookies, setCookie] = useCookies(['boardCurrentPage']);
     const ServerImgUrl = "http://localhost:3690/images/";
     const textAreaCols = window.innerWidth < 1199 ? 30 : 50;
@@ -117,17 +120,20 @@ const UserBoard = () => {
                         </section>
 
                         <section className="userBoard-userWriteContainer">
-                            <button onClick={() => console.log("test")}>
+                            <button onClick={() => setUserPostType("글")}>
                                 <p>작성한 글</p>
                                 <p style={{ fontWeight: "bold" }}>{boardList.length} 개</p>
                             </button>
-                            <button onClick={() => console.log("test")}>
+                            <button onClick={() => setUserPostType("댓글")}>
                                 <p>작성한 댓글</p>
-                                <p style={{ fontWeight: "bold" }}>비밀</p>
+                                <p style={{ fontWeight: "bold" }}>{userProfile[0].userCommentCnt} 개</p>
                             </button>
                         </section>
 
-                        <Post />
+                        {userPostType === "글" 
+                            ? <Post />
+                            : userProfile[0].userNo && <UserComment userNo={userProfile[0].userNo}/>
+                        }
                     </>
             }
         </>

@@ -23,7 +23,12 @@ const UserComment = ({ userNo }: { userNo: number }) => {
                 ToastError("유저 댓글 조회를 실패했어요");
                 console.error(e);
             }
-        })
+        },
+        {
+            keepPreviousData: true,
+            cacheTime: 1000 * 60 * 10,
+        }
+    );
 
     useEffect(() => {
         if (userComment) setUserCommentList(userComment);

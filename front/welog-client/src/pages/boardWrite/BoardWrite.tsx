@@ -104,7 +104,7 @@ const BoardWrite = () => {
 
                     URL.revokeObjectURL(blobImg);
                     setUpdateValue({ titleValue: "", contentsValue: "", boardNo: 0 });
-                    navigate("/");
+                    navigate(-1);
                 } catch (e) {
                     if (type === 1) {
                         ToastError("수정을 실패했어요");

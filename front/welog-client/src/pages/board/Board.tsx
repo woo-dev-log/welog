@@ -2,18 +2,16 @@ import dayjs from "dayjs";
 import { useCallback, useEffect, useState } from "react";
 import { useCookies } from "react-cookie";
 import { useQuery } from "react-query";
-import { useNavigate, useParams } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import { useRecoilState } from "recoil";
 import { board, boardUpdate, loginUser } from "../../store/atoms";
-import { getBoardApi, getBoardDailyApi, postBoardApi, updateBoardViewsApi } from "../../api/board";
+import { getBoardDailyApi, postBoardApi, updateBoardViewsApi } from "../../api/board";
 import { ToastError, ToastWarn } from "../../components/Toast";
 import { debounce } from "lodash-es";
 import SEO from "../../components/SEO";
 import Line from "../../components/line/Line";
-import Paging from "../../components/paging/Paging";
 import Button from "../../components/button/Button";
 import Input from "../../components/input/Input";
-// import './Board.scss';
 import './Board.test.scss';
 import Post from "../../components/post/Post";
 
@@ -38,7 +36,7 @@ const Board = () => {
     const [updateValue, setUpdateValue] = useRecoilState(boardUpdate);
     const [currentPage, setCurrentPage] = useState(1);
     const [cookies, setCookie] = useCookies(['viewPost', 'boardCurrentPage']);
-    const { keyword } = useParams();
+    const [keyword, setKeyword] = useState("");
     const navigate = useNavigate();
     const ServerImgUrl = "http://localhost:3690/images/";
     const titleWordLength = window.innerWidth < 768 ? 20 : 60;
@@ -54,21 +52,6 @@ const Board = () => {
         }
     })
 
-    const { data: post, isLoading } = useQuery<BoardType[]>(['userBoardList'], async () => {
-        try {
-            const data = await getBoardApi();
-            return data;
-        } catch (e) {
-            ToastError("글 조회를 실패했어요");
-            console.error(e);
-        }
-    },
-        {
-            keepPreviousData: true,
-            cacheTime: 1000 * 60 * 10,
-        }
-    );
-
     const writeBoardOnclick = () => {
         if (userInfo[0].userNo !== 0) {
             setUpdateValue({
@@ -80,25 +63,18 @@ const Board = () => {
         } else ToastWarn("로그인을 해주세요");
     }
 
-    const searchBoardListOnChange = debounce((e: React.ChangeEvent<HTMLInputElement>) => {
+    const searchBoardListOnChange = debounce(async (e: React.ChangeEvent<HTMLInputElement>) => {
         if (e.target.value === keyword) return;
 
-        setCurrentPage(1);
-        if (e.target.value === "") {
-            navigate("/");
-        } else {
-            navigate("/search/" + e.target.value);
-        }
-    }, 500);
-
-    const searchBoardListApi = async (value: string) => {
         try {
-            const data = await postBoardApi(value);
+            const data = await postBoardApi(e.target.value);
+            setCurrentPage(1);
+            setKeyword(e.target.value);
             setBoardList(data);
         } catch (e) {
             console.error(e);
         }
-    }
+    }, 500);
 
     const updateBoardViewsOnClick = useCallback(async (boardNo: number, views: number) => {
         try {
@@ -117,14 +93,6 @@ const Board = () => {
             console.error(e);
         }
     }, []);
-
-    useEffect(() => {
-        if (post && keyword === undefined) {
-            setBoardList(post);
-        } else if (keyword !== undefined) {
-            searchBoardListApi(keyword);
-        }
-    }, [post, keyword]);
 
     useEffect(() => {
         if (cookies.boardCurrentPage) {
@@ -198,21 +166,18 @@ const Board = () => {
                     </>
             }
 
-            {isLoading
-                ? <h2>글을 불러오는 중이에요</h2>
-                : <>
-                    <Input placeholder="제목, 내용, 닉네임을 입력해주세요" onChange={searchBoardListOnChange} />
-                    <div className="board-top">
-                        {keyword
-                            ? <p>{keyword} 검색 결과 총 {boardList.length}개의 글을 찾았어요</p>
-                            : <p>총 {boardList.length}개의 글이 있어요</p>}
-                        <div className="board-button">
-                            <Button onClick={writeBoardOnclick} text="글쓰기" />
-                        </div>
+            <>
+                <Input placeholder="제목, 내용, 닉네임을 입력해주세요" onChange={searchBoardListOnChange} />
+                <div className="board-top">
+                    {keyword
+                        ? <p>{keyword} 검색 결과 총 {boardList.length}개의 글을 찾았어요</p>
+                        : <p>총 {boardList.length}개의 글이 있어요</p>}
+                    <div className="board-button">
+                        <Button onClick={writeBoardOnclick} text="글쓰기" />
                     </div>
-                    <Post />
-                </>
-            }
+                </div>
+                <Post />
+            </>
         </div>
     )
 };

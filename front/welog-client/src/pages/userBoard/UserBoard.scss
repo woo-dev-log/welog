@@ -43,6 +43,7 @@
     display: flex;
     gap: 10px;
     margin-bottom: 50px;
+
     
     button {
         cursor: pointer;
@@ -51,8 +52,18 @@
         height: 100px;
         border: 2px solid lightgray;
         border-radius: 10px;
-        background-color: white;
+        
+        &.userBoard-bgWhite {
+            background-color: white;
+            color: black;
+        }
+    
+        &.userBoard-bgBlack {
+            background-color: black;
+            color: white;
+        }
     }
+
 }
 
 @media (max-width: 767px) {

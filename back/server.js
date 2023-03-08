@@ -64,9 +64,11 @@ app.post("/userProfile", async (req, res) => {
     try {
         const { userNickname } = req.body;
         const [rows] = await mysql.query(`
-            SELECT u.userNo, u.nickname, u.imgUrl, u.profileContents, COUNT(c.userNo) AS userCommentCnt 
+            SELECT u.userNo, u.nickname, u.imgUrl, u.profileContents, 
+            COUNT(DISTINCT b.boardNo) AS userBoardCnt, COUNT(DISTINCT c.commentNo) AS userCommentCnt 
             FROM user u 
-            INNER JOIN comment c ON u.userNo = c.userNo
+            LEFT JOIN board b ON u.userNo = b.userNo
+            LEFT JOIN comment c ON u.userNo = c.userNo
             WHERE u.nickname = ?
             GROUP BY u.userNo, u.nickname, u.imgUrl, u.profileContents
             `, [userNickname]);

@@ -1,0 +1,46 @@
+.userComment-article {
+    margin-bottom: 20px;
+}
+
+.userComment-container {
+    cursor: pointer;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+
+    &:hover {
+        transform: scale(1.02);
+    }
+
+    .userComment-contents {
+        font-family: "LINESeedKR-Bd";
+        font-size: 18px;
+    }
+
+    .userComment-block {
+        display: flex;
+        align-items: center;
+        gap: 20px;
+
+        .userComment-blockDate {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            color: gray;
+        }
+
+        .userComment-right {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+
+            img {
+                object-fit: cover;
+                border-radius: 1000px;
+                box-shadow: lightgray 0 3px 10px;
+                width: 40px;
+                height: 40px;
+            }
+        }
+    }
+}

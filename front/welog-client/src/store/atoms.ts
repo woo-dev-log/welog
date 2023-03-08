@@ -15,19 +15,28 @@ interface BoardType {
     commentCnt: number;
 }
 
-interface loginProps {
+interface LoginProps {
     userNo: number;
     nickname: string;
     id: string;
     imgUrl: string;
 }
 
-interface boardUpdateProps {
+interface BoardUpdateProps {
     titleValue: string,
     contentsValue: string,
     boardNo: number,
     tags?: string,
     boardImgUrl?: string
+}
+
+interface UserProfileType {
+    userNo: number;
+    nickname: string;
+    imgUrl: string;
+    profileContents: string;
+    userBoardCnt: number;
+    userCommentCnt: number;
 }
 
 export const board = atom<BoardType[]>({
@@ -40,12 +49,12 @@ export const loginCheckCnt = atom({
     default: 1
 });
 
-export const loginUser = atom<loginProps[]>({
+export const loginUser = atom<LoginProps[]>({
     key: 'loginUserKey',
     default: [{ userNo: 0, nickname: "", id: "", imgUrl: "" }]
 });
 
-export const boardUpdate = atom<boardUpdateProps>({
+export const boardUpdate = atom<BoardUpdateProps>({
     key: 'boardUpdateKey',
     default: {
         titleValue: "",
@@ -54,4 +63,9 @@ export const boardUpdate = atom<boardUpdateProps>({
         tags: "",
         boardImgUrl: ""
     }
+});
+
+export const user = atom<UserProfileType[]>({
+    key: 'userKey',
+    default: []
 });

@@ -3,26 +3,17 @@ import { useParams } from "react-router-dom";
 import { postUserProfileApi, updateProfileContentsApi } from "../../api/board";
 import SEO from "../../components/SEO";
 import { useRecoilState } from "recoil";
-import { loginUser } from "../../store/atoms";
+import { loginUser, user } from "../../store/atoms";
 import './UserBoard.scss';
 import Post from "../../components/post/Post";
 import { ToastError, ToastSuccess, ToastWarn } from "../../components/Toast";
 import UserComment from "../../components/userComment/UserComment";
 
-interface UserProfileType {
-    userNo: number;
-    nickname: string;
-    imgUrl: string;
-    profileContents: string;
-    userBoardCnt: number;
-    userCommentCnt: number;
-}
-
 const UserBoard = () => {
     const { userNickname } = useParams();
     const [userInfo, setUserInfo] = useRecoilState(loginUser);
+    const [userProfile, setUserProfile] = useRecoilState(user);
     const [updateProfileBoolean, setUpdateProfileBoolean] = useState(false);
-    const [userProfile, setUserProfile] = useState<UserProfileType[]>([]);
     const [updateProfileContents, setUpdateProfileContents] = useState("");
     const [userPostType, setUserPostType] = useState("글");
     const ServerImgUrl = "http://localhost:3690/images/";
@@ -71,7 +62,7 @@ const UserBoard = () => {
                 : <>
                     <section className="userBoard-userContainer">
                         <div className="userBoard-userProfile">
-                            <img src={`${ServerImgUrl}${userProfile[0].imgUrl}`} />
+                            <img src={`${ServerImgUrl}${userProfile[0].imgUrl}`} alt="userProfileImg" />
                             <div className="userBoard-introduce">
                                 <h2>{userProfile[0].nickname}</h2>
                                 {updateProfileBoolean

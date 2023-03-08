@@ -12,7 +12,7 @@ import SEO from "../../components/SEO";
 import Line from "../../components/line/Line";
 import Button from "../../components/button/Button";
 import Input from "../../components/input/Input";
-import './Board.test.scss';
+import './Board.scss';
 import Post from "../../components/post/Post";
 
 interface BoardType {

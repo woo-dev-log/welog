@@ -39,7 +39,7 @@ const Board = () => {
     const [keyword, setKeyword] = useState("");
     const navigate = useNavigate();
     const ServerImgUrl = "http://localhost:3690/images/";
-    const contentsWordLength = window.innerWidth < 768 ? 25 : 48;
+    const contentsWordLength = window.innerWidth < 1199 ? 35 : 48;
 
     const { data: boardDailyList, isLoading: boardDailyLoading } = useQuery<BoardType[]>("boardDailyList", async () => {
         try {
@@ -127,17 +127,10 @@ const Board = () => {
                                             </p>
                                         </header>
                                         <footer>
-                                            <div className="board-footerTop">
-                                                <div className="board-tagContainer">
-                                                    {boardDaily.tags && boardDaily.tags.split(",").map((v, i) => (
-                                                        <p key={i} className="board-tagBox">{v}</p>
-                                                    ))}
-                                                </div>
-                                                <div className="board-userBlock" onClick={() => navigate("/userBoard/" + boardDaily.nickname)}>
-                                                    <img src={`${ServerImgUrl}${boardDaily.imgUrl}`} alt={boardDaily.imgUrl}
-                                                        className="board-userProfileImg" />
-                                                    <p className="board-nickname">{boardDaily.nickname}</p>
-                                                </div>
+                                            <div className="board-userBlock" onClick={() => navigate("/userBoard/" + boardDaily.nickname)}>
+                                                <img src={`${ServerImgUrl}${boardDaily.imgUrl}`} alt={boardDaily.imgUrl}
+                                                    className="board-userProfileImg" />
+                                                <p className="board-nickname">{boardDaily.nickname}</p>
                                             </div>
                                             <div className="board-footer">
                                                 <p>{dayjs(boardDaily.rgstrDate).format('YY.MM.DD HH:mm')}</p>
@@ -153,6 +146,11 @@ const Board = () => {
                                                 </div>
                                             </div>
                                         </footer>
+                                    </div>
+                                    <div className="board-tagContainer">
+                                        {boardDaily.tags && boardDaily.tags.split(",").map((v, i) => (
+                                            <p key={i} className="board-tagBox">{v}</p>
+                                        ))}
                                     </div>
                                     <Line />
                                 </article>

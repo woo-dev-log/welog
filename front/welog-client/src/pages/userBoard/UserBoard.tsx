@@ -97,12 +97,12 @@ const UserBoard = () => {
                         <button className={`${userPostType === "글" ? "userBoard-bgBlack" : "userBoard-bgWhite"}`}
                             onClick={() => setUserPostType("글")}>
                             <p>작성한 글</p>
-                            <p>{userProfile[0].userBoardCnt} 개</p>
+                            <p><span>{userProfile[0].userBoardCnt}</span> 개</p>
                         </button>
                         <button className={`${userPostType === "댓글" ? "userBoard-bgBlack" : "userBoard-bgWhite"}`}
                             onClick={() => setUserPostType("댓글")}>
                             <p>작성한 댓글</p>
-                            <p>{userProfile[0].userCommentCnt} 개</p>
+                            <p><span>{userProfile[0].userCommentCnt}</span> 개</p>
                         </button>
                     </section>
 

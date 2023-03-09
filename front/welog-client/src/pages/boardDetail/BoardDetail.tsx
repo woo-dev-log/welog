@@ -103,33 +103,34 @@ const BoardDetail = () => {
                         <h2 className="boardDetail-title">{boardDetail[0].title}</h2>
                         <div className="board-views">
                             <img src="/views.svg" alt="click" />
-                            <div>{boardDetail[0].views}</div>
+                            <p>{boardDetail[0].views}</p>
                         </div>
-                    </article>
-                    
-                    <article className="boardDetail-tagContainer">
-                        {boardDetail[0].tags && boardDetail[0].tags.split(",").map((v, i) => (
-                            <div key={i} className="boardDetail-tagBox">{v}</div>
-                        ))}
                     </article>
 
                     <article className="boardDetail-writerContainer">
                         <div className="boardDetail-date">
-                            <div className="boardDetail-rgstrDate">{dayjs(boardDetail[0].rgstrDate).format('YY.MM.DD HH:mm')} 등록</div>
-                            {boardDetail[0].updateDate && <div className="boardDetail-rgstrDate">{dayjs(boardDetail[0].updateDate).format('YY.MM.DD HH:mm')} 수정</div>}
+                            <p className="boardDetail-rgstrDate">{dayjs(boardDetail[0].rgstrDate).format('YY.MM.DD HH:mm')} 등록</p>
+                            {boardDetail[0].updateDate && <p className="boardDetail-rgstrDate">{dayjs(boardDetail[0].updateDate).format('YY.MM.DD HH:mm')} 수정</p>}
                         </div>
                         <div className="boardDetail-userProfile">
                             <img src={`${ServerImgUrl}${boardDetail[0].imgUrl}`} alt="userProfileImg"
                                 onClick={() => userBoardOnClick(boardDetail[0].nickname)} />
-                            <div className="boardDetail-nickname" onClick={() => userBoardOnClick(boardDetail[0].nickname)}>
+                            <p className="boardDetail-nickname" onClick={() => userBoardOnClick(boardDetail[0].nickname)}>
                                 {boardDetail[0].nickname}
-                            </div>
+                            </p>
                         </div>
                     </article>
+
+                    <article className="boardDetail-tagContainer">
+                        {boardDetail[0].tags && boardDetail[0].tags.split(",").map((v, i) => (
+                            <p key={i} className="boardDetail-tagBox">{v}</p>
+                        ))}
+                    </article>
+
                     <Line />
 
                     <article className="boardDetail-contentsContainer">
-                        <div className="boardDetail-contents" dangerouslySetInnerHTML={{ __html: boardDetail[0].contents }} />
+                        <p className="boardDetail-contents" dangerouslySetInnerHTML={{ __html: boardDetail[0].contents }} />
 
                         {userInfo[0].userNo === boardDetail[0].userNo &&
                             <div className="boardDetail-deleteBtn">

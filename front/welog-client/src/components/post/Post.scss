@@ -16,24 +16,28 @@
     }
 }
 
-.board-block {
-    display: flex;
-    flex-direction: row-reverse;
-    margin: 20px 0;
-
+.board-article {
     &:hover {
         transition: 0.3s;
         transform: scale(1.02);
     }
 }
 
+.board-block {
+    display: flex;
+    flex-direction: row-reverse;
+    margin: 20px 0;
+}
+
 aside {
+    display: flex;
+    align-items: center;
     cursor: pointer;
     margin-left: 50px;
 
     img {
         object-fit: cover;
-        width: 280px;
+        width: 400px;
         height: 200px;
         border-radius: 10px;
     }
@@ -41,7 +45,7 @@ aside {
 
 .board-contentsContainer {
     width: 100%;
-    height: 200px;
+    // height: 200px;
     display: flex;
     flex-direction: column;
     justify-content: space-between;
@@ -62,51 +66,26 @@ aside {
     }
 
     footer {
-        .board-footerTop {
+        .board-userBlock {
             display: flex;
-            justify-content: space-between;
+            align-items: center;
+            justify-content: end;
 
-            .board-tagContainer {
-                display: flex;
-                align-items: center;
-                gap: 10px;
-                width: 70%;
-                white-space: nowrap;
-                overflow-x: scroll;
-
-                .board-tagBox {
-                    display: flex;
-                    align-items: center;
-                    padding: 0 10px;
-                    height: 30px;
-                    background-color: black;
-                    color: white;
-                    border-radius: 5px;
-                    font-size: 14px;
-                    margin: 0;
-                }
+            .board-userProfileImg {
+                cursor: pointer;
+                object-fit: cover;
+                background-color: white;
+                width: 35px;
+                height: 35px;
+                box-shadow: lightgray 0 3px 10px;
+                border-radius: 1000px;
+                margin-right: 10px;
             }
 
-            .board-userBlock {
+            .board-nickname {
                 cursor: pointer;
-                display: flex;
-                align-items: center;
-                justify-content: end;
-
-                .board-userProfileImg {
-                    object-fit: cover;
-                    background-color: white;
-                    width: 35px;
-                    height: 35px;
-                    box-shadow: lightgray 0 3px 10px;
-                    border-radius: 1000px;
-                    margin-right: 10px;
-                }
-
-                .board-nickname {
-                    font-family: "LINESeedKR-Bd";
-                    font-size: 18px;
-                }
+                font-family: "LINESeedKR-Bd";
+                font-size: 18px;
             }
         }
 
@@ -142,11 +121,49 @@ aside {
     }
 }
 
+.board-tagContainer {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    width: 100%;
+    // white-space: nowrap;
+    // overflow-x: scroll;
+    flex-wrap: wrap;
+
+    .board-tagBox {
+        display: flex;
+        align-items: center;
+        padding: 0 10px;
+        height: 30px;
+        background-color: black;
+        color: white;
+        border-radius: 5px;
+        font-size: 14px;
+        margin: 0;
+    }
+}
+
 .board-button {
     text-align: center;
 
     button {
         @include buttonCss(120px, 40px);
+    }
+}
+
+@media (max-width: 1199px) {
+    aside {
+        img {
+            width: 300px;
+        }
+    }
+
+    .board-contentsContainer {
+        header {
+            .board-contents {
+                width: auto;
+            }
+        }
     }
 }
 
@@ -185,20 +202,11 @@ aside {
         }
 
         footer {
-            .board-footerTop {
-                .board-tagContainer {
-                    .board-tagBox {
-                        font-size: 12px;
-                        height: 25px;
-                    }
-                }
+            .board-userBlock {
+                font-size: 14px;
 
-                .board-userBlock {
+                .board-nickname {
                     font-size: 14px;
-
-                    .board-nickname {
-                        font-size: 14px;
-                    }
                 }
             }
 
@@ -212,6 +220,13 @@ aside {
                     }
                 }
             }
+        }
+    }
+
+    .board-tagContainer {
+        .board-tagBox {
+            font-size: 12px;
+            height: 25px;
         }
     }
 

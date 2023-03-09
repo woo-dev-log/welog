@@ -158,18 +158,18 @@ const BoardComment = ({ IntBoardNo }: { IntBoardNo: number }) => {
                         <div className="boardComment-commentLabel">
                             <img src={`${ServerImgUrl}${boardC.imgUrl}`} alt={boardC.imgUrl}
                                 onClick={() => userBoardOnClick(boardC.nickname)} />
-                            <div className="boardComment-commentNickname" onClick={() => userBoardOnClick(boardC.nickname)}>{boardC.nickname}</div>
+                            <p className="boardComment-commentNickname" onClick={() => userBoardOnClick(boardC.nickname)}>{boardC.nickname}</p>
                             <div className="boardComment-date">
-                                <div className="boardComment-commentRgstrDate">{dayjs(boardC.rgstrDate).format('YY.MM.DD HH:mm')} 등록</div>
+                                <p className="boardComment-commentRgstrDate">{dayjs(boardC.rgstrDate).format('YY.MM.DD HH:mm')} 등록</p>
                                 {boardC.updateDate &&
-                                    <div className="boardComment-commentRgstrDate">{dayjs(boardC.updateDate).format('YY.MM.DD HH:mm')} 수정</div>}
+                                    <p className="boardComment-commentRgstrDate">{dayjs(boardC.updateDate).format('YY.MM.DD HH:mm')} 수정</p>}
                             </div>
                         </div>
                     </header>
                     {commentUpdateCheckNo === boardC.commentNo && userInfo[0].userNo !== 0
                         ? <textarea ref={textRef} value={boardCommentUpdate} placeholder="댓글을 입력해주세요"
                             onInput={autoHeightRef} onChange={e => setBoardCommentUpdate(e.target.value)} />
-                        : <div dangerouslySetInnerHTML={{ __html: boardC.contents.replaceAll(/(\n|\r\n)/g, '<br>') }} />}
+                        : <p dangerouslySetInnerHTML={{ __html: boardC.contents.replaceAll(/(\n|\r\n)/g, '<br>') }} />}
 
                     <footer className="boardComment-commentDeleteBtn">
                         {userInfo[0].userNo === boardC.userNo &&

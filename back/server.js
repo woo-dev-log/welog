@@ -16,7 +16,7 @@ app.use(cors());
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 app.use('/images', express.static('images'));
-// app.use(express.static(path.join(__dirname, "./dist")));
+// app.use(express.static(path.join(__dirname, "../front/welog-client/dist")));
 
 let imageName = [];
 const imageUpload = multer({
@@ -460,7 +460,7 @@ app.post("/signIn", async (req, res) => {
 })
 
 // app.get('*', (req, res) => {
-//     res.sendFile(path.join(__dirname, './dist', 'index.html'));
+//     res.sendFile(path.join(__dirname, '../front/welog-client/dist', 'index.html'));
 // });
 
 app.listen(port, () => {

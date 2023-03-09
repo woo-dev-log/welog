@@ -35,7 +35,7 @@ const Post = () => {
     const ServerImgUrl = "http://localhost:3690/images/";
     const limit = 5;
     const offset = (currentPage - 1) * limit;
-    const contentsWordLength = window.innerWidth < 768 ? 25 : 58;
+    const contentsWordLength = window.innerWidth < 1199 ? 35 : 58;
 
     const { data: post, isLoading } = useQuery<BoardType[]>(['userBoardList'], async () => {
         try {
@@ -95,9 +95,9 @@ const Post = () => {
             {isLoading
                 ? <h2>글을 불러오는 중이에요</h2>
                 :
-                <section className="board-section">
+                <section>
                     {boardList.slice(offset, offset + limit).map((board, i) => (
-                        <article key={i}>
+                        <article key={i} className="board-article">
                             <div className="board-block">
                                 <aside onClick={() => updateBoardViewsOnClick(board.boardNo, board.views)}>
                                     <img src={`${ServerImgUrl}${board.boardImgUrl}`} alt="boardImgUrl" />
@@ -112,17 +112,10 @@ const Post = () => {
                                         </p>
                                     </header>
                                     <footer>
-                                        <div className="board-footerTop">
-                                            <div className="board-tagContainer">
-                                                {board.tags && board.tags.split(",").map((v, i) => (
-                                                    <p key={i} className="board-tagBox">{v}</p>
-                                                ))}
-                                            </div>
-                                            <div className="board-userBlock" onClick={() => navigate("/userBoard/" + board.nickname)}>
-                                                <img src={`${ServerImgUrl}${board.imgUrl}`} alt="userImg"
-                                                    className="board-userProfileImg" />
-                                                <p className="board-nickname">{board.nickname}</p>
-                                            </div>
+                                        <div className="board-userBlock">
+                                            <img src={`${ServerImgUrl}${board.imgUrl}`} alt="userImg"
+                                                className="board-userProfileImg" onClick={() => navigate("/userBoard/" + board.nickname)}/>
+                                            <p className="board-nickname" onClick={() => navigate("/userBoard/" + board.nickname)}>{board.nickname}</p>
                                         </div>
                                         <div className="board-footer">
                                             <p>{dayjs(board.rgstrDate).format('YY.MM.DD HH:mm')}</p>
@@ -139,6 +132,11 @@ const Post = () => {
                                         </div>
                                     </footer>
                                 </div>
+                            </div>
+                            <div className="board-tagContainer">
+                                {board.tags && board.tags.split(",").map((v, i) => (
+                                    <p key={i} className="board-tagBox">{v}</p>
+                                ))}
                             </div>
                             <Line />
                         </article>

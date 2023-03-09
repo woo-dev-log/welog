@@ -39,8 +39,7 @@ const Board = () => {
     const [keyword, setKeyword] = useState("");
     const navigate = useNavigate();
     const ServerImgUrl = "http://localhost:3690/images/";
-    const titleWordLength = window.innerWidth < 768 ? 20 : 60;
-    const contentsWordLength = window.innerWidth < 768 ? 25 : 60;
+    const contentsWordLength = window.innerWidth < 768 ? 25 : 50;
 
     const { data: boardDailyList, isLoading: boardDailyLoading } = useQuery<BoardType[]>("boardDailyList", async () => {
         try {
@@ -111,49 +110,45 @@ const Board = () => {
                         <h2>이번주에 댓글이 많이 달린 글이에요</h2>
                         <section className="boardDaily-section">
                             {boardDailyList.map((boardDaily, i) => (
-                                <article key={i} className="boardDaily-block" onClick={() => updateBoardViewsOnClick(boardDaily.boardNo, boardDaily.views)}>
-                                    <aside>
+                                <article key={i} className="boardDaily-block">
+                                    <aside onClick={() => updateBoardViewsOnClick(boardDaily.boardNo, boardDaily.views)}>
                                         <img src={`${ServerImgUrl}${boardDaily.boardImgUrl}`} alt="boardDailyImgUrl" />
                                     </aside>
                                     <div className="board-contentsContainer">
-                                        <header>
+                                        <header onClick={() => updateBoardViewsOnClick(boardDaily.boardNo, boardDaily.views)}>
                                             <div className="board-title">
-                                                {boardDaily.title.length < titleWordLength
-                                                    ? boardDaily.title
-                                                    : boardDaily.title.substring(0, titleWordLength) + " ..."}
-                                                <div className="boardDaily-weekComment">New {boardDaily.weekCommentCnt}</div>
+                                                <p>{boardDaily.title}</p>
+                                                <p className="boardDaily-weekComment">New {boardDaily.weekCommentCnt}</p>
                                             </div>
-                                            <div className="board-contents">
+                                            <p className="board-contents">
                                                 {boardDaily.contents.replaceAll(/<[^>]*>?/g, "").length < contentsWordLength
                                                     ? boardDaily.contents.replaceAll(/<[^>]*>?/g, "")
                                                     : boardDaily.contents.replaceAll(/<[^>]*>?/g, "").substring(0, contentsWordLength) + " ..."}
-                                            </div>
+                                            </p>
                                         </header>
                                         <footer className="board-footer">
                                             <div className="board-footerTop">
                                                 <div className="board-tagContainer">
                                                     {boardDaily.tags && boardDaily.tags.split(",").map((v, i) => (
-                                                        <div key={i} className="board-tagBox">{v}</div>
+                                                        <p key={i} className="board-tagBox">{v}</p>
                                                     ))}
                                                 </div>
-                                                <div className="board-userBlock">
-                                                    <div className="board-userProfile">
-                                                        <img src={`${ServerImgUrl}${boardDaily.imgUrl}`} alt={boardDaily.imgUrl}
-                                                            className="board-userProfileImg" />
-                                                        <div className="board-nickname">{boardDaily.nickname}</div>
-                                                    </div>
+                                                <div className="board-userBlock" onClick={() => navigate("/userBoard/" + boardDaily.nickname)}>
+                                                    <img src={`${ServerImgUrl}${boardDaily.imgUrl}`} alt={boardDaily.imgUrl}
+                                                        className="board-userProfileImg" />
+                                                    <p className="board-nickname">{boardDaily.nickname}</p>
                                                 </div>
                                             </div>
                                             <div className="board-footer">
-                                                <div>{dayjs(boardDaily.rgstrDate).format('YY.MM.DD HH:mm')}</div>
+                                                <p>{dayjs(boardDaily.rgstrDate).format('YY.MM.DD HH:mm')}</p>
                                                 <div className="board-postInfo">
                                                     <div className="board-views">
                                                         <img src="/views.svg" alt="views" />
-                                                        <div>{boardDaily.views}</div>
+                                                        <p>{boardDaily.views}</p>
                                                     </div>
                                                     <div className="board-comment">
                                                         <img src="/comment.svg" alt="comment" />
-                                                        <div>{boardDaily.commentCnt}</div>
+                                                        <p>{boardDaily.commentCnt}</p>
                                                     </div>
                                                 </div>
                                             </div>

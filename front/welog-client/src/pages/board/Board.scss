@@ -35,24 +35,26 @@
         margin-bottom: 100px;
 
         .boardDaily-block {
-            cursor: pointer;
-
             &:hover {
+                transition: 0.3s;
                 transform: scale(1.02);
             }
 
-            .board-title {
-                display: flex;
-                justify-content: space-between;
-
-                .boardDaily-weekComment {
-                    color: red;
-                    width: 20%;
-                    text-align: right;
+            header {
+                .board-title {
+                    display: flex;
+                    justify-content: space-between;
+                    
+                    .boardDaily-weekComment {
+                        color: red;
+                        width: 20%;
+                        text-align: right;
+                    }
                 }
             }
 
             aside {
+                cursor: pointer;
                 margin: 0;
 
                 img {
@@ -62,6 +64,7 @@
             }
 
             .board-userBlock {
+                cursor: pointer;
                 display: flex;
 
                 .board-userProfile {
@@ -99,9 +102,11 @@
             gap: 10px;
 
             .boardDaily-block {
-                .board-title {
-                    .boardDaily-weekComment {
-                        width: 30%;
+                header {
+                    .board-title {
+                        .boardDaily-weekComment {
+                            width: 30%;
+                        }
                     }
                 }
 

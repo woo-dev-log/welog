@@ -17,16 +17,17 @@
 }
 
 .board-block {
-    cursor: pointer;
     display: flex;
     margin: 20px 0;
 
     &:hover {
+        transition: 0.3s;
         transform: scale(1.02);
     }
 }
 
 aside {
+    cursor: pointer;
     margin-left: 50px;
 
     img {
@@ -39,36 +40,41 @@ aside {
 
 .board-contentsContainer {
     width: 100%;
-    margin-bottom: 20px;
+    height: 200px;
     display: flex;
     flex-direction: column;
     justify-content: space-between;
 
-    .board-title {
-        font-size: 20px;
-        font-family: "LINESeedKR-Bd";
-        margin: 10px 0;
-    }
+    header {
+        cursor: pointer;
 
-    .board-contents {
-        font-size: 16px;
-        width: 80%;
+        .board-title {
+            font-size: 20px;
+            font-family: "LINESeedKR-Bd";
+        }
+
+        .board-contents {
+            font-size: 16px;
+            width: 80%;
+        }
     }
 
     footer {
         .board-footerTop {
             display: flex;
             justify-content: space-between;
-            margin: 10px 0;
 
             .board-tagContainer {
+                cursor: pointer;
                 display: flex;
-                flex-wrap: wrap;
                 align-items: center;
                 gap: 10px;
-                width: 75%;
+                width: 70%;
+                white-space: nowrap;
+                overflow-x: scroll;
 
                 .board-tagBox {
+                    cursor: pointer;
                     display: flex;
                     align-items: center;
                     padding: 0 10px;
@@ -77,14 +83,16 @@ aside {
                     color: white;
                     border-radius: 5px;
                     font-size: 14px;
+                    margin: 0;
                 }
             }
 
             .board-userBlock {
+                cursor: pointer;
                 display: flex;
                 align-items: center;
                 justify-content: end;
-                width: 25%;
+                width: 30%;
 
                 .board-userProfileImg {
                     object-fit: cover;
@@ -166,12 +174,14 @@ aside {
     .board-contentsContainer {
         margin-bottom: 0;
 
-        .board-title {
-            font-size: 16px;
-        }
+        header {
+            .board-title {
+                font-size: 16px;
+            }
 
-        .board-contents {
-            font-size: 14px;
+            .board-contents {
+                font-size: 14px;
+            }
         }
 
         footer {

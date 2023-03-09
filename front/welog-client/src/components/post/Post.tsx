@@ -1,5 +1,5 @@
 import dayjs from "dayjs";
-import { useCallback, useEffect, useState } from "react";
+import { Fragment, useCallback, useEffect, useState } from "react";
 import { useCookies } from "react-cookie";
 import { useQuery } from "react-query";
 import { useNavigate, useParams } from "react-router-dom";
@@ -35,7 +35,7 @@ const Post = () => {
     const ServerImgUrl = "http://localhost:3690/images/";
     const limit = 5;
     const offset = (currentPage - 1) * limit;
-    const contentsWordLength = window.innerWidth < 768 ? 25 : 60;
+    const contentsWordLength = window.innerWidth < 768 ? 25 : 58;
 
     const { data: post, isLoading } = useQuery<BoardType[]>(['userBoardList'], async () => {
         try {
@@ -95,50 +95,52 @@ const Post = () => {
             {isLoading
                 ? <h2>글을 불러오는 중이에요</h2>
                 :
-                <section>
+                <section className="board-section">
                     {boardList.slice(offset, offset + limit).map((board, i) => (
-                        <article key={i} className="board-block">
-                            <Line />
-                            <div className="board-contentsContainer">
-                                <header onClick={() => updateBoardViewsOnClick(board.boardNo, board.views)}>
-                                    <p className="board-title">{board.title}</p>
-                                    <p className="board-contents">
-                                        {board.contents.replaceAll(/<[^>]*>?/g, "").length < contentsWordLength
-                                            ? board.contents.replaceAll(/<[^>]*>?/g, "")
-                                            : board.contents.replaceAll(/<[^>]*>?/g, "").substring(0, contentsWordLength) + " ..."}
-                                    </p>
-                                </header>
-                                <footer>
-                                    <div className="board-footerTop">
-                                        <div className="board-tagContainer">
-                                            {board.tags && board.tags.split(",").map((v, i) => (
-                                                <p key={i} className="board-tagBox">{v}</p>
-                                            ))}
-                                        </div>
-                                        <div className="board-userBlock" onClick={() => navigate("/userBoard/" + board.nickname)}>
-                                            <img src={`${ServerImgUrl}${board.imgUrl}`} alt="userImg"
-                                                className="board-userProfileImg" />
-                                            <p className="board-nickname">{board.nickname}</p>
-                                        </div>
-                                    </div>
-                                    <div className="board-footer">
-                                        <p>{dayjs(board.rgstrDate).format('YY.MM.DD HH:mm')}</p>
-                                        <div className="board-postInfo">
-                                            <div className="board-views">
-                                                <img src="/views.svg" alt="views" />
-                                                <p>{board.views}</p>
+                        <article key={i}>
+                            <div className="board-block">
+                                <aside onClick={() => updateBoardViewsOnClick(board.boardNo, board.views)}>
+                                    <img src={`${ServerImgUrl}${board.boardImgUrl}`} alt="boardImgUrl" />
+                                </aside>
+                                <div className="board-contentsContainer">
+                                    <header onClick={() => updateBoardViewsOnClick(board.boardNo, board.views)}>
+                                        <p className="board-title">{board.title}</p>
+                                        <p className="board-contents">
+                                            {board.contents.replaceAll(/<[^>]*>?/g, "").length < contentsWordLength
+                                                ? board.contents.replaceAll(/<[^>]*>?/g, "")
+                                                : board.contents.replaceAll(/<[^>]*>?/g, "").substring(0, contentsWordLength) + " ..."}
+                                        </p>
+                                    </header>
+                                    <footer>
+                                        <div className="board-footerTop">
+                                            <div className="board-tagContainer">
+                                                {board.tags && board.tags.split(",").map((v, i) => (
+                                                    <p key={i} className="board-tagBox">{v}</p>
+                                                ))}
                                             </div>
-                                            <div className="board-comment">
-                                                <img src="/comment.svg" alt="comment" />
-                                                <p>{board.commentCnt}</p>
+                                            <div className="board-userBlock" onClick={() => navigate("/userBoard/" + board.nickname)}>
+                                                <img src={`${ServerImgUrl}${board.imgUrl}`} alt="userImg"
+                                                    className="board-userProfileImg" />
+                                                <p className="board-nickname">{board.nickname}</p>
                                             </div>
                                         </div>
-                                    </div>
-                                </footer>
+                                        <div className="board-footer">
+                                            <p>{dayjs(board.rgstrDate).format('YY.MM.DD HH:mm')}</p>
+                                            <div className="board-postInfo">
+                                                <div className="board-views">
+                                                    <img src="/views.svg" alt="views" />
+                                                    <p>{board.views}</p>
+                                                </div>
+                                                <div className="board-comment">
+                                                    <img src="/comment.svg" alt="comment" />
+                                                    <p>{board.commentCnt}</p>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </footer>
+                                </div>
                             </div>
-                            <aside onClick={() => updateBoardViewsOnClick(board.boardNo, board.views)}>
-                                <img src={`${ServerImgUrl}${board.boardImgUrl}`} alt="boardImgUrl" />
-                            </aside>
+                            <Line />
                         </article>
                     ))}
 

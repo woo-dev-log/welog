@@ -39,7 +39,7 @@ const Board = () => {
     const [keyword, setKeyword] = useState("");
     const navigate = useNavigate();
     const ServerImgUrl = "http://localhost:3690/images/";
-    const contentsWordLength = window.innerWidth < 768 ? 25 : 50;
+    const contentsWordLength = window.innerWidth < 768 ? 25 : 48;
 
     const { data: boardDailyList, isLoading: boardDailyLoading } = useQuery<BoardType[]>("boardDailyList", async () => {
         try {
@@ -126,7 +126,7 @@ const Board = () => {
                                                     : boardDaily.contents.replaceAll(/<[^>]*>?/g, "").substring(0, contentsWordLength) + " ..."}
                                             </p>
                                         </header>
-                                        <footer className="board-footer">
+                                        <footer>
                                             <div className="board-footerTop">
                                                 <div className="board-tagContainer">
                                                     {boardDaily.tags && boardDaily.tags.split(",").map((v, i) => (

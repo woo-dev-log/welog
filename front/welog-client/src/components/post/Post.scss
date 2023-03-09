@@ -18,6 +18,7 @@
 
 .board-block {
     display: flex;
+    flex-direction: row-reverse;
     margin: 20px 0;
 
     &:hover {
@@ -33,7 +34,7 @@ aside {
     img {
         object-fit: cover;
         width: 280px;
-        height: 180px;
+        height: 200px;
         border-radius: 10px;
     }
 }
@@ -47,6 +48,7 @@ aside {
 
     header {
         cursor: pointer;
+        height: 100%;
 
         .board-title {
             font-size: 20px;
@@ -55,7 +57,7 @@ aside {
 
         .board-contents {
             font-size: 16px;
-            width: 80%;
+            width: 75%;
         }
     }
 
@@ -65,7 +67,6 @@ aside {
             justify-content: space-between;
 
             .board-tagContainer {
-                cursor: pointer;
                 display: flex;
                 align-items: center;
                 gap: 10px;
@@ -74,7 +75,6 @@ aside {
                 overflow-x: scroll;
 
                 .board-tagBox {
-                    cursor: pointer;
                     display: flex;
                     align-items: center;
                     padding: 0 10px;
@@ -92,7 +92,6 @@ aside {
                 display: flex;
                 align-items: center;
                 justify-content: end;
-                width: 30%;
 
                 .board-userProfileImg {
                     object-fit: cover;
@@ -158,7 +157,8 @@ aside {
     }
 
     .board-block {
-        flex-direction: column-reverse;
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(15rem, 1fr));
         margin: 0;
 
         aside {
@@ -220,7 +220,6 @@ aside {
             width: 100px;
             height: 30px;
             font-size: 14px;
-            margin-bottom: 20px;
         }
     }
 }

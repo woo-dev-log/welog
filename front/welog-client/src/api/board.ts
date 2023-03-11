@@ -30,8 +30,8 @@ export const writeBoardCommentApi = async (boardNo: number, boardCommentAdd: str
     return data;
 }
 
-export const getBoardCommentApi = async (boardNo: number) => {
-    const { data } = await axios.post("/boardComment", { boardNo });
+export const getBoardCommentApi = async (boardNo: number, page: string) => {
+    const { data } = await axios.post("/boardComment", { boardNo, page });
     return data;
 };
 
@@ -54,8 +54,8 @@ export const updateBoardViewsApi = async (boardNo: number, views: number) => {
     return data;
 };
 
-export const getUserBoardApi = async (userNickname: string | undefined) => {
-    const { data } = await axios.post("/userBoard", { userNickname });
+export const getUserBoardApi = async (userNickname: string, page: string) => {
+    const { data } = await axios.post("/userBoard", { userNickname, page });
     return data;
 };
 

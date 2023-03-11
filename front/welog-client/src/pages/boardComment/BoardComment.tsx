@@ -1,6 +1,6 @@
 import dayjs from "dayjs";
 import { useCallback, useEffect, useRef, useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useSearchParams } from "react-router-dom";
 import { useRecoilState } from "recoil";
 import { deleteBoardCommentApi, getBoardCommentApi, updateBoardCommentApi, writeBoardCommentApi } from "../../api/board";
 import { ToastError, ToastSuccess, ToastWarn } from "../../components/Toast";
@@ -20,6 +20,7 @@ interface BoardCommentType {
     updateDate: string;
     nickname: string;
     imgUrl: string;
+    boardCommentCnt: number;
 }
 
 const BoardComment = ({ IntBoardNo }: { IntBoardNo: number }) => {
@@ -31,11 +32,12 @@ const BoardComment = ({ IntBoardNo }: { IntBoardNo: number }) => {
     const [commentUpdateBoolean, setCommentUpdateBoolean] = useState(false);
     const [commentUpdateCheckNo, setCommentUpdateCheckNo] = useState(0);
     const [currentPage, setCurrentPage] = useState(1);
+    const [searchParams, setSearchParams] = useSearchParams();
     const navigate = useNavigate();
     const ServerImgUrl = "http://localhost:3690/images/";
+    const page = searchParams.get("page");
     const textRef = useRef<HTMLTextAreaElement>(null);
     const limit = 5;
-    const offset = (currentPage - 1) * limit;
 
     const autoHeightRef = () => {
         if (textRef.current) {
@@ -122,7 +124,7 @@ const BoardComment = ({ IntBoardNo }: { IntBoardNo: number }) => {
 
     const getBoardComment = async () => {
         try {
-            const data = await getBoardCommentApi(IntBoardNo);
+            const data = await getBoardCommentApi(IntBoardNo, page ? page : "1");
             setBoardCommentList(data);
         } catch (e) {
             ToastError("댓글 조회를 실패했어요");
@@ -131,12 +133,16 @@ const BoardComment = ({ IntBoardNo }: { IntBoardNo: number }) => {
     }
 
     useEffect(() => {
+        if(page) {
+            setCurrentPage(Number(page));
+        } else setCurrentPage(1);
+
         getBoardComment();
-    }, []);
+    }, [page]);
 
     return (
         <>
-            {boardCommentList && <Label text={boardCommentList.length + "개의 댓글이 있어요"} />}
+            {boardCommentList.length > 0 && <Label text={boardCommentList[0].boardCommentCnt + "개의 댓글이 있어요"} />}
             <textarea ref={textRef} value={boardCommentWrite} placeholder="댓글을 입력해주세요" disabled={commentCheckLogin}
                 onFocus={checkLoginBoardCommentOnFocus} onInput={autoHeightRef} onChange={e => setBoardCommentWrite(e.target.value)} />
             <div className="boardComment-commentAddBtn">
@@ -144,14 +150,13 @@ const BoardComment = ({ IntBoardNo }: { IntBoardNo: number }) => {
             </div>
 
             {boardCommentList.length > 0 && <Paging
-                total={boardCommentList.length}
+                total={boardCommentList[0].boardCommentCnt}
                 limit={limit}
                 page={currentPage}
-                setCurrentPage={setCurrentPage}
-                type="boardCommentList" />
+                setCurrentPage={setCurrentPage} />
             }
 
-            {boardCommentList.slice(offset, offset + limit).map((boardC, j) => (
+            {boardCommentList.map((boardC, j) => (
                 <article key={j} className="boardComment-commentContainer">
                     <Line />
                     <header className="boardComment-commentBlock">

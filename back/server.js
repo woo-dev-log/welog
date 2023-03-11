@@ -81,19 +81,22 @@ app.post("/userProfile", async (req, res) => {
 
 app.post("/userBoard", async (req, res) => {
     try {
-        const { userNickname } = req.body;
+        const { userNickname, page } = req.body;
+        const pageNum = page * 5 - 5;
+
         const [rows] = await mysql.query(`
             SELECT b.boardNo, b.userNo, b.title, b.contents, b.rgstrDate, b.views, 
             b.tags, b.boardImgUrl, u.nickname, u.imgUrl, 
+            COUNT(*) OVER() AS boardCnt, 
             (SELECT count(*) FROM comment c WHERE c.boardNo = b.boardNo) commentCnt 
             FROM board b 
             INNER JOIN user u 
             ON b.userNo = u.userNo 
             where u.nickname = ? 
             ORDER BY b.rgstrDate DESC
-            `, [userNickname]);
+            LIMIT ?, 5
+            `, [userNickname, pageNum]);
 
-        if(rows.length > 0) rows[0].boardCnt = rows.length;
         res.status(200).send(rows);
     } catch (e) {
         res.status(400).send("fail");
@@ -181,16 +184,19 @@ app.post("/writeBoardComment", async (req, res) => {
 
 app.post("/boardComment", async (req, res) => {
     try {
-        const { boardNo } = req.body;
+        const { boardNo, page } = req.body;
+        const pageNum = page * 5 - 5;
+
         const [rows] = await mysql.query(`
         SELECT c.commentNo, c.boardNo, c.userNo, c.contents, c.rgstrDate, c.updateDate, 
-        u.nickname, u.imgUrl 
+        u.nickname, u.imgUrl, COUNT(*) OVER() AS boardCommentCnt 
         FROM comment c 
         INNER JOIN user u
         ON c.userNo = u.userNo
         WHERE boardNo = ? 
         ORDER BY rgstrDate DESC
-        `, [boardNo]);
+        LIMIT ?, 5;
+        `, [boardNo, pageNum]);
         res.status(200).send(rows);
     } catch (e) {
         res.status(400).send("fail");
@@ -358,6 +364,7 @@ app.post("/boardSearch", async (req, res) => {
         const [rows] = await mysql.query(`
             SELECT b.boardNo, b.userNo, b.title, b.contents, b.rgstrDate, 
             b.views, b.tags, b.boardImgUrl, u.nickname, u.imgUrl, 
+            COUNT(*) OVER() AS boardCnt, 
             (SELECT count(*) FROM comment c WHERE c.boardNo = b.boardNo) commentCnt 
             FROM board b 
             INNER JOIN user u 
@@ -367,7 +374,6 @@ app.post("/boardSearch", async (req, res) => {
             LIMIT ?, 5
             `, [value, value, value, pageNum]);
 
-        if(rows.length > 0) rows[0].boardCnt = rows.length;
         res.status(200).send(rows);
     } catch (e) {
         res.status(400).send("fail");
@@ -383,7 +389,7 @@ app.post("/board", async (req, res) => {
         const [rows] = await mysql.query(`
         SELECT b.boardNo, b.userNo, b.title, b.contents, b.rgstrDate, 
         b.views, b.tags, b.boardImgUrl, u.nickname, u.imgUrl, 
-        (SELECT count(*) FROM board) AS boardCnt, 
+        COUNT(*) OVER() AS boardCnt, 
         (SELECT count(*) FROM comment c WHERE c.boardNo = b.boardNo) AS commentCnt 
         FROM board b 
         INNER JOIN user u 

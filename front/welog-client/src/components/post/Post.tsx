@@ -38,7 +38,6 @@ const Post = () => {
     const page = searchParams.get("page");
     const limit = 5;
     const contentsWordLength = window.innerWidth < 1199 ? 35 : 58;
-    console.log(boardList.length > 0 && boardList[0].boardCnt);
 
     const { data: post, isLoading } = useQuery<BoardType[]>(['boardList', page], async () => {
         try {
@@ -67,8 +66,14 @@ const Post = () => {
     }
 
     const userBoardApi = async () => {
-        const data = await getUserBoardApi(userNickname);
-        setBoardList(data);
+        try {
+            if (userNickname) {
+                const data = await getUserBoardApi(userNickname, page ? page : "1");
+                setBoardList(data);
+            }
+        } catch (e) {
+            console.error(e);
+        }
     }
 
     const updateBoardViewsOnClick = useCallback(async (boardNo: number, views: number) => {
@@ -98,6 +103,12 @@ const Post = () => {
             } else setBoardList(post);
         };
     }, [post, userNickname, keyword]);
+
+    useEffect(() => {
+        if(page) {
+            setCurrentPage(Number(page));
+        } else setCurrentPage(1);
+    }, [page]);
 
     return (
         <>

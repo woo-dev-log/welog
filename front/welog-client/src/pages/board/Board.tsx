@@ -35,7 +35,6 @@ const Board = () => {
     const [userInfo, setUserInfo] = useRecoilState(loginUser);
     const [boardList, setBoardList] = useRecoilState(board);
     const [updateValue, setUpdateValue] = useRecoilState(boardUpdate);
-    const [currentPage, setCurrentPage] = useState(1);
     const [cookies, setCookie] = useCookies(['viewPost', 'boardCurrentPage']);
     const [searchParams, setSearchParams] = useSearchParams();
     const navigate = useNavigate();
@@ -66,7 +65,7 @@ const Board = () => {
 
     const searchBoardListOnChange = debounce(async (e: React.ChangeEvent<HTMLInputElement>) => {
         if (e.target.value) {
-            setSearchParams({ keyword: e.target.value });
+            setSearchParams({ "keyword": e.target.value });
         } else navigate("/");
     }, 500);
 

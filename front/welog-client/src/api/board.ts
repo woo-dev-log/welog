@@ -5,8 +5,8 @@ export const updateProfileContentsApi = async (profileContents: string, userNo: 
     return data;
 }
 
-export const postUserCommentApi = async(userNo: number) => {
-    const { data } = await axios.post("/userComment", {userNo});
+export const postUserCommentApi = async(userNo: number, page: string) => {
+    const { data } = await axios.post("/userComment", {userNo, page});
     return data;
 }
 

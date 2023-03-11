@@ -47,12 +47,15 @@ app.post("/updateProfileContents", async (req, res) => {
 
 app.post("/userComment", async (req, res) => {
     try {
-        const { userNo } = req.body;
+        const { userNo, page } = req.body;
+        const pageNum = page * 5 - 5;
+
         const [rows] = await mysql.query(`
             SELECT *
             FROM comment
             WHERE userNo = ?
-            `, [userNo]);
+            LIMIT ?, 5
+            `, [userNo, pageNum]);
         res.status(200).send(rows);
     } catch (e) {
         res.status(400).send("fail");

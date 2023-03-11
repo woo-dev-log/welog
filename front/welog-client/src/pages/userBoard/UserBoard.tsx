@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { useParams } from "react-router-dom";
+import { useParams, useSearchParams } from "react-router-dom";
 import { postUserProfileApi, updateProfileContentsApi } from "../../api/board";
 import SEO from "../../components/SEO";
 import { useRecoilState } from "recoil";
@@ -15,7 +15,9 @@ const UserBoard = () => {
     const [userProfile, setUserProfile] = useRecoilState(user);
     const [updateProfileBoolean, setUpdateProfileBoolean] = useState(false);
     const [updateProfileContents, setUpdateProfileContents] = useState("");
-    const [userPostType, setUserPostType] = useState("글");
+    const [searchParams, setSearchParams] = useSearchParams({ "type": "post" });
+    const type = searchParams.get("type");
+    const page = searchParams.get("page");
     const ServerImgUrl = "http://localhost:3690/images/";
     const textAreaCols = window.innerWidth < 1199 ? 30 : 50;
 
@@ -94,19 +96,19 @@ const UserBoard = () => {
                     </section>
 
                     <section className="userBoard-userWriteContainer">
-                        <button className={`${userPostType === "글" ? "userBoard-bgBlack" : "userBoard-bgWhite"}`}
-                            onClick={() => setUserPostType("글")}>
+                        <button className={`${type === "post" ? "userBoard-bgBlack" : "userBoard-bgWhite"}`}
+                            onClick={() => setSearchParams({ "type": "post" })}>
                             <p>작성한 글</p>
                             <p><span>{userProfile[0].userBoardCnt}</span> 개</p>
                         </button>
-                        <button className={`${userPostType === "댓글" ? "userBoard-bgBlack" : "userBoard-bgWhite"}`}
-                            onClick={() => setUserPostType("댓글")}>
+                        <button className={`${type === "comment" ? "userBoard-bgBlack" : "userBoard-bgWhite"}`}
+                            onClick={() => setSearchParams({ "type": "comment" })}>
                             <p>작성한 댓글</p>
                             <p><span>{userProfile[0].userCommentCnt}</span> 개</p>
                         </button>
                     </section>
 
-                    {userPostType === "글"
+                    {type === "post"
                         ? <Post />
                         : userProfile[0].userNo && <UserComment userNo={userProfile[0].userNo} />
                     }

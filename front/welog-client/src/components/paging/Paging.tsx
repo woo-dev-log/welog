@@ -37,8 +37,12 @@ const Paging = ({ total, limit, page, setCurrentPage }: Props) => {
     setCurrentPage(page);
 
     const keyword = searchParams.get("keyword");
-    if(keyword) {
-      setSearchParams({ "keyword": keyword, "page": String(page) });
+    const type = searchParams.get("type");
+
+    if (keyword) {
+      setSearchParams({ "keyword": keyword, "page": String(page) })
+    } else if (type) {
+      setSearchParams({ "type": type, "page": String(page) })
     } else setSearchParams({ "page": String(page) });
   };
 

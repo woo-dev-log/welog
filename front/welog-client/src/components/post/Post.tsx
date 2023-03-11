@@ -97,7 +97,7 @@ const Post = () => {
     useEffect(() => {
         if (userNickname) {
             userBoardApi();
-        } else if (post && !userNickname) {
+        } else if (post) {
             if (keyword) {
                 searchBoardApi();
             } else setBoardList(post);

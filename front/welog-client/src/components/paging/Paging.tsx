@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import { useCookies } from 'react-cookie';
+import { useSearchParams } from 'react-router-dom';
 import Button from '../button/Button';
 import './Paging.scss';
 
@@ -8,11 +9,11 @@ interface Props {
   limit: number
   page: number,
   setCurrentPage: (setCurrentPage: number) => void;
-  type : string
 }
 
-const Paging = ({ total, limit, page, setCurrentPage, type }: Props) => {
+const Paging = ({ total, limit, page, setCurrentPage }: Props) => {
   const [cookies, setCookie] = useCookies(['boardCurrentPage', 'boardCommentCurrentPage']);
+  const [searchParams, setSearchParams] = useSearchParams();
   // const [totalPageArray, setTotalPageArray] = useState<number[][]>([]);
   // const [currentPageArray, setCurrentPageArray] = useState<number[]>([]);
   const numPages = Math.ceil(total / limit);
@@ -34,9 +35,11 @@ const Paging = ({ total, limit, page, setCurrentPage, type }: Props) => {
 
   const handleOnClickPageChange = (page: number) => {
     setCurrentPage(page);
-    if(type === "board") {
-      setCookie("boardCurrentPage", page);
-    }
+
+    const keyword = searchParams.get("keyword");
+    if(keyword) {
+      setSearchParams({ "keyword": keyword, "page": String(page) });
+    } else setSearchParams({ "page": String(page) });
   };
 
   return (

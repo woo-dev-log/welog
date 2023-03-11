@@ -1,10 +1,10 @@
 import dayjs from "dayjs";
-import { Fragment, useCallback, useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import { useCookies } from "react-cookie";
 import { useQuery } from "react-query";
-import { useNavigate, useParams } from "react-router-dom";
+import { useNavigate, useParams, useSearchParams } from "react-router-dom";
 import { useRecoilState } from "recoil";
-import { getBoardApi, getUserBoardApi, updateBoardViewsApi } from "../../api/board";
+import { getBoardApi, getUserBoardApi, postBoardApi, updateBoardViewsApi } from "../../api/board";
 import { board } from "../../store/atoms";
 import Line from "../line/Line";
 import Paging from "../paging/Paging";
@@ -22,8 +22,8 @@ interface BoardType {
     boardImgUrl: string;
     nickname: string;
     imgUrl: string;
+    boardCnt?: number;
     commentCnt: number;
-    weekCommentCnt?: number;
 }
 
 const Post = () => {
@@ -31,15 +31,18 @@ const Post = () => {
     const [cookies, setCookie] = useCookies(['viewPost', 'boardCurrentPage']);
     const [boardList, setBoardList] = useRecoilState(board);
     const [currentPage, setCurrentPage] = useState(1);
+    const [searchParams, setSearchParams] = useSearchParams();
     const navigate = useNavigate();
     const ServerImgUrl = "http://localhost:3690/images/";
+    const keyword = searchParams.get("keyword");
+    const page = searchParams.get("page");
     const limit = 5;
-    const offset = (currentPage - 1) * limit;
     const contentsWordLength = window.innerWidth < 1199 ? 35 : 58;
+    console.log(boardList.length > 0 && boardList[0].boardCnt);
 
-    const { data: post, isLoading } = useQuery<BoardType[]>(['userBoardList'], async () => {
+    const { data: post, isLoading } = useQuery<BoardType[]>(['boardList', page], async () => {
         try {
-            const data = await getBoardApi();
+            const data = await getBoardApi(page ? page : "1");
             return data;
         } catch (e) {
             ToastError("글 조회를 실패했어요");
@@ -51,6 +54,17 @@ const Post = () => {
             cacheTime: 1000 * 60 * 10,
         }
     );
+
+    const searchBoardApi = async () => {
+        try {
+            if (keyword) {
+                const data = await postBoardApi(keyword, page ? page : "1");
+                setBoardList(data);
+            }
+        } catch (e) {
+            console.error(e);
+        }
+    }
 
     const userBoardApi = async () => {
         const data = await getUserBoardApi(userNickname);
@@ -76,27 +90,23 @@ const Post = () => {
     }, []);
 
     useEffect(() => {
-        if (cookies.boardCurrentPage) {
-            setCurrentPage(Number(cookies.boardCurrentPage));
-        }
-    }, [setCurrentPage, cookies.boardCurrentPage]);
-
-    useEffect(() => {
         if (userNickname) {
             userBoardApi();
         } else if (post && !userNickname) {
-            setBoardList(post);
+            if (keyword) {
+                searchBoardApi();
+            } else setBoardList(post);
         };
-        setCookie("boardCurrentPage", 1);
-    }, [post, userNickname]);
+    }, [post, userNickname, keyword]);
 
     return (
         <>
             {isLoading
                 ? <h2>글을 불러오는 중이에요</h2>
                 :
+                boardList.length > 0 &&
                 <section>
-                    {boardList.slice(offset, offset + limit).map((board, i) => (
+                    {boardList.map((board, i) => (
                         <article key={i} className="board-article">
                             <div className="board-block">
                                 <aside onClick={() => updateBoardViewsOnClick(board.boardNo, board.views)}>
@@ -114,7 +124,7 @@ const Post = () => {
                                     <footer>
                                         <div className="board-userBlock">
                                             <img src={`${ServerImgUrl}${board.imgUrl}`} alt="userImg"
-                                                className="board-userProfileImg" onClick={() => navigate("/userBoard/" + board.nickname)}/>
+                                                className="board-userProfileImg" onClick={() => navigate("/userBoard/" + board.nickname)} />
                                             <p className="board-nickname" onClick={() => navigate("/userBoard/" + board.nickname)}>{board.nickname}</p>
                                         </div>
                                         <div className="board-footer">
@@ -143,11 +153,10 @@ const Post = () => {
                     ))}
 
                     <Paging
-                        total={boardList.length}
+                        total={boardList[0].boardCnt ? boardList[0].boardCnt : 1}
                         limit={limit}
                         page={currentPage}
                         setCurrentPage={setCurrentPage}
-                        type="board"
                     />
                 </section>}
         </>

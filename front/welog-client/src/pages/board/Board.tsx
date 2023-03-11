@@ -2,10 +2,10 @@ import dayjs from "dayjs";
 import { useCallback, useEffect, useState } from "react";
 import { useCookies } from "react-cookie";
 import { useQuery } from "react-query";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useSearchParams } from "react-router-dom";
 import { useRecoilState } from "recoil";
 import { board, boardUpdate, loginUser } from "../../store/atoms";
-import { getBoardDailyApi, postBoardApi, updateBoardViewsApi } from "../../api/board";
+import { getBoardDailyApi, updateBoardViewsApi } from "../../api/board";
 import { ToastError, ToastWarn } from "../../components/Toast";
 import { debounce } from "lodash-es";
 import SEO from "../../components/SEO";
@@ -26,6 +26,7 @@ interface BoardType {
     boardImgUrl: string;
     nickname: string;
     imgUrl: string;
+    boardCnt: number;
     commentCnt: number;
     weekCommentCnt?: number;
 }
@@ -36,10 +37,11 @@ const Board = () => {
     const [updateValue, setUpdateValue] = useRecoilState(boardUpdate);
     const [currentPage, setCurrentPage] = useState(1);
     const [cookies, setCookie] = useCookies(['viewPost', 'boardCurrentPage']);
-    const [keyword, setKeyword] = useState("");
+    const [searchParams, setSearchParams] = useSearchParams();
     const navigate = useNavigate();
     const ServerImgUrl = "http://localhost:3690/images/";
     const contentsWordLength = window.innerWidth < 1199 ? 35 : 48;
+    const boardCnt = boardList.length > 0 ? boardList[0].boardCnt : 0;
 
     const { data: boardDailyList, isLoading: boardDailyLoading } = useQuery<BoardType[]>("boardDailyList", async () => {
         try {
@@ -63,16 +65,9 @@ const Board = () => {
     }
 
     const searchBoardListOnChange = debounce(async (e: React.ChangeEvent<HTMLInputElement>) => {
-        if (e.target.value === keyword) return;
-
-        try {
-            const data = await postBoardApi(e.target.value);
-            setCurrentPage(1);
-            setKeyword(e.target.value);
-            setBoardList(data);
-        } catch (e) {
-            console.error(e);
-        }
+        if (e.target.value) {
+            setSearchParams({ keyword: e.target.value });
+        } else navigate("/");
     }, 500);
 
     const updateBoardViewsOnClick = useCallback(async (boardNo: number, views: number) => {
@@ -92,12 +87,6 @@ const Board = () => {
             console.error(e);
         }
     }, []);
-
-    useEffect(() => {
-        if (cookies.boardCurrentPage) {
-            setCurrentPage(Number(cookies.boardCurrentPage));
-        }
-    }, [setCurrentPage, cookies.boardCurrentPage]);
 
     return (
         <div className="board-postContainer">
@@ -162,9 +151,9 @@ const Board = () => {
             <>
                 <Input placeholder="제목, 내용, 닉네임을 입력해주세요" onChange={searchBoardListOnChange} />
                 <div className="board-top">
-                    {keyword
-                        ? <p>{keyword} 검색 결과 총 {boardList.length}개의 글을 찾았어요</p>
-                        : <p>총 {boardList.length}개의 글이 있어요</p>}
+                    {searchParams.get("keyword")
+                        ? <p>{searchParams.get("keyword")} 검색 결과 총 {boardCnt}개의 글을 찾았어요</p>
+                        : <p>총 {boardCnt}개의 글이 있어요</p>}
                     <div className="board-button">
                         <Button onClick={writeBoardOnclick} text="글쓰기" />
                     </div>

@@ -64,8 +64,8 @@ export const getBoardDailyApi = async () => {
     return data;
 }
 
-export const postBoardApi = async (search: string) => {
-    const { data } = await axios.post("/boardSearch", { search });
+export const postBoardApi = async (search: string, page: string) => {
+    const { data } = await axios.post("/boardSearch", { search, page });
     return data;
 }
 
@@ -74,7 +74,7 @@ export const getBoardDetailApi = async (boardNo: number) => {
     return data;
 }
 
-export const getBoardApi = async () => {
-    const { data } = await axios.get("/board");
+export const getBoardApi = async (page: string) => {
+    const { data } = await axios.post("/board", { page });
     return data;
 };

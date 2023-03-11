@@ -92,6 +92,8 @@ app.post("/userBoard", async (req, res) => {
             where u.nickname = ? 
             ORDER BY b.rgstrDate DESC
             `, [userNickname]);
+
+        if(rows.length > 0) rows[0].boardCnt = rows.length;
         res.status(200).send(rows);
     } catch (e) {
         res.status(400).send("fail");
@@ -349,7 +351,8 @@ app.get("/boardDaily", async (req, res) => {
 
 app.post("/boardSearch", async (req, res) => {
     try {
-        const { search } = req.body;
+        const { search, page } = req.body;
+        const pageNum = page * 5 - 5;
         const value = "%" + search + "%";
 
         const [rows] = await mysql.query(`
@@ -361,8 +364,10 @@ app.post("/boardSearch", async (req, res) => {
             ON b.userNo = u.userNo 
             WHERE b.title LIKE ? OR b.contents LIKE ? OR u.nickname LIKE ?
             ORDER BY b.rgstrDate DESC
-            `, [value, value, value]);
+            LIMIT ?, 5
+            `, [value, value, value, pageNum]);
 
+        if(rows.length > 0) rows[0].boardCnt = rows.length;
         res.status(200).send(rows);
     } catch (e) {
         res.status(400).send("fail");
@@ -370,17 +375,22 @@ app.post("/boardSearch", async (req, res) => {
     }
 })
 
-app.get("/board", async (req, res) => {
+app.post("/board", async (req, res) => {
     try {
+        const { page } = req.body;
+        const pageNum = page * 5 - 5;
+
         const [rows] = await mysql.query(`
         SELECT b.boardNo, b.userNo, b.title, b.contents, b.rgstrDate, 
         b.views, b.tags, b.boardImgUrl, u.nickname, u.imgUrl, 
-        (SELECT count(*) FROM comment c WHERE c.boardNo = b.boardNo) commentCnt 
+        (SELECT count(*) FROM board) AS boardCnt, 
+        (SELECT count(*) FROM comment c WHERE c.boardNo = b.boardNo) AS commentCnt 
         FROM board b 
         INNER JOIN user u 
         ON b.userNo = u.userNo 
         ORDER BY b.rgstrDate DESC
-        `);
+        LIMIT ?, 5
+        `, [pageNum]);
         res.status(200).send(rows);
     } catch (e) {
         res.status(400).send("fail");

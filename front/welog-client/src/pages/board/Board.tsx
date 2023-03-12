@@ -99,7 +99,8 @@ const Board = () => {
                         <section className="boardDaily-section">
                             {boardDailyList.map((boardDaily, i) => (
                                 <article key={i} className="boardDaily-block">
-                                    <aside onClick={() => updateBoardViewsOnClick(boardDaily.boardNo, boardDaily.views)}>
+                                    <aside className="board-asideBoardImg"
+                                        onClick={() => updateBoardViewsOnClick(boardDaily.boardNo, boardDaily.views)}>
                                         <img src={`${ServerImgUrl}${boardDaily.boardImgUrl}`} alt="boardDailyImgUrl" />
                                     </aside>
                                     <div className="board-contentsContainer">

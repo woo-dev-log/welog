@@ -120,7 +120,8 @@ const Post = () => {
                     {boardList.map((board, i) => (
                         <article key={i} className="board-article">
                             <div className="board-block">
-                                <aside onClick={() => updateBoardViewsOnClick(board.boardNo, board.views)}>
+                                <aside className="board-asideBoardImg"
+                                    onClick={() => updateBoardViewsOnClick(board.boardNo, board.views)}>
                                     <img src={`${ServerImgUrl}${board.boardImgUrl}`} alt="boardImgUrl" />
                                 </aside>
                                 <div className="board-contentsContainer">

@@ -29,7 +29,7 @@
     margin: 20px 0;
 }
 
-aside {
+.board-asideBoardImg {
     display: flex;
     align-items: center;
     cursor: pointer;
@@ -152,7 +152,7 @@ aside {
 }
 
 @media (max-width: 1199px) {
-    aside {
+    .board-asideBoardImg {
         img {
             width: 300px;
         }
@@ -178,7 +178,7 @@ aside {
         grid-template-columns: repeat(auto-fit, minmax(15rem, 1fr));
         margin: 0;
 
-        aside {
+        .board-asideBoardImg {
             margin-left: 0;
 
             img {

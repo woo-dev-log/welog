@@ -14,6 +14,21 @@ import "./BoardWrite.scss"
 import 'react-quill/dist/quill.snow.css';
 const ReactQuill = lazy(() => import('react-quill'));
 
+const modules = {
+    toolbar: [
+        [{ 'header': [1, 2, 3, false] }],
+        [{ 'color': [] }, { 'background': [] }],
+        ['bold', 'italic', 'underline', 'strike'],
+        ['blockquote', 'code-block'],
+        [], [], [], [], [], [], [],
+        [{ 'list': 'ordered' }, { 'list': 'bullet' }],
+        [{ 'align': [] }],
+        [{ 'indent': '-1' }, { 'indent': '+1' }],
+        [ 'image', 'video' ],
+        [ 'link' ]
+    ]
+};
+
 const BoardWrite = () => {
     const [title, setTitle] = useState("");
     const [contents, setContents] = useState("");
@@ -26,6 +41,7 @@ const BoardWrite = () => {
     const [blobImg, setBlobImg] = useState("");
     const navigate = useNavigate();
     const ServerImgUrl = "http://localhost:3690/images/";
+    console.log(contents);
 
     const tagOnClick = (index: number) => {
         tags.splice(index, 1);
@@ -84,7 +100,7 @@ const BoardWrite = () => {
                 confirmButtonText: '네',
                 cancelButtonText: '아니요'
             })
-            
+
             if (result.isConfirmed) {
                 try {
                     let formData = new FormData();
@@ -162,7 +178,7 @@ const BoardWrite = () => {
                     <Label text="내용" />
                     <Line />
                     <Suspense fallback={<div>Loading...</div>}>
-                        <ReactQuill onChange={setContents} value={contents} placeholder="내용을 입력해주세요" />
+                        <ReactQuill modules={modules} onChange={setContents} value={contents} placeholder="내용을 입력해주세요" />
                     </Suspense>
                 </article>
                 <aside>

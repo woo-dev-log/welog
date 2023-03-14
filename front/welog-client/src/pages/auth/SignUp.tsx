@@ -132,7 +132,7 @@ const SignUp = () => {
                     if (data.status === 200) {
                         URL.revokeObjectURL(blobImg);
                         ToastSuccess("회원가입을 성공했어요!");
-                        navigate("/");
+                        navigate(-1);
                     }
                 } catch (e) {
                     ToastError("회원가입을 실패했어요");

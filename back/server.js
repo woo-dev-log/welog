@@ -210,7 +210,17 @@ app.post("/boardComment", async (req, res) => {
 app.post("/deleteBoard", async (req, res) => {
     try {
         const { boardNo } = req.body;
-        const [rows] = await mysql.query("DELETE FROM board WHERE boardNo = ?", [boardNo]);
+        const [rows] = await mysql.query("SELECT boardImgUrl FROM board WHERE boardNo = ?", [boardNo]);
+        await mysql.query("DELETE FROM board WHERE boardNo = ?", [boardNo]);
+
+        if (rows[0].boardImgUrl !== "React.png") {
+            fs.unlink("./images/" + rows[0].boardImgUrl, (err) => {
+                if (err) {
+                    console.error(err);
+                    return res.status(400).send("fail");
+                }
+            });
+        }
 
         res.status(200).send("success");
     } catch (e) {

@@ -55,7 +55,7 @@ const BoardDetail = () => {
             if (result.isConfirmed) {
                 await deleteBoardApi(IntBoardNo);
                 ToastSuccess("글이 삭제되었어요!");
-                navigate("/");
+                navigate(-1);
             }
 
         } catch (e) {

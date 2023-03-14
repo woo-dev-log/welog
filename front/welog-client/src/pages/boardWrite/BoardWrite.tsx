@@ -1,5 +1,5 @@
 import Swal from "sweetalert2";
-import { lazy, Suspense, useCallback, useEffect, useState } from "react";
+import { lazy, Suspense, useEffect, useMemo, useRef, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useRecoilState } from "recoil";
 import { boardUpdate, loginUser } from "../../store/atoms";
@@ -14,21 +14,6 @@ import "./BoardWrite.scss"
 import 'react-quill/dist/quill.snow.css';
 const ReactQuill = lazy(() => import('react-quill'));
 
-const modules = {
-    toolbar: [
-        [{ 'header': [1, 2, 3, false] }],
-        [{ 'color': [] }, { 'background': [] }],
-        ['bold', 'italic', 'underline', 'strike'],
-        ['blockquote', 'code-block'],
-        [], [], [], [], [], [], [],
-        [{ 'list': 'ordered' }, { 'list': 'bullet' }],
-        [{ 'align': [] }],
-        [{ 'indent': '-1' }, { 'indent': '+1' }],
-        [ 'image', 'video' ],
-        [ 'link' ]
-    ]
-};
-
 const BoardWrite = () => {
     const [title, setTitle] = useState("");
     const [contents, setContents] = useState("");
@@ -41,7 +26,63 @@ const BoardWrite = () => {
     const [blobImg, setBlobImg] = useState("");
     const navigate = useNavigate();
     const ServerImgUrl = "http://localhost:3690/images/";
+    const quillRef = useRef(null);
     console.log(contents);
+
+    const imageHandler = () => {
+        const input = document.createElement('input');
+        input.setAttribute('type', 'file');
+        input.setAttribute('accept', 'image/*');
+        input.click();
+      
+        input.onchange = async () => {
+            if(input.files && quillRef.current) {
+                const file = input.files[0];
+                const formData = new FormData();
+                formData.append('image', file);
+                const imageUrl = URL.createObjectURL(file);
+                console.log(imageUrl);
+                
+                const quill = quillRef.current.getEditor();
+                const range = quill.getSelection(true);
+                quill.insertEmbed(range.index, 'image', imageUrl);
+            }
+        
+        //   try {
+        //     const data = await fetch('/api/upload', {
+        //       method: 'POST',
+        //       body: formData
+        //     });
+        //     const imageUrl = `https://example.com/${data.filename}`;
+      
+        //     const range = quill.getSelection(true);
+        //     quill.insertEmbed(range.index, 'image', imageUrl);
+        //   } catch (error) {
+        //     console.error(error);
+        //   }
+        };
+      };
+
+    const modules = useMemo(() => {
+        return {
+            toolbar: {
+                container: [
+                    [{ 'header': [1, 2, 3, false] }],
+                    [{ 'color': [] }, { 'background': [] }],
+                    ['bold', 'italic', 'underline', 'strike'],
+                    ['blockquote', 'code-block'],
+                    [{ 'list': 'ordered' }, { 'list': 'bullet' }],
+                    [{ 'align': [] }],
+                    [{ 'indent': '-1' }, { 'indent': '+1' }],
+                    ['image', 'video'],
+                    ['link']
+                ],
+                handlers: {
+                    image: imageHandler
+                }
+            }
+        }
+    }, []);
 
     const tagOnClick = (index: number) => {
         tags.splice(index, 1);
@@ -143,6 +184,7 @@ const BoardWrite = () => {
         if (!e.target.files) {
             return;
         }
+        console.log(e.target.files[0]);
         setImage(e.target.files[0]);
         setBlobImg(URL.createObjectURL(e.target.files[0]));
     };
@@ -178,16 +220,17 @@ const BoardWrite = () => {
                     <Label text="내용" />
                     <Line />
                     <Suspense fallback={<div>Loading...</div>}>
-                        <ReactQuill modules={modules} onChange={setContents} value={contents} placeholder="내용을 입력해주세요" />
+                        <ReactQuill modules={modules} onChange={setContents} value={contents} 
+                         ref={quillRef} placeholder="내용을 입력해주세요" />
                     </Suspense>
                 </article>
                 <aside>
                     <p style={{ marginTop: "0" }}>썸네일</p>
                     <div className="boardWrite-thumbnail">
-                        {image ? <img src={blobImg} /> :
+                        {image ? <img src={blobImg} alt="board-thumbnail" /> :
                             updateValue.titleValue
-                                ? <img src={`${ServerImgUrl}${updateValue.boardImgUrl}`} />
-                                : <img src={`${ServerImgUrl}React.png`} />}
+                                ? <img src={`${ServerImgUrl}${updateValue.boardImgUrl}`} alt="board-thumbnail" />
+                                : <img src={`${ServerImgUrl}React.png`} alt="board-thumbnail" />}
                         <label className="boardWrite-imgSelect" htmlFor="boardWriteImg">사진 선택</label>
                         <input type="file" accept="image/*" onChange={uploadImageOnChange} id="boardWriteImg" />
                     </div>

@@ -154,7 +154,7 @@ const SignUp = () => {
         <div className="container">
             <SEO title="회원가입" contents="회원가입" />
             <div className="signUp-img">
-                {image && <img src={blobImg} />}
+                {image && <img src={blobImg} alt="user-profile" />}
             </div>
             <label className="signUp-imgSelect" htmlFor="profileImg">사진 선택</label>
             <input type="file" accept="image/*" onChange={uploadImageOnChange} id="profileImg" />

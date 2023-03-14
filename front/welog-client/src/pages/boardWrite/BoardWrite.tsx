@@ -4,7 +4,7 @@ import { useNavigate } from "react-router-dom";
 import { useRecoilState } from "recoil";
 import { boardUpdate, loginUser } from "../../store/atoms";
 import { ToastError, ToastSuccess, ToastWarn } from "../../components/Toast";
-import { writeBoardApi } from "../../api/board";
+import { writeBoardApi, writeBoardImgApi } from "../../api/board";
 import SEO from "../../components/SEO";
 import Line from "../../components/line/Line";
 import Label from "../../components/label/Label";
@@ -34,34 +34,27 @@ const BoardWrite = () => {
         input.setAttribute('type', 'file');
         input.setAttribute('accept', 'image/*');
         input.click();
-      
+
         input.onchange = async () => {
-            if(input.files && quillRef.current) {
+            if (input.files && quillRef.current) {
                 const file = input.files[0];
                 const formData = new FormData();
-                formData.append('image', file);
-                const imageUrl = URL.createObjectURL(file);
-                console.log(imageUrl);
-                
-                const quill = quillRef.current.getEditor();
-                const range = quill.getSelection(true);
-                quill.insertEmbed(range.index, 'image', imageUrl);
+                formData.append('boardImg', file);
+
+                try {
+                    const data = await writeBoardImgApi(formData);
+
+                    // 타입스크립트 오류인지 빨간줄이 생기지만, 문제 없음
+                    const quill = quillRef.current.getEditor();
+                    const range = quill.getSelection(true);
+                    quill.insertEmbed(range.index, 'image', ServerImgUrl + "boardImg/" + data.fileName);
+                    quill.setSelection(range.index + 1);
+                } catch (error) {
+                    console.error(error);
+                }
             }
-        
-        //   try {
-        //     const data = await fetch('/api/upload', {
-        //       method: 'POST',
-        //       body: formData
-        //     });
-        //     const imageUrl = `https://example.com/${data.filename}`;
-      
-        //     const range = quill.getSelection(true);
-        //     quill.insertEmbed(range.index, 'image', imageUrl);
-        //   } catch (error) {
-        //     console.error(error);
-        //   }
         };
-      };
+    };
 
     const modules = useMemo(() => {
         return {
@@ -220,8 +213,8 @@ const BoardWrite = () => {
                     <Label text="내용" />
                     <Line />
                     <Suspense fallback={<div>Loading...</div>}>
-                        <ReactQuill modules={modules} onChange={setContents} value={contents} 
-                         ref={quillRef} placeholder="내용을 입력해주세요" />
+                        <ReactQuill modules={modules} onChange={setContents} value={contents}
+                            ref={quillRef} placeholder="내용을 입력해주세요" />
                     </Suspense>
                 </article>
                 <aside>

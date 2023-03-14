@@ -40,6 +40,15 @@ export const deleteBoardApi = async (boardNo: number) => {
     return data;
 }
 
+export const writeBoardImgApi = async (formData: FormData) => {
+    const { data } = await axios.post("/writeBoardImg", formData, {
+        headers: {
+            'Content-Type': 'multipart/form-data'
+        }
+    });
+    return data;
+}
+
 export const writeBoardApi = async (typeUrl: string, formData: FormData) => {
     const { data } = await axios.post(typeUrl, formData, {
         headers: {

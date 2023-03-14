@@ -20,9 +20,20 @@ app.use('/images', express.static('images'));
 
 let imageName = [];
 const imageUpload = multer({
-    limits: { fieldSize: 25 * 1024 * 1024 },
     storage: multer.diskStorage({
         destination: (req, file, cb) => cb(null, 'images/'),
+        filename: (req, file, cb) => {
+            const originalName = file.originalname.replace(" ", "");
+            let fileName = new Date().valueOf() + '_' + Buffer.from(originalName, 'latin1').toString('utf8');
+            cb(null, fileName);
+            imageName.push(fileName);
+        }
+    })
+});
+
+const boardImgUpload = multer({
+    storage: multer.diskStorage({
+        destination: (req, file, cb) => cb(null, 'images/boardImg/'),
         filename: (req, file, cb) => {
             const originalName = file.originalname.replace(" ", "");
             let fileName = new Date().valueOf() + '_' + Buffer.from(originalName, 'latin1').toString('utf8');
@@ -38,10 +49,10 @@ app.post("/updateProfileContents", async (req, res) => {
         const [rows] = await mysql.query(`
             UPDATE user SET profileContents = ? WHERE userNo = ?
             `, [profileContents, userNo]);
-        res.status(200).send("success");
+        return res.status(200).send("success");
     } catch (e) {
-        res.status(400).send("fail");
         console.error(e);
+        return res.status(400).send("fail");
     }
 })
 
@@ -56,10 +67,10 @@ app.post("/userComment", async (req, res) => {
             WHERE userNo = ?
             LIMIT ?, 5
             `, [userNo, pageNum]);
-        res.status(200).send(rows);
+        return res.status(200).send(rows);
     } catch (e) {
-        res.status(400).send("fail");
         console.error(e);
+        return res.status(400).send("fail");
     }
 })
 
@@ -75,10 +86,10 @@ app.post("/userProfile", async (req, res) => {
             WHERE u.nickname = ?
             GROUP BY u.userNo, u.nickname, u.imgUrl, u.profileContents
             `, [userNickname]);
-        res.status(200).send(rows);
+        return res.status(200).send(rows);
     } catch (e) {
-        res.status(400).send("fail");
         console.error(e);
+        return res.status(400).send("fail");
     }
 })
 
@@ -100,10 +111,10 @@ app.post("/userBoard", async (req, res) => {
             LIMIT ?, 5
             `, [userNickname, pageNum]);
 
-        res.status(200).send(rows);
+        return res.status(200).send(rows);
     } catch (e) {
-        res.status(400).send("fail");
         console.error(e);
+        return res.status(400).send("fail");
     }
 })
 
@@ -112,7 +123,7 @@ app.post("/checkSignUpId", async (req, res) => {
 
     const [rows] = await mysql.query("SELECT EXISTS (SELECT * FROM user WHERE id = ?) as cnt", [id]);
 
-    rows[0].cnt === 1 ? res.send("no") : res.send("yes");
+    return rows[0].cnt === 1 ? res.send("no") : res.send("yes");
 })
 
 app.post("/checkSignUpNickname", async (req, res) => {
@@ -120,16 +131,17 @@ app.post("/checkSignUpNickname", async (req, res) => {
 
     const [rows] = await mysql.query("SELECT EXISTS (SELECT * FROM user WHERE nickname = ?) as cnt", [nickname]);
 
-    rows[0].cnt === 1 ? res.send("no") : res.send("yes");
+    return rows[0].cnt === 1 ? res.send("no") : res.send("yes");
 })
 
 app.post("/loginToken", async (req, res) => {
     try {
         const { welogJWT } = req.body;
         const user = await jwt.verify(welogJWT, "welogJWT");
-        res.send(user);
+        return res.send(user);
     } catch (e) {
         console.error(e);
+        return res.status(400).send("fail");
     }
 })
 
@@ -138,10 +150,10 @@ app.post("/deleteBoardComment", async (req, res) => {
         const { boardNo, commentNo } = req.body;
         const [rows] = await mysql.query("DELETE FROM comment WHERE boardNo = ? AND commentNo = ?", [boardNo, commentNo]);
 
-        res.status(200).send("success");
+        return res.status(200).send("success");
     } catch (e) {
-        res.status(400).send("fail");
         console.error(e);
+        return res.status(400).send("fail");
     }
 })
 
@@ -149,7 +161,7 @@ app.post("/updateBoardComment", async (req, res) => {
     try {
         const { boardNo, boardCommentUpdate, userNo, commentNo } = req.body;
         if (userNo === 0) {
-            res.status(400).send("fail");
+            return res.status(400).send("fail");
         } else {
             const [rows] = await mysql.query(`
             UPDATE comment 
@@ -157,11 +169,11 @@ app.post("/updateBoardComment", async (req, res) => {
             WHERE boardNo = ? AND userNo = ? AND commentNo = ?
             `, [boardCommentUpdate, boardNo, userNo, commentNo]);
 
-            res.status(200).send("success");
+            return res.status(200).send("success");
         }
     } catch (e) {
-        res.status(400).send("fail");
         console.error(e);
+        return res.status(400).send("fail");
     }
 })
 
@@ -169,7 +181,7 @@ app.post("/writeBoardComment", async (req, res) => {
     try {
         const { boardNo, boardCommentAdd, userNo } = req.body;
         if (userNo === 0) {
-            res.status(400).send("fail");
+            return res.status(400).send("fail");
         } else {
             const [rows] = await mysql.query(`
             INSERT INTO
@@ -177,11 +189,11 @@ app.post("/writeBoardComment", async (req, res) => {
             VALUES(?, ?, ?, now())
             `, [boardNo, userNo, boardCommentAdd]);
 
-            res.status(200).send("success");
+            return res.status(200).send("success");
         }
     } catch (e) {
-        res.status(400).send("fail");
         console.error(e);
+        return res.status(400).send("fail");
     }
 })
 
@@ -200,10 +212,10 @@ app.post("/boardComment", async (req, res) => {
         ORDER BY rgstrDate DESC
         LIMIT ?, 5;
         `, [boardNo, pageNum]);
-        res.status(200).send(rows);
+        return res.status(200).send(rows);
     } catch (e) {
-        res.status(400).send("fail");
         console.error(e);
+        return res.status(400).send("fail");
     }
 })
 
@@ -222,10 +234,10 @@ app.post("/deleteBoard", async (req, res) => {
             });
         }
 
-        res.status(200).send("success");
+        return res.status(200).send("success");
     } catch (e) {
-        res.status(400).send("fail");
         console.error(e);
+        return res.status(400).send("fail");
     }
 })
 
@@ -256,7 +268,7 @@ app.post("/updateBoard", imageUpload.single('thumbnail'), async (req, res) => {
         }
 
         if (userNo === 0) {
-            res.status(400).send("fail");
+            return res.status(400).send("fail");
         } else {
             const [rows] = await mysql.query(`
             UPDATE board 
@@ -264,11 +276,48 @@ app.post("/updateBoard", imageUpload.single('thumbnail'), async (req, res) => {
             tags = ?, boardImgUrl = ?
             WHERE boardNo = ? AND userNo = ?
             `, [title, contents, tags, newFilePath, boardNo, userNo]);
-            res.status(200).send("success");
+            return res.status(200).send("success");
         }
     } catch (e) {
-        res.status(400).send("fail");
         console.error(e);
+        return res.status(400).send("fail");
+    }
+})
+
+app.post("/writeBoardImg", boardImgUpload.single('boardImg'), async (req, res) => {
+    try {
+        let newFilePath = imageName;
+        if (req.file) {
+            if (req.file.originalname.split(".").reverse()[0] === "gif") {
+                imageName = [];
+                return res.status(200).send({ fileName: newFilePath });
+            }
+
+            let reImage = '';
+            newFilePath = new Date().valueOf() + '_' + Buffer.from(req.file.originalname, 'latin1').toString('utf8');
+            if (req.file.size <= 500 * 1024) {
+                reImage = await sharp(req.file.path).toFile("./images/boardImg/" + newFilePath);
+            } else {
+                if (req.file.originalname.split(".").reverse()[0] === "png") {
+                    reImage = await sharp(req.file.path).resize({ width: 500 }).png({ quality: 80 }).toFile("./images/boardImg/" + newFilePath);
+                } else {
+                    reImage = await sharp(req.file.path).resize({ width: 500 }).jpeg({ quality: 80 }).toFile("./images/boardImg/" + newFilePath);
+                }
+            }
+
+            fs.unlink("./images/boardImg/" + imageName, (err) => {
+                if (err) {
+                    console.error(err);
+                    return res.status(400).send("fail");
+                }
+            });
+        }
+
+        imageName = [];
+        return res.status(200).send({ fileName: newFilePath });
+    } catch (e) {
+        console.error(e);
+        return res.status(400).send("fail");
     }
 })
 
@@ -298,20 +347,20 @@ app.post("/writeBoard", imageUpload.single('thumbnail'), async (req, res) => {
             });
         }
 
+        imageName = [];
         if (userNo === 0) {
-            res.status(400).send("fail");
+            return res.status(400).send("fail");
         } else {
             const [rows] = await mysql.query(`
             INSERT INTO
             board(userNo, title, contents, rgstrDate, tags, boardImgUrl)
             VALUES(?, ?, ?, now(), ?, ?)
             `, [userNo, title, contents, tags, newFilePath]);
-            res.status(200).send("success");
+            return res.status(200).send("success");
         }
-        imageName = [];
     } catch (e) {
-        res.status(400).send("fail");
         console.error(e);
+        return res.status(400).send("fail");
     }
 })
 
@@ -320,10 +369,10 @@ app.post("/boardViews", async (req, res) => {
         const { boardNo, views } = req.body;
         const [rows] = await mysql.query("UPDATE board SET views = ? WHERE boardNo = ?", [views, boardNo]);
 
-        res.status(200).send("success");
+        return res.status(200).send("success");
     } catch (e) {
-        res.status(400).send("fail");
         console.error(e);
+        return res.status(400).send("fail");
     }
 })
 
@@ -339,10 +388,10 @@ app.post("/boardDetail", async (req, res) => {
         ON b.userNo = u.userNo 
         WHERE b.boardNo = ?
         `, [boardNo]);
-        res.status(200).send(rows);
+        return res.status(200).send(rows);
     } catch (e) {
-        res.status(400).send("fail");
         console.error(e);
+        return res.status(400).send("fail");
     }
 })
 
@@ -361,10 +410,10 @@ app.get("/boardDaily", async (req, res) => {
         ORDER BY weekCommentCnt DESC
         LIMIT 4;
         `);
-        res.status(200).send(rows);
+        return res.status(200).send(rows);
     } catch (e) {
-        res.status(400).send("fail");
         console.error(e);
+        return res.status(400).send("fail");
     }
 })
 
@@ -387,10 +436,10 @@ app.post("/boardSearch", async (req, res) => {
             LIMIT ?, 5
             `, [value, value, value, pageNum]);
 
-        res.status(200).send(rows);
+        return res.status(200).send(rows);
     } catch (e) {
-        res.status(400).send("fail");
         console.error(e);
+        return res.status(400).send("fail");
     }
 })
 
@@ -410,10 +459,10 @@ app.post("/board", async (req, res) => {
         ORDER BY b.rgstrDate DESC
         LIMIT ?, 5
         `, [pageNum]);
-        res.status(200).send(rows);
+        return res.status(200).send(rows);
     } catch (e) {
-        res.status(400).send("fail");
         console.error(e);
+        return res.status(400).send("fail");
     }
 })
 
@@ -446,11 +495,11 @@ app.post("/signUp", imageUpload.single('thumbnail'), async (req, res) => {
         VALUES(?, ?, ?, ?)
         `, [id, pw, nickname, newFilePath]);
 
-        res.status(200).send("success");
         imageName = [];
+        return res.status(200).send("success");
     } catch (e) {
-        res.status(400).send("fail");
         console.error(e);
+        return res.status(400).send("fail");
     }
 })
 
@@ -478,18 +527,18 @@ app.post("/signIn", async (req, res) => {
                 }
             );
 
-            res.status(200).send({ user, token });
+            return res.status(200).send({ user, token });
         } else {
-            res.status(200).send("no");
+            return res.status(200).send("no");
         }
     } catch (e) {
-        res.status(400).send("fail");
         console.error(e);
+        return res.status(400).send("fail");
     }
 })
 
 // app.get('*', (req, res) => {
-//     res.sendFile(path.join(__dirname, '../front/welog-client/dist', 'index.html'));
+//     return res.sendFile(path.join(__dirname, '../front/welog-client/dist', 'index.html'));
 // });
 
 app.listen(port, () => {

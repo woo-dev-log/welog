@@ -81,7 +81,7 @@
             color: gray;
         }
 
-        .boardDetail-userProfile{
+        .boardDetail-userProfile {
             display: flex;
             align-items: center;
 
@@ -89,7 +89,7 @@
                 cursor: pointer;
                 @include imgCss(35px, 35px);
             }
-            
+
             .boardDetail-nickname {
                 cursor: pointer;
                 font-family: "LINESeedKR-Bd";
@@ -130,8 +130,12 @@
     .boardDetail-contentsContainer {
         margin: 30px 0 100px 0;
 
-        img {
-            max-width: 100%;
+        .boardDetail-contents {
+            min-height: 100px;
+
+            img {
+                max-width: 100%;
+            }
         }
     }
 
@@ -160,7 +164,7 @@
                 height: 150px;
             }
         }
-        
+
         .boardDetail-titleContainer {
             margin-bottom: 0;
 

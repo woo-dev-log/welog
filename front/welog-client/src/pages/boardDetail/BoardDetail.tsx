@@ -130,7 +130,7 @@ const BoardDetail = () => {
                     <Line />
 
                     <article className="boardDetail-contentsContainer">
-                        <p className="boardDetail-contents" dangerouslySetInnerHTML={{ __html: boardDetail[0].contents }} />
+                        <div className="boardDetail-contents" dangerouslySetInnerHTML={{ __html: boardDetail[0].contents }} />
 
                         {userInfo[0].userNo === boardDetail[0].userNo &&
                             <div className="boardDetail-deleteBtn">

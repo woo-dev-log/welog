@@ -8,7 +8,6 @@
     font-size: $font-size;
     font-family: "LINESeedKR-Bd";
     color: white;
-    transition: .2s ease-in;
 
     &:hover {
         background-color: white;
@@ -45,7 +44,6 @@ textarea {
 }
 
 .boardComment-commentContainer {
-    transition: .2s ease-in;
     font-size: 16px;
 
     .boardComment-commentBlock {
@@ -74,8 +72,10 @@ textarea {
                 margin-right: 10px;
             }
 
-            .boardComment-commentRgstrDate {
+            .boardComment-date {
                 color: gray;
+                display: flex;
+                gap: 10px;
             }
         }
     }
@@ -109,6 +109,14 @@ textarea {
 
     .boardComment-commentContainer {
         font-size: 14px;
+        
+        .boardComment-commentBlock {
+            .boardComment-commentLabel {
+                .boardComment-date {
+                    display: block;
+                }
+            }
+        }
 
         .boardComment-commentDeleteBtn {
             button {

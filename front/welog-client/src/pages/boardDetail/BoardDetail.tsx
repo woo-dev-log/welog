@@ -99,15 +99,15 @@ const BoardDetail = () => {
                         <img src={`${ServerImgUrl}${boardDetail[0].boardImgUrl}`} alt="boardThumbnail" />
                     </div>
 
-                    <article className="boardDetail-titleContainer">
+                    <div className="boardDetail-titleContainer">
                         <h2 className="boardDetail-title">{boardDetail[0].title}</h2>
                         <div className="board-views">
                             <img src="/views.svg" alt="click" />
                             <p>{boardDetail[0].views}</p>
                         </div>
-                    </article>
+                    </div>
 
-                    <article className="boardDetail-writerContainer">
+                    <div className="boardDetail-writerContainer">
                         <div className="boardDetail-date">
                             <p className="boardDetail-rgstrDate">{dayjs(boardDetail[0].rgstrDate).format('YY.MM.DD HH:mm')} 등록</p>
                             {boardDetail[0].updateDate && <p className="boardDetail-rgstrDate">{dayjs(boardDetail[0].updateDate).format('YY.MM.DD HH:mm')} 수정</p>}
@@ -119,17 +119,17 @@ const BoardDetail = () => {
                                 {boardDetail[0].nickname}
                             </p>
                         </div>
-                    </article>
+                    </div>
 
-                    <article className="boardDetail-tagContainer">
+                    <div className="boardDetail-tagContainer">
                         {boardDetail[0].tags && boardDetail[0].tags.split(",").map((v, i) => (
                             <p key={i} className="boardDetail-tagBox">{v}</p>
                         ))}
-                    </article>
+                    </div>
 
                     <Line />
 
-                    <article className="boardDetail-contentsContainer">
+                    <div className="boardDetail-contentsContainer">
                         <div className="boardDetail-contents" dangerouslySetInnerHTML={{ __html: boardDetail[0].contents }} />
 
                         {userInfo[0].userNo === boardDetail[0].userNo &&
@@ -139,7 +139,7 @@ const BoardDetail = () => {
                             </div>
                         }
                         <Line />
-                    </article>
+                    </div>
                     <BoardComment IntBoardNo={IntBoardNo} />
                 </section>
             }

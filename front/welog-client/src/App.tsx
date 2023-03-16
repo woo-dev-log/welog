@@ -15,17 +15,18 @@ import UserBoard from './pages/userBoard/UserBoard'
 import './App.scss'
 
 function App() {
-  const [cookies] = useCookies(['welogJWT']);
+  const [cookies] = useCookies(['welogJWT', 'themeColor']);
   const [userInfo, setUserInfo] = useRecoilState(loginUser);
   axios.defaults.baseURL = "http://localhost:3690";
 
   let osTheme = window.matchMedia("(prefers-color-scheme: dark)").matches ? 'dark': 'light';
-  console.log(document.body.dataset.theme);
-  console.log(osTheme);
-  if(osTheme === "dark"){
-    document.body.dataset.theme = osTheme;
-    console.log("dark On");
-  } else document.documentElement.setAttribute('theme', 'light');
+  if(cookies.themeColor) {
+    document.body.dataset.theme = cookies.themeColor;
+  } else {
+    if(osTheme === "dark"){
+      document.body.dataset.theme = osTheme;
+    } else document.body.dataset.theme = 'light';
+  }
 
   const silentRefresh = async () => {
     if (cookies.welogJWT) {

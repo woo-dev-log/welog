@@ -93,53 +93,55 @@ const BoardDetail = () => {
             <SEO title="상세 글" contents="상세 글" />
             <button className="boardDetail-backbutton" onClick={() => navigate(-1)}>&lt;&nbsp;&nbsp;이전으로</button>
             {boardDetail[0] &&
-                <section className="boardDetail-container">
-                    <div className="boarDetail-boardThumbnail">
+                <section className="boardDetail-section">
+                    <aside className="boarDetail-boardThumbnail">
                         <img src={`${ServerImgUrl}${boardDetail[0].boardImgUrl}`} alt="boardThumbnail" />
-                    </div>
+                    </aside>
 
-                    <div className="boardDetail-titleContainer">
-                        <h2 className="boardDetail-title">{boardDetail[0].title}</h2>
-                        <div className="board-views">
-                            <img src="/views.svg" alt="click" />
-                            <p>{boardDetail[0].views}</p>
-                        </div>
-                    </div>
-
-                    <div className="boardDetail-writerContainer">
-                        <div className="boardDetail-date">
-                            <p className="boardDetail-rgstrDate">{dayjs(boardDetail[0].rgstrDate).format('YY.MM.DD HH:mm')} 등록</p>
-                            {boardDetail[0].updateDate && <p className="boardDetail-rgstrDate">{dayjs(boardDetail[0].updateDate).format('YY.MM.DD HH:mm')} 수정</p>}
-                        </div>
-                        <div className="boardDetail-userProfile">
-                            <img src={`${ServerImgUrl}${boardDetail[0].imgUrl}`} alt="userProfileImg"
-                                onClick={() => userBoardOnClick(boardDetail[0].nickname)} />
-                            <p className="boardDetail-nickname" onClick={() => userBoardOnClick(boardDetail[0].nickname)}>
-                                {boardDetail[0].nickname}
-                            </p>
-                        </div>
-                    </div>
-
-                    <div className="boardDetail-tagContainer">
-                        {boardDetail[0].tags && boardDetail[0].tags.split(",").map((v, i) => (
-                            <p key={i} className="boardDetail-tagBox">{v}</p>
-                        ))}
-                    </div>
-
-                    <Line />
-
-                    <div className="boardDetail-contentsContainer">
-                        <div className="boardDetail-contents" dangerouslySetInnerHTML={{ __html: boardDetail[0].contents }} />
-
-                        {userInfo[0].userNo === boardDetail[0].userNo &&
-                            <div className="boardDetail-deleteBtn">
-                                <Button onClick={updateBoardOnClick} text="수정" />
-                                <Button onClick={deleteBoardOnClick} text="삭제" />
+                    <div className="boardDetail-container">
+                        <div className="boardDetail-titleContainer">
+                            <h2 className="boardDetail-title">{boardDetail[0].title}</h2>
+                            <div className="board-views">
+                                <img src="/views.svg" alt="click" />
+                                <p>{boardDetail[0].views}</p>
                             </div>
-                        }
+                        </div>
+
+                        <div className="boardDetail-writerContainer">
+                            <div className="boardDetail-date">
+                                <p className="boardDetail-rgstrDate">{dayjs(boardDetail[0].rgstrDate).format('YY.MM.DD HH:mm')} 등록</p>
+                                {boardDetail[0].updateDate && <p className="boardDetail-rgstrDate">{dayjs(boardDetail[0].updateDate).format('YY.MM.DD HH:mm')} 수정</p>}
+                            </div>
+                            <div className="boardDetail-userProfile">
+                                <img src={`${ServerImgUrl}${boardDetail[0].imgUrl}`} alt="userProfileImg"
+                                    onClick={() => userBoardOnClick(boardDetail[0].nickname)} />
+                                <p className="boardDetail-nickname" onClick={() => userBoardOnClick(boardDetail[0].nickname)}>
+                                    {boardDetail[0].nickname}
+                                </p>
+                            </div>
+                        </div>
+
+                        <div className="boardDetail-tagContainer">
+                            {boardDetail[0].tags && boardDetail[0].tags.split(",").map((v, i) => (
+                                <p key={i} className="boardDetail-tagBox">{v}</p>
+                            ))}
+                        </div>
+
                         <Line />
+
+                        <div className="boardDetail-contentsContainer">
+                            <div className="boardDetail-contents" dangerouslySetInnerHTML={{ __html: boardDetail[0].contents }} />
+
+                            {userInfo[0].userNo === boardDetail[0].userNo &&
+                                <div className="boardDetail-deleteBtn">
+                                    <Button onClick={updateBoardOnClick} text="수정" />
+                                    <Button onClick={deleteBoardOnClick} text="삭제" />
+                                </div>
+                            }
+                            <Line />
+                        </div>
+                        <BoardComment IntBoardNo={IntBoardNo} />
                     </div>
-                    <BoardComment IntBoardNo={IntBoardNo} />
                 </section>
             }
         </>

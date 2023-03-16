@@ -116,7 +116,7 @@ const Post = () => {
                 ? <h2>글을 불러오는 중이에요</h2>
                 :
                 boardList.length > 0 &&
-                <section>
+                <section className="board-section">
                     {boardList.map((board, i) => (
                         <article key={i} className="board-block">
                             <aside className="board-asideBoardImg"

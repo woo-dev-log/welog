@@ -2,6 +2,7 @@ body[data-theme='light'] {
     color: #121212;
     background-color: #F1F3F5;
 
+    --back-color: #F1F3F5;
     --font-color: #121212;
     --board-color: #FFFFFF;
     --element-color: #DEE2E6;
@@ -12,6 +13,7 @@ body[data-theme='dark'] {
     color: #F1F3F5;
     background-color: #121212;
 
+    --back-color: #121212;
     --font-color: #F1F3F5;
     --board-color: #1E1E1E;
     --element-color: #252525;

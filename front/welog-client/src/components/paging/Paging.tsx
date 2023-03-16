@@ -1,4 +1,3 @@
-import { useState } from 'react';
 import { useCookies } from 'react-cookie';
 import { useSearchParams } from 'react-router-dom';
 import Button from '../button/Button';
@@ -48,7 +47,7 @@ const Paging = ({ total, limit, page, setCurrentPage }: Props) => {
 
   return (
     <div className='paging-container'>
-      <Button text={"<"} onClick={() => setCurrentPage(page - 1)} disabled={page === 1} />
+      <Button text={"<"} onClick={() => handleOnClickPageChange(page - 1)} disabled={page === 1} />
       {/* {totalPageArray && totalPageArray.map((d, i) => ( */}
       {Array(numPages).fill(undefined).map((_, i) => (
         <div key={i} className={page === i + 1 ? "paging-currentpageNum" : ""}>
@@ -56,7 +55,7 @@ const Paging = ({ total, limit, page, setCurrentPage }: Props) => {
           {/* aria-current={page === i + 1 ? "page" : null} /> */}
         </div>
       ))}
-      <Button text={">"} onClick={() => setCurrentPage(page + 1)} disabled={page === numPages} />
+      <Button text={">"} onClick={() => handleOnClickPageChange(page + 1)} disabled={page === numPages} />
     </div>
   );
 

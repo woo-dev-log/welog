@@ -4,10 +4,12 @@
     }
 
     input {
+        background-color: var(--board-color);
+        color: var(--font-color);
         font-size: 16px;
         width: 360px;
         padding: 10px;
-        border: 1px solid lightgray;
+        border: none;
         border-radius: 5px;
     }
 
@@ -27,10 +29,12 @@
     .boardDaily-section {
         display: grid;
         grid-template-columns: repeat(auto-fit, minmax(27rem, 1fr));
-        gap: 50px;
+        gap: 30px;
         margin-bottom: 100px;
 
         .boardDaily-block {
+            background-color: var(--board-color);
+
             &:hover {
                 transition: 0.3s;
                 transform: scale(1.02);
@@ -51,10 +55,11 @@
 
             .board-asideBoardImg {
                 cursor: pointer;
-                margin: 0 0 20px 0;
+                margin: 0;
 
                 img {
                     width: 100%;
+                    height: 215px;
                 }
             }
 

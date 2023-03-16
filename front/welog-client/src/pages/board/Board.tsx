@@ -135,13 +135,12 @@ const Board = () => {
                                                 </div>
                                             </div>
                                         </footer>
+                                        <div className="board-tagContainer">
+                                            {boardDaily.tags && boardDaily.tags.split(",").map((v, i) => (
+                                                <p key={i} className="board-tagBox">{v}</p>
+                                            ))}
+                                        </div>
                                     </div>
-                                    <div className="board-tagContainer">
-                                        {boardDaily.tags && boardDaily.tags.split(",").map((v, i) => (
-                                            <p key={i} className="board-tagBox">{v}</p>
-                                        ))}
-                                    </div>
-                                    <Line />
                                 </article>
                             ))}
                         </section>

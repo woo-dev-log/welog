@@ -1,7 +1,7 @@
 .header-container {
     height: 70px;
-    background-color: black;
-    color: white;
+    background-color: var(--board-color);
+    color: var(--font-color);
     display: flex;
     align-items: center;
     justify-content: space-between;
@@ -42,6 +42,7 @@
                 width: 40px;
                 height: 40px;
                 border-radius: 1000px;
+                border: 1px solid var(--font-color);
                 margin-right: 20px;
             }
 
@@ -49,7 +50,7 @@
                 display: none;
                 position: absolute;
                 list-style: none;
-                background-color: black;
+                background-color: var(--element-color);
                 top: 22px;
                 right: 0px;
                 width: 130px;
@@ -58,6 +59,10 @@
 
                 li {
                     margin-bottom: 15px;
+
+                    &:hover {
+                        transform: scale(1.05);
+                    }
                 }
             }
         }

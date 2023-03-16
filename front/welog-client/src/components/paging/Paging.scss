@@ -15,8 +15,8 @@
         font-size: 16px;
         padding: 10px;
         margin: 0 5px;
-        background-color: lightgray;
-        color: black;
+        background-color: var(--element-color);
+        color: var(--font-color);
     }
 
     button[disabled] {
@@ -27,8 +27,8 @@
         display: flex;
 
         button {
-            background-color: black;
-            color: white;
+            background-color: var(--font-color);
+            color: var(--element-color);
         }
     }
 }

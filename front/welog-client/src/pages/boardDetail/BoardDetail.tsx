@@ -8,7 +8,6 @@ import { ToastError, ToastSuccess } from "../../components/Toast";
 import { deleteBoardApi, getBoardDetailApi } from "../../api/board";
 import SEO from "../../components/SEO";
 import Line from "../../components/line/Line";
-import Label from "../../components/label/Label";
 import Button from "../../components/button/Button";
 import BoardComment from "../boardComment/BoardComment";
 import "./BoardDetail.scss";

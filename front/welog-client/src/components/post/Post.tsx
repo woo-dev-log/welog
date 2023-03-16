@@ -105,7 +105,7 @@ const Post = () => {
     }, [post, userNickname, keyword]);
 
     useEffect(() => {
-        if(page) {
+        if (page) {
             setCurrentPage(Number(page));
         } else setCurrentPage(1);
     }, [page]);
@@ -118,49 +118,47 @@ const Post = () => {
                 boardList.length > 0 &&
                 <section>
                     {boardList.map((board, i) => (
-                        <article key={i} className="board-article">
-                            <div className="board-block">
-                                <aside className="board-asideBoardImg"
-                                    onClick={() => updateBoardViewsOnClick(board.boardNo, board.views)}>
-                                    <img src={`${ServerImgUrl}${board.boardImgUrl}`} alt="boardImgUrl" />
-                                </aside>
-                                <div className="board-contentsContainer">
-                                    <header onClick={() => updateBoardViewsOnClick(board.boardNo, board.views)}>
-                                        <p className="board-title">{board.title}</p>
-                                        <p className="board-contents">
-                                            {board.contents.replaceAll(/<[^>]*>?/g, "").length < contentsWordLength
-                                                ? board.contents.replaceAll(/<[^>]*>?/g, "")
-                                                : board.contents.replaceAll(/<[^>]*>?/g, "").substring(0, contentsWordLength) + " ..."}
-                                        </p>
-                                    </header>
-                                    <footer>
-                                        <div className="board-userBlock">
-                                            <img src={`${ServerImgUrl}${board.imgUrl}`} alt="userImg"
-                                                className="board-userProfileImg" onClick={() => navigate("/userBoard/" + board.nickname)} />
-                                            <p className="board-nickname" onClick={() => navigate("/userBoard/" + board.nickname)}>{board.nickname}</p>
-                                        </div>
-                                        <div className="board-footer">
-                                            <p>{dayjs(board.rgstrDate).format('YY.MM.DD HH:mm')}</p>
-                                            <div className="board-postInfo">
-                                                <div className="board-views">
-                                                    <img src="/views.svg" alt="views" />
-                                                    <p>{board.views}</p>
-                                                </div>
-                                                <div className="board-comment">
-                                                    <img src="/comment.svg" alt="comment" />
-                                                    <p>{board.commentCnt}</p>
-                                                </div>
+                        <article key={i} className="board-block">
+                            <aside className="board-asideBoardImg"
+                                onClick={() => updateBoardViewsOnClick(board.boardNo, board.views)}>
+                                <img src={`${ServerImgUrl}${board.boardImgUrl}`} alt="boardImgUrl" />
+                            </aside>
+                            <div className="board-contentsContainer">
+                                <header onClick={() => updateBoardViewsOnClick(board.boardNo, board.views)}>
+                                    <p className="board-title">{board.title}</p>
+                                    <p className="board-contents">
+                                        {board.contents.replaceAll(/<[^>]*>?/g, "").length < contentsWordLength
+                                            ? board.contents.replaceAll(/<[^>]*>?/g, "")
+                                            : board.contents.replaceAll(/<[^>]*>?/g, "").substring(0, contentsWordLength) + " ..."}
+                                    </p>
+                                </header>
+                                <footer>
+                                    <div className="board-userBlock">
+                                        <img src={`${ServerImgUrl}${board.imgUrl}`} alt="userImg"
+                                            className="board-userProfileImg" onClick={() => navigate("/userBoard/" + board.nickname)} />
+                                        <p className="board-nickname" onClick={() => navigate("/userBoard/" + board.nickname)}>{board.nickname}</p>
+                                    </div>
+                                    <div className="board-footer">
+                                        <p>{dayjs(board.rgstrDate).format('YY.MM.DD HH:mm')}</p>
+                                        <div className="board-postInfo">
+                                            <div className="board-views">
+                                                <img src="/views.svg" alt="views" />
+                                                <p>{board.views}</p>
+                                            </div>
+                                            <div className="board-comment">
+                                                <img src="/comment.svg" alt="comment" />
+                                                <p>{board.commentCnt}</p>
                                             </div>
                                         </div>
-                                    </footer>
+                                    </div>
+                                </footer>
+
+                                <div className="board-tagContainer">
+                                    {board.tags && board.tags.split(",").map((v, i) => (
+                                        <p key={i} className="board-tagBox">{v}</p>
+                                    ))}
                                 </div>
                             </div>
-                            <div className="board-tagContainer">
-                                {board.tags && board.tags.split(",").map((v, i) => (
-                                    <p key={i} className="board-tagBox">{v}</p>
-                                ))}
-                            </div>
-                            <Line />
                         </article>
                     ))}
 

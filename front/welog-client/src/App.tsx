@@ -19,6 +19,14 @@ function App() {
   const [userInfo, setUserInfo] = useRecoilState(loginUser);
   axios.defaults.baseURL = "http://localhost:3690";
 
+  let osTheme = window.matchMedia("(prefers-color-scheme: dark)").matches ? 'dark': 'light';
+  console.log(document.body.dataset.theme);
+  console.log(osTheme);
+  if(osTheme === "dark"){
+    document.body.dataset.theme = osTheme;
+    console.log("dark On");
+  } else document.documentElement.setAttribute('theme', 'light');
+
   const silentRefresh = async () => {
     if (cookies.welogJWT) {
       const { data } = await axios.post("loginToken", { welogJWT: cookies.welogJWT });

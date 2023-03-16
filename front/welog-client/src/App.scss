@@ -1,3 +1,23 @@
+body[data-theme='light'] {
+    color: #121212;
+    background-color: #F1F3F5;
+
+    --font-color: #121212;
+    --board-color: #FFFFFF;
+    --element-color: #DEE2E6;
+    --element-hover-color: #E9ECEF;
+}
+
+body[data-theme='dark'] {
+    color: #F1F3F5;
+    background-color: #121212;
+
+    --font-color: #F1F3F5;
+    --board-color: #1E1E1E;
+    --element-color: #252525;
+    --element-hover-color: #2E2E2E;
+}
+
 .app-block {
     margin: 50px 300px;
     font-family: "LINESeedKR-Rg";

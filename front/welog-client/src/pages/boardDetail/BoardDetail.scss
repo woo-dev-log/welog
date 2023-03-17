@@ -21,9 +21,7 @@
     transition: .2s ease-in;
 
     &:hover {
-        background-color: white;
-        color: black;
-        box-shadow: lightgray 0 3px 10px;
+        background-color: var(--element-hover-color);
     }
 }
 
@@ -129,6 +127,12 @@
 
             .boardDetail-contents {
                 min-height: 100px;
+
+                .ql-syntax {
+                    background-color: var(--element-hover-color);
+                    border-radius: 5px;
+                    padding: 10px;
+                }
 
                 img {
                     max-width: 100%;

@@ -13,6 +13,8 @@ import Button from "../../components/button/Button";
 import "./BoardWrite.scss"
 import 'react-quill/dist/quill.snow.css';
 const ReactQuill = lazy(() => import('react-quill'));
+import hljs from 'highlight.js/lib/core';
+import 'highlight.js/styles/github-dark.css';
 
 const BoardWrite = () => {
     const [title, setTitle] = useState("");
@@ -72,7 +74,10 @@ const BoardWrite = () => {
                 handlers: {
                     image: imageHandler
                 }
-            }
+            },
+            syntax: {
+                highlight: (text: string) => hljs.highlightAuto(text).value
+            },
         }
     }, []);
 
@@ -176,7 +181,6 @@ const BoardWrite = () => {
         if (!e.target.files) {
             return;
         }
-        console.log(e.target.files[0]);
         setImage(e.target.files[0]);
         setBlobImg(URL.createObjectURL(e.target.files[0]));
     };

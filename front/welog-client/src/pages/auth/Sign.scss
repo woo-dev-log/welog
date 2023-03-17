@@ -1,10 +1,11 @@
 @mixin btn-block {
-    background-color: white;
+    background-color: var(--element-color);
     margin-top: 20px;
     width: 300px;
     height: 40px;
     border-radius: 10px;
     font-size: 16px;
+    color: var(--font-color);
 }
 
 .container {
@@ -15,7 +16,7 @@
     align-items: center;
 
     .signUp-img {
-        border: 3px solid lightgray;
+        border: 3px solid var(--element-color);
         border-radius: 1000px;
         width: 200px;
         height: 200px;
@@ -34,13 +35,13 @@
         display: flex;
         justify-content: center;
         align-items: center;        
-        background-color: black;
+        background-color: var(--element-color);
         width: 100px;
         height: 30px;
-        color: white;
+        color: var(--font-color);
         font-family: "LINESeedKR-Bd";
         font-size: 14px;
-        border-radius: 15px;
+        border-radius: 10px;
     }
 
     input[type="file"] {
@@ -50,22 +51,17 @@
     input {
         @include btn-block;
         padding: 0 10px 0 10px;
-        border: 1px solid lightgray;
-        box-shadow: lightgray 0 3px 10px;
+        border: 1px solid var(--element-color);
     }
 
     button {
         @include btn-block;
         cursor: pointer;
         font-family: "LINESeedKR-Bd";
-        transition: .3s ease-in;
-        border: 1px solid black;
-        background-color: white;
-        color: black;
+        border: 1px solid var(--element-color);
 
         &:hover {
-            background-color: black;
-            color: white;
+            background-color: var(--element-hover-color);
         }
     }
 }

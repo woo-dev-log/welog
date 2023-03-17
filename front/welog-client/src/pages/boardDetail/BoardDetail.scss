@@ -1,6 +1,6 @@
 @mixin imgCss($width, $height) {
     object-fit: cover;
-    background-color: var(--font-color);
+    background-color: white;
     width: $width;
     height: $height;
     border-radius: 1000px;

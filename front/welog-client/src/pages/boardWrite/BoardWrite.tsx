@@ -27,7 +27,6 @@ const BoardWrite = () => {
     const navigate = useNavigate();
     const ServerImgUrl = "http://localhost:3690/images/";
     const quillRef = useRef(null);
-    console.log(contents);
 
     const imageHandler = () => {
         const input = document.createElement('input');
@@ -44,7 +43,7 @@ const BoardWrite = () => {
                 try {
                     const data = await writeBoardImgApi(formData);
 
-                    // 타입스크립트 오류인지 빨간줄이 생기지만, 문제 없음
+                    // @ts-ignore getEditor() 타입 오류가 생기지만 문제 없음. 
                     const quill = quillRef.current.getEditor();
                     const range = quill.getSelection(true);
                     quill.insertEmbed(range.index, 'image', ServerImgUrl + "boardImg/" + data.fileName);

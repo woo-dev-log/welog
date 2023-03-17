@@ -249,7 +249,17 @@ app.post("/api/updateBoard", imageUpload.single('thumbnail'), async (req, res) =
         if (req.file) {
             if (req.file.originalname.split(".").reverse()[0] === "gif") {
                 imageName = [];
-                return res.status(200).send({ fileName: newFilePath });
+                if (userNo === 0) {
+                    return res.status(400).send("fail");
+                } else {
+                    const [rows] = await mysql.query(`
+                    UPDATE board 
+                    SET title = ?, contents = ?, updateDate = now(), 
+                    tags = ?, boardImgUrl = ?
+                    WHERE boardNo = ? AND userNo = ?
+                    `, [title, contents, tags, newFilePath, boardNo, userNo]);
+                    return res.status(200).send("success");
+                }
             }
         
             let reImage = '';
@@ -335,7 +345,16 @@ app.post("/api/writeBoard", imageUpload.single('thumbnail'), async (req, res) =>
         if (req.file) {
             if (req.file.originalname.split(".").reverse()[0] === "gif") {
                 imageName = [];
-                return res.status(200).send({ fileName: newFilePath });
+                if (userNo === 0) {
+                    return res.status(400).send("fail");
+                } else {
+                    const [rows] = await mysql.query(`
+                    INSERT INTO
+                    board(userNo, title, contents, rgstrDate, tags, boardImgUrl)
+                    VALUES(?, ?, ?, now(), ?, ?)
+                    `, [userNo, title, contents, tags, newFilePath]);
+                    return res.status(200).send("success");
+                }
             }
 
             let reImage = '';

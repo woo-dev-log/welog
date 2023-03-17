@@ -17,7 +17,7 @@ import './App.scss'
 function App() {
   const [cookies] = useCookies(['welogJWT', 'themeColor']);
   const [userInfo, setUserInfo] = useRecoilState(loginUser);
-  axios.defaults.baseURL = "http://localhost:3690";
+  axios.defaults.baseURL = "https://welog.fly.dev";
 
   let osTheme = window.matchMedia("(prefers-color-scheme: dark)").matches ? 'dark': 'light';
   if(cookies.themeColor) {

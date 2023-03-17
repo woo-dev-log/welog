@@ -24,7 +24,7 @@ const UserComment = ({ userNo }: { userNo: number }) => {
     const [userProfile, setUserProfile] = useRecoilState(user);
     const [searchParams, setSearchParams] = useSearchParams();
     const [currentPage, setCurrentPage] = useState(1);
-    const ServerImgUrl = "http://localhost:3690/images/";
+    const ServerImgUrl = "https://welog.fly.dev/images/";
     const navigate = useNavigate();
     const page = searchParams.get("page");
     const limit = 5;

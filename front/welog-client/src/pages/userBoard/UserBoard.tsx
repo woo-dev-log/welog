@@ -18,7 +18,7 @@ const UserBoard = () => {
     const [searchParams, setSearchParams] = useSearchParams({ "type": "post" });
     const type = searchParams.get("type");
     const page = searchParams.get("page");
-    const ServerImgUrl = "http://localhost:3690/images/";
+    const ServerImgUrl = "https://welog.fly.dev/images/";
     const textAreaCols = window.innerWidth < 1199 ? 30 : 50;
 
     const updateProfileContentsOnClick = async () => {

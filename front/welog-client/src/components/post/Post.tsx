@@ -33,7 +33,7 @@ const Post = () => {
     const [currentPage, setCurrentPage] = useState(1);
     const [searchParams, setSearchParams] = useSearchParams();
     const navigate = useNavigate();
-    const ServerImgUrl = "http://localhost:3690/images/";
+    const ServerImgUrl = "https://welog.fly.dev/images/";
     const keyword = searchParams.get("keyword");
     const page = searchParams.get("page");
     const limit = 5;

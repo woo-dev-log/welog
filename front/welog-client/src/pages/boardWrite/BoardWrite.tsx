@@ -25,7 +25,7 @@ const BoardWrite = () => {
     const [image, setImage] = useState<File>();
     const [blobImg, setBlobImg] = useState("");
     const navigate = useNavigate();
-    const ServerImgUrl = "http://localhost:3690/images/";
+    const ServerImgUrl = "https://welog.fly.dev/images/";
     const quillRef = useRef(null);
 
     const imageHandler = () => {

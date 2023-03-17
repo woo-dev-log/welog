@@ -34,7 +34,7 @@ const BoardComment = ({ IntBoardNo }: { IntBoardNo: number }) => {
     const [currentPage, setCurrentPage] = useState(1);
     const [searchParams, setSearchParams] = useSearchParams();
     const navigate = useNavigate();
-    const ServerImgUrl = "http://localhost:3690/images/";
+    const ServerImgUrl = "https://welog.fly.dev/images/";
     const page = searchParams.get("page");
     const textRef = useRef<HTMLTextAreaElement>(null);
     const limit = 5;

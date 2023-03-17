@@ -12,7 +12,7 @@ const Header = () => {
     const [userInfo, setUserInfo] = useRecoilState(loginUser);
     const [cookies, setCookie, removeCookie] = useCookies(['welogJWT', 'boardCurrentPage', 'themeColor']);
     const [themeColor, setThemeColor] = useState(document.body.dataset.theme);
-    const ServerImgUrl = "http://localhost:3690/images/";
+    const ServerImgUrl = "https://welog.fly.dev/images/";
 
     const themeOnClick = (color: string) => {
         setThemeColor(color);

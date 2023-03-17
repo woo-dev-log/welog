@@ -38,7 +38,7 @@ const Board = () => {
     const [cookies, setCookie] = useCookies(['viewPost', 'boardCurrentPage']);
     const [searchParams, setSearchParams] = useSearchParams();
     const navigate = useNavigate();
-    const ServerImgUrl = "http://localhost:3690/images/";
+    const ServerImgUrl = "https://welog.fly.dev/images/";
     const contentsWordLength = window.innerWidth < 1199 ? 35 : 48;
     const boardCnt = boardList.length > 0 ? boardList[0].boardCnt : 0;
 

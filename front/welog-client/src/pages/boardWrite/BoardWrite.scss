@@ -53,6 +53,7 @@
             background-color: var(--element-color);
             border-radius: 5px;
             padding: 10px;
+            overflow: auto;
         }
     }
 
@@ -178,6 +179,7 @@
 
         aside {
             margin-left: 0;
+            margin-top: 20px;
 
             .boardWrite-thumbnail {
                 img {

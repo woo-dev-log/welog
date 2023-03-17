@@ -272,6 +272,7 @@ app.post("/api/updateBoard", imageUpload.single('thumbnail'), async (req, res) =
             });
         }
 
+        imageName = [];
         if (userNo === 0) {
             return res.status(400).send("fail");
         } else {

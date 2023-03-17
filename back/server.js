@@ -43,7 +43,7 @@ const boardImgUpload = multer({
     })
 });
 
-app.post("/updateProfileContents", async (req, res) => {
+app.post("/api/updateProfileContents", async (req, res) => {
     try {
         const { userNo, profileContents } = req.body;
         const [rows] = await mysql.query(`
@@ -56,7 +56,7 @@ app.post("/updateProfileContents", async (req, res) => {
     }
 })
 
-app.post("/userComment", async (req, res) => {
+app.post("/api/userComment", async (req, res) => {
     try {
         const { userNo, page } = req.body;
         const pageNum = page * 5 - 5;
@@ -74,7 +74,7 @@ app.post("/userComment", async (req, res) => {
     }
 })
 
-app.post("/userProfile", async (req, res) => {
+app.post("/api/userProfile", async (req, res) => {
     try {
         const { userNickname } = req.body;
         const [rows] = await mysql.query(`
@@ -93,7 +93,7 @@ app.post("/userProfile", async (req, res) => {
     }
 })
 
-app.post("/userBoard", async (req, res) => {
+app.post("/api/userBoard", async (req, res) => {
     try {
         const { userNickname, page } = req.body;
         const pageNum = page * 5 - 5;
@@ -118,7 +118,7 @@ app.post("/userBoard", async (req, res) => {
     }
 })
 
-app.post("/checkSignUpId", async (req, res) => {
+app.post("/api/checkSignUpId", async (req, res) => {
     const { id } = req.body;
 
     const [rows] = await mysql.query("SELECT EXISTS (SELECT * FROM user WHERE id = ?) as cnt", [id]);
@@ -126,7 +126,7 @@ app.post("/checkSignUpId", async (req, res) => {
     return rows[0].cnt === 1 ? res.send("no") : res.send("yes");
 })
 
-app.post("/checkSignUpNickname", async (req, res) => {
+app.post("/api/checkSignUpNickname", async (req, res) => {
     const { nickname } = req.body;
 
     const [rows] = await mysql.query("SELECT EXISTS (SELECT * FROM user WHERE nickname = ?) as cnt", [nickname]);
@@ -134,7 +134,7 @@ app.post("/checkSignUpNickname", async (req, res) => {
     return rows[0].cnt === 1 ? res.send("no") : res.send("yes");
 })
 
-app.post("/loginToken", async (req, res) => {
+app.post("/api/loginToken", async (req, res) => {
     try {
         const { welogJWT } = req.body;
         const user = await jwt.verify(welogJWT, "welogJWT");
@@ -145,7 +145,7 @@ app.post("/loginToken", async (req, res) => {
     }
 })
 
-app.post("/deleteBoardComment", async (req, res) => {
+app.post("/api/deleteBoardComment", async (req, res) => {
     try {
         const { boardNo, commentNo } = req.body;
         const [rows] = await mysql.query("DELETE FROM comment WHERE boardNo = ? AND commentNo = ?", [boardNo, commentNo]);
@@ -157,7 +157,7 @@ app.post("/deleteBoardComment", async (req, res) => {
     }
 })
 
-app.post("/updateBoardComment", async (req, res) => {
+app.post("/api/updateBoardComment", async (req, res) => {
     try {
         const { boardNo, boardCommentUpdate, userNo, commentNo } = req.body;
         if (userNo === 0) {
@@ -177,7 +177,7 @@ app.post("/updateBoardComment", async (req, res) => {
     }
 })
 
-app.post("/writeBoardComment", async (req, res) => {
+app.post("/api/writeBoardComment", async (req, res) => {
     try {
         const { boardNo, boardCommentAdd, userNo } = req.body;
         if (userNo === 0) {
@@ -197,7 +197,7 @@ app.post("/writeBoardComment", async (req, res) => {
     }
 })
 
-app.post("/boardComment", async (req, res) => {
+app.post("/api/boardComment", async (req, res) => {
     try {
         const { boardNo, page } = req.body;
         const pageNum = page * 5 - 5;
@@ -219,7 +219,7 @@ app.post("/boardComment", async (req, res) => {
     }
 })
 
-app.post("/deleteBoard", async (req, res) => {
+app.post("/api/deleteBoard", async (req, res) => {
     try {
         const { boardNo } = req.body;
         const [rows] = await mysql.query("SELECT boardImgUrl FROM board WHERE boardNo = ?", [boardNo]);
@@ -241,7 +241,7 @@ app.post("/deleteBoard", async (req, res) => {
     }
 })
 
-app.post("/updateBoard", imageUpload.single('thumbnail'), async (req, res) => {
+app.post("/api/updateBoard", imageUpload.single('thumbnail'), async (req, res) => {
     try {
         const { title, contents, boardNo, userNo, tags, boardImgUrl } = req.body;
 
@@ -284,7 +284,7 @@ app.post("/updateBoard", imageUpload.single('thumbnail'), async (req, res) => {
     }
 })
 
-app.post("/writeBoardImg", boardImgUpload.single('boardImg'), async (req, res) => {
+app.post("/api/writeBoardImg", boardImgUpload.single('boardImg'), async (req, res) => {
     try {
         let newFilePath = imageName;
         if (req.file) {
@@ -321,7 +321,7 @@ app.post("/writeBoardImg", boardImgUpload.single('boardImg'), async (req, res) =
     }
 })
 
-app.post("/writeBoard", imageUpload.single('thumbnail'), async (req, res) => {
+app.post("/api/writeBoard", imageUpload.single('thumbnail'), async (req, res) => {
     try {
         const { title, contents, userNo, tags } = req.body;
 
@@ -364,7 +364,7 @@ app.post("/writeBoard", imageUpload.single('thumbnail'), async (req, res) => {
     }
 })
 
-app.post("/boardViews", async (req, res) => {
+app.post("/api/boardViews", async (req, res) => {
     try {
         const { boardNo, views } = req.body;
         const [rows] = await mysql.query("UPDATE board SET views = ? WHERE boardNo = ?", [views, boardNo]);
@@ -376,7 +376,7 @@ app.post("/boardViews", async (req, res) => {
     }
 })
 
-app.post("/boardDetail", async (req, res) => {
+app.post("/api/boardDetail", async (req, res) => {
     try {
         const { boardNo } = req.body;
         const [rows] = await mysql.query(`
@@ -395,7 +395,7 @@ app.post("/boardDetail", async (req, res) => {
     }
 })
 
-app.get("/boardDaily", async (req, res) => {
+app.get("/api/boardDaily", async (req, res) => {
     try {
         const [rows] = await mysql.query(`
         SELECT b.boardNo, b.userNo, b.title, b.contents, b.rgstrDate, 
@@ -417,7 +417,7 @@ app.get("/boardDaily", async (req, res) => {
     }
 })
 
-app.post("/boardSearch", async (req, res) => {
+app.post("/api/boardSearch", async (req, res) => {
     try {
         const { search, page } = req.body;
         const pageNum = page * 5 - 5;
@@ -443,7 +443,7 @@ app.post("/boardSearch", async (req, res) => {
     }
 })
 
-app.post("/board", async (req, res) => {
+app.post("/api/board", async (req, res) => {
     try {
         const { page } = req.body;
         const pageNum = page * 5 - 5;
@@ -466,7 +466,7 @@ app.post("/board", async (req, res) => {
     }
 })
 
-app.post("/signUp", imageUpload.single('thumbnail'), async (req, res) => {
+app.post("/api/signUp", imageUpload.single('thumbnail'), async (req, res) => {
     try {
         const { nickname, id, pw } = req.body;
 
@@ -503,7 +503,7 @@ app.post("/signUp", imageUpload.single('thumbnail'), async (req, res) => {
     }
 })
 
-app.post("/signIn", async (req, res) => {
+app.post("/api/signIn", async (req, res) => {
     try {
         const { id, pw } = req.body;
         const [rows] = await mysql.query(`

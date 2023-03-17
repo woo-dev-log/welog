@@ -13,13 +13,13 @@ https://welog.fly.dev/
 | -------------- | ------------------------------------------------ | ---- |
 | Front-end      | React, TypeScript, Recoil, React-Query, Scss     |
 | Back-end       | Express, Node.js                                 |
-| Database       | Mysql                                            |
-| Cloud Services | 생각중                                             |
+| Database       | Mysql - AWS RDS                                  |
+| Cloud Services | fly.io                                           |
 | Tool           | VsCode, GitHub                                   |
 
 ## 사용 모듈
 ```
-모듈명         사용 이유          
+모듈명          사용 이유          
 
 react-query    페이지 캐싱을 위해 사용했어요
 

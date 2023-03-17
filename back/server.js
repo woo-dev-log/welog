@@ -325,13 +325,14 @@ app.post("/api/writeBoard", imageUpload.single('thumbnail'), async (req, res) =>
     try {
         const { title, contents, userNo, tags } = req.body;
 
-        let newFilePath = "React.png";
+        let newFilePath = imageName;
         if (req.file) {
             if (req.file.originalname.split(".").reverse()[0] === "gif") {
                 imageName = [];
                 return res.status(200).send({ fileName: newFilePath });
             }
-            
+
+            newFilePath = "React.png"
             let reImage = '';
             newFilePath = new Date().valueOf() + '_' + Buffer.from(req.file.originalname, 'latin1').toString('utf8');
             if (req.file.size <= 500 * 1024) {

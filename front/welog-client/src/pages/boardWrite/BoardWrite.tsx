@@ -13,7 +13,7 @@ import Button from "../../components/button/Button";
 import "./BoardWrite.scss"
 import 'react-quill/dist/quill.snow.css';
 const ReactQuill = lazy(() => import('react-quill'));
-import hljs from 'highlight.js/lib/core';
+import hljs from 'highlight.js';
 import 'highlight.js/styles/github-dark.css';
 
 const BoardWrite = () => {

@@ -37,7 +37,7 @@ const Header = () => {
 
         if (result.isConfirmed) {
             ToastSuccess(userInfo[0].nickname + "님 안녕히가세요!");
-            removeCookie("welogJWT");
+            removeCookie("welogJWT", {path : '/'});
             setUserInfo([{ userNo: 0, nickname: "", id: "", imgUrl: "" }]);
         }
     }

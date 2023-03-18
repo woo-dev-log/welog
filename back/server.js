@@ -84,14 +84,18 @@ app.post("/api/updateUserProfile", imageUpload.single('userProfileImg'), async (
         UPDATE user SET nickname = ?, imgUrl = ?, profileContents = ? WHERE userNo = ?
         `, [updateProfileName, newFilePath, updateProfileContents, userNo]);
 
-        const user = [{ userNo: rows[0].userNo, id: rows[0].id, nickname: rows[0].nickname, imgUrl: rows[0].imgUrl }];
+        const [userRows] = await mysql.query(`
+        SELECT * FROM user WHERE id = ? AND password = ?
+        `, [id, pw]);
+
+        const user = [{ userNo: userRows[0].userNo, id: userRows[0].id, nickname: userRows[0].nickname, imgUrl: userRows[0].imgUrl }];
         const token = await jwt.sign(
             {
                 type: "JWT",
-                userNo: rows[0].userNo,
-                id: rows[0].id,
-                nickname: rows[0].nickname,
-                imgUrl: rows[0].imgUrl
+                userNo: userRows[0].userNo,
+                id: userRows[0].id,
+                nickname: userRows[0].nickname,
+                imgUrl: userRows[0].imgUrl
             },
             "welogJWT",
             {

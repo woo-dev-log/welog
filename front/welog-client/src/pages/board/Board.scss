@@ -59,7 +59,7 @@
 
                 img {
                     width: 100%;
-                    height: 215px;
+                    height: 220px;
                 }
             }
 
@@ -99,7 +99,7 @@
 
         .boardDaily-section {
             grid-template-columns: repeat(auto-fit, minmax(15rem, 1fr));
-            gap: 10px;
+            gap: 20px;
 
             .boardDaily-block {
                 header {

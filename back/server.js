@@ -61,6 +61,26 @@ const resizeHandler = async (file, newPath, imageName) => {
     });
 }
 
+const jsonWebToken = async (userRows) => {
+    const user = [{ userNo: userRows[0].userNo, id: userRows[0].id, nickname: userRows[0].nickname, imgUrl: userRows[0].imgUrl }];
+    const token = await jwt.sign(
+        {
+            type: "JWT",
+            userNo: userRows[0].userNo,
+            id: userRows[0].id,
+            nickname: userRows[0].nickname,
+            imgUrl: userRows[0].imgUrl
+        },
+        "welogJWT",
+        {
+            expiresIn: "30d",
+            issuer: "test"
+        }
+    );
+
+    return { user, token };
+}
+
 app.post("/api/updateUserProfile", imageUpload.single('userProfileImg'), async (req, res) => {
     try {
         const { userNo, updateProfileName, updateProfileContents, profileImgUrl } = req.body;
@@ -72,7 +92,9 @@ app.post("/api/updateUserProfile", imageUpload.single('userProfileImg'), async (
                 const [rows] = await mysql.query(`
                 UPDATE user SET nickname = ?, imgUrl = ?, profileContents = ? WHERE userNo = ?
                 `, [updateProfileName, newFilePath, updateProfileContents, userNo]);
-                return res.status(200).send("success");
+
+                const [userRows] = await mysql.query(`SELECT * FROM user WHERE userNo = ?`, [userNo]);
+                return res.status(200).send(await jsonWebToken(userRows));
             }
 
             newFilePath = new Date().valueOf() + '_' + Buffer.from(req.file.originalname, 'latin1').toString('utf8');
@@ -84,27 +106,8 @@ app.post("/api/updateUserProfile", imageUpload.single('userProfileImg'), async (
         UPDATE user SET nickname = ?, imgUrl = ?, profileContents = ? WHERE userNo = ?
         `, [updateProfileName, newFilePath, updateProfileContents, userNo]);
 
-        const [userRows] = await mysql.query(`
-        SELECT * FROM user WHERE id = ? AND password = ?
-        `, [id, pw]);
-
-        const user = [{ userNo: userRows[0].userNo, id: userRows[0].id, nickname: userRows[0].nickname, imgUrl: userRows[0].imgUrl }];
-        const token = await jwt.sign(
-            {
-                type: "JWT",
-                userNo: userRows[0].userNo,
-                id: userRows[0].id,
-                nickname: userRows[0].nickname,
-                imgUrl: userRows[0].imgUrl
-            },
-            "welogJWT",
-            {
-                expiresIn: "30d",
-                issuer: "test"
-            }
-        );
-
-        return res.status(200).send({ user, token });
+        const [userRows] = await mysql.query(`SELECT * FROM user WHERE userNo = ?`, [userNo]);
+        return res.status(200).send(await jsonWebToken(userRows));
     } catch (e) {
         console.error(e);
         return res.status(400).send("fail");
@@ -543,23 +546,7 @@ app.post("/api/signIn", async (req, res) => {
         `, [id, pw]);
 
         if (rows.length > 0) {
-            const user = [{ userNo: rows[0].userNo, id: rows[0].id, nickname: rows[0].nickname, imgUrl: rows[0].imgUrl }];
-            const token = await jwt.sign(
-                {
-                    type: "JWT",
-                    userNo: rows[0].userNo,
-                    id: rows[0].id,
-                    nickname: rows[0].nickname,
-                    imgUrl: rows[0].imgUrl
-                },
-                "welogJWT",
-                {
-                    expiresIn: "30d",
-                    issuer: "test"
-                }
-            );
-
-            return res.status(200).send({ user, token });
+            return res.status(200).send(await jsonWebToken(rows));
         } else {
             return res.status(200).send("no");
         }

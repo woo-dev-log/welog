@@ -71,11 +71,7 @@ const jsonWebToken = async (userRows) => {
             nickname: userRows[0].nickname,
             imgUrl: userRows[0].imgUrl
         },
-        "welogJWT",
-        {
-            expiresIn: "30d",
-            issuer: "test"
-        }
+        "welogJWT"
     );
 
     return { user, token };

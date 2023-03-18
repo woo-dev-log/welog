@@ -38,6 +38,10 @@
             align-items: center;
             gap: 10px;
 
+            p {
+                font-family: "LINESeedKR-Bd";
+            }
+
             img {
                 object-fit: cover;
                 background-color: white;
@@ -59,7 +63,21 @@
         }
 
         .userComment-block{
-            justify-content: space-between;
+            display: block;
+            font-size: 14px;
+
+            .userComment-blockDate {
+                justify-content: end;
+            }
+
+            .userComment-right {
+                justify-content: end;
+
+                img {
+                    width: 35px;
+                    height: 35px;
+                }
+            }
         }
     }
 }

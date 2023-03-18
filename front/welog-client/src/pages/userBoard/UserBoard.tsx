@@ -17,7 +17,7 @@ const UserBoard = () => {
     const [cookies, setCookie] = useCookies(['welogJWT']);
     const [userProfile, setUserProfile] = useRecoilState(user);
     const [updateProfileBoolean, setUpdateProfileBoolean] = useState(false);
-    const [updateProfileName, setUpdateProfileName] = useState(userNickname);
+    const [updateProfileName, setUpdateProfileName] = useState("");
     const [updateProfileContents, setUpdateProfileContents] = useState("");
     const [image, setImage] = useState<File>();
     const [blobImg, setBlobImg] = useState("");
@@ -133,6 +133,7 @@ const UserBoard = () => {
                                         onClick={updateProfileContentsOnClick}>수정하기</button>
                                     : <button className="userBoard-updateProfileBtn"
                                         onClick={() => {
+                                            setUpdateProfileName(userProfile[0].nickname);
                                             setUpdateProfileContents(userProfile[0].profileContents);
                                             setUpdateProfileBoolean(!updateProfileBoolean);
                                         }}>내 정보 수정</button>}

@@ -13,7 +13,7 @@ import './Sign.scss';
 const SignIn = () => {
     const [userInfo, setUserInfo] = useRecoilState(loginUser);
     const [checkCnt, setCheckCnt] = useRecoilState(loginCheckCnt);
-    const [cookies, setCookie] = useCookies(['welogJWT']);
+    const [cookies, setCookie, removeCookie] = useCookies(['welogJWT']);
     const navigate = useNavigate();
     const [id, setId] = useState("");
     const [pw, setPw] = useState("");
@@ -54,6 +54,7 @@ const SignIn = () => {
                     } else setCheckLogin("유저 정보와 일치하지 않아요");
                 } else {
                     // setCookie("welogJWT", data.token, { httpOnly: true });
+                    removeCookie("welogJWT");
                     setCookie("welogJWT", data.token, { sameSite: 'strict' });
                     setUserInfo(data.user);
                     ToastSuccess(data.user[0].nickname + "님 안녕하세요!");

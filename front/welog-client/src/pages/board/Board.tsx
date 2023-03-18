@@ -35,7 +35,7 @@ const Board = () => {
     const [userInfo, setUserInfo] = useRecoilState(loginUser);
     const [boardList, setBoardList] = useRecoilState(board);
     const [updateValue, setUpdateValue] = useRecoilState(boardUpdate);
-    const [cookies, setCookie] = useCookies(['viewPost', 'boardCurrentPage']);
+    const [cookies, setCookie, removeCookie] = useCookies(['viewPost', 'boardCurrentPage']);
     const [searchParams, setSearchParams] = useSearchParams();
     const navigate = useNavigate();
     const ServerImgUrl = "https://welog.fly.dev/images/";
@@ -74,10 +74,12 @@ const Board = () => {
             if (cookies.viewPost) {
                 if (!cookies.viewPost.includes(boardNo)) {
                     await updateBoardViewsApi(boardNo, views);
+                    removeCookie("viewPost");
                     setCookie("viewPost", [...cookies.viewPost, boardNo], { sameSite: 'strict' });
                 }
             } else {
                 await updateBoardViewsApi(boardNo, views);
+                removeCookie("viewPost");
                 setCookie("viewPost", [boardNo], { sameSite: 'strict' });
             }
             navigate("/" + boardNo);

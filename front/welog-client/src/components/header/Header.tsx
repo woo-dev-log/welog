@@ -16,10 +16,12 @@ const Header = () => {
 
     const themeOnClick = (color: string) => {
         setThemeColor(color);
+        removeCookie("themeColor");
         setCookie("themeColor", color);
     }
 
     const homeOnClick = () => {
+        removeCookie("boardCurrentPage");
         setCookie("boardCurrentPage", 1);
         navigate("/");
     }
@@ -37,7 +39,7 @@ const Header = () => {
 
         if (result.isConfirmed) {
             ToastSuccess(userInfo[0].nickname + "님 안녕히가세요!");
-            removeCookie("welogJWT", {path : '/'});
+            removeCookie("welogJWT");
             setUserInfo([{ userNo: 0, nickname: "", id: "", imgUrl: "" }]);
         }
     }

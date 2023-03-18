@@ -77,7 +77,6 @@ const UserComment = ({ userNo }: { userNo: number }) => {
                                     </div>
                                 </div>
                             </div>
-                            <Line />
                         </article>
                     ))}
 

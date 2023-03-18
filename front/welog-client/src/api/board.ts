@@ -1,7 +1,11 @@
 import axios from "axios";
 
-export const updateProfileContentsApi = async (profileContents: string, userNo: number) => {
-    const { data } = await axios.post("/updateProfileContents", { profileContents, userNo });
+export const updateUserProfileApi = async (formData: FormData) => {
+    const { data } = await axios.post("/updateUserProfile", formData, {
+        headers: {
+            'Content-Type': 'multipart/form-data'
+        }
+    });
     return data;
 }
 

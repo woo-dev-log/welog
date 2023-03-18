@@ -7,19 +7,54 @@
         display: flex;
         align-items: center;
         width: 100%;
-        
-        img {
-            object-fit: cover;
-            width: 130px;
-            height: 130px;
-            border-radius: 1000px;
+
+        .userBoard-userProfileImg {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
             margin-right: 20px;
-            background-color: white;
-            border: 1px solid var(--element-color);
+
+            img {
+                object-fit: cover;
+                width: 150px;
+                height: 150px;
+                border-radius: 1000px;
+                background-color: white;
+                border: 1px solid var(--element-color);
+            }
+
+            .userBoard-imgSelect {
+                cursor: pointer;
+                margin-top: 20px;
+                display: flex;
+                justify-content: center;
+                align-items: center;
+                background-color: var(--element-color);
+                color: var(--font-color);
+                width: 100px;
+                height: 30px;
+                font-family: "LINESeedKR-Bd";
+                font-size: 14px;
+                border-radius: 10px;
+            }
+
+            input[type="file"] {
+                display: none;
+            }
         }
 
         .userBoard-introduce {
-            width: 70%;
+            width: 65%;
+
+            input {
+                background-color: var(--element-color);
+                color: var(--font-color);
+                border: none;
+                border-radius: 10px;
+                padding: 10px;
+                font-size: 22px;
+                width: 200px;
+            }
 
             textarea {
                 background-color: var(--element-color);
@@ -62,14 +97,14 @@
             font-family: "LINESeedKR-Bd";
         }
         
-        &.userBoard-bgWhite {
-            background-color: black;
-            color: white;
+        &.userBoard-bgColor {
+            background-color: var(--font-color);
+            color: var(--back-color);
         }
-    
-        &.userBoard-bgBlack {
-            background-color: white;
-            color: black;
+
+        &.userBoard-notColor {
+            background-color: var(--back-color);
+            color: var(--font-color);
         }
     }
 }
@@ -79,12 +114,17 @@
         display: block;
         
         .userBoard-userProfile {
-            display: flex;
+            display: block;
             font-size: 14px;
 
             img {
                 width: 120px;
                 height: 120px;
+            }
+
+            .userBoard-introduce {
+                width: 100%;
+                margin-top: 20px;
             }
         }
 

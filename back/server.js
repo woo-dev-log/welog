@@ -43,12 +43,44 @@ const boardImgUpload = multer({
     })
 });
 
-app.post("/api/updateProfileContents", async (req, res) => {
+app.post("/api/updateUserProfile", imageUpload.single('userProfileImg'), async (req, res) => {
     try {
-        const { userNo, profileContents } = req.body;
+        const { userNo, updateProfileName, updateProfileContents, profileImgUrl } = req.body;
+
+        let newFilePath = imageName.length > 0 ? imageName : profileImgUrl;
+        if (req.file) {
+            if (req.file.originalname.split(".").reverse()[0] === "gif") {
+                imageName = [];
+                const [rows] = await mysql.query(`
+                UPDATE user SET nickname = ?, imgUrl = ?, profileContents = ? WHERE userNo = ?
+                `, [updateProfileName, newFilePath, updateProfileContents, userNo]);
+                return res.status(200).send("success");
+            }
+
+            let reImage = '';
+            newFilePath = new Date().valueOf() + '_' + Buffer.from(req.file.originalname, 'latin1').toString('utf8');
+            if (req.file.size <= 500 * 1024) {
+                reImage = await sharp(req.file.path).toFile("./images/" + newFilePath);
+            } else {
+                if (req.file.originalname.split(".").reverse()[0] === "png") {
+                    reImage = await sharp(req.file.path).resize({ width: 500 }).png({ quality: 80 }).toFile("./images/" + newFilePath);
+                } else {
+                    reImage = await sharp(req.file.path).resize({ width: 500 }).jpeg({ quality: 80 }).toFile("./images/" + newFilePath);
+                }
+            }
+
+            fs.unlink("./images/" + imageName, (err) => {
+                if (err) {
+                    console.error(err);
+                    return res.status(400).send("fail");
+                }
+            });
+        }
+
+        imageName = [];
         const [rows] = await mysql.query(`
-            UPDATE user SET profileContents = ? WHERE userNo = ?
-            `, [profileContents, userNo]);
+        UPDATE user SET nickname = ?, imgUrl = ?, profileContents = ? WHERE userNo = ?
+        `, [updateProfileName, newFilePath, updateProfileContents, userNo]);
         return res.status(200).send("success");
     } catch (e) {
         console.error(e);
@@ -261,7 +293,7 @@ app.post("/api/updateBoard", imageUpload.single('thumbnail'), async (req, res) =
                     return res.status(200).send("success");
                 }
             }
-        
+
             let reImage = '';
             newFilePath = new Date().valueOf() + '_' + Buffer.from(req.file.originalname, 'latin1').toString('utf8');
             if (req.file.size <= 500 * 1024) {

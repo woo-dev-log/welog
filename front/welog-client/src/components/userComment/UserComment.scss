@@ -1,5 +1,13 @@
 .userComment-article {
     margin-bottom: 20px;
+    background-color: var(--element-color);
+    padding: 20px;
+    border-radius: 10px;
+    transition: 0.3s;
+
+    &:hover {
+        transform: scale(1.02);
+    }
 }
 
 .userComment-container {
@@ -7,10 +15,6 @@
     display: flex;
     justify-content: space-between;
     align-items: center;
-
-    &:hover {
-        transform: scale(1.02);
-    }
 
     .userComment-contents {
         font-family: "LINESeedKR-Bd";
@@ -42,6 +46,20 @@
                 width: 40px;
                 height: 40px;
             }
+        }
+    }
+}
+
+@media (max-width: 767px) {
+    .userComment-container {
+        display: block;
+
+        .userComment-contents {
+            font-size: 16px;
+        }
+
+        .userComment-block{
+            justify-content: space-between;
         }
     }
 }

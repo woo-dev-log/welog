@@ -221,7 +221,6 @@ const BoardWrite = () => {
                     </Suspense>
                 </article>
                 <aside>
-                    <div>{contents}</div>
                     <p style={{ marginTop: "0" }}>썸네일</p>
                     <div className="boardWrite-thumbnail">
                         {image ? <img src={blobImg} alt="board-thumbnail" /> :

@@ -9,10 +9,12 @@ import Post from "../../components/post/Post";
 import { ToastError, ToastSuccess, ToastWarn } from "../../components/Toast";
 import UserComment from "../../components/userComment/UserComment";
 import Input from "../../components/input/Input";
+import { useCookies } from "react-cookie";
 
 const UserBoard = () => {
     const { userNickname } = useParams();
     const [userInfo, setUserInfo] = useRecoilState(loginUser);
+    const [cookies, setCookie] = useCookies(['welogJWT']);
     const [userProfile, setUserProfile] = useRecoilState(user);
     const [updateProfileBoolean, setUpdateProfileBoolean] = useState(false);
     const [updateProfileName, setUpdateProfileName] = useState(userNickname);
@@ -44,11 +46,13 @@ const UserBoard = () => {
                 image && formData.append('userProfileImg', image);
                 formData.append('profileImgUrl', userProfile[0].imgUrl);
 
-                await updateUserProfileApi(formData);
+                const data = await updateUserProfileApi(formData);
                 setUpdateProfileBoolean(false);
                 URL.revokeObjectURL(blobImg);
-                ToastSuccess("프로필이 수정되었어요!");
+                setCookie("welogJWT", data.token, { sameSite: 'strict' });
+                setUserInfo(data.user);
                 userProfileApi();
+                ToastSuccess("프로필이 수정되었어요!");
                 navigate("/userBoard/" + updateProfileName);
             } catch (e) {
                 ToastError("프로필 수정을 실패했어요");

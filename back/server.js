@@ -83,7 +83,24 @@ app.post("/api/updateUserProfile", imageUpload.single('userProfileImg'), async (
         const [rows] = await mysql.query(`
         UPDATE user SET nickname = ?, imgUrl = ?, profileContents = ? WHERE userNo = ?
         `, [updateProfileName, newFilePath, updateProfileContents, userNo]);
-        return res.status(200).send("success");
+
+        const user = [{ userNo: rows[0].userNo, id: rows[0].id, nickname: rows[0].nickname, imgUrl: rows[0].imgUrl }];
+        const token = await jwt.sign(
+            {
+                type: "JWT",
+                userNo: rows[0].userNo,
+                id: rows[0].id,
+                nickname: rows[0].nickname,
+                imgUrl: rows[0].imgUrl
+            },
+            "welogJWT",
+            {
+                expiresIn: "30d",
+                issuer: "test"
+            }
+        );
+
+        return res.status(200).send({ user, token });
     } catch (e) {
         console.error(e);
         return res.status(400).send("fail");

@@ -17,12 +17,12 @@ const Header = () => {
     const themeOnClick = (color: string) => {
         setThemeColor(color);
         removeCookie("themeColor");
-        setCookie("themeColor", color);
+        setCookie("themeColor", color, { sameSite: 'strict' });
     }
 
     const homeOnClick = () => {
         removeCookie("boardCurrentPage");
-        setCookie("boardCurrentPage", 1);
+        setCookie("boardCurrentPage", 1, { sameSite: 'strict' });
         navigate("/");
     }
 

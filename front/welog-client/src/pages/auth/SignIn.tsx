@@ -53,9 +53,8 @@ const SignIn = () => {
                         setCheckCnt(checkCnt+1);
                     } else setCheckLogin("유저 정보와 일치하지 않아요");
                 } else {
-                    // setCookie("welogJWT", data.token, { httpOnly: true });
-                    removeCookie("welogJWT");
-                    setCookie("welogJWT", data.token, { sameSite: 'strict' });
+                    removeCookie("welogJWT", { path: '/', sameSite: 'strict' });
+                    setCookie("welogJWT", data.token, { path: '/', sameSite: 'strict' });
                     setUserInfo(data.user);
                     ToastSuccess(data.user[0].nickname + "님 안녕하세요!");
                     navigate(-1);

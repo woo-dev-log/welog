@@ -10,19 +10,17 @@ import './Header.scss';
 const Header = () => {
     const navigate = useNavigate();
     const [userInfo, setUserInfo] = useRecoilState(loginUser);
-    const [cookies, setCookie, removeCookie] = useCookies(['welogJWT', 'boardCurrentPage', 'themeColor']);
+    const [cookies, setCookie, removeCookie] = useCookies(['welogJWT', 'themeColor']);
     const [themeColor, setThemeColor] = useState(document.body.dataset.theme);
     const ServerImgUrl = "https://welog.fly.dev/images/";
 
     const themeOnClick = (color: string) => {
         setThemeColor(color);
-        removeCookie("themeColor");
-        setCookie("themeColor", color, { sameSite: 'strict' });
+        removeCookie("themeColor", { path: '/', sameSite: 'strict' });
+        setCookie("themeColor", color, { path: '/', sameSite: 'strict' });
     }
 
     const homeOnClick = () => {
-        removeCookie("boardCurrentPage");
-        setCookie("boardCurrentPage", 1, { sameSite: 'strict' });
         navigate("/");
     }
 
@@ -39,7 +37,7 @@ const Header = () => {
 
         if (result.isConfirmed) {
             ToastSuccess(userInfo[0].nickname + "님 안녕히가세요!");
-            removeCookie("welogJWT");
+            removeCookie("welogJWT", { path: '/', sameSite: 'strict' });
             setUserInfo([{ userNo: 0, nickname: "", id: "", imgUrl: "" }]);
         }
     }

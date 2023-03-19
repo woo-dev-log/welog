@@ -67,7 +67,8 @@
                 gap: 5px;
                 width: 15%;
                 font-size: 18px;
-                color: gray;
+                color: var(--font-color);
+                opacity: 0.7;
 
                 img {
                     width: 25px;
@@ -84,7 +85,8 @@
             .boardDetail-date {
                 display: flex;
                 gap: 10px;
-                color: gray;
+                color: var(--font-color);
+                opacity: 0.7;
             }
 
             .boardDetail-userProfile {

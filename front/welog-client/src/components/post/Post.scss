@@ -92,7 +92,8 @@
             justify-content: space-between;
             align-items: center;
             font-size: 16px;
-            color: gray;
+            color: var(--font-color);
+            opacity: 0.7;
             margin: 10px 0;
 
             .board-postInfo {

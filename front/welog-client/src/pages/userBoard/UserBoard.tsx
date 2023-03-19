@@ -49,8 +49,8 @@ const UserBoard = () => {
                 const data = await updateUserProfileApi(formData);
                 setUpdateProfileBoolean(false);
                 URL.revokeObjectURL(blobImg);
-                removeCookie("welogJWT");
-                setCookie("welogJWT", data.token, { sameSite: 'strict' });
+                removeCookie("welogJWT", { path: '/', sameSite: 'strict' });
+                setCookie("welogJWT", data.token, { path: '/', sameSite: 'strict' });
                 setUserInfo(data.user);
                 userProfileApi();
                 ToastSuccess("프로필이 수정되었어요!");

@@ -44,7 +44,8 @@
             min-height: 400px;
 
             .ql-blank::before {
-                color: gray;
+                color: var(--font-color);
+                opacity: 0.7;
             }
         }
 

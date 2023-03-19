@@ -11,7 +11,6 @@ interface Props {
 }
 
 const Paging = ({ total, limit, page, setCurrentPage }: Props) => {
-  const [cookies, setCookie] = useCookies(['boardCurrentPage', 'boardCommentCurrentPage']);
   const [searchParams, setSearchParams] = useSearchParams();
   // const [totalPageArray, setTotalPageArray] = useState<number[][]>([]);
   // const [currentPageArray, setCurrentPageArray] = useState<number[]>([]);

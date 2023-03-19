@@ -28,7 +28,7 @@ interface BoardType {
 
 const Post = () => {
     const { userNickname } = useParams();
-    const [cookies, setCookie, removeCookie] = useCookies(['viewPost', 'boardCurrentPage']);
+    const [cookies, setCookie, removeCookie] = useCookies(['viewPost']);
     const [boardList, setBoardList] = useRecoilState(board);
     const [currentPage, setCurrentPage] = useState(1);
     const [searchParams, setSearchParams] = useSearchParams();
@@ -81,13 +81,13 @@ const Post = () => {
             if (cookies.viewPost) {
                 if (!cookies.viewPost.includes(boardNo)) {
                     await updateBoardViewsApi(boardNo, views);
-                    removeCookie("viewPost");
-                    setCookie("viewPost", [...cookies.viewPost, boardNo], { sameSite: 'strict' });
+                    removeCookie("viewPost", { path: '/', sameSite: 'strict' });
+                    setCookie("viewPost", [...cookies.viewPost, boardNo], { path: '/', sameSite: 'strict' });
                 }
             } else {
                 await updateBoardViewsApi(boardNo, views);
-                removeCookie("viewPost");
-                setCookie("viewPost", [boardNo], { sameSite: 'strict' });
+                removeCookie("viewPost", { path: '/', sameSite: 'strict' });
+                setCookie("viewPost", [boardNo], { path: '/', sameSite: 'strict' });
             }
             navigate("/" + boardNo);
         } catch (e) {

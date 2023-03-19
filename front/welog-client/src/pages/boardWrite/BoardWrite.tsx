@@ -14,7 +14,7 @@ import "./BoardWrite.scss"
 import 'react-quill/dist/quill.snow.css';
 const ReactQuill = lazy(() => import('react-quill'));
 import hljs from 'highlight.js';
-import 'highlight.js/styles/github-dark.css';
+import 'highlight.js/styles/atom-one-dark.css';
 
 const BoardWrite = () => {
     const [title, setTitle] = useState("");

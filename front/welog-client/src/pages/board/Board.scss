@@ -27,49 +27,81 @@
     }
 
     .boardDaily-section {
-        display: grid;
-        grid-template-columns: repeat(auto-fit, minmax(25rem, 1fr));
-        gap: 30px;
+        position: relative;
+        overflow: hidden;
         margin-bottom: 100px;
 
-        .boardDaily-block {
-            background-color: var(--board-color);
+        .boardDaily-prevBtn,
+        .boardDaily-nextBtn {
+            position: absolute;
+            top: 50%;
+            transform: translateY(-50%);
+            width: 50px;
+            height: 100%;
+            border: none;
+            background: var(--element-color);
+            color: var(--font-color);
+            font-size: 20px;
+            opacity: 0.9;
 
             &:hover {
-                transition: 0.3s;
-                transform: scale(1.02);
+                background-color: var(--element-hover-color);
             }
+        }
 
-            header {
-                .board-title {
-                    display: flex;
-                    justify-content: space-between;
+        .boardDaily-prevBtn {
+            left: 0;
+        }
 
-                    .boardDaily-weekComment {
-                        color: red;
-                        width: 20%;
-                        text-align: right;
+        .boardDaily-nextBtn {
+            right: 0;
+        }
+
+        .boardDaily-article {
+            display: flex;
+            transition: transform 0.5s;
+            gap: 30px;
+
+            .boardDaily-block {
+                background-color: var(--board-color);
+                flex: 0 0 70%;
+
+                &:hover {
+                    transition: 0.3s;
+                    transform: scale(1.02);
+                }
+
+                header {
+                    .board-title {
+                        display: flex;
+                        justify-content: space-between;
+
+                        .boardDaily-weekComment {
+                            color: red;
+                            width: 20%;
+                            text-align: right;
+                        }
                     }
                 }
-            }
 
-            .board-asideBoardImg {
-                cursor: pointer;
-                margin: 0;
+                .board-asideBoardImg {
+                    cursor: pointer;
+                    margin: 0;
 
-                img {
-                    width: 100%;
-                    height: 220px;
+                    img {
+                        width: 100%;
+                        height: 220px;
+                    }
                 }
-            }
 
-            .board-userBlock {
-                cursor: pointer;
-                display: flex;
-
-                .board-userProfile {
+                .board-userBlock {
+                    cursor: pointer;
                     display: flex;
-                    align-items: center;
+
+                    .board-userProfile {
+                        display: flex;
+                        align-items: center;
+                    }
                 }
             }
         }
@@ -98,22 +130,33 @@
         }
 
         .boardDaily-section {
-            grid-template-columns: repeat(auto-fit, minmax(15rem, 1fr));
-            gap: 20px;
+            .boardDaily-prevBtn,
+            .boardDaily-nextBtn {
+                font-size: 16px;
+                width: 40px;
+                height: 40px;
+            }
 
-            .boardDaily-block {
-                header {
-                    .board-title {
-                        .boardDaily-weekComment {
-                            width: 30%;
+            .boardDaily-article {
+                grid-template-columns: repeat(auto-fit, minmax(15rem, 1fr));
+                gap: 20px;
+
+                .boardDaily-block {
+                    flex: 0 0 90%;
+
+                    header {
+                        .board-title {
+                            .boardDaily-weekComment {
+                                width: 30%;
+                            }
                         }
                     }
-                }
 
-                .board-asideBoardImg {
-                    img {
-                        width: 100%;
-                        height: 150px;
+                    .board-asideBoardImg {
+                        img {
+                            width: 100%;
+                            height: 150px;
+                        }
                     }
                 }
             }

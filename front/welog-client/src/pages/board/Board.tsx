@@ -1,5 +1,5 @@
 import dayjs from "dayjs";
-import { useCallback, useEffect, useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 import { useCookies } from "react-cookie";
 import { useQuery } from "react-query";
 import { useNavigate, useSearchParams } from "react-router-dom";
@@ -9,7 +9,6 @@ import { getBoardDailyApi, updateBoardViewsApi } from "../../api/board";
 import { ToastError, ToastWarn } from "../../components/Toast";
 import { debounce } from "lodash-es";
 import SEO from "../../components/SEO";
-import Line from "../../components/line/Line";
 import Button from "../../components/button/Button";
 import Input from "../../components/input/Input";
 import './Board.scss';
@@ -41,6 +40,10 @@ const Board = () => {
     const ServerImgUrl = "https://welog.fly.dev/images/";
     const contentsWordLength = window.innerWidth < 1199 ? 35 : 48;
     const boardCnt = boardList.length > 0 ? boardList[0].boardCnt : 0;
+    const [slideIndex, setSlideIndex] = useState(0);
+    const boardDailyRef = useRef<HTMLDivElement>(null);
+    const boardDailyWidth = boardDailyRef.current
+        ? boardDailyRef.current.clientWidth + 10 : 600;
 
     const { data: boardDailyList, isLoading: boardDailyLoading } = useQuery<BoardType[]>("boardDailyList", async () => {
         try {
@@ -99,52 +102,59 @@ const Board = () => {
                     : <>
                         <h2>이번주에 댓글이 많이 달린 글이에요</h2>
                         <section className="boardDaily-section">
-                            {boardDailyList.map((boardDaily, i) => (
-                                <article key={i} className="boardDaily-block">
-                                    <aside className="board-asideBoardImg"
-                                        onClick={() => updateBoardViewsOnClick(boardDaily.boardNo, boardDaily.views)}>
-                                        <img src={`${ServerImgUrl}${boardDaily.boardImgUrl}`} alt="boardDailyImgUrl" />
-                                    </aside>
-                                    <div className="board-contentsContainer">
-                                        <header onClick={() => updateBoardViewsOnClick(boardDaily.boardNo, boardDaily.views)}>
-                                            <div className="board-title">
-                                                <p>{boardDaily.title}</p>
-                                                <p className="boardDaily-weekComment">New {boardDaily.weekCommentCnt}</p>
-                                            </div>
-                                            <p className="board-contents">
-                                                {boardDaily.contents.replaceAll(/<[^>]*>?/g, "").length < contentsWordLength
-                                                    ? boardDaily.contents.replaceAll(/<[^>]*>?/g, "")
-                                                    : boardDaily.contents.replaceAll(/<[^>]*>?/g, "").substring(0, contentsWordLength) + " ..."}
-                                            </p>
-                                        </header>
-                                        <footer>
-                                            <div className="board-userBlock" onClick={() => navigate("/userBoard/" + boardDaily.nickname)}>
-                                                <img src={`${ServerImgUrl}${boardDaily.imgUrl}`} alt={boardDaily.imgUrl}
-                                                    className="board-userProfileImg" />
-                                                <p className="board-nickname">{boardDaily.nickname}</p>
-                                            </div>
-                                            <div className="board-footer">
-                                                <p>{dayjs(boardDaily.rgstrDate).format('YY.MM.DD HH:mm')}</p>
-                                                <div className="board-postInfo">
-                                                    <div className="board-views">
-                                                        <img src="/views.svg" alt="views" />
-                                                        <p>{boardDaily.views}</p>
-                                                    </div>
-                                                    <div className="board-comment">
-                                                        <img src="/comment.svg" alt="comment" />
-                                                        <p>{boardDaily.commentCnt}</p>
+                            <article className="boardDaily-article"
+                                style={{ transform: `translateX(-${slideIndex * boardDailyWidth}px)` }}>
+                                {boardDailyList.map((boardDaily, i) => (
+                                    <div key={i} ref={boardDailyRef} className="boardDaily-block">
+                                        <aside className="board-asideBoardImg"
+                                            onClick={() => updateBoardViewsOnClick(boardDaily.boardNo, boardDaily.views)}>
+                                            <img src={`${ServerImgUrl}${boardDaily.boardImgUrl}`} alt="boardDailyImgUrl" />
+                                        </aside>
+                                        <div className="board-contentsContainer">
+                                            <header onClick={() => updateBoardViewsOnClick(boardDaily.boardNo, boardDaily.views)}>
+                                                <div className="board-title">
+                                                    <p>{boardDaily.title}</p>
+                                                    <p className="boardDaily-weekComment">New {boardDaily.weekCommentCnt}</p>
+                                                </div>
+                                                <p className="board-contents">
+                                                    {boardDaily.contents.replaceAll(/<[^>]*>?/g, "").length < contentsWordLength
+                                                        ? boardDaily.contents.replaceAll(/<[^>]*>?/g, "")
+                                                        : boardDaily.contents.replaceAll(/<[^>]*>?/g, "").substring(0, contentsWordLength) + " ..."}
+                                                </p>
+                                            </header>
+                                            <footer>
+                                                <div className="board-userBlock" onClick={() => navigate("/userBoard/" + boardDaily.nickname)}>
+                                                    <img src={`${ServerImgUrl}${boardDaily.imgUrl}`} alt={boardDaily.imgUrl}
+                                                        className="board-userProfileImg" />
+                                                    <p className="board-nickname">{boardDaily.nickname}</p>
+                                                </div>
+                                                <div className="board-footer">
+                                                    <p>{dayjs(boardDaily.rgstrDate).format('YY.MM.DD HH:mm')}</p>
+                                                    <div className="board-postInfo">
+                                                        <div className="board-views">
+                                                            <img src="/views.svg" alt="views" />
+                                                            <p>{boardDaily.views}</p>
+                                                        </div>
+                                                        <div className="board-comment">
+                                                            <img src="/comment.svg" alt="comment" />
+                                                            <p>{boardDaily.commentCnt}</p>
+                                                        </div>
                                                     </div>
                                                 </div>
+                                            </footer>
+                                            <div className="board-tagContainer">
+                                                {boardDaily.tags && boardDaily.tags.split(",").map((v, i) => (
+                                                    <p key={i} className="board-tagBox">{v}</p>
+                                                ))}
                                             </div>
-                                        </footer>
-                                        <div className="board-tagContainer">
-                                            {boardDaily.tags && boardDaily.tags.split(",").map((v, i) => (
-                                                <p key={i} className="board-tagBox">{v}</p>
-                                            ))}
                                         </div>
                                     </div>
-                                </article>
-                            ))}
+                                ))}
+                            </article>
+                            {slideIndex > 0 && <button className="boardDaily-prevBtn"
+                                onClick={() => setSlideIndex(slideIndex - 1)}>&lt;</button>}
+                            {slideIndex !== boardDailyList.length - 1 && <button className="boardDaily-nextBtn"
+                                onClick={() => setSlideIndex(slideIndex + 1)}>&gt;</button>}
                         </section>
                     </>
             }

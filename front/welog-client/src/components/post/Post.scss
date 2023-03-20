@@ -14,12 +14,18 @@
     }
 }
 
+.board-article {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+
 .board-block {
     display: flex;
     flex-direction: row-reverse;
-    margin-bottom: 20px;
     background-color: var(--board-color);
-    height: 260px;
+    // height: 250px;
+    flex: 0 0 100%;
 
     &:hover {
         transition: 0.3s;
@@ -122,14 +128,17 @@
 
     .board-tagContainer {
         display: flex;
-        align-items: center;
         gap: 10px;
-        width: 100%;
         // white-space: nowrap;
-        // overflow-x: scroll;
+        // overflow: auto;
         flex-wrap: wrap;
 
+        // &::-webkit-scrollbar {
+        //     display: none;
+        // }
+
         .board-tagBox {
+            cursor: pointer;
             display: flex;
             align-items: center;
             padding: 0 10px;
@@ -152,12 +161,6 @@
 }
 
 @media (max-width: 1199px) {
-    .board-block {
-        height: auto;
-        min-height: 260px;
-        max-height: 320px;
-    }
-    
     .board-asideBoardImg {
         img {
             width: 300px;
@@ -174,17 +177,9 @@
 }
 
 @media (max-width: 767px) {
-    .board-section {
-        display: grid;
-        gap: 20px;
-    }
-
     .board-block {
-        display: grid;
-        grid-template-columns: repeat(auto-fit, minmax(15rem, 1fr));
+        flex-direction: column;
         margin: 0;
-        min-height: 330px;
-        max-height: 450px;
 
         .board-asideBoardImg {
             margin-left: 0;

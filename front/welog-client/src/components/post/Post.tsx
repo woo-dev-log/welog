@@ -113,14 +113,14 @@ const Post = () => {
     }, [page]);
 
     return (
-        <>
+        <section>
             {isLoading
                 ? <h2>글을 불러오는 중이에요</h2>
                 :
                 boardList.length > 0 &&
-                <section className="board-section">
+                <article className="board-article">
                     {boardList.map((board, i) => (
-                        <article key={i} className="board-block">
+                        <div key={i} className="board-block">
                             <aside className="board-asideBoardImg"
                                 onClick={() => updateBoardViewsOnClick(board.boardNo, board.views)}>
                                 <img src={`${ServerImgUrl}${board.boardImgUrl}`} alt="boardImgUrl" />
@@ -161,7 +161,7 @@ const Post = () => {
                                     ))}
                                 </div>
                             </div>
-                        </article>
+                        </div>
                     ))}
 
                     <Paging
@@ -170,8 +170,8 @@ const Post = () => {
                         page={currentPage}
                         setCurrentPage={setCurrentPage}
                     />
-                </section>}
-        </>
+                </article>}
+        </section>
     )
 }
 

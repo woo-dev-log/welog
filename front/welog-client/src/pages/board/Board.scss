@@ -27,7 +27,7 @@
 
         .board-button {
             text-align: center;
-        
+
             button {
                 cursor: pointer;
                 background-color: var(--element-color);
@@ -38,7 +38,7 @@
                 font-size: 16px;
                 font-family: "LINESeedKR-Bd";
                 color: var(--font-color);
-        
+
                 &:hover {
                     background-color: var(--element-hover-color);
                 }
@@ -138,7 +138,7 @@
         gap: 30px;
         overflow: hidden;
         margin-bottom: 100px;
-            
+
         .skeleton-boardDailyBlock {
             flex: 0 0 70%;
             height: 442px;
@@ -146,14 +146,14 @@
         }
     }
 
-    .skeleton-boardInput{
+    .skeleton-boardInput {
         width: 50%;
         height: 40px;
         margin-bottom: 10px;
         background-color: var(--element-color);
     }
 
-    .skeleton-boardTop{
+    .skeleton-boardTop {
         display: flex;
         align-items: center;
         justify-content: space-between;
@@ -164,6 +164,7 @@
             height: 30px;
             background-color: var(--element-color);
         }
+
         .skeleton-boardBtn {
             width: 120px;
             height: 40px;
@@ -204,6 +205,7 @@
         }
 
         .boardDaily-section {
+
             .boardDaily-prevBtn,
             .boardDaily-nextBtn {
                 font-size: 16px;
@@ -235,15 +237,34 @@
             }
         }
 
-        .skeleton-boardInput{
+        .skeleton-boardDailyText {
+            width: 80%;
+        }
+
+        .skeleton-boardDailySection {
+            gap: 20px;
+            
+            .skeleton-boardDailyBlock {
+                flex: 0 0 90%;
+            }
+        }
+
+        .skeleton-boardInput {
             width: 100%;
         }
-    
-        .skeleton-boardTop{
+
+        .skeleton-boardTop {
             display: block;
+
+            .skeleton-boardText {
+                width: 50%;
+                margin-bottom: 20px;
+            }
 
             .skeleton-boardBtn {
                 margin: 0 auto;
+                width: 100px;
+                height: 30px;
             }
         }
     }

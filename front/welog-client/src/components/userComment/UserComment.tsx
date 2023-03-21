@@ -5,7 +5,6 @@ import { useNavigate, useSearchParams } from "react-router-dom";
 import { useRecoilState } from "recoil";
 import { postUserCommentApi } from "../../api/board";
 import { user } from "../../store/atoms";
-import Line from "../line/Line";
 import Paging from "../paging/Paging";
 import { ToastError } from "../Toast";
 import './UserComment.scss';
@@ -58,14 +57,24 @@ const UserComment = ({ userNo }: { userNo: number }) => {
     return (
         <>
             {userCommentLoading
-                ? <h2>유저 댓글을 조회중이에요</h2>
+                ? <div className="skeleton-userCommentArticle">
+                    <div className="skeleton-userCommentBlock" />
+                    <div className="skeleton-userCommentBlock" />
+                    <div className="skeleton-userCommentBlock" />
+                    <div className="skeleton-userCommentBlock" />
+                    <div className="skeleton-userCommentBlock" />
+                </div>
                 :
                 <section>
                     {userCommentList.map((userComment, i) => (
                         <article key={i} className="userComment-article"
                             onClick={() => navigate("/" + userComment.boardNo)}>
                             <div className="userComment-container">
-                                <p className="userComment-contents">{userComment.contents}</p>
+                                <p className="userComment-contents">
+                                    {userComment.contents.length < 60
+                                        ? userComment.contents
+                                        : userComment.contents.substring(0, 60) + " ..."}
+                                </p>
                                 <div className="userComment-block">
                                     <div className="userComment-blockDate">
                                         <p>{dayjs(userComment.rgstrDate).format('YY.MM.DD HH:mm')} 등록</p>

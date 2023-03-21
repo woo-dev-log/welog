@@ -44,7 +44,7 @@ const Header = () => {
 
     return (
         <div className="header-container">
-            <div className="header-home" onClick={homeOnClick}>홈</div>
+            <div className="header-home" onClick={homeOnClick}>우리의 하루</div>
             <div className='header-box'>
                 <button className='themeColorBtn'>
                     {themeColor === 'dark'

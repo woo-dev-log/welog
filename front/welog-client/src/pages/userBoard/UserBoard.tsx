@@ -21,6 +21,7 @@ const UserBoard = () => {
     const [updateProfileContents, setUpdateProfileContents] = useState("");
     const [image, setImage] = useState<File>();
     const [blobImg, setBlobImg] = useState("");
+    const [profileLoading, setProfileLoading] = useState(false);
     const [searchParams, setSearchParams] = useSearchParams({ "type": "post" });
     const type = searchParams.get("type");
     const page = searchParams.get("page");
@@ -66,6 +67,7 @@ const UserBoard = () => {
         try {
             const data = await postUserProfileApi(userNickname ? userNickname : "");
             setUserProfile(data);
+            setProfileLoading(true);
         } catch (e) {
             ToastError("유저 정보 조회를 실패했어요");
             console.error(e);
@@ -87,9 +89,9 @@ const UserBoard = () => {
     return (
         <>
             <SEO title="유저보드" contents="유저보드" />
-            {userProfile === undefined || userProfile.length === 0
-                ? <h2>유저 정보가 없어요</h2>
-                : <>
+            {profileLoading
+                ? userProfile.length > 0 &&
+                <>
                     <section className="userBoard-userContainer">
                         <div className="userBoard-userProfile">
                             <div className="userBoard-userProfileImg">
@@ -156,8 +158,18 @@ const UserBoard = () => {
 
                     {type === "post"
                         ? <Post />
-                        : userProfile[0].userNo && <UserComment userNo={userProfile[0].userNo} />
+                        : <UserComment userNo={userProfile[0].userNo} />
                     }
+                </>
+                : <>
+                    <div className="skeleton-userProfile">
+                        <div className="skeleton-userProfileImg" />
+                        <div className="skeleton-introduce" />
+                    </div>
+                    <section className="skeleton-userWriteContainer">
+                        <div className="skeleton-btn" />
+                        <div className="skeleton-btn" />
+                    </section>
                 </>
             }
         </>

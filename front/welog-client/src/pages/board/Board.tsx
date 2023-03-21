@@ -53,7 +53,12 @@ const Board = () => {
             ToastError("데일리 글 조회를 실패했어요");
             console.error(e);
         }
-    })
+    },
+        {
+            keepPreviousData: true,
+            cacheTime: 1000 * 60 * 10,
+        }
+    );
 
     const writeBoardOnclick = () => {
         if (userInfo[0].userNo !== 0) {
@@ -96,7 +101,18 @@ const Board = () => {
         <div className="board-postContainer">
             <SEO title="메인" contents="리스트" />
             {boardDailyLoading
-                ? <h2>이번주에 댓글이 많이 달린 글을 불러오는 중이에요</h2>
+                ? <>
+                    <div className="skeleton-boardDailyText" />
+                    <section className="skeleton-boardDailySection">
+                        <div className="skeleton-boardDailyBlock" />
+                        <div className="skeleton-boardDailyBlock" />
+                    </section>
+                    <div className="skeleton-boardInput" />
+                    <div className="skeleton-boardTop">
+                        <div className="skeleton-boardText" />
+                        <div className="skeleton-boardBtn" />
+                    </div>
+                </>
                 : boardDailyList === undefined
                     ? <h2>이번주에 댓글이 많이 달린 글이 없어요</h2>
                     : <>
@@ -156,21 +172,18 @@ const Board = () => {
                             {slideIndex !== boardDailyList.length - 1 && <button className="boardDaily-nextBtn"
                                 onClick={() => setSlideIndex(slideIndex + 1)}>&gt;</button>}
                         </section>
-                    </>
-            }
 
-            <>
-                <Input placeholder="제목, 내용, 닉네임을 입력해주세요" onChange={searchBoardListOnChange} />
-                <div className="board-top">
-                    {searchParams.get("keyword")
-                        ? <p>{searchParams.get("keyword")} 검색 결과 총 {boardCnt}개의 글을 찾았어요</p>
-                        : <p>총 {boardCnt}개의 글이 있어요</p>}
-                    <div className="board-button">
-                        <Button onClick={writeBoardOnclick} text="글쓰기" />
-                    </div>
-                </div>
-                <Post />
-            </>
+                        <Input placeholder="제목, 내용, 닉네임을 입력해주세요" onChange={searchBoardListOnChange} />
+                        <div className="board-top">
+                            {searchParams.get("keyword")
+                                ? <p>{searchParams.get("keyword")} 검색 결과 총 {boardCnt}개의 글을 찾았어요</p>
+                                : <p>총 {boardCnt}개의 글이 있어요</p>}
+                            <div className="board-button">
+                                <Button onClick={writeBoardOnclick} text="글쓰기" />
+                            </div>
+                        </div>
+                    </>}
+            <Post />
         </div>
     )
 };

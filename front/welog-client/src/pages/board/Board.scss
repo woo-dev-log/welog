@@ -24,6 +24,26 @@
             font-family: "LINESeedKR-Bd";
             margin-bottom: 0;
         }
+
+        .board-button {
+            text-align: center;
+        
+            button {
+                cursor: pointer;
+                background-color: var(--element-color);
+                width: 120px;
+                height: 40px;
+                border: none;
+                border-radius: 10px;
+                font-size: 16px;
+                font-family: "LINESeedKR-Bd";
+                color: var(--font-color);
+        
+                &:hover {
+                    background-color: var(--element-hover-color);
+                }
+            }
+        }
     }
 
     .boardDaily-section {
@@ -105,6 +125,53 @@
             }
         }
     }
+
+    .skeleton-boardDailyText {
+        width: 40%;
+        height: 30px;
+        background-color: var(--element-color);
+        margin-bottom: 10px;
+    }
+
+    .skeleton-boardDailySection {
+        display: flex;
+        gap: 30px;
+        overflow: hidden;
+        margin-bottom: 100px;
+            
+        .skeleton-boardDailyBlock {
+            flex: 0 0 70%;
+            height: 442px;
+            background-color: var(--element-color);
+        }
+    }
+
+    .skeleton-boardInput{
+        width: 50%;
+        height: 40px;
+        margin-bottom: 10px;
+        background-color: var(--element-color);
+    }
+
+    .skeleton-boardTop{
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        margin-bottom: 30px;
+
+        .skeleton-boardText {
+            width: 30%;
+            height: 30px;
+            background-color: var(--element-color);
+        }
+        .skeleton-boardBtn {
+            width: 120px;
+            height: 40px;
+            border: none;
+            border-radius: 10px;
+            background-color: var(--element-color);
+        }
+    }
 }
 
 @media (max-width: 767px) {
@@ -125,6 +192,14 @@
                 font-size: 16px;
                 margin-top: 0px;
                 margin-bottom: 20px;
+            }
+
+            .board-button {
+                button {
+                    width: 100px;
+                    height: 30px;
+                    font-size: 14px;
+                }
             }
         }
 
@@ -157,6 +232,18 @@
                         }
                     }
                 }
+            }
+        }
+
+        .skeleton-boardInput{
+            width: 100%;
+        }
+    
+        .skeleton-boardTop{
+            display: block;
+
+            .skeleton-boardBtn {
+                margin: 0 auto;
             }
         }
     }

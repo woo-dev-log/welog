@@ -6,7 +6,6 @@ import { useNavigate, useParams, useSearchParams } from "react-router-dom";
 import { useRecoilState } from "recoil";
 import { getBoardApi, getUserBoardApi, postBoardApi, updateBoardViewsApi } from "../../api/board";
 import { board } from "../../store/atoms";
-import Line from "../line/Line";
 import Paging from "../paging/Paging";
 import { ToastError } from "../Toast";
 import './Post.scss';
@@ -115,9 +114,14 @@ const Post = () => {
     return (
         <section>
             {isLoading
-                ? <h2>글을 불러오는 중이에요</h2>
-                :
-                boardList.length > 0 &&
+                ? <div className="skeleton-article">
+                    <div className="skeleton-block" />
+                    <div className="skeleton-block" />
+                    <div className="skeleton-block" />
+                    <div className="skeleton-block" />
+                    <div className="skeleton-block" />
+                </div>
+                : boardList.length > 0 &&
                 <article className="board-article">
                     {boardList.map((board, i) => (
                         <div key={i} className="board-block">

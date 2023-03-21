@@ -66,7 +66,7 @@
     .userBoard-updateProfileContainer {
         display: flex;
         align-items: center;
-        
+
         .userBoard-updateProfileBtn {
             cursor: pointer;
             border: none;
@@ -96,7 +96,7 @@
         span {
             font-family: "LINESeedKR-Bd";
         }
-        
+
         &.userBoard-bgColor {
             background-color: var(--font-color);
             color: var(--back-color);
@@ -109,10 +109,51 @@
     }
 }
 
+.skeleton-userProfile {
+    display: flex;
+    align-items: center;
+    width: 100%;
+    margin-bottom: 30px;
+
+    .skeleton-userProfileImg {
+        width: 150px;
+        height: 150px;
+        border-radius: 1000px;
+        background-color: var(--element-color);
+        border: 1px solid var(--element-color);
+        margin-right: 20px;
+    }
+
+    .skeleton-introduce {
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        width: 50%;
+        height: 100px;
+        background-color: var(--element-color);
+        border: none;
+        border-radius: 10px;
+    }
+}
+
+.skeleton-userWriteContainer {
+    display: flex;
+    gap: 10px;
+    margin-bottom: 50px;
+
+    .skeleton-btn {
+        width: 50%;
+        height: 100px;
+        border: 2px solid var(--element-color);
+        background-color: var(--element-color);
+        border-radius: 10px;
+    }
+}
+
 @media (max-width: 767px) {
     .userBoard-userContainer {
         display: block;
-        
+
         .userBoard-userProfile {
             display: block;
             font-size: 14px;
@@ -131,7 +172,7 @@
         .userBoard-updateProfileContainer {
             justify-content: center;
             margin-top: 20px;
-            
+
             .userBoard-updateProfileBtn {
                 font-size: 12px;
                 width: 110px;
@@ -144,6 +185,25 @@
         button {
             font-size: 14px;
             height: 80px;
+        }
+    }
+
+    .skeleton-userProfile {
+        display: block;
+        font-size: 14px;
+        
+        .skeleton-userProfileImg{
+            margin: 0 auto;
+        }
+
+        .skeleton-introduce {
+            width: 100%;
+            margin-top: 20px;
+            margin-left: 0;
+
+            .skeleton-userText {
+                width: 100%;
+            }
         }
     }
 }

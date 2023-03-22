@@ -444,7 +444,7 @@ app.get("/api/boardDaily", async (req, res) => {
         WHERE c.rgstrDate BETWEEN DATE_SUB(NOW(), INTERVAL 1 WEEK) AND NOW() 
         GROUP BY c.boardNo  
         ORDER BY weekCommentCnt DESC
-        LIMIT 4;
+        LIMIT 5;
         `);
         return res.status(200).send(rows);
     } catch (e) {

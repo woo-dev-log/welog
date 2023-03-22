@@ -84,7 +84,8 @@
 
             .boardDaily-block {
                 background-color: var(--board-color);
-                flex: 0 0 70%;
+                flex: 0 0 40%;
+                width: 40%;
 
                 &:hover {
                     transition: 0.3s;
@@ -113,14 +114,8 @@
                     }
                 }
 
-                .board-userBlock {
-                    cursor: pointer;
-                    display: flex;
-
-                    .board-userProfile {
-                        display: flex;
-                        align-items: center;
-                    }
+                .board-contentsContainer {
+                    width: 100%;
                 }
             }
         }
@@ -171,6 +166,18 @@
             border: none;
             border-radius: 10px;
             background-color: var(--element-color);
+        }
+    }
+}
+
+@media (max-width: 1199px) {
+    .board-postContainer {
+        .boardDaily-section {
+            .boardDaily-article {
+                .boardDaily-block {
+                    flex: 0 0 80%;
+                }
+            }
         }
     }
 }
@@ -243,7 +250,7 @@
 
         .skeleton-boardDailySection {
             gap: 20px;
-            
+
             .skeleton-boardDailyBlock {
                 flex: 0 0 90%;
             }

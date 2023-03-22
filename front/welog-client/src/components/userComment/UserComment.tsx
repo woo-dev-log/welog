@@ -81,7 +81,7 @@ const UserComment = ({ userNo }: { userNo: number }) => {
                                         {userComment.updateDate && <p>{dayjs(userComment.updateDate).format('YY.MM.DD HH:mm')} 수정</p>}
                                     </div>
                                     <div className="userComment-right">
-                                        <img src={`${ServerImgUrl}${userProfile[0].imgUrl}`} alt="userProfileImg" />
+                                        <img src={`${ServerImgUrl}${userProfile[0].imgUrl}`} alt="userProfileImg" loading="lazy" />
                                         <p>{userProfile[0].nickname}</p>
                                     </div>
                                 </div>

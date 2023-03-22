@@ -97,7 +97,7 @@ const UserBoard = () => {
                             <div className="userBoard-userProfileImg">
                                 {image
                                     ? <img src={blobImg} alt="userImg" />
-                                    : <img src={`${ServerImgUrl}${userProfile[0].imgUrl}`} alt="userImg" />}
+                                    : <img src={`${ServerImgUrl}${userProfile[0].imgUrl}`} alt="userImg" loading="lazy" />}
                                 {updateProfileBoolean &&
                                     <>
                                         <label className="userBoard-imgSelect" htmlFor="userProfileImg">사진 선택</label>

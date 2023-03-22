@@ -31,12 +31,13 @@ const Post = () => {
     const [boardList, setBoardList] = useRecoilState(board);
     const [currentPage, setCurrentPage] = useState(1);
     const [searchParams, setSearchParams] = useSearchParams();
+    const [postLoading, setPostLoading] = useState(false);
     const navigate = useNavigate();
     const ServerImgUrl = "https://welog.fly.dev/images/";
     const keyword = searchParams.get("keyword");
     const page = searchParams.get("page");
     const limit = 5;
-    const contentsWordLength = window.innerWidth < 1199 ? 35 : 58;
+    const contentsWordLength = window.innerWidth < 1199 ? 38 : 58;
 
     const { data: post, isLoading } = useQuery<BoardType[]>(['boardList', page], async () => {
         try {
@@ -56,8 +57,10 @@ const Post = () => {
     const searchBoardApi = async () => {
         try {
             if (keyword) {
+                setPostLoading(false);
                 const data = await postBoardApi(keyword, page ? page : "1");
                 setBoardList(data);
+                setPostLoading(true);
             }
         } catch (e) {
             console.error(e);
@@ -67,8 +70,10 @@ const Post = () => {
     const userBoardApi = async () => {
         try {
             if (userNickname) {
+                setPostLoading(false);
                 const data = await getUserBoardApi(userNickname, page ? page : "1");
                 setBoardList(data);
+                setPostLoading(true);
             }
         } catch (e) {
             console.error(e);
@@ -96,14 +101,20 @@ const Post = () => {
     }, []);
 
     useEffect(() => {
-        if (userNickname) {
-            userBoardApi();
+        userBoardApi();
+    }, [userNickname, page]);
+
+    useEffect(() => {
+        if (userNickname) return;
+
+        if (keyword) {
+            searchBoardApi();
         } else if (post) {
-            if (keyword) {
-                searchBoardApi();
-            } else setBoardList(post);
-        };
-    }, [post, userNickname, keyword]);
+            setPostLoading(false);
+            setBoardList(post);
+            setPostLoading(true);
+        }
+    }, [post, keyword]);
 
     useEffect(() => {
         if (page) {
@@ -113,7 +124,7 @@ const Post = () => {
 
     return (
         <section>
-            {isLoading
+            {!postLoading
                 ? <div className="skeleton-article">
                     <div className="skeleton-block" />
                     <div className="skeleton-block" />
@@ -127,7 +138,7 @@ const Post = () => {
                         <div key={i} className="board-block">
                             <aside className="board-asideBoardImg"
                                 onClick={() => updateBoardViewsOnClick(board.boardNo, board.views)}>
-                                <img src={`${ServerImgUrl}${board.boardImgUrl}`} alt="boardImgUrl" />
+                                <img src={`${ServerImgUrl}${board.boardImgUrl}`} alt="boardImgUrl" loading="lazy" />
                             </aside>
                             <div className="board-contentsContainer">
                                 <header onClick={() => updateBoardViewsOnClick(board.boardNo, board.views)}>
@@ -140,7 +151,7 @@ const Post = () => {
                                 </header>
                                 <footer>
                                     <div className="board-userBlock">
-                                        <img src={`${ServerImgUrl}${board.imgUrl}`} alt="userImg"
+                                        <img src={`${ServerImgUrl}${board.imgUrl}`} alt="userImg" loading="lazy"
                                             className="board-userProfileImg" onClick={() => navigate("/userBoard/" + board.nickname)} />
                                         <p className="board-nickname" onClick={() => navigate("/userBoard/" + board.nickname)}>{board.nickname}</p>
                                     </div>

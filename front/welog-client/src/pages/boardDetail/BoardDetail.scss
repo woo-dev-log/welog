@@ -95,7 +95,7 @@
 
                 img {
                     cursor: pointer;
-                    @include imgCss(35px, 35px);
+                    @include imgCss(40px, 40px);
                 }
 
                 .boardDetail-nickname {
@@ -165,7 +165,14 @@
 .skeleton-boardDetailSection {
     background-color: var(--element-color);
     width: 100%;
-    height: 100vh;
+    height: 50vh;
+}
+
+.skeleton-boardCommentContainer {
+    background-color: var(--element-color);
+    width: 100%;
+    height: 100px;
+    margin-bottom: 20px;
 }
 
 @media (max-width: 767px) {
@@ -209,8 +216,8 @@
                     margin-top: 10px;
 
                     img {
-                        width: 30px;
-                        height: 30px;
+                        width: 35px;
+                        height: 35px;
                     }
 
                     .boardDetail-nickname {

@@ -88,6 +88,7 @@ const BoardDetail = () => {
     }
 
     useEffect(() => {
+        window.scrollTo({ top: 0, behavior: "smooth" });
         getBoardDetail();
     }, [boardNo]);
 
@@ -100,7 +101,7 @@ const BoardDetail = () => {
                     <button className="boardDetail-backbutton" onClick={() => navigate(-1)}>&lt;&nbsp;&nbsp;이전으로</button>
                     <section className="boardDetail-section">
                         <aside className="boarDetail-boardThumbnail">
-                            <img src={`${ServerImgUrl}${boardDetail[0].boardImgUrl}`} alt="boardThumbnail" />
+                            <img src={`${ServerImgUrl}${boardDetail[0].boardImgUrl}`} alt="boardThumbnail" loading="lazy" />
                         </aside>
 
                         <div className="boardDetail-container">
@@ -118,7 +119,7 @@ const BoardDetail = () => {
                                     {boardDetail[0].updateDate && <p className="boardDetail-rgstrDate">{dayjs(boardDetail[0].updateDate).format('YY.MM.DD HH:mm')} 수정</p>}
                                 </div>
                                 <div className="boardDetail-userProfile">
-                                    <img src={`${ServerImgUrl}${boardDetail[0].imgUrl}`} alt="userProfileImg"
+                                    <img src={`${ServerImgUrl}${boardDetail[0].imgUrl}`} alt="userProfileImg" loading="lazy"
                                         onClick={() => userBoardOnClick(boardDetail[0].nickname)} />
                                     <p className="boardDetail-nickname" onClick={() => userBoardOnClick(boardDetail[0].nickname)}>
                                         {boardDetail[0].nickname}
@@ -152,6 +153,9 @@ const BoardDetail = () => {
                 : <>
                     <div className="skeleton-boardDetailBackBtn" />
                     <section className="skeleton-boardDetailSection" />
+                    <article className="skeleton-boardCommentContainer" />
+                    <article className="skeleton-boardCommentContainer" />
+                    <article className="skeleton-boardCommentContainer" />
                 </>
             }
         </>

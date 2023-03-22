@@ -1,5 +1,5 @@
 import dayjs from "dayjs";
-import { useCallback, useEffect, useRef, useState } from "react";
+import { useCallback, useRef, useState } from "react";
 import { useCookies } from "react-cookie";
 import { useQuery } from "react-query";
 import { useNavigate, useSearchParams } from "react-router-dom";
@@ -38,7 +38,7 @@ const Board = () => {
     const [searchParams, setSearchParams] = useSearchParams();
     const navigate = useNavigate();
     const ServerImgUrl = "https://welog.fly.dev/images/";
-    const contentsWordLength = window.innerWidth < 1199 ? 35 : 48;
+    const contentsWordLength = window.innerWidth < 1199 ? 38 : 38;
     const boardCnt = boardList.length > 0 ? boardList[0].boardCnt : 0;
     const [slideIndex, setSlideIndex] = useState(0);
     const boardDailyRef = useRef<HTMLDivElement>(null);
@@ -114,9 +114,9 @@ const Board = () => {
                     </div>
                 </>
                 : boardDailyList === undefined
-                    ? <h2>이번주에 댓글이 많이 달린 글이 없어요</h2>
+                    ? <h2>이번주에 댓글이 달린 글이 없어요</h2>
                     : <>
-                        <h2>이번주에 댓글이 많이 달린 글이에요</h2>
+                        <h2>이번주 댓글 Top 5</h2>
                         <section className="boardDaily-section">
                             <article className="boardDaily-article"
                                 style={{ transform: `translateX(-${slideIndex * boardDailyWidth}px)` }}>
@@ -124,7 +124,7 @@ const Board = () => {
                                     <div key={i} ref={boardDailyRef} className="boardDaily-block">
                                         <aside className="board-asideBoardImg"
                                             onClick={() => updateBoardViewsOnClick(boardDaily.boardNo, boardDaily.views)}>
-                                            <img src={`${ServerImgUrl}${boardDaily.boardImgUrl}`} alt="boardDailyImgUrl" />
+                                            <img src={`${ServerImgUrl}${boardDaily.boardImgUrl}`} alt="boardDailyImgUrl" loading="lazy" />
                                         </aside>
                                         <div className="board-contentsContainer">
                                             <header onClick={() => updateBoardViewsOnClick(boardDaily.boardNo, boardDaily.views)}>
@@ -139,10 +139,10 @@ const Board = () => {
                                                 </p>
                                             </header>
                                             <footer>
-                                                <div className="board-userBlock" onClick={() => navigate("/userBoard/" + boardDaily.nickname)}>
-                                                    <img src={`${ServerImgUrl}${boardDaily.imgUrl}`} alt={boardDaily.imgUrl}
-                                                        className="board-userProfileImg" />
-                                                    <p className="board-nickname">{boardDaily.nickname}</p>
+                                                <div className="board-userBlock">
+                                                    <img src={`${ServerImgUrl}${boardDaily.imgUrl}`} alt={boardDaily.imgUrl} loading="lazy"
+                                                        className="board-userProfileImg" onClick={() => navigate("/userBoard/" + boardDaily.nickname)} />
+                                                    <p className="board-nickname" onClick={() => navigate("/userBoard/" + boardDaily.nickname)}>{boardDaily.nickname}</p>
                                                 </div>
                                                 <div className="board-footer">
                                                     <p>{dayjs(boardDaily.rgstrDate).format('YY.MM.DD HH:mm')}</p>
@@ -173,13 +173,15 @@ const Board = () => {
                                 onClick={() => setSlideIndex(slideIndex + 1)}>&gt;</button>}
                         </section>
 
-                        <Input placeholder="제목, 내용, 닉네임을 입력해주세요" onChange={searchBoardListOnChange} />
-                        <div className="board-top">
-                            {searchParams.get("keyword")
-                                ? <p>{searchParams.get("keyword")} 검색 결과 총 {boardCnt}개의 글을 찾았어요</p>
-                                : <p>총 {boardCnt}개의 글이 있어요</p>}
-                            <div className="board-button">
-                                <Button onClick={writeBoardOnclick} text="글쓰기" />
+                        <div className="board-topBlock">
+                            <Input placeholder="제목, 내용, 닉네임을 입력해주세요" onChange={searchBoardListOnChange} />
+                            <div className="board-top">
+                                {searchParams.get("keyword")
+                                    ? <p>{searchParams.get("keyword")} 검색 결과 총 {boardCnt}개의 글을 찾았어요</p>
+                                    : <p>총 {boardCnt}개의 글이 있어요</p>}
+                                <div className="board-button">
+                                    <Button onClick={writeBoardOnclick} text="글쓰기" />
+                                </div>
                             </div>
                         </div>
                     </>}

@@ -135,7 +135,7 @@
         margin-bottom: 100px;
 
         .skeleton-boardDailyBlock {
-            flex: 0 0 70%;
+            flex: 0 0 40%;
             height: 442px;
             background-color: var(--element-color);
         }
@@ -177,6 +177,12 @@
                 .boardDaily-block {
                     flex: 0 0 80%;
                 }
+            }
+        }
+
+        .skeleton-boardDailySection {
+            .skeleton-boardDailyBlock {
+                flex: 0 0 80%;
             }
         }
     }

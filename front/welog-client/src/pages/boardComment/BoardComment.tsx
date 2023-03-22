@@ -31,6 +31,7 @@ const BoardComment = ({ IntBoardNo }: { IntBoardNo: number }) => {
     const [commentCheckLogin, setCommentCheckLogin] = useState(false);
     const [commentUpdateBoolean, setCommentUpdateBoolean] = useState(false);
     const [commentUpdateCheckNo, setCommentUpdateCheckNo] = useState(0);
+    const [isLoading, setIsLoading] = useState(false);
     const [currentPage, setCurrentPage] = useState(1);
     const [searchParams, setSearchParams] = useSearchParams();
     const navigate = useNavigate();
@@ -124,8 +125,10 @@ const BoardComment = ({ IntBoardNo }: { IntBoardNo: number }) => {
 
     const getBoardComment = async () => {
         try {
+            setIsLoading(false);
             const data = await getBoardCommentApi(IntBoardNo, page ? page : "1");
             setBoardCommentList(data);
+            setIsLoading(true);
         } catch (e) {
             ToastError("댓글 조회를 실패했어요");
             console.error(e);
@@ -133,7 +136,7 @@ const BoardComment = ({ IntBoardNo }: { IntBoardNo: number }) => {
     }
 
     useEffect(() => {
-        if(page) {
+        if (page) {
             setCurrentPage(Number(page));
         } else setCurrentPage(1);
 
@@ -142,55 +145,69 @@ const BoardComment = ({ IntBoardNo }: { IntBoardNo: number }) => {
 
     return (
         <>
-            {boardCommentList.length > 0 && <Label text={boardCommentList[0].boardCommentCnt + "개의 댓글이 있어요"} />}
-            <textarea ref={textRef} value={boardCommentWrite} placeholder="댓글을 입력해주세요" disabled={commentCheckLogin}
-                onFocus={checkLoginBoardCommentOnFocus} onInput={autoHeightRef} onChange={e => setBoardCommentWrite(e.target.value)} />
-            <div className="boardComment-commentAddBtn">
-                <Button onClick={writeBoardCommentOnClick} text="댓글 등록" />
-            </div>
+            {isLoading
+                ? <>
+                    {boardCommentList.length > 0 && <Label text={boardCommentList[0].boardCommentCnt + "개의 댓글이 있어요"} />}
+                    <textarea ref={textRef} value={boardCommentWrite} placeholder="댓글을 입력해주세요" disabled={commentCheckLogin}
+                        onFocus={checkLoginBoardCommentOnFocus} onInput={autoHeightRef} onChange={e => setBoardCommentWrite(e.target.value)} />
+                    <div className="boardComment-commentAddBtn">
+                        <Button onClick={writeBoardCommentOnClick} text="댓글 등록" />
+                    </div>
 
-            {boardCommentList.length > 0 && <Paging
-                total={boardCommentList[0].boardCommentCnt}
-                limit={limit}
-                page={currentPage}
-                setCurrentPage={setCurrentPage} />
-            }
+                    {boardCommentList.length > 0 && <Paging
+                        total={boardCommentList[0].boardCommentCnt}
+                        limit={limit}
+                        page={currentPage}
+                        setCurrentPage={setCurrentPage} />
+                    }
 
-            {boardCommentList.map((boardC, j) => (
-                <article key={j} className="boardComment-commentContainer">
-                    <Line />
-                    <header className="boardComment-commentBlock">
-                        <div className="boardComment-commentLabel">
-                            <img src={`${ServerImgUrl}${boardC.imgUrl}`} alt={boardC.imgUrl}
-                                onClick={() => userBoardOnClick(boardC.nickname)} />
-                            <p className="boardComment-commentNickname" onClick={() => userBoardOnClick(boardC.nickname)}>{boardC.nickname}</p>
-                            <div className="boardComment-date">
-                                <p className="boardComment-commentRgstrDate">{dayjs(boardC.rgstrDate).format('YY.MM.DD HH:mm')} 등록</p>
-                                {boardC.updateDate &&
-                                    <p className="boardComment-commentRgstrDate">{dayjs(boardC.updateDate).format('YY.MM.DD HH:mm')} 수정</p>}
-                            </div>
-                        </div>
-                    </header>
-                    {commentUpdateCheckNo === boardC.commentNo && userInfo[0].userNo !== 0
-                        ? <textarea ref={textRef} value={boardCommentUpdate} placeholder="댓글을 입력해주세요"
-                            onInput={autoHeightRef} onChange={e => setBoardCommentUpdate(e.target.value)} />
-                        : <p dangerouslySetInnerHTML={{ __html: boardC.contents.replaceAll(/(\n|\r\n)/g, '<br>') }} />}
+                    {boardCommentList.map((boardC, j) => (
+                        <article key={j} className="boardComment-commentContainer">
+                            <Line />
+                            <header className="boardComment-commentBlock">
+                                <div className="boardComment-commentLabel">
+                                    <img src={`${ServerImgUrl}${boardC.imgUrl}`} alt={boardC.imgUrl}
+                                        onClick={() => userBoardOnClick(boardC.nickname)} />
+                                    <p className="boardComment-commentNickname" onClick={() => userBoardOnClick(boardC.nickname)}>{boardC.nickname}</p>
+                                    <div className="boardComment-date">
+                                        <p className="boardComment-commentRgstrDate">{dayjs(boardC.rgstrDate).format('YY.MM.DD HH:mm')} 등록</p>
+                                        {boardC.updateDate &&
+                                            <p className="boardComment-commentRgstrDate">{dayjs(boardC.updateDate).format('YY.MM.DD HH:mm')} 수정</p>}
+                                    </div>
+                                </div>
+                            </header>
+                            {commentUpdateCheckNo === boardC.commentNo && userInfo[0].userNo !== 0
+                                ? <textarea ref={textRef} value={boardCommentUpdate} placeholder="댓글을 입력해주세요"
+                                    onInput={autoHeightRef} onChange={e => setBoardCommentUpdate(e.target.value)} />
+                                : <p dangerouslySetInnerHTML={{ __html: boardC.contents.replaceAll(/(\n|\r\n)/g, '<br>') }} />}
 
-                    <footer className="boardComment-commentDeleteBtn">
-                        {userInfo[0].userNo === boardC.userNo &&
-                            <>
-                                {commentUpdateBoolean && commentUpdateCheckNo === boardC.commentNo &&
-                                    <Button onClick={() => updateBoardCommentOnClick(boardC.contents, boardC.commentNo)} text="수정 완료" />}
-                                {!commentUpdateBoolean &&
+                            <footer className="boardComment-commentDeleteBtn">
+                                {userInfo[0].userNo === boardC.userNo &&
                                     <>
-                                        <Button onClick={() => updateCheckBoardCommentOnClick(boardC.contents, boardC.commentNo)} text="수정" />
-                                        <Button onClick={() => deleteBoardCommentOnClick(boardC.commentNo)} text="삭제" />
-                                    </>}
-                            </>
-                        }
-                    </footer>
-                </article>
-            ))}
+                                        {commentUpdateBoolean && commentUpdateCheckNo === boardC.commentNo &&
+                                            <Button onClick={() => updateBoardCommentOnClick(boardC.contents, boardC.commentNo)} text="수정 완료" />}
+                                        {!commentUpdateBoolean &&
+                                            <>
+                                                <Button onClick={() => updateCheckBoardCommentOnClick(boardC.contents, boardC.commentNo)} text="수정" />
+                                                <Button onClick={() => deleteBoardCommentOnClick(boardC.commentNo)} text="삭제" />
+                                            </>}
+                                    </>
+                                }
+                            </footer>
+                        </article>
+                    ))}
+                </>
+                : <>
+                    <div className="skeleton-boardCommentLabel"/>
+                    <div className="skeleton-boardCommentText"/>
+                    <div className="skeleton-boardCommentBtnBlock">
+                        <div className="skeleton-boardCommentBtn"/>
+                    </div>
+                    <div className="skeleton-boardComment"/>
+                    <div className="skeleton-boardComment"/>
+                    <div className="skeleton-boardComment"/>
+                    <div className="skeleton-boardComment"/>
+                </>}
         </>
     )
 }

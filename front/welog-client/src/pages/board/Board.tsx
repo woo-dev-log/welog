@@ -106,6 +106,7 @@ const Board = () => {
                     <section className="skeleton-boardDailySection">
                         <div className="skeleton-boardDailyBlock" />
                         <div className="skeleton-boardDailyBlock" />
+                        <div className="skeleton-boardDailyBlock" />
                     </section>
                     <div className="skeleton-boardInput" />
                     <div className="skeleton-boardTop">

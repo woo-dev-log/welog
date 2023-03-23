@@ -98,8 +98,9 @@
                         justify-content: space-between;
 
                         .boardDaily-weekComment {
+                            font-size: 18px;
                             color: red;
-                            width: 20%;
+                            width: 30%;
                             text-align: right;
                         }
                     }
@@ -136,7 +137,7 @@
 
         .skeleton-boardDailyBlock {
             flex: 0 0 40%;
-            height: 442px;
+            height: 490px;
             background-color: var(--element-color);
         }
     }
@@ -183,6 +184,7 @@
         .skeleton-boardDailySection {
             .skeleton-boardDailyBlock {
                 flex: 0 0 80%;
+                height: 440px;
             }
         }
     }
@@ -233,14 +235,6 @@
                 .boardDaily-block {
                     flex: 0 0 90%;
 
-                    header {
-                        .board-title {
-                            .boardDaily-weekComment {
-                                width: 30%;
-                            }
-                        }
-                    }
-
                     .board-asideBoardImg {
                         img {
                             height: 150px;
@@ -259,6 +253,7 @@
 
             .skeleton-boardDailyBlock {
                 flex: 0 0 90%;
+                height: 370px;
             }
         }
 

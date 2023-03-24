@@ -167,7 +167,10 @@ const BoardComment = ({ IntBoardNo }: { IntBoardNo: number }) => {
         try {
             setIsLoading(false);
             const data = await getBoardCommentApi(IntBoardNo, page ? page : "1");
-            data.boardCommentCnt = data.commentRows[0].boardCommentCnt + data.subCommentRows[0].boardCommentCnt;
+            let cnt = 0;
+            if (data.commentRows[0]) cnt += data.commentRows[0].boardCommentCnt;
+            if (data.subCommentRows[0]) cnt += data.subCommentRows[0].boardCommentCnt;
+            data.boardCommentCnt = cnt;
             setBoardCommentList(data);
             setIsLoading(true);
         } catch (e) {

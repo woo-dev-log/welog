@@ -77,7 +77,7 @@ const UserComment = ({ userNo }: { userNo: number }) => {
                                 </p>
                                 <div className="userComment-block">
                                     <div className="userComment-blockDate">
-                                        <p>{dayjs(userComment.rgstrDate).format('YY.MM.DD HH:mm')} 등록</p>
+                                        <p>{dayjs(userComment.rgstrDate).format('YY.MM.DD HH:mm')} 작성</p>
                                         {userComment.updateDate && <p>{dayjs(userComment.updateDate).format('YY.MM.DD HH:mm')} 수정</p>}
                                     </div>
                                     <div className="userComment-right">

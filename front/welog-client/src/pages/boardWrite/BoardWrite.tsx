@@ -102,7 +102,7 @@ const BoardWrite = () => {
 
         if (e.key === "Enter" || e.key === ",") {
             if (tags.length > 5) {
-                ToastWarn("태그는 6개까지 등록할 수 있어요");
+                ToastWarn("태그는 6개까지 작성할 수 있어요");
                 return;
             }
 
@@ -119,7 +119,7 @@ const BoardWrite = () => {
             ToastWarn("제목을 30자 이내로 작성해주세요");
             return;
         } else {
-            let typeTitle = "글을 등록하시겠어요?";
+            let typeTitle = "글을 작성하시겠어요?";
             let typeUrl = "/writeBoard";
             let typeData = { title, contents, userNo: userInfo[0].userNo, boardNo: 0, tags };
 
@@ -154,7 +154,7 @@ const BoardWrite = () => {
 
                     if (type === 1) {
                         ToastSuccess("글이 수정되었어요!");
-                    } else ToastSuccess("글이 등록되었어요!");
+                    } else ToastSuccess("글이 작성되었어요!");
 
                     URL.revokeObjectURL(blobImg);
                     setUpdateValue({ titleValue: "", contentsValue: "", boardNo: 0 });
@@ -162,7 +162,7 @@ const BoardWrite = () => {
                 } catch (e) {
                     if (type === 1) {
                         ToastError("수정을 실패했어요");
-                    } else ToastError("등록을 실패했어요");
+                    } else ToastError("작성을 실패했어요");
                     console.error(e);
                 }
             }
@@ -245,7 +245,7 @@ const BoardWrite = () => {
 
                     <div className="boardWrite-button">
                         {updateValue.titleValue ? <Button onClick={() => WriteBoardOnClick(1)} text="글 수정" />
-                            : <Button onClick={() => WriteBoardOnClick(0)} text="글 등록" />}
+                            : <Button onClick={() => WriteBoardOnClick(0)} text="글 작성" />}
                     </div>
                 </aside>
             </section>

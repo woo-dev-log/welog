@@ -199,6 +199,26 @@ app.post("/api/loginToken", async (req, res) => {
     }
 })
 
+app.post("/api/writeBoardSubComment", async (req, res) => {
+    try {
+        const { boardNo, commentNo, boardSubCommentAdd, userNo } = req.body;
+        if (userNo === 0) {
+            return res.status(400).send("fail");
+        } else {
+            const [rows] = await mysql.query(`
+            INSERT INTO
+            comment(boardNo, parentCommentNo, userNo, contents, rgstrDate)   
+            VALUES(?, ?, ?, ?, now())
+            `, [boardNo, commentNo, userNo, boardSubCommentAdd]);
+
+            return res.status(200).send("success");
+        }
+    } catch (e) {
+        console.error(e);
+        return res.status(400).send("fail");
+    }
+})
+
 app.post("/api/deleteBoardComment", async (req, res) => {
     try {
         const { boardNo, commentNo } = req.body;
@@ -257,7 +277,7 @@ app.post("/api/boardComment", async (req, res) => {
         const pageNum = page * 5 - 5;
 
         const [rows] = await mysql.query(`
-        SELECT c.commentNo, c.boardNo, c.userNo, c.contents, c.rgstrDate, c.updateDate, 
+        SELECT c.commentNo, c.boardNo, c.parentCommentNo, c.userNo, c.contents, c.rgstrDate, c.updateDate, 
         u.nickname, u.imgUrl, COUNT(*) OVER() AS boardCommentCnt 
         FROM comment c 
         INNER JOIN user u

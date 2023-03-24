@@ -2,7 +2,7 @@ import dayjs from "dayjs";
 import { useCallback, useEffect, useRef, useState } from "react";
 import { useNavigate, useSearchParams } from "react-router-dom";
 import { useRecoilState } from "recoil";
-import { deleteBoardCommentApi, getBoardCommentApi, updateBoardCommentApi, writeBoardCommentApi } from "../../api/board";
+import { deleteBoardCommentApi, getBoardCommentApi, updateBoardCommentApi, writeBoardCommentApi, writeBoardSubCommentApi } from "../../api/board";
 import { ToastError, ToastSuccess, ToastWarn } from "../../components/Toast";
 import { loginUser } from "../../store/atoms";
 import Line from "../../components/line/Line";
@@ -14,6 +14,7 @@ import "./BoardComment.scss";
 interface BoardCommentType {
     commentNo: number;
     boardNo: number;
+    parentCommentNo: number;
     userNo: number;
     contents: string;
     rgstrDate: string;
@@ -27,9 +28,10 @@ const BoardComment = ({ IntBoardNo }: { IntBoardNo: number }) => {
     const [userInfo, setUserInfo] = useRecoilState(loginUser);
     const [boardCommentList, setBoardCommentList] = useState<BoardCommentType[]>([]);
     const [boardCommentWrite, setBoardCommentWrite] = useState("");
+    const [boardSubCommentWrite, setBoardSubCommentWrite] = useState("");
     const [boardCommentUpdate, setBoardCommentUpdate] = useState("");
     const [commentCheckLogin, setCommentCheckLogin] = useState(false);
-    const [commentUpdateBoolean, setCommentUpdateBoolean] = useState(false);
+    const [subCommentCheckNo, setSubCommentCheckNo] = useState(0);
     const [commentUpdateCheckNo, setCommentUpdateCheckNo] = useState(0);
     const [isLoading, setIsLoading] = useState(false);
     const [currentPage, setCurrentPage] = useState(1);
@@ -50,6 +52,29 @@ const BoardComment = ({ IntBoardNo }: { IntBoardNo: number }) => {
         navigate("/userBoard/" + nickname);
     };
 
+    const writeBoardSubCommentOnClick = useCallback(async (IntCommentNo: number) => {
+        if (boardSubCommentWrite === "") {
+            ToastWarn("대댓글을 입력해주세요");
+            return;
+        }
+        if (userInfo[0].userNo === 0) {
+            ToastWarn("로그인을 해주세요");
+            setCommentCheckLogin(true);
+            return;
+        }
+
+        try {
+            await writeBoardSubCommentApi(IntBoardNo, IntCommentNo, boardSubCommentWrite, userInfo[0].userNo);
+            setBoardSubCommentWrite("");
+            setSubCommentCheckNo(0);
+            ToastSuccess("대댓글이 작성되었어요!");
+            getBoardComment();
+        } catch (e) {
+            ToastError("대댓글 작성을 실패했어요");
+            console.error(e);
+        }
+    }, [boardSubCommentWrite, userInfo]);
+
     const deleteBoardCommentOnClick = useCallback(async (commentNo: number) => {
         try {
             await deleteBoardCommentApi(IntBoardNo, commentNo);
@@ -67,18 +92,14 @@ const BoardComment = ({ IntBoardNo }: { IntBoardNo: number }) => {
             return;
         } else if (commentContents === boardCommentUpdate) {
             ToastWarn("수정된 내용이 없어요");
-            setBoardCommentWrite("");
             setBoardCommentUpdate("");
             setCommentUpdateCheckNo(0);
-            setCommentUpdateBoolean(false);
             return;
         } else {
             try {
                 await updateBoardCommentApi(IntBoardNo, boardCommentUpdate, userInfo[0].userNo, commentNo);
-                setBoardCommentWrite("");
                 setBoardCommentUpdate("");
                 setCommentUpdateCheckNo(0);
-                setCommentUpdateBoolean(false);
                 ToastSuccess("댓글이 수정되었어요!");
                 getBoardComment();
             } catch (e) {
@@ -91,27 +112,27 @@ const BoardComment = ({ IntBoardNo }: { IntBoardNo: number }) => {
     const updateCheckBoardCommentOnClick = (boardCContents: string, boardCNo: number) => {
         setBoardCommentUpdate(boardCContents);
         setCommentUpdateCheckNo(boardCNo);
-        setCommentUpdateBoolean(true);
     }
 
     const writeBoardCommentOnClick = useCallback(async () => {
         if (boardCommentWrite === "") {
             ToastWarn("댓글을 입력해주세요");
             return;
-        } else if (userInfo[0].userNo === 0) {
+        }
+        if (userInfo[0].userNo === 0) {
             ToastWarn("로그인을 해주세요");
             setCommentCheckLogin(true);
             return;
-        } else {
-            try {
-                await writeBoardCommentApi(IntBoardNo, boardCommentWrite, userInfo[0].userNo);
-                setBoardCommentWrite("");
-                ToastSuccess("댓글이 등록되었어요!");
-                getBoardComment();
-            } catch (e) {
-                ToastError("댓글 등록을 실패했어요");
-                console.error(e);
-            }
+        }
+
+        try {
+            await writeBoardCommentApi(IntBoardNo, boardCommentWrite, userInfo[0].userNo);
+            setBoardCommentWrite("");
+            ToastSuccess("댓글이 작성되었어요!");
+            getBoardComment();
+        } catch (e) {
+            ToastError("댓글 작성을 실패했어요");
+            console.error(e);
         }
     }, [boardCommentWrite, userInfo]);
 
@@ -151,7 +172,7 @@ const BoardComment = ({ IntBoardNo }: { IntBoardNo: number }) => {
                     <textarea ref={textRef} value={boardCommentWrite} placeholder="댓글을 입력해주세요" disabled={commentCheckLogin}
                         onFocus={checkLoginBoardCommentOnFocus} onInput={autoHeightRef} onChange={e => setBoardCommentWrite(e.target.value)} />
                     <div className="boardComment-commentAddBtn">
-                        <Button onClick={writeBoardCommentOnClick} text="댓글 등록" />
+                        <Button onClick={writeBoardCommentOnClick} text="댓글 작성" />
                     </div>
 
                     {boardCommentList.length > 0 && <Paging
@@ -163,50 +184,71 @@ const BoardComment = ({ IntBoardNo }: { IntBoardNo: number }) => {
 
                     {boardCommentList.map((boardC, j) => (
                         <article key={j} className="boardComment-commentContainer">
-                            <Line />
-                            <header className="boardComment-commentBlock">
-                                <div className="boardComment-commentLabel">
-                                    <img src={`${ServerImgUrl}${boardC.imgUrl}`} alt={boardC.imgUrl}
-                                        onClick={() => userBoardOnClick(boardC.nickname)} />
-                                    <p className="boardComment-commentNickname" onClick={() => userBoardOnClick(boardC.nickname)}>{boardC.nickname}</p>
-                                    <div className="boardComment-date">
-                                        <p className="boardComment-commentRgstrDate">{dayjs(boardC.rgstrDate).format('YY.MM.DD HH:mm')} 등록</p>
-                                        {boardC.updateDate &&
-                                            <p className="boardComment-commentRgstrDate">{dayjs(boardC.updateDate).format('YY.MM.DD HH:mm')} 수정</p>}
-                                    </div>
-                                </div>
-                            </header>
-                            {commentUpdateCheckNo === boardC.commentNo && userInfo[0].userNo !== 0
-                                ? <textarea ref={textRef} value={boardCommentUpdate} placeholder="댓글을 입력해주세요"
-                                    onInput={autoHeightRef} onChange={e => setBoardCommentUpdate(e.target.value)} />
-                                : <p dangerouslySetInnerHTML={{ __html: boardC.contents.replaceAll(/(\n|\r\n)/g, '<br>') }} />}
+                            {boardC.commentNo} {boardC.parentCommentNo}
+                            {boardC.parentCommentNo === 0 &&
+                                <div className="boardComment-commentContainer">
+                                    <Line />
+                                    <header className="boardComment-commentBlock">
+                                        <div className="boardComment-commentLabel">
+                                            <img src={`${ServerImgUrl}${boardC.imgUrl}`} alt={boardC.imgUrl}
+                                                onClick={() => userBoardOnClick(boardC.nickname)} />
+                                            <p className="boardComment-commentNickname" onClick={() => userBoardOnClick(boardC.nickname)}>{boardC.nickname}</p>
+                                            <div className="boardComment-date">
+                                                <p className="boardComment-commentRgstrDate">{dayjs(boardC.rgstrDate).format('YY.MM.DD HH:mm')} 작성</p>
+                                                {boardC.updateDate &&
+                                                    <p className="boardComment-commentRgstrDate">{dayjs(boardC.updateDate).format('YY.MM.DD HH:mm')} 수정</p>}
+                                            </div>
+                                        </div>
+                                    </header>
+                                    {commentUpdateCheckNo === boardC.commentNo && userInfo[0].userNo !== 0
+                                        ? <textarea ref={textRef} value={boardCommentUpdate} placeholder="댓글을 입력해주세요"
+                                            onInput={autoHeightRef} onChange={e => setBoardCommentUpdate(e.target.value)} />
+                                        : <p dangerouslySetInnerHTML={{ __html: boardC.contents.replaceAll(/(\n|\r\n)/g, '<br>') }} />}
 
-                            <footer className="boardComment-commentDeleteBtn">
-                                {userInfo[0].userNo === boardC.userNo &&
-                                    <>
-                                        {commentUpdateBoolean && commentUpdateCheckNo === boardC.commentNo &&
-                                            <Button onClick={() => updateBoardCommentOnClick(boardC.contents, boardC.commentNo)} text="수정 완료" />}
-                                        {!commentUpdateBoolean &&
-                                            <>
-                                                <Button onClick={() => updateCheckBoardCommentOnClick(boardC.contents, boardC.commentNo)} text="수정" />
-                                                <Button onClick={() => deleteBoardCommentOnClick(boardC.commentNo)} text="삭제" />
-                                            </>}
-                                    </>
-                                }
-                            </footer>
+                                    <footer className="boardComment-footer">
+                                        {subCommentCheckNo !== boardC.commentNo
+                                            ? <div className="boardComment-subCommentText" onClick={() => setSubCommentCheckNo(boardC.commentNo)}>+ 대댓글 쓰기</div>
+                                            : <div className="boardComment-subCommentText" onClick={() => setSubCommentCheckNo(0)}>- 대댓글 취소</div>}
+
+                                        {userInfo[0].userNo === boardC.userNo &&
+                                            <div className="boardcomment-btn">
+                                                {commentUpdateCheckNo === boardC.commentNo
+                                                    ? <Button onClick={() => updateBoardCommentOnClick(boardC.contents, boardC.commentNo)} text="수정 완료" />
+                                                    : <>
+                                                        <Button onClick={() => updateCheckBoardCommentOnClick(boardC.contents, boardC.commentNo)} text="수정" />
+                                                        <Button onClick={() => deleteBoardCommentOnClick(boardC.commentNo)} text="삭제" />
+                                                    </>}
+                                            </div>
+                                        }
+                                    </footer>
+
+                                    {subCommentCheckNo === boardC.commentNo &&
+                                        <div className="boardComment-subCommentTextArea">
+                                            <textarea ref={textRef} value={boardSubCommentWrite} placeholder="대댓글을 입력해주세요"
+                                                onInput={autoHeightRef} onChange={e => setBoardSubCommentWrite(e.target.value)} />
+                                            <Button onClick={() => writeBoardSubCommentOnClick(boardC.commentNo)} text="대댓글 작성" />
+                                        </div>}
+                                </div>}
+
+                            {boardCommentList.map((subComment, k) => (
+                                boardC.commentNo === subComment.parentCommentNo &&
+                                <div key={k} className="boardComment-subCommentBlock">
+                                    <p dangerouslySetInnerHTML={{ __html: subComment.contents.replaceAll(/(\n|\r\n)/g, '<br>') }} />
+                                </div>
+                            ))}
                         </article>
                     ))}
                 </>
                 : <>
-                    <div className="skeleton-boardCommentLabel"/>
-                    <div className="skeleton-boardCommentText"/>
+                    <div className="skeleton-boardCommentLabel" />
+                    <div className="skeleton-boardCommentText" />
                     <div className="skeleton-boardCommentBtnBlock">
-                        <div className="skeleton-boardCommentBtn"/>
+                        <div className="skeleton-boardCommentBtn" />
                     </div>
-                    <div className="skeleton-boardComment"/>
-                    <div className="skeleton-boardComment"/>
-                    <div className="skeleton-boardComment"/>
-                    <div className="skeleton-boardComment"/>
+                    <div className="skeleton-boardComment" />
+                    <div className="skeleton-boardComment" />
+                    <div className="skeleton-boardComment" />
+                    <div className="skeleton-boardComment" />
                 </>}
         </>
     )

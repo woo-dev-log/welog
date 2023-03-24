@@ -19,6 +19,11 @@ export const postUserProfileApi = async (userNickname: string) => {
     return data;
 }
 
+export const writeBoardSubCommentApi = async (boardNo: number, commentNo: number, boardSubCommentAdd: string, userNo: number) => {
+    const { data } = await axios.post("/writeBoardSubComment", { boardNo, commentNo, boardSubCommentAdd, userNo });
+    return data;
+}
+
 export const deleteBoardCommentApi = async (boardNo: number, commentNo: number) => {
     const { data } = await axios.post("/deleteBoardComment", { boardNo, commentNo });
     return data;

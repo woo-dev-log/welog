@@ -81,15 +81,43 @@ textarea {
         }
     }
 
-    .boardComment-commentDeleteBtn {
+    .boardComment-subCommentBlock {
+        padding: 30px
+    }
+
+    .boardComment-footer {
         display: flex;
         align-items: center;
-        justify-content: end;
+        justify-content: space-between;
         margin-top: 10px;
 
+        .boardComment-subCommentText {
+            cursor: pointer;
+            color: coral;
+
+            &:hover {
+                color: lightcoral;
+                text-decoration-line: underline;
+            }
+        }
+
+        .boardcomment-btn {
+            button {
+                margin-left: 10px;
+                @include buttonCss(90px, 40px, 14px);
+            }
+        }
+    }
+
+    .boardComment-subCommentTextArea {
+        display: flex;
+        flex-direction: column;
+        align-items: end;
+        padding-left: 30px;
+
         button {
-            margin-left: 10px;
-            @include buttonCss(90px, 40px, 14px);
+            margin-top: 10px;
+            @include buttonCss(190px, 40px, 16px);
         }
     }
 }
@@ -145,7 +173,7 @@ textarea {
 
     .boardComment-commentContainer {
         font-size: 14px;
-        
+
         .boardComment-commentBlock {
             .boardComment-commentLabel {
                 img {
@@ -159,9 +187,18 @@ textarea {
             }
         }
 
-        .boardComment-commentDeleteBtn {
+        .boardComment-footer {
+            .boardcomment-btn {
+                button {
+                    @include buttonCss(70px, 30px, 12px);
+                }
+            }
+        }
+
+        .boardComment-subCommentTextArea {
             button {
-                @include buttonCss(70px, 30px, 12px);
+                margin-top: 10px;
+                @include buttonCss(120px, 30px, 12px);
             }
         }
     }

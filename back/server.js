@@ -276,16 +276,27 @@ app.post("/api/boardComment", async (req, res) => {
         const { boardNo, page } = req.body;
         const pageNum = page * 5 - 5;
 
-        const [rows] = await mysql.query(`
+        const [commentRows] = await mysql.query(`
         SELECT c.commentNo, c.boardNo, c.parentCommentNo, c.userNo, c.contents, c.rgstrDate, c.updateDate, 
         u.nickname, u.imgUrl, COUNT(*) OVER() AS boardCommentCnt 
         FROM comment c 
         INNER JOIN user u
         ON c.userNo = u.userNo
-        WHERE boardNo = ? 
-        ORDER BY rgstrDate DESC
-        LIMIT ?, 5;
+        WHERE boardNo = ? AND parentCommentNo = 0 
+        ORDER BY rgstrDate DESC 
+        LIMIT ?, 5
         `, [boardNo, pageNum]);
+
+        const [subCommentRows] = await mysql.query(`
+        SELECT c.commentNo, c.boardNo, c.parentCommentNo, c.userNo, c.contents, c.rgstrDate, c.updateDate, 
+        u.nickname, u.imgUrl, COUNT(*) OVER() AS boardCommentCnt 
+        FROM comment c 
+        INNER JOIN user u
+        ON c.userNo = u.userNo
+        WHERE boardNo = ? AND parentCommentNo != 0
+        `, [boardNo]);
+
+        rows = {commentRows, subCommentRows};
         return res.status(200).send(rows);
     } catch (e) {
         console.error(e);

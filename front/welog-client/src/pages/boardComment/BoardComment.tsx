@@ -10,8 +10,15 @@ import Label from "../../components/label/Label";
 import Button from "../../components/button/Button";
 import Paging from "../../components/paging/Paging";
 import "./BoardComment.scss";
+import Swal from "sweetalert2";
 
 interface BoardCommentType {
+    boardCommentCnt: number;
+    commentRows: CommentType[];
+    subCommentRows: CommentType[];
+}
+
+interface CommentType {
     commentNo: number;
     boardNo: number;
     parentCommentNo: number;
@@ -26,7 +33,7 @@ interface BoardCommentType {
 
 const BoardComment = ({ IntBoardNo }: { IntBoardNo: number }) => {
     const [userInfo, setUserInfo] = useRecoilState(loginUser);
-    const [boardCommentList, setBoardCommentList] = useState<BoardCommentType[]>([]);
+    const [boardCommentList, setBoardCommentList] = useState<BoardCommentType>();
     const [boardCommentWrite, setBoardCommentWrite] = useState("");
     const [boardSubCommentWrite, setBoardSubCommentWrite] = useState("");
     const [boardCommentUpdate, setBoardCommentUpdate] = useState("");
@@ -77,9 +84,21 @@ const BoardComment = ({ IntBoardNo }: { IntBoardNo: number }) => {
 
     const deleteBoardCommentOnClick = useCallback(async (commentNo: number) => {
         try {
-            await deleteBoardCommentApi(IntBoardNo, commentNo);
-            ToastSuccess("댓글이 삭제되었어요!");
-            getBoardComment();
+            const result = await Swal.fire({
+                title: '댓글을 삭제하시겠어요?',
+                icon: 'question',
+                showCancelButton: true,
+                confirmButtonColor: 'black',
+                cancelButtonColor: 'red',
+                confirmButtonText: '네',
+                cancelButtonText: '아니요'
+            })
+
+            if (result.isConfirmed) {
+                await deleteBoardCommentApi(IntBoardNo, commentNo);
+                ToastSuccess("댓글이 삭제되었어요!");
+                getBoardComment();
+            }
         } catch (e) {
             ToastError("댓글 삭제를 실패했어요");
             console.error(e);
@@ -148,6 +167,7 @@ const BoardComment = ({ IntBoardNo }: { IntBoardNo: number }) => {
         try {
             setIsLoading(false);
             const data = await getBoardCommentApi(IntBoardNo, page ? page : "1");
+            data.boardCommentCnt = data.commentRows[0].boardCommentCnt + data.subCommentRows[0].boardCommentCnt;
             setBoardCommentList(data);
             setIsLoading(true);
         } catch (e) {
@@ -167,24 +187,24 @@ const BoardComment = ({ IntBoardNo }: { IntBoardNo: number }) => {
     return (
         <>
             {isLoading
-                ? <>
-                    {boardCommentList.length > 0 && <Label text={boardCommentList[0].boardCommentCnt + "개의 댓글이 있어요"} />}
+                ? boardCommentList &&
+                <>
+                    {boardCommentList.boardCommentCnt > 0 && <Label text={boardCommentList.boardCommentCnt + "개의 댓글이 있어요"} />}
                     <textarea ref={textRef} value={boardCommentWrite} placeholder="댓글을 입력해주세요" disabled={commentCheckLogin}
                         onFocus={checkLoginBoardCommentOnFocus} onInput={autoHeightRef} onChange={e => setBoardCommentWrite(e.target.value)} />
                     <div className="boardComment-commentAddBtn">
                         <Button onClick={writeBoardCommentOnClick} text="댓글 작성" />
                     </div>
 
-                    {boardCommentList.length > 0 && <Paging
-                        total={boardCommentList[0].boardCommentCnt}
+                    {boardCommentList.boardCommentCnt > 0 && <Paging
+                        total={boardCommentList.commentRows[0].boardCommentCnt}
                         limit={limit}
                         page={currentPage}
                         setCurrentPage={setCurrentPage} />
                     }
 
-                    {boardCommentList.map((boardC, j) => (
-                        <article key={j} className="boardComment-commentContainer">
-                            {boardC.commentNo} {boardC.parentCommentNo}
+                    {boardCommentList.commentRows.map((boardC, i) => (
+                        <article key={i} className="boardComment-commentContainer">
                             {boardC.parentCommentNo === 0 &&
                                 <div className="boardComment-commentContainer">
                                     <Line />
@@ -230,14 +250,41 @@ const BoardComment = ({ IntBoardNo }: { IntBoardNo: number }) => {
                                         </div>}
                                 </div>}
 
-                            {boardCommentList.map((subComment, k) => (
+                            {boardCommentList.subCommentRows.map((subComment, j) => (
                                 boardC.commentNo === subComment.parentCommentNo &&
-                                <div key={k} className="boardComment-subCommentBlock">
-                                    <p dangerouslySetInnerHTML={{ __html: subComment.contents.replaceAll(/(\n|\r\n)/g, '<br>') }} />
-                                </div>
-                            ))}
-                        </article>
-                    ))}
+                                <div key={j} className="boardComment-subCommentBlock">
+                                    <Line />
+                                    <header className="boardComment-commentBlock">
+                                        <div className="boardComment-commentLabel">
+                                            <img src={`${ServerImgUrl}${subComment.imgUrl}`} alt={subComment.imgUrl}
+                                                onClick={() => userBoardOnClick(subComment.nickname)} />
+                                            <p className="boardComment-commentNickname" onClick={() => userBoardOnClick(subComment.nickname)}>{subComment.nickname}</p>
+                                            <div className="boardComment-date">
+                                                <p className="boardComment-commentRgstrDate">{dayjs(subComment.rgstrDate).format('YY.MM.DD HH:mm')} 작성</p>
+                                                {subComment.updateDate &&
+                                                    <p className="boardComment-commentRgstrDate">{dayjs(subComment.updateDate).format('YY.MM.DD HH:mm')} 수정</p>}
+                                            </div>
+                                        </div>
+                                    </header>
+
+                                    {commentUpdateCheckNo === subComment.commentNo && userInfo[0].userNo !== 0
+                                        ? <textarea ref={textRef} value={boardCommentUpdate} placeholder="댓글을 입력해주세요"
+                                            onInput={autoHeightRef} onChange={e => setBoardCommentUpdate(e.target.value)} />
+                                        : <p dangerouslySetInnerHTML={{ __html: subComment.contents.replaceAll(/(\n|\r\n)/g, '<br>') }} />}
+
+                                    <footer className="boardComment-footer" style={{ justifyContent: "end" }}>
+                                        {userInfo[0].userNo === subComment.userNo &&
+                                            <div className="boardcomment-btn">
+                                                {commentUpdateCheckNo === subComment.commentNo
+                                                    ? <Button onClick={() => updateBoardCommentOnClick(subComment.contents, subComment.commentNo)} text="수정 완료" />
+                                                    : <>
+                                                        <Button onClick={() => updateCheckBoardCommentOnClick(subComment.contents, subComment.commentNo)} text="수정" />
+                                                        <Button onClick={() => deleteBoardCommentOnClick(subComment.commentNo)} text="삭제" />
+                                                    </>}
+                                            </div>}
+                                    </footer>
+                                </div>))}
+                        </article>))}
                 </>
                 : <>
                     <div className="skeleton-boardCommentLabel" />

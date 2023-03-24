@@ -82,7 +82,7 @@ textarea {
     }
 
     .boardComment-subCommentBlock {
-        padding: 30px
+        padding-left: 30px
     }
 
     .boardComment-footer {
@@ -187,12 +187,20 @@ textarea {
             }
         }
 
+        .boardComment-subCommentBlock {
+            padding-left: 20px
+        }
+
         .boardComment-footer {
             .boardcomment-btn {
                 button {
                     @include buttonCss(70px, 30px, 12px);
                 }
             }
+        }
+
+        .boardComment-subCommentTextArea {
+            padding-left: 20px;
         }
 
         .boardComment-subCommentTextArea {

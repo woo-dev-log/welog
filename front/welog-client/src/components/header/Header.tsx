@@ -56,10 +56,11 @@ const Header = () => {
                 {userInfo[0].userNo !== 0 ?
                     <div className="header-block">
                         <img src={`${ServerImgUrl}${userInfo[0].imgUrl}`} alt={userInfo[0].imgUrl} />
-                        <div>{userInfo[0].nickname}</div>
+                        <div className="header-nickname">{userInfo[0].nickname}</div>
                         <ul>
-                            <li onClick={() => navigate("/userBoard/" + userInfo[0].nickname)}>내가 쓴 글</li>
-                            <li onClick={logOut}>로그아웃</li>
+                            <div className='test'></div>
+                            <li><span onClick={() => navigate("/userBoard/" + userInfo[0].nickname)}>마이페이지</span></li>
+                            <li><span onClick={logOut}>로그아웃</span></li>
                         </ul>
                     </div>
                     :

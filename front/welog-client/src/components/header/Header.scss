@@ -8,6 +8,11 @@
     padding: 0 300px;
     font-size: 20px;
     font-family: "LINESeedKR-Bd";
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    z-index: 1;
 
     .header-home {
         cursor: pointer;
@@ -43,7 +48,14 @@
         .header-block {
             display: flex;
             align-items: center;
-            cursor: pointer;
+
+            img {
+                cursor: pointer;
+            }
+
+            .header-nickname {
+                cursor: pointer;
+            }
 
             .header-signIn {
                 margin-right: 20px;
@@ -76,17 +88,20 @@
                 position: absolute;
                 list-style: none;
                 background-color: var(--element-color);
-                top: 22px;
+                top: 28px;
                 right: 0px;
-                width: 130px;
-                padding: 27px 20px 0 20px;
+                width: 100px;
+                padding: 20px 20px 10px;
                 font-size: 18px;
 
                 li {
                     margin-bottom: 15px;
-
-                    &:hover {
-                        transform: scale(1.05);
+                    
+                    span {
+                        &:hover {
+                            cursor: pointer;
+                            color: coral;
+                        }
                     }
                 }
             }

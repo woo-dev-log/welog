@@ -117,7 +117,7 @@ const Board = () => {
                 : boardDailyList === undefined
                     ? <h2>이번주에 댓글이 달린 글이 없어요</h2>
                     : <>
-                        <h2>이번주 댓글 Top 5</h2>
+                        <h2>이번주 댓글 Top {boardDailyList.length}</h2>
                         <section className="boardDaily-section">
                             <article className="boardDaily-article"
                                 style={{ transform: `translateX(-${slideIndex * boardDailyWidth}px)` }}>

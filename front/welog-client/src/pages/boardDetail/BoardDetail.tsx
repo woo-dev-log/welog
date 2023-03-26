@@ -146,7 +146,7 @@ const BoardDetail = () => {
                                 }
                                 <Line />
                             </div>
-                            <BoardComment IntBoardNo={IntBoardNo} />
+                            <BoardComment IntBoardNo={IntBoardNo} IntBoardUserNo={boardDetail[0].userNo} />
                         </div>
                     </section>
                 </>

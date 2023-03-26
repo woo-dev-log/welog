@@ -31,7 +31,7 @@ interface CommentType {
     boardCommentCnt: number;
 }
 
-const BoardComment = ({ IntBoardNo }: { IntBoardNo: number }) => {
+const BoardComment = ({ IntBoardNo, IntBoardUserNo }: { IntBoardNo: number, IntBoardUserNo: number }) => {
     const [userInfo, setUserInfo] = useRecoilState(loginUser);
     const [boardCommentList, setBoardCommentList] = useState<BoardCommentType>();
     const [boardCommentWrite, setBoardCommentWrite] = useState("");
@@ -215,12 +215,14 @@ const BoardComment = ({ IntBoardNo }: { IntBoardNo: number }) => {
                                         <div className="boardComment-commentLabel">
                                             <img src={`${ServerImgUrl}${boardC.imgUrl}`} alt={boardC.imgUrl}
                                                 onClick={() => userBoardOnClick(boardC.nickname)} />
-                                            <p className="boardComment-commentNickname" onClick={() => userBoardOnClick(boardC.nickname)}>{boardC.nickname}</p>
-                                            <div className="boardComment-date">
-                                                <p className="boardComment-commentRgstrDate">{dayjs(boardC.rgstrDate).format('YY.MM.DD HH:mm')} 작성</p>
-                                                {boardC.updateDate &&
-                                                    <p className="boardComment-commentRgstrDate">{dayjs(boardC.updateDate).format('YY.MM.DD HH:mm')} 수정</p>}
-                                            </div>
+                                            <p className="boardComment-commentNickname" onClick={() => userBoardOnClick(boardC.nickname)}>
+                                                <span className={IntBoardUserNo === boardC.userNo ? "coral" : ""}>{boardC.nickname}</span>
+                                            </p>
+                                        </div>
+                                        <div className="boardComment-date">
+                                            <p className="boardComment-commentRgstrDate">{dayjs(boardC.rgstrDate).format('YY.MM.DD HH:mm')} 작성</p>
+                                            {boardC.updateDate &&
+                                                <p className="boardComment-commentRgstrDate">{dayjs(boardC.updateDate).format('YY.MM.DD HH:mm')} 수정</p>}
                                         </div>
                                     </header>
                                     {commentUpdateCheckNo === boardC.commentNo && userInfo[0].userNo !== 0
@@ -261,12 +263,14 @@ const BoardComment = ({ IntBoardNo }: { IntBoardNo: number }) => {
                                         <div className="boardComment-commentLabel">
                                             <img src={`${ServerImgUrl}${subComment.imgUrl}`} alt={subComment.imgUrl}
                                                 onClick={() => userBoardOnClick(subComment.nickname)} />
-                                            <p className="boardComment-commentNickname" onClick={() => userBoardOnClick(subComment.nickname)}>{subComment.nickname}</p>
-                                            <div className="boardComment-date">
-                                                <p className="boardComment-commentRgstrDate">{dayjs(subComment.rgstrDate).format('YY.MM.DD HH:mm')} 작성</p>
-                                                {subComment.updateDate &&
-                                                    <p className="boardComment-commentRgstrDate">{dayjs(subComment.updateDate).format('YY.MM.DD HH:mm')} 수정</p>}
-                                            </div>
+                                            <p className="boardComment-commentNickname" onClick={() => userBoardOnClick(subComment.nickname)}>
+                                                <span className={IntBoardUserNo === subComment.userNo ? "coral" : ""}>{subComment.nickname}</span>
+                                            </p>
+                                        </div>
+                                        <div className="boardComment-date">
+                                            <p className="boardComment-commentRgstrDate">{dayjs(subComment.rgstrDate).format('YY.MM.DD HH:mm')} 작성</p>
+                                            {subComment.updateDate &&
+                                                <p className="boardComment-commentRgstrDate">{dayjs(subComment.updateDate).format('YY.MM.DD HH:mm')} 수정</p>}
                                         </div>
                                     </header>
 

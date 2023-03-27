@@ -119,7 +119,7 @@ app.post("/api/userComment", async (req, res) => {
             SELECT * 
             FROM comment 
             WHERE userNo = ? 
-            ORDER BY b.rgstrDate DESC 
+            ORDER BY rgstrDate DESC 
             LIMIT ?, 5
             `, [userNo, pageNum]);
         return res.status(200).send(rows);

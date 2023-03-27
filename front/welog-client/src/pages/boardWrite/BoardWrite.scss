@@ -65,6 +65,7 @@
         margin-left: 50px;
         border-radius: 10px;
         padding: 20px;
+        min-width: 300px;
         height: 580px;
         background-color: var(--board-color);
         
@@ -161,11 +162,11 @@
 
 @media (max-width: 1199px) {
     .boardWrite-container {
-        flex-direction: column-reverse;
+        flex-direction: column;
 
         aside {
             margin-left: 0;
-            margin-bottom: 50px;
+            margin-top: 50px;
 
             .boardWrite-tagInput {
                 width: 40%;

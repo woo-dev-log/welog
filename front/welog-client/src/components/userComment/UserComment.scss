@@ -85,16 +85,14 @@
         }
 
         .userComment-block{
-            display: block;
             font-size: 14px;
+            justify-content: space-between;
 
             .userComment-blockDate {
-                justify-content: end;
+                display: block;
             }
 
             .userComment-right {
-                justify-content: end;
-
                 img {
                     width: 35px;
                     height: 35px;

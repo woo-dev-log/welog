@@ -1,4 +1,3 @@
-import dayjs from "dayjs";
 import { useCallback, useRef, useState } from "react";
 import { useCookies } from "react-cookie";
 import { useQuery } from "react-query";
@@ -13,6 +12,7 @@ import Button from "../../components/button/Button";
 import Input from "../../components/input/Input";
 import './Board.scss';
 import Post from "../../components/post/Post";
+import DayFormat from "../../components/DayFormat";
 
 interface BoardType {
     boardNo: number;
@@ -146,7 +146,7 @@ const Board = () => {
                                                     <p className="board-nickname" onClick={() => navigate("/userBoard/" + boardDaily.nickname)}>{boardDaily.nickname}</p>
                                                 </div>
                                                 <div className="board-footer">
-                                                    <p>{dayjs(boardDaily.rgstrDate).format('YY.MM.DD HH:mm')}</p>
+                                                    <p>{DayFormat(boardDaily.rgstrDate)}</p>
                                                     <div className="board-postInfo">
                                                         <div className="board-views">
                                                             <img src="/views.svg" alt="views" />

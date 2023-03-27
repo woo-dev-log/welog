@@ -1,4 +1,3 @@
-import dayjs from "dayjs";
 import { useCallback, useEffect, useState } from "react";
 import { useCookies } from "react-cookie";
 import { useQuery } from "react-query";
@@ -6,6 +5,7 @@ import { useNavigate, useParams, useSearchParams } from "react-router-dom";
 import { useRecoilState } from "recoil";
 import { getBoardApi, getUserBoardApi, postBoardApi, updateBoardViewsApi } from "../../api/board";
 import { board } from "../../store/atoms";
+import DayFormat from "../DayFormat";
 import Paging from "../paging/Paging";
 import { ToastError } from "../Toast";
 import './Post.scss';
@@ -156,7 +156,7 @@ const Post = () => {
                                         <p className="board-nickname" onClick={() => navigate("/userBoard/" + board.nickname)}>{board.nickname}</p>
                                     </div>
                                     <div className="board-footer">
-                                        <p>{dayjs(board.rgstrDate).format('YY.MM.DD HH:mm')}</p>
+                                        <p>{DayFormat(board.rgstrDate)}</p>
                                         <div className="board-postInfo">
                                             <div className="board-views">
                                                 <img src="/views.svg" alt="views" />

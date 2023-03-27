@@ -42,7 +42,7 @@
         cursor: pointer;
 
         .board-title {
-            font-size: 20px;
+            font-size: 18px;
             font-family: "LINESeedKR-Bd";
         }
 
@@ -148,10 +148,6 @@
 @media (max-width: 1199px) {
     .board-contentsContainer {
         header {
-            .board-title {
-                font-size: 18px;
-            }
-            
             .board-contents {
                 width: auto;
             }

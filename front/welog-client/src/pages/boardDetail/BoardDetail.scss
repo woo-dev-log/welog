@@ -57,6 +57,7 @@
 
             .boardDetail-title {
                 font-family: "LINESeedKR-Bd";
+                font-size: 20px;
                 width: 85%;
             }
 
@@ -193,7 +194,7 @@
                 margin-bottom: 0;
 
                 .boardDetail-title {
-                    font-size: 18px;
+                    font-size: 16px;
                     width: 75%;
                 }
 
@@ -209,12 +210,13 @@
             }
 
             .boardDetail-writerContainer {
-                flex-direction: column;
                 font-size: 14px;
 
-                .boardDetail-userProfile {
-                    margin-top: 10px;
+                .boardDetail-date {
+                    display: block;
+                }
 
+                .boardDetail-userProfile {
                     img {
                         width: 35px;
                         height: 35px;

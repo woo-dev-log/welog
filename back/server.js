@@ -116,9 +116,10 @@ app.post("/api/userComment", async (req, res) => {
         const pageNum = page * 5 - 5;
 
         const [rows] = await mysql.query(`
-            SELECT *
-            FROM comment
-            WHERE userNo = ?
+            SELECT * 
+            FROM comment 
+            WHERE userNo = ? 
+            ORDER BY b.rgstrDate DESC 
             LIMIT ?, 5
             `, [userNo, pageNum]);
         return res.status(200).send(rows);
@@ -296,7 +297,7 @@ app.post("/api/boardComment", async (req, res) => {
         WHERE boardNo = ? AND parentCommentNo != 0
         `, [boardNo]);
 
-        rows = {commentRows, subCommentRows};
+        rows = { commentRows, subCommentRows };
         return res.status(200).send(rows);
     } catch (e) {
         console.error(e);

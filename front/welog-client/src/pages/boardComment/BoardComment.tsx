@@ -1,4 +1,3 @@
-import dayjs from "dayjs";
 import { useCallback, useEffect, useRef, useState } from "react";
 import { useNavigate, useSearchParams } from "react-router-dom";
 import { useRecoilState } from "recoil";
@@ -11,6 +10,7 @@ import Button from "../../components/button/Button";
 import Paging from "../../components/paging/Paging";
 import "./BoardComment.scss";
 import Swal from "sweetalert2";
+import DayFormat from "../../components/DayFormat";
 
 interface BoardCommentType {
     boardCommentCnt: number;
@@ -220,9 +220,9 @@ const BoardComment = ({ IntBoardNo, IntBoardUserNo }: { IntBoardNo: number, IntB
                                             </p>
                                         </div>
                                         <div className="boardComment-date">
-                                            <p className="boardComment-commentRgstrDate">{dayjs(boardC.rgstrDate).format('YY.MM.DD HH:mm')} 작성</p>
+                                            <p className="boardComment-commentRgstrDate">{DayFormat(boardC.rgstrDate)} 작성</p>
                                             {boardC.updateDate &&
-                                                <p className="boardComment-commentRgstrDate">{dayjs(boardC.updateDate).format('YY.MM.DD HH:mm')} 수정</p>}
+                                                <p className="boardComment-commentRgstrDate">{DayFormat(boardC.updateDate)} 수정</p>}
                                         </div>
                                     </header>
                                     {commentUpdateCheckNo === boardC.commentNo && userInfo[0].userNo !== 0
@@ -268,9 +268,9 @@ const BoardComment = ({ IntBoardNo, IntBoardUserNo }: { IntBoardNo: number, IntB
                                             </p>
                                         </div>
                                         <div className="boardComment-date">
-                                            <p className="boardComment-commentRgstrDate">{dayjs(subComment.rgstrDate).format('YY.MM.DD HH:mm')} 작성</p>
+                                            <p className="boardComment-commentRgstrDate">{DayFormat(subComment.rgstrDate)} 작성</p>
                                             {subComment.updateDate &&
-                                                <p className="boardComment-commentRgstrDate">{dayjs(subComment.updateDate).format('YY.MM.DD HH:mm')} 수정</p>}
+                                                <p className="boardComment-commentRgstrDate">{DayFormat(subComment.updateDate)} 수정</p>}
                                         </div>
                                     </header>
 

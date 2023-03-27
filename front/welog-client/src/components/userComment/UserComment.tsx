@@ -1,10 +1,10 @@
-import dayjs from "dayjs";
 import { useEffect, useState } from "react";
 import { useQuery } from "react-query";
 import { useNavigate, useSearchParams } from "react-router-dom";
 import { useRecoilState } from "recoil";
 import { postUserCommentApi } from "../../api/board";
 import { user } from "../../store/atoms";
+import DayFormat from "../DayFormat";
 import Paging from "../paging/Paging";
 import { ToastError } from "../Toast";
 import './UserComment.scss';
@@ -77,8 +77,8 @@ const UserComment = ({ userNo }: { userNo: number }) => {
                                 </p>
                                 <div className="userComment-block">
                                     <div className="userComment-blockDate">
-                                        <p>{dayjs(userComment.rgstrDate).format('YY.MM.DD HH:mm')} 작성</p>
-                                        {userComment.updateDate && <p>{dayjs(userComment.updateDate).format('YY.MM.DD HH:mm')} 수정</p>}
+                                        <p>{DayFormat(userComment.rgstrDate)} 작성</p>
+                                        {userComment.updateDate && <p>{DayFormat(userComment.updateDate)} 수정</p>}
                                     </div>
                                     <div className="userComment-right">
                                         <img src={`${ServerImgUrl}${userProfile[0].imgUrl}`} alt="userProfileImg" loading="lazy" />

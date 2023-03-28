@@ -162,10 +162,10 @@ const UserBoard = () => {
                     }
                 </>
                 : <>
-                    <div className="skeleton-userProfile">
+                    <section className="skeleton-userProfile">
                         <div className="skeleton-userProfileImg" />
                         <div className="skeleton-introduce" />
-                    </div>
+                    </section>
                     <section className="skeleton-userWriteContainer">
                         <div className="skeleton-btn" />
                         <div className="skeleton-btn" />

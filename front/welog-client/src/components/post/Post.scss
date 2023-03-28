@@ -56,6 +56,7 @@
             display: flex;
             align-items: center;
             justify-content: end;
+            gap: 10px;
 
             .board-userProfileImg {
                 cursor: pointer;
@@ -65,7 +66,6 @@
                 height: 35px;
                 border-radius: 1000px;
                 border: 1px solid var(--element-color);
-                margin-right: 10px;
             }
 
             .board-nickname {

@@ -55,6 +55,7 @@ textarea {
         .boardComment-commentLabel {
             display: flex;
             align-items: center;
+            gap: 10px;
 
             img {
                 cursor: pointer;
@@ -64,13 +65,11 @@ textarea {
                 height: 40px;
                 border-radius: 1000px;
                 border: 1px solid var(--element-color);
-                margin-right: 10px;
             }
 
             .boardComment-commentNickname {
                 cursor: pointer;
                 font-family: "LINESeedKR-Bd";
-                margin-right: 10px;
 
                 .coral {
                     color: coral;
@@ -215,6 +214,17 @@ textarea {
                 margin-top: 10px;
                 @include buttonCss(120px, 30px, 12px);
             }
+        }
+    }
+
+    .skeleton-boardCommentLabel {
+        width: 50%;
+    }
+
+    .skeleton-boardCommentBtnBlock {
+        .skeleton-boardCommentBtn {
+            width: 120px;
+            height: 30px;
         }
     }
 }

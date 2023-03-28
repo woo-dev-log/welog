@@ -5,7 +5,6 @@
     height: $height;
     border-radius: 1000px;
     border: 1px solid var(--element-color);
-    margin-right: 10px;
 }
 
 @mixin buttonCss($width, $height, $font-size) {
@@ -93,6 +92,7 @@
             .boardDetail-userProfile {
                 display: flex;
                 align-items: center;
+                gap: 10px;
 
                 img {
                     cursor: pointer;

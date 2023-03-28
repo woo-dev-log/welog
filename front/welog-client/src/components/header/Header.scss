@@ -57,17 +57,13 @@
         .header-block {
             display: flex;
             align-items: center;
-
-            img {
-                cursor: pointer;
-            }
+            gap: 10px;
 
             .header-nickname {
                 cursor: pointer;
             }
 
             .header-signIn {
-                margin-right: 20px;
                 cursor: pointer;
             }
 
@@ -76,13 +72,13 @@
             }
 
             img {
+                cursor: pointer;
                 object-fit: cover;
                 background-color: white;
                 width: 40px;
                 height: 40px;
                 border-radius: 1000px;
                 border: 1px solid var(--element-color);
-                margin-right: 20px;
             }
         }
 
@@ -99,7 +95,7 @@
 
             li {
                 margin-bottom: 15px;
-                
+
                 span {
                     &:hover {
                         cursor: pointer;
@@ -125,6 +121,13 @@
 
         .header-home {
             font-size: 18px;
+        }
+
+        .themeColorBtn {
+            .header-themeImg {
+                width: 30px;
+                height: 30px;
+            }
         }
 
         .header-box {

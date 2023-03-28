@@ -45,14 +45,14 @@ const Header = () => {
     return (
         <div className="header-container">
             <div className="header-home" onClick={homeOnClick}>우리의 하루</div>
+            <button className='themeColorBtn'>
+                {themeColor === 'dark'
+                    ? <img onClick={() => themeOnClick('light')}
+                        className='header-themeImg' src="/dark-mode.svg" alt="dark-mode" />
+                    : <img onClick={() => themeOnClick('dark')}
+                        className='header-themeImg' src="/light-mode.svg" alt="light-mode" />}
+            </button>
             <div className='header-box'>
-                <button className='themeColorBtn'>
-                    {themeColor === 'dark'
-                        ? <img onClick={() => themeOnClick('light')}
-                            className='header-themeImg' src="/dark-mode.svg" alt="dark-mode" />
-                        : <img onClick={() => themeOnClick('dark')}
-                            className='header-themeImg' src="/light-mode.svg" alt="light-mode" />}
-                </button>
                 {userInfo[0].userNo !== 0 ?
                     <div className="header-block">
                         <img src={`${ServerImgUrl}${userInfo[0].imgUrl}`} alt={userInfo[0].imgUrl} />

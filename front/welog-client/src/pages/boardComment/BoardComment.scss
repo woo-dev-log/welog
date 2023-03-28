@@ -16,6 +16,7 @@
 
 .label {
     text-align: left;
+    margin-left: 10px;
 }
 
 textarea {
@@ -63,7 +64,7 @@ textarea {
                 height: 40px;
                 border-radius: 1000px;
                 border: 1px solid var(--element-color);
-                margin-right: 20px;
+                margin-right: 10px;
             }
 
             .boardComment-commentNickname {

@@ -237,6 +237,14 @@
                 .boardDaily-block {
                     flex: 0 0 90%;
 
+                    header {
+                        .board-title {
+                            .boardDaily-weekComment {
+                                font-size: 16px;
+                            }
+                        }
+                    }
+
                     .board-asideBoardImg {
                         img {
                             height: 150px;

@@ -46,10 +46,10 @@ const Paging = ({ total, limit, page, setCurrentPage }: Props) => {
     const boardArticle = document.querySelector(".board-article") as HTMLElement;
     if (boardTopBlock) {
       const TopBlockOffsetTop = boardTopBlock.offsetTop;
-      window.scrollTo({ top: TopBlockOffsetTop - 50, behavior: "smooth" });
+      window.scrollTo({ top: TopBlockOffsetTop - 80, behavior: "smooth" });
     } else if (boardArticle) {
       const ArticleOffsetTop = boardArticle.offsetTop;
-      window.scrollTo({ top: ArticleOffsetTop - 50, behavior: "smooth" });
+      window.scrollTo({ top: ArticleOffsetTop - 80, behavior: "smooth" });
     }
   };
 

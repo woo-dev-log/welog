@@ -58,7 +58,6 @@ const Header = () => {
                         <img src={`${ServerImgUrl}${userInfo[0].imgUrl}`} alt={userInfo[0].imgUrl} />
                         <div className="header-nickname">{userInfo[0].nickname}</div>
                         <ul>
-                            <div className='test'></div>
                             <li><span onClick={() => navigate("/userBoard/" + userInfo[0].nickname)}>마이페이지</span></li>
                             <li><span onClick={logOut}>로그아웃</span></li>
                         </ul>

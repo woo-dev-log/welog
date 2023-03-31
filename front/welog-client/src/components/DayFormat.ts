@@ -21,10 +21,10 @@ const DayFormat = (date: string) => {
     }
     if (now.year !== rgstrDate.year) return localDate.format('YY.MM.DD HH:mm');
     if (dayjs().diff(localDate, "day") > 31) return localDate.format('YY.MM.DD HH:mm');
-    if (now.day !== rgstrDate.day) return now.day - rgstrDate.day + "일전";
+    if (now.day !== rgstrDate.day) return dayjs().diff(localDate, "day") + "일전";
 
     if (now.hour === rgstrDate.hour) {
-        if(now.minute === rgstrDate.minute) return now.second - rgstrDate.second + "초전";
+        if (now.minute === rgstrDate.minute) return now.second - rgstrDate.second + "초전";
         return now.minute - rgstrDate.minute + "분전";
     } else {
         return now.hour - rgstrDate.hour + "시간전";

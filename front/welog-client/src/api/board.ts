@@ -9,8 +9,8 @@ export const updateUserProfileApi = async (formData: FormData) => {
     return data;
 }
 
-export const postUserCommentApi = async(userNo: number, page: string) => {
-    const { data } = await axios.post("/userComment", {userNo, page});
+export const postUserCommentApi = async (userNo: number, page: string) => {
+    const { data } = await axios.post("/userComment", { userNo, page });
     return data;
 }
 
@@ -92,7 +92,7 @@ export const getBoardDetailApi = async (boardNo: number) => {
     return data;
 }
 
-export const getBoardApi = async (page: string) => {
-    const { data } = await axios.post("/board", { page });
+export const getBoardApi = async (boardType: number, page: string) => {
+    const { data } = await axios.post("/board", { boardType, page });
     return data;
 };

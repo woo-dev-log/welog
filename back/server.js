@@ -310,6 +310,7 @@ app.post("/api/deleteBoard", async (req, res) => {
         const { boardNo } = req.body;
         const [rows] = await mysql.query("SELECT boardImgUrl FROM board WHERE boardNo = ?", [boardNo]);
         await mysql.query("DELETE FROM board WHERE boardNo = ?", [boardNo]);
+        await mysql.query("DELETE FROM comment WHERE boardNo = ?", [boardNo]);
 
         if (rows[0].boardImgUrl !== "React.png") {
             fs.unlink("./images/" + rows[0].boardImgUrl, (err) => {
@@ -513,20 +514,21 @@ app.post("/api/boardSearch", async (req, res) => {
 
 app.post("/api/board", async (req, res) => {
     try {
-        const { page } = req.body;
+        const { page, boardType } = req.body;
         const pageNum = page * 5 - 5;
 
         const [rows] = await mysql.query(`
-        SELECT b.boardNo, b.userNo, b.title, b.contents, b.rgstrDate, 
+        SELECT b.boardNo, b.userNo, b.title, b.contents, b.rgstrDate, b.boardType, 
         b.views, b.tags, b.boardImgUrl, u.nickname, u.imgUrl, 
         COUNT(*) OVER() AS boardCnt, 
         (SELECT count(*) FROM comment c WHERE c.boardNo = b.boardNo) AS commentCnt 
         FROM board b 
         INNER JOIN user u 
-        ON b.userNo = u.userNo 
+        ON b.userNo = u.userNo
+        WHERE b.boardType = ? 
         ORDER BY b.rgstrDate DESC
         LIMIT ?, 5
-        `, [pageNum]);
+        `, [boardType, pageNum]);
         return res.status(200).send(rows);
     } catch (e) {
         console.error(e);

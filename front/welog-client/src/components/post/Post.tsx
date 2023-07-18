@@ -29,6 +29,7 @@ const Post = () => {
     const { userNickname } = useParams();
     const [cookies, setCookie, removeCookie] = useCookies(['viewPost']);
     const [boardList, setBoardList] = useRecoilState(board);
+    const [boardType, setBoardType] = useState(2);
     const [currentPage, setCurrentPage] = useState(1);
     const [searchParams, setSearchParams] = useSearchParams();
     const [postLoading, setPostLoading] = useState(false);
@@ -41,7 +42,7 @@ const Post = () => {
 
     const { data: post, isLoading } = useQuery<BoardType[]>(['boardList', page], async () => {
         try {
-            const data = await getBoardApi(page ? page : "1");
+            const data = await getBoardApi(boardType, page ? page : "1");
             return data;
         } catch (e) {
             ToastError("글 조회를 실패했어요");
@@ -54,9 +55,35 @@ const Post = () => {
         }
     );
 
+    const boardTypeOnClick = async (boardType: number) => {
+        setSearchParams({ "page": "1" })
+        const boardTopBlock = document.querySelector(".board-topBlock") as HTMLElement;
+        const boardArticle = document.querySelector(".board-article") as HTMLElement;
+        if (boardTopBlock) {
+        const TopBlockOffsetTop = boardTopBlock.offsetTop;
+        window.scrollTo({ top: TopBlockOffsetTop - 80, behavior: "smooth" });
+        } else if (boardArticle) {
+        const ArticleOffsetTop = boardArticle.offsetTop;
+        window.scrollTo({ top: ArticleOffsetTop - 80, behavior: "smooth" });
+        }
+
+        setBoardType(boardType);
+        const data = await getBoardApi(boardType, page ? page : "1");
+        setBoardList(data);
+    }
+
     const searchBoardApi = async () => {
         try {
             if (keyword) {
+                const boardTopBlock = document.querySelector(".board-topBlock") as HTMLElement;
+                const boardArticle = document.querySelector(".board-article") as HTMLElement;
+                if (boardTopBlock) {
+                const TopBlockOffsetTop = boardTopBlock.offsetTop;
+                window.scrollTo({ top: TopBlockOffsetTop - 80, behavior: "smooth" });
+                } else if (boardArticle) {
+                const ArticleOffsetTop = boardArticle.offsetTop;
+                window.scrollTo({ top: ArticleOffsetTop - 80, behavior: "smooth" });
+                }
                 setPostLoading(false);
                 const data = await postBoardApi(keyword, page ? page : "1");
                 setBoardList(data);
@@ -134,6 +161,13 @@ const Post = () => {
                 </div>
                 : boardList.length > 0 &&
                 <article className="board-article">
+                    {!keyword && !userNickname && <div className="board-Type">
+                        <button className={boardType === 2 ? "board-TypeBtnOn" : "board-TypeBtnOff"} onClick={() => boardTypeOnClick(2)}>하루</button>
+                        <button className={boardType === 1 ? "board-TypeBtnOn" : "board-TypeBtnOff"} onClick={() => boardTypeOnClick(1)}>개발</button>
+                        <button className={boardType === 3 ? "board-TypeBtnOn" : "board-TypeBtnOff"} onClick={() => boardTypeOnClick(3)}>문의</button>
+                        <button className={boardType === 0 ? "board-TypeBtnOn" : "board-TypeBtnOff"} onClick={() => boardTypeOnClick(0)}>테스트</button>
+                    </div>}
+
                     {boardList.map((board, i) => (
                         <div key={i} className="board-block">
                             <aside className="board-asideBoardImg"

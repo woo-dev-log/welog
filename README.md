@@ -59,15 +59,13 @@ lodash-es in debounce
 ```
 
 ## 스크린샷
-### 예전 메인
-![메인-예전](https://user-images.githubusercontent.com/110772642/221354648-c9d2ab94-b08e-4a86-9916-dbb7fafb5fd7.png)
 
-### 메인 화면 변경
-![메인-상단](https://user-images.githubusercontent.com/110772642/222924168-a51fc9ce-ecda-4d9c-8f5c-2881a090eba0.png)
-![메인-하단](https://user-images.githubusercontent.com/110772642/222924171-a63c189c-c91b-4a34-abb9-ec87562a86a4.png)
+### 메인 화면
+![메인-상단](https://github.com/woo-dev-log/welog/assets/110772642/272f3f66-fed7-4382-99ed-b3185e776d23)
 
 ### 유저 화면
-![유저보드](https://user-images.githubusercontent.com/110772642/223098689-11c54781-a21e-4f74-ac38-d7d3bd4e61c1.png)
+![유저보드](https://github.com/woo-dev-log/welog/assets/110772642/d2b06569-f1d6-4d99-bf5e-790c8dc7e022)
 
 ### 모바일 & 태블릿 화면
-![모바일](https://user-images.githubusercontent.com/110772642/222924176-9e550432-9c82-4d1e-a48f-9d118eeb5247.png)
+<img width="368" alt="메인" src="https://github.com/woo-dev-log/welog/assets/110772642/ed7351b9-3c76-474d-afa1-0d3c018a8e41">
+<img width="375" alt="유저" src="https://github.com/woo-dev-log/welog/assets/110772642/0021d8ef-772c-4657-8d38-f4c8fbb08ff1">

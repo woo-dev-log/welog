@@ -11,7 +11,6 @@ import Line from "../../components/line/Line";
 import Button from "../../components/button/Button";
 import BoardComment from "../boardComment/BoardComment";
 import "./BoardDetail.scss";
-import Category from "../../components/category/Category";
 
 interface BoardDetailType {
     boardNo: number;

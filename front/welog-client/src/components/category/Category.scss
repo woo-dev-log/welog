@@ -1,0 +1,28 @@
+.board-TypeBtnOn {
+    cursor: pointer;
+    background-color: coral;
+    width: 80px;
+    height: 40px;
+    border: none;
+    border-radius: 4px;
+    font-size: 16px;
+    font-family: "LINESeedKR-Bd";
+    // color: coral;
+    color: var(--font-color);
+}
+
+.board-TypeBtnOff {
+    cursor: pointer;
+    background-color: var(--element-color);
+    width: 80px;
+    height: 40px;
+    border: none;
+    border-radius: 4px;
+    font-size: 16px;
+    font-family: "LINESeedKR-Bd";
+    color: var(--font-color);
+
+    &:hover {
+        background-color: var(--element-hover-color);
+    }
+}

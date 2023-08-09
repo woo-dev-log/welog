@@ -450,7 +450,7 @@ app.post("/api/boardDetail", async (req, res) => {
         const { boardNo } = req.body;
         const [rows] = await mysql.query(`
         SELECT b.boardNo, b.userNo, b.title, b.contents, b.rgstrDate, b.updateDate, 
-        b.views, b.tags, b.boardImgUrl, 
+        b.views, b.tags, b.boardImgUrl, b.boardType, 
         u.nickname, u.imgUrl 
         FROM board b 
         INNER JOIN user u 

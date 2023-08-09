@@ -9,6 +9,7 @@ import DayFormat from "../DayFormat";
 import Paging from "../paging/Paging";
 import { ToastError } from "../Toast";
 import './Post.scss';
+import Category from "../category/Category";
 
 interface BoardType {
     boardNo: number;
@@ -54,23 +55,6 @@ const Post = () => {
             cacheTime: 1000 * 60 * 10,
         }
     );
-
-    const boardTypeOnClick = async (boardType: number) => {
-        setSearchParams({ "page": "1" })
-        const boardTopBlock = document.querySelector(".board-topBlock") as HTMLElement;
-        const boardArticle = document.querySelector(".board-article") as HTMLElement;
-        if (boardTopBlock) {
-        const TopBlockOffsetTop = boardTopBlock.offsetTop;
-        window.scrollTo({ top: TopBlockOffsetTop - 80, behavior: "smooth" });
-        } else if (boardArticle) {
-        const ArticleOffsetTop = boardArticle.offsetTop;
-        window.scrollTo({ top: ArticleOffsetTop - 80, behavior: "smooth" });
-        }
-
-        setBoardType(boardType);
-        const data = await getBoardApi(boardType, page ? page : "1");
-        setBoardList(data);
-    }
 
     const searchBoardApi = async () => {
         try {
@@ -162,10 +146,7 @@ const Post = () => {
                 : boardList.length > 0 &&
                 <article className="board-article">
                     {!keyword && !userNickname && <div className="board-Type">
-                        <button className={boardType === 2 ? "board-TypeBtnOn" : "board-TypeBtnOff"} onClick={() => boardTypeOnClick(2)}>하루</button>
-                        <button className={boardType === 1 ? "board-TypeBtnOn" : "board-TypeBtnOff"} onClick={() => boardTypeOnClick(1)}>개발</button>
-                        <button className={boardType === 3 ? "board-TypeBtnOn" : "board-TypeBtnOff"} onClick={() => boardTypeOnClick(3)}>문의</button>
-                        <button className={boardType === 0 ? "board-TypeBtnOn" : "board-TypeBtnOff"} onClick={() => boardTypeOnClick(0)}>테스트</button>
+                        <Category boardTypeNum={boardType} />
                     </div>}
 
                     {boardList.map((board, i) => (

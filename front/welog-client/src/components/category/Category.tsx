@@ -1,4 +1,3 @@
-import { useState } from "react";
 import { board, boardType } from "../../store/atoms";
 import { useRecoilState } from "recoil";
 import { useSearchParams } from "react-router-dom";

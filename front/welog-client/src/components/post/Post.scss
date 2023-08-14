@@ -175,6 +175,10 @@
 }
 
 @media (max-width: 767px) {
+    .board-Type {
+        justify-content: center;
+    }
+
     .board-TypeBtnOn {
         width: 80px;
         height: 30px;

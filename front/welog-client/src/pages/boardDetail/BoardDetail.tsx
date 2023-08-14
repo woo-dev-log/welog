@@ -111,10 +111,12 @@ const BoardDetail = () => {
                                 {boardDetail[0].boardType === 2 && <div className="board-Type">하루</div>}
                                 {boardDetail[0].boardType === 3 && <div className="board-Type">문의</div>}
                                 {boardDetail[0].boardType === 0 && <div className="board-Type">테스트</div>}
-                                <h2 className="boardDetail-title">{boardDetail[0].title}</h2>
-                                <div className="board-views">
-                                    <img src="/views.svg" alt="click" />
-                                    <p>{boardDetail[0].views}</p>
+                                <div className="boardDetail-titleBox">
+                                    <h2 className="boardDetail-title">{boardDetail[0].title}</h2>
+                                    <div className="board-views">
+                                        <img src="/views.svg" alt="click" />
+                                        <p>{boardDetail[0].views}</p>
+                                    </div>
                                 </div>
                             </div>
 

@@ -26,3 +26,12 @@
         background-color: var(--element-hover-color);
     }
 }
+
+@media (max-width: 767px) {
+    .board-TypeBtnOn, 
+    .board-TypeBtnOff {
+        font-size: 14px;
+        width: 70px;
+        height: 35px;
+    }
+}

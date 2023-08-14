@@ -146,23 +146,23 @@
     .skeleton-block {
         width: 100%;
         height: 250px;
-        // background-color: var(--element-color);
+        background-color: var(--element-color);
     }
 }
 
-.skeleton-block {
-    background: linear-gradient(120deg, var(--element-color) 0%,
-            var(--element-color) 40%, var(--element-hover-color) 50%,
-            var(--element-color) 60%, var(--element-color) 100%);
-    background-size: 200% 100%;
-    animation: skeleton-flow 1.5s ease-in-out infinite;
-}
+// .skeleton-block {
+//     background: linear-gradient(120deg, var(--element-color) 0%,
+//             var(--element-color) 40%, var(--element-hover-color) 50%,
+//             var(--element-color) 60%, var(--element-color) 100%);
+//     background-size: 200% 100%;
+//     animation: skeleton-flow 1.5s ease-in-out infinite;
+// }
 
-@keyframes skeleton-flow {
-    0% {
-        background-position: 100% 0;
-    }
-}
+// @keyframes skeleton-flow {
+//     0% {
+//         background-position: 100% 0;
+//     }
+// }
 
 @media (max-width: 1199px) {
     .board-contentsContainer {

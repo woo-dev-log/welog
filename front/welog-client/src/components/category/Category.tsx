@@ -1,17 +1,13 @@
 import { useState } from "react";
-import { board } from "../../store/atoms";
+import { board, boardType } from "../../store/atoms";
 import { useRecoilState } from "recoil";
 import { useSearchParams } from "react-router-dom";
 import { getBoardApi } from "../../api/board";
 import './Category.scss';
 
-interface CategoryProps {
-    boardTypeNum: number;
-}
-
-const Category = ({ boardTypeNum }: CategoryProps) => {
+const Category = () => {
     const [boardList, setBoardList] = useRecoilState(board);
-    const [boardType, setBoardType] = useState(boardTypeNum);
+    const [boardTypeNum, setBoardTypeNum] = useRecoilState(boardType);
     const [searchParams, setSearchParams] = useSearchParams();
     const page = searchParams.get("page");
 
@@ -27,16 +23,16 @@ const Category = ({ boardTypeNum }: CategoryProps) => {
             window.scrollTo({ top: ArticleOffsetTop - 80, behavior: "smooth" });
         }
 
-        setBoardType(boardType);
+        setBoardTypeNum(boardType);
         const data = await getBoardApi(boardType, page ? page : "1");
         setBoardList(data);
     }
 
     return <>
-        <button className={boardType === 2 ? "board-TypeBtnOn" : "board-TypeBtnOff"} onClick={() => boardTypeOnClick(2)}>하루</button>
-        <button className={boardType === 1 ? "board-TypeBtnOn" : "board-TypeBtnOff"} onClick={() => boardTypeOnClick(1)}>개발</button>
-        <button className={boardType === 3 ? "board-TypeBtnOn" : "board-TypeBtnOff"} onClick={() => boardTypeOnClick(3)}>문의</button>
-        <button className={boardType === 0 ? "board-TypeBtnOn" : "board-TypeBtnOff"} onClick={() => boardTypeOnClick(0)}>테스트</button>
+        <button className={boardTypeNum === 1 ? "board-TypeBtnOn" : "board-TypeBtnOff"} onClick={() => boardTypeOnClick(1)}>개발</button>
+        <button className={boardTypeNum === 2 ? "board-TypeBtnOn" : "board-TypeBtnOff"} onClick={() => boardTypeOnClick(2)}>하루</button>
+        <button className={boardTypeNum === 3 ? "board-TypeBtnOn" : "board-TypeBtnOff"} onClick={() => boardTypeOnClick(3)}>문의</button>
+        <button className={boardTypeNum === 0 ? "board-TypeBtnOn" : "board-TypeBtnOff"} onClick={() => boardTypeOnClick(0)}>테스트</button>
     </>
 }
 

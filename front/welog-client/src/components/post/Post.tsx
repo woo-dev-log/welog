@@ -4,7 +4,7 @@ import { useQuery } from "react-query";
 import { useNavigate, useParams, useSearchParams } from "react-router-dom";
 import { useRecoilState } from "recoil";
 import { getBoardApi, getUserBoardApi, postBoardApi, updateBoardViewsApi } from "../../api/board";
-import { board } from "../../store/atoms";
+import { board, boardType } from "../../store/atoms";
 import DayFormat from "../DayFormat";
 import Paging from "../paging/Paging";
 import { ToastError } from "../Toast";
@@ -30,7 +30,7 @@ const Post = () => {
     const { userNickname } = useParams();
     const [cookies, setCookie, removeCookie] = useCookies(['viewPost']);
     const [boardList, setBoardList] = useRecoilState(board);
-    const [boardType, setBoardType] = useState(2);
+    const [boardTypeNum, setBoardTypeNum] = useRecoilState(boardType);
     const [currentPage, setCurrentPage] = useState(1);
     const [searchParams, setSearchParams] = useSearchParams();
     const [postLoading, setPostLoading] = useState(false);
@@ -43,7 +43,7 @@ const Post = () => {
 
     const { data: post, isLoading } = useQuery<BoardType[]>(['boardList', page], async () => {
         try {
-            const data = await getBoardApi(boardType, page ? page : "1");
+            const data = await getBoardApi(boardTypeNum, page ? page : "1");
             return data;
         } catch (e) {
             ToastError("글 조회를 실패했어요");
@@ -62,11 +62,11 @@ const Post = () => {
                 const boardTopBlock = document.querySelector(".board-topBlock") as HTMLElement;
                 const boardArticle = document.querySelector(".board-article") as HTMLElement;
                 if (boardTopBlock) {
-                const TopBlockOffsetTop = boardTopBlock.offsetTop;
-                window.scrollTo({ top: TopBlockOffsetTop - 80, behavior: "smooth" });
+                    const TopBlockOffsetTop = boardTopBlock.offsetTop;
+                    window.scrollTo({ top: TopBlockOffsetTop - 80, behavior: "smooth" });
                 } else if (boardArticle) {
-                const ArticleOffsetTop = boardArticle.offsetTop;
-                window.scrollTo({ top: ArticleOffsetTop - 80, behavior: "smooth" });
+                    const ArticleOffsetTop = boardArticle.offsetTop;
+                    window.scrollTo({ top: ArticleOffsetTop - 80, behavior: "smooth" });
                 }
                 setPostLoading(false);
                 const data = await postBoardApi(keyword, page ? page : "1");
@@ -146,7 +146,7 @@ const Post = () => {
                 : boardList.length > 0 &&
                 <article className="board-article">
                     {!keyword && !userNickname && <div className="board-Type">
-                        <Category boardTypeNum={boardType} />
+                        <Category />
                     </div>}
 
                     {boardList.map((board, i) => (

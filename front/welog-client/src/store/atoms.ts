@@ -1,6 +1,6 @@
 import { atom } from "recoil";
 
-interface BoardType {
+interface BoardProps {
     boardNo: number;
     userNo: number;
     title: string;
@@ -40,7 +40,7 @@ interface UserProfileType {
     userCommentCnt: number;
 }
 
-export const board = atom<BoardType[]>({
+export const board = atom<BoardProps[]>({
     key: 'boardKey',
     default: []
 });
@@ -69,4 +69,9 @@ export const boardUpdate = atom<BoardUpdateProps>({
 export const user = atom<UserProfileType[]>({
     key: 'userKey',
     default: []
+});
+
+export const boardType = atom({
+    key: 'boardTypeKey',
+    default: 1
 });

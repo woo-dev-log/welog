@@ -2,7 +2,7 @@ import Swal from "sweetalert2";
 import { lazy, Suspense, useEffect, useMemo, useRef, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useRecoilState } from "recoil";
-import { boardUpdate, loginUser } from "../../store/atoms";
+import { boardType, boardUpdate, loginUser } from "../../store/atoms";
 import { ToastError, ToastSuccess, ToastWarn } from "../../components/Toast";
 import { writeBoardApi, writeBoardImgApi } from "../../api/board";
 import SEO from "../../components/SEO";
@@ -15,12 +15,14 @@ import 'react-quill/dist/quill.snow.css';
 const ReactQuill = lazy(() => import('react-quill'));
 import hljs from 'highlight.js';
 import 'highlight.js/styles/atom-one-dark.css';
+import Category from "../../components/category/Category";
 
 const BoardWrite = () => {
     const [title, setTitle] = useState("");
     const [contents, setContents] = useState("");
     const [userInfo, setUserInfo] = useRecoilState(loginUser);
     const [updateValue, setUpdateValue] = useRecoilState(boardUpdate);
+    const [boardTypeNum, setBoardTypeNum] = useRecoilState(boardType);
     const [boardBoolean, setBoardBoolean] = useState(false);
     const [tagName, setTagName] = useState("");
     const [tags, setTags] = useState<String[]>([]);
@@ -112,6 +114,7 @@ const BoardWrite = () => {
     };
 
     const WriteBoardOnClick = async (type: number) => {
+        console.log(boardTypeNum);
         if (title === "" || contents === "") {
             ToastWarn("모두 입력해주세요");
             return;
@@ -121,7 +124,7 @@ const BoardWrite = () => {
         } else {
             let typeTitle = "글을 작성하시겠어요?";
             let typeUrl = "/writeBoard";
-            let typeData = { title, contents, userNo: userInfo[0].userNo, boardNo: 0, tags };
+            let typeData = { title, contents, userNo: userInfo[0].userNo, boardNo: 0, tags, boardTypeNum };
 
             if (type === 1) {
                 typeTitle = "글을 수정하시겠어요?"
@@ -147,6 +150,7 @@ const BoardWrite = () => {
                     formData.append('boardNo', String(typeData.boardNo));
                     formData.append('userNo', String(typeData.userNo));
                     formData.append('tags', String(typeData.tags));
+                    formData.append('boardType', String(typeData.boardTypeNum));
                     image && formData.append('thumbnail', image);
                     type === 1 && formData.append('boardImgUrl', String(updateValue.boardImgUrl));
 
@@ -208,6 +212,10 @@ const BoardWrite = () => {
             <SEO title="글쓰기" contents="글쓰기" />
             <section className="boardWrite-container">
                 <article className="boardWrite-titleContainer">
+                    <Label text="카테고리" />
+                    <div className="boardWrite-CategoryBlock">
+                        <Category />
+                    </div>
                     <div className="boardWrite-titleBlock">
                         <Label text="제목" />
                         <Input placeholder="제목을 입력해주세요" disabled={boardBoolean}

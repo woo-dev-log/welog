@@ -145,9 +145,7 @@ const Post = () => {
                 </div>
                 : boardList.length > 0 &&
                 <article className="board-article">
-                    {!keyword && !userNickname && <div className="board-Type">
-                        <Category />
-                    </div>}
+                    {!keyword && !userNickname && <Category />}
 
                     {boardList.map((board, i) => (
                         <div key={i} className="board-block">

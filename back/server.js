@@ -394,7 +394,7 @@ app.post("/api/writeBoardImg", boardImgUpload.single('boardImg'), async (req, re
 
 app.post("/api/writeBoard", imageUpload.single('thumbnail'), async (req, res) => {
     try {
-        const { title, contents, userNo, tags } = req.body;
+        const { title, contents, userNo, tags, boardType } = req.body;
 
         let newFilePath = imageName.length > 0 ? imageName : "React.png";
         if (req.file) {
@@ -405,9 +405,9 @@ app.post("/api/writeBoard", imageUpload.single('thumbnail'), async (req, res) =>
                 } else {
                     const [rows] = await mysql.query(`
                     INSERT INTO
-                    board(userNo, title, contents, rgstrDate, tags, boardImgUrl)
-                    VALUES(?, ?, ?, now(), ?, ?)
-                    `, [userNo, title, contents, tags, newFilePath]);
+                    board(userNo, title, contents, rgstrDate, tags, boardImgUrl, boardType)
+                    VALUES(?, ?, ?, now(), ?, ?, ?)
+                    `, [userNo, title, contents, tags, newFilePath, boardType]);
                     return res.status(200).send("success");
                 }
             }
@@ -422,9 +422,9 @@ app.post("/api/writeBoard", imageUpload.single('thumbnail'), async (req, res) =>
         } else {
             const [rows] = await mysql.query(`
             INSERT INTO
-            board(userNo, title, contents, rgstrDate, tags, boardImgUrl)
-            VALUES(?, ?, ?, now(), ?, ?)
-            `, [userNo, title, contents, tags, newFilePath]);
+            board(userNo, title, contents, rgstrDate, tags, boardImgUrl, boardType)
+            VALUES(?, ?, ?, now(), ?, ?, ?)
+            `, [userNo, title, contents, tags, newFilePath, boardType]);
             return res.status(200).send("success");
         }
     } catch (e) {

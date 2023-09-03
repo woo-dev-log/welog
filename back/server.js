@@ -8,14 +8,13 @@ const sharp = require('sharp');
 const path = require('path');
 const fs = require('fs');
 const cors = require('cors');
-const { S3, PutObjectCommand } = require('@aws-sdk/client-s3');
+const { S3, PutObjectCommand, DeleteObjectCommand } = require('@aws-sdk/client-s3');
 const awsConfig = require('./s3.json');
 const s3 = new S3(awsConfig);
 
 app.use(cors());
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
-app.use('/images', express.static('images'));
 app.use(express.static(path.join(__dirname, "./dist")));
 
 const imageUpload = multer({
@@ -288,12 +287,10 @@ app.post("/api/deleteBoard", async (req, res) => {
         await mysql.query("DELETE FROM comment WHERE boardNo = ?", [boardNo]);
 
         if (rows[0].boardImgUrl !== "React.png") {
-            fs.unlink("./images/" + rows[0].boardImgUrl, (err) => {
-                if (err) {
-                    console.error(err);
-                    return res.status(400).send("fail");
-                }
-            });
+            await s3.send(new DeleteObjectCommand({
+                Bucket: 'welog-seoul',
+                Key: rows[0].boardImgUrl
+            }));
         }
 
         return res.status(200).send("success");

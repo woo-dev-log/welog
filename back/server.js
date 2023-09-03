@@ -8,56 +8,44 @@ const sharp = require('sharp');
 const path = require('path');
 const fs = require('fs');
 const cors = require('cors');
-// app.use(cors({
-//     origin: 'http://localhost:5173',
-//     credential: 'true'
-// }));
+const { S3, PutObjectCommand } = require('@aws-sdk/client-s3');
+const awsConfig = require('./s3.json');
+const s3 = new S3(awsConfig);
+
 app.use(cors());
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 app.use('/images', express.static('images'));
 app.use(express.static(path.join(__dirname, "./dist")));
 
-let imageName = [];
 const imageUpload = multer({
-    storage: multer.diskStorage({
-        destination: (req, file, cb) => cb(null, 'images/'),
-        filename: (req, file, cb) => {
-            const originalName = file.originalname.replace(" ", "");
-            let fileName = new Date().valueOf() + '_' + Buffer.from(originalName, 'latin1').toString('utf8');
-            cb(null, fileName);
-            imageName.push(fileName);
-        }
-    })
+    storage: multer.memoryStorage()
 });
 
-// const resizeHandler = async (file, newPath, imageName) => {
-const resizeHandler = async (file, imageName) => {
-    // if (file.size <= 500 * 1024) {
-    //     await sharp(file.path).toFile("./images/" + newPath);
-    // } else {
-    //     if (file.originalname.split(".").reverse()[0] === "png") {
-    //         await sharp(file.path).resize({ width: 500 }).png({ quality: 80 }).toFile("./images/" + newPath);
-    //     } else {
-    //         await sharp(file.path).resize({ width: 500 }).jpeg({ quality: 80 }).toFile("./images/" + newPath);
-    //     }
-    // }
-    const newFilePath = new Date().valueOf() + '_' + Buffer.from(file.originalname, 'latin1').toString('utf8');
+const resizeHandler = async (file) => {
+    try {
+        const newFilePath = new Date().valueOf() + '_' + Buffer.from(file.originalname, 'latin1').toString('utf8');
+        const extension = file.originalname.split('.').reverse()[0];
+        let outputBuffer = file.buffer;
 
-    const { width } = await sharp(file.path).metadata();
-    if (width > 500 && newFilePath.split(".").reverse()[0] !== "gif") {
-        const rename = newFilePath.slice(0, newFilePath.lastIndexOf(".")) + ".webp";
-        await sharp(file.path).resize({ width: 800 }).webp().toFile("./images/" + rename);
+        const { width } = await sharp(outputBuffer).metadata();
+        if (width > 500 && extension !== "gif") {
+            newFilePath = newFilePath.replace(`.${extension}`, '.webp');
+            outputBuffer = await sharp(outputBuffer).resize({ width: 800 }).webp().toBuffer();
+        }
 
-        fs.unlink("./images/" + imageName, (err) => {
-            if (err) {
-                return console.error(err);
-            }
-        });
+        await s3.send(new PutObjectCommand({
+            Bucket: 'welog-seoul',
+            Key: newFilePath,
+            Body: outputBuffer,
+            ContentType: `image/${extension}`,
+            ACL: 'public-read'
+        }));
 
-        return rename;
+        return newFilePath;
+    } catch (err) {
+        console.error(err);
     }
-    return newFilePath;
 }
 
 const jsonWebToken = async (userRows) => {
@@ -80,12 +68,11 @@ app.post("/api/updateUserProfile", imageUpload.single('userProfileImg'), async (
     try {
         const { userNo, updateProfileName, updateProfileContents, profileImgUrl } = req.body;
 
-        let newFilePath = imageName.length > 0 ? imageName : profileImgUrl;
+        let newFilePath = profileImgUrl;
         if (req.file) {
-            newFilePath = await resizeHandler(req.file, imageName);
+            newFilePath = await resizeHandler(req.file);
         }
 
-        imageName = [];
         const [rows] = await mysql.query(`
         UPDATE user SET nickname = ?, imgUrl = ?, profileContents = ? WHERE userNo = ?
         `, [updateProfileName, newFilePath, updateProfileContents, userNo]);
@@ -320,12 +307,11 @@ app.post("/api/updateBoard", imageUpload.single('thumbnail'), async (req, res) =
     try {
         const { title, contents, boardNo, userNo, tags, boardImgUrl } = req.body;
 
-        let newFilePath = imageName.length > 0 ? imageName : boardImgUrl;
+        let newFilePath = boardImgUrl;
         if (req.file) {
-            newFilePath = await resizeHandler(req.file, imageName);
+            newFilePath = await resizeHandler(req.file);
         }
 
-        imageName = [];
         if (userNo === 0) {
             return res.status(400).send("fail");
         } else {
@@ -345,12 +331,11 @@ app.post("/api/updateBoard", imageUpload.single('thumbnail'), async (req, res) =
 
 app.post("/api/writeBoardImg", imageUpload.single('boardImg'), async (req, res) => {
     try {
-        let newFilePath = imageName;
+        let newFilePath;
         if (req.file) {
-            newFilePath = await resizeHandler(req.file, imageName);
+            newFilePath = await resizeHandler(req.file);
         }
 
-        imageName = [];
         return res.status(200).send({ fileName: newFilePath });
     } catch (e) {
         console.error(e);
@@ -362,12 +347,11 @@ app.post("/api/writeBoard", imageUpload.single('thumbnail'), async (req, res) =>
     try {
         const { title, contents, userNo, tags, boardType } = req.body;
 
-        let newFilePath = imageName.length > 0 ? imageName : "React.png";
+        let newFilePath = "React.png";
         if (req.file) {
-            newFilePath = await resizeHandler(req.file, imageName);
+            newFilePath = await resizeHandler(req.file);
         }
 
-        imageName = [];
         if (userNo === 0) {
             return res.status(400).send("fail");
         } else {
@@ -491,9 +475,9 @@ app.post("/api/signUp", imageUpload.single('thumbnail'), async (req, res) => {
     try {
         const { nickname, id, pw } = req.body;
 
-        let newFilePath = imageName.length > 0 ? imageName : "loopy.png";
+        let newFilePath = "loopy.png";
         if (req.file) {
-            newFilePath = await resizeHandler(req.file, imageName);
+            newFilePath = await resizeHandler(req.file);
         }
 
         const [rows] = await mysql.query(`
@@ -502,7 +486,6 @@ app.post("/api/signUp", imageUpload.single('thumbnail'), async (req, res) => {
         VALUES(?, ?, ?, ?)
         `, [id, pw, nickname, newFilePath]);
 
-        imageName = [];
         return res.status(200).send("success");
     } catch (e) {
         console.error(e);

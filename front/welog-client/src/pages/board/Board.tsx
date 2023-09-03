@@ -37,7 +37,7 @@ const Board = () => {
     const [cookies, setCookie, removeCookie] = useCookies(['viewPost']);
     const [searchParams, setSearchParams] = useSearchParams();
     const navigate = useNavigate();
-    const ServerImgUrl = "https://welog.fly.dev/images/";
+    const ServerImgUrl = "https://welog-seoul.s3.ap-northeast-2.amazonaws.com/";
     const contentsWordLength = window.innerWidth < 1199 ? 38 : 38;
     const boardCnt = boardList.length > 0 ? boardList[0].boardCnt : 0;
     const [slideIndex, setSlideIndex] = useState(0);

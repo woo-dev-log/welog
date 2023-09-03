@@ -35,7 +35,7 @@ const Post = () => {
     const [searchParams, setSearchParams] = useSearchParams();
     const [postLoading, setPostLoading] = useState(false);
     const navigate = useNavigate();
-    const ServerImgUrl = "https://welog.fly.dev/images/";
+    const ServerImgUrl = "https://welog-seoul.s3.ap-northeast-2.amazonaws.com/";
     const keyword = searchParams.get("keyword");
     const page = searchParams.get("page");
     const limit = 5;

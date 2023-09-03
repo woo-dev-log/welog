@@ -35,7 +35,7 @@ const BoardDetail = () => {
     const { boardNo } = useParams();
     const IntBoardNo = Number(boardNo);
     const navigate = useNavigate();
-    const ServerImgUrl = "https://welog-seoul.s3.ap-northeast-2.amazonaws.com/";
+    const ServerImgUrl = "https://d12uvkd7f5nrla.cloudfront.net/";
 
     const userBoardOnClick = (nickname: string) => {
         navigate("/userBoard/" + nickname);

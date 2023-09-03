@@ -20,6 +20,7 @@ const SignUp = () => {
     const [dupCheckNickname, setDupCheckNickname] = useState(false);
     const [checkNickname, setCheckNickName] = useState("");
     const [checkId, setCheckId] = useState("");
+    const ServerImgUrl = "https://d12uvkd7f5nrla.cloudfront.net/";
 
     const pwCheckOnChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         const hangul = /[ㄱ-ㅎ|ㅏ-ㅣ|가-힣]/g;
@@ -154,7 +155,8 @@ const SignUp = () => {
         <div className="container">
             <SEO title="회원가입" contents="회원가입" />
             <div className="signUp-img">
-                {image && <img src={blobImg} alt="user-profile" />}
+                {image ? <img src={blobImg} alt="user-profile" />
+                    : <img src={`${ServerImgUrl}loopy.png`} alt="user-profile" />}
             </div>
             <label className="signUp-imgSelect" htmlFor="profileImg">사진 선택</label>
             <input type="file" accept="image/*" onChange={uploadImageOnChange} id="profileImg" />

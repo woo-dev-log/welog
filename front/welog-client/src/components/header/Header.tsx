@@ -12,7 +12,7 @@ const Header = () => {
     const [userInfo, setUserInfo] = useRecoilState(loginUser);
     const [cookies, setCookie, removeCookie] = useCookies(['welogJWT', 'themeColor']);
     const [themeColor, setThemeColor] = useState(document.body.dataset.theme);
-    const ServerImgUrl = "https://welog-seoul.s3.ap-northeast-2.amazonaws.com/";
+    const ServerImgUrl = "https://d12uvkd7f5nrla.cloudfront.net/";
 
     const themeOnClick = (color: string) => {
         setThemeColor(color);

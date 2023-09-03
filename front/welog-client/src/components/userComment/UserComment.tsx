@@ -23,7 +23,7 @@ const UserComment = ({ userNo }: { userNo: number }) => {
     const [userProfile, setUserProfile] = useRecoilState(user);
     const [searchParams, setSearchParams] = useSearchParams();
     const [currentPage, setCurrentPage] = useState(1);
-    const ServerImgUrl = "https://welog-seoul.s3.ap-northeast-2.amazonaws.com/";
+    const ServerImgUrl = "https://d12uvkd7f5nrla.cloudfront.net/";
     const navigate = useNavigate();
     const page = searchParams.get("page");
     const limit = 5;

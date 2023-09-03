@@ -24,9 +24,9 @@ const imageUpload = multer({
 
 const resizeHandler = async (file) => {
     try {
-        const newFilePath = new Date().valueOf() + '_' + Buffer.from(file.originalname, 'latin1').toString('utf8');
-        const extension = file.originalname.split('.').reverse()[0];
+        let newFilePath = new Date().valueOf() + '_' + Buffer.from(file.originalname, 'latin1').toString('utf8');
         let outputBuffer = file.buffer;
+        const extension = file.originalname.split('.').reverse()[0];
 
         const { width } = await sharp(outputBuffer).metadata();
         if (width > 500 && extension !== "gif") {

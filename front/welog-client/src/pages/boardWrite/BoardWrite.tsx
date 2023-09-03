@@ -29,7 +29,7 @@ const BoardWrite = () => {
     const [image, setImage] = useState<File>();
     const [blobImg, setBlobImg] = useState("");
     const navigate = useNavigate();
-    const ServerImgUrl = "https://welog-seoul.s3.ap-northeast-2.amazonaws.com/";
+    const ServerImgUrl = "https://d12uvkd7f5nrla.cloudfront.net/";
     const quillRef = useRef(null);
 
     const imageHandler = () => {

@@ -25,7 +25,7 @@ const UserBoard = () => {
     const [searchParams, setSearchParams] = useSearchParams({ "type": "post" });
     const type = searchParams.get("type");
     const navigate = useNavigate();
-    const ServerImgUrl = "https://welog-seoul.s3.ap-northeast-2.amazonaws.com/";
+    const ServerImgUrl = "https://d12uvkd7f5nrla.cloudfront.net/";
     const textAreaCols = window.innerWidth < 1199 ? 30 : 50;
 
     const updateProfileContentsOnClick = async () => {

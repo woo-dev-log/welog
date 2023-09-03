@@ -31,34 +31,33 @@ const imageUpload = multer({
     })
 });
 
-const boardImgUpload = multer({
-    storage: multer.diskStorage({
-        destination: (req, file, cb) => cb(null, 'images/boardImg/'),
-        filename: (req, file, cb) => {
-            const originalName = file.originalname.replace(" ", "");
-            let fileName = new Date().valueOf() + '_' + Buffer.from(originalName, 'latin1').toString('utf8');
-            cb(null, fileName);
-            imageName.push(fileName);
-        }
-    })
-});
+// const resizeHandler = async (file, newPath, imageName) => {
+const resizeHandler = async (file, imageName) => {
+    // if (file.size <= 500 * 1024) {
+    //     await sharp(file.path).toFile("./images/" + newPath);
+    // } else {
+    //     if (file.originalname.split(".").reverse()[0] === "png") {
+    //         await sharp(file.path).resize({ width: 500 }).png({ quality: 80 }).toFile("./images/" + newPath);
+    //     } else {
+    //         await sharp(file.path).resize({ width: 500 }).jpeg({ quality: 80 }).toFile("./images/" + newPath);
+    //     }
+    // }
+    const newFilePath = new Date().valueOf() + '_' + Buffer.from(file.originalname, 'latin1').toString('utf8');
 
-const resizeHandler = async (file, newPath, imageName) => {
-    if (file.size <= 500 * 1024) {
-        await sharp(file.path).toFile("./images/" + newPath);
-    } else {
-        if (file.originalname.split(".").reverse()[0] === "png") {
-            await sharp(file.path).resize({ width: 500 }).png({ quality: 80 }).toFile("./images/" + newPath);
-        } else {
-            await sharp(file.path).resize({ width: 500 }).jpeg({ quality: 80 }).toFile("./images/" + newPath);
-        }
+    const { width } = await sharp(file.path).metadata();
+    if (width > 500 && newFilePath.split(".").reverse()[0] !== "gif") {
+        const rename = newFilePath.slice(0, newFilePath.lastIndexOf(".")) + ".webp";
+        await sharp(file.path).resize({ width: 800 }).webp().toFile("./images/" + rename);
+
+        fs.unlink("./images/" + imageName, (err) => {
+            if (err) {
+                return console.error(err);
+            }
+        });
+
+        return rename;
     }
-
-    fs.unlink("./images/" + imageName, (err) => {
-        if (err) {
-            return console.error(err);
-        }
-    });
+    return newFilePath;
 }
 
 const jsonWebToken = async (userRows) => {
@@ -83,18 +82,7 @@ app.post("/api/updateUserProfile", imageUpload.single('userProfileImg'), async (
 
         let newFilePath = imageName.length > 0 ? imageName : profileImgUrl;
         if (req.file) {
-            if (req.file.originalname.split(".").reverse()[0] === "gif") {
-                imageName = [];
-                const [rows] = await mysql.query(`
-                UPDATE user SET nickname = ?, imgUrl = ?, profileContents = ? WHERE userNo = ?
-                `, [updateProfileName, newFilePath, updateProfileContents, userNo]);
-
-                const [userRows] = await mysql.query(`SELECT * FROM user WHERE userNo = ?`, [userNo]);
-                return res.status(200).send(await jsonWebToken(userRows));
-            }
-
-            newFilePath = new Date().valueOf() + '_' + Buffer.from(req.file.originalname, 'latin1').toString('utf8');
-            resizeHandler(req.file, newFilePath, imageName);
+            newFilePath = await resizeHandler(req.file, imageName);
         }
 
         imageName = [];
@@ -334,23 +322,7 @@ app.post("/api/updateBoard", imageUpload.single('thumbnail'), async (req, res) =
 
         let newFilePath = imageName.length > 0 ? imageName : boardImgUrl;
         if (req.file) {
-            if (req.file.originalname.split(".").reverse()[0] === "gif") {
-                imageName = [];
-                if (userNo === 0) {
-                    return res.status(400).send("fail");
-                } else {
-                    const [rows] = await mysql.query(`
-                    UPDATE board 
-                    SET title = ?, contents = ?, updateDate = now(), 
-                    tags = ?, boardImgUrl = ?
-                    WHERE boardNo = ? AND userNo = ?
-                    `, [title, contents, tags, newFilePath, boardNo, userNo]);
-                    return res.status(200).send("success");
-                }
-            }
-
-            newFilePath = new Date().valueOf() + '_' + Buffer.from(req.file.originalname, 'latin1').toString('utf8');
-            resizeHandler(req.file, newFilePath, imageName);
+            newFilePath = await resizeHandler(req.file, imageName);
         }
 
         imageName = [];
@@ -371,17 +343,11 @@ app.post("/api/updateBoard", imageUpload.single('thumbnail'), async (req, res) =
     }
 })
 
-app.post("/api/writeBoardImg", boardImgUpload.single('boardImg'), async (req, res) => {
+app.post("/api/writeBoardImg", imageUpload.single('boardImg'), async (req, res) => {
     try {
         let newFilePath = imageName;
         if (req.file) {
-            if (req.file.originalname.split(".").reverse()[0] === "gif") {
-                imageName = [];
-                return res.status(200).send({ fileName: newFilePath });
-            }
-
-            newFilePath = new Date().valueOf() + '_' + Buffer.from(req.file.originalname, 'latin1').toString('utf8');
-            resizeHandler(req.file, "boardImg/" + newFilePath, "boardImg/" + imageName);
+            newFilePath = await resizeHandler(req.file, imageName);
         }
 
         imageName = [];
@@ -398,22 +364,7 @@ app.post("/api/writeBoard", imageUpload.single('thumbnail'), async (req, res) =>
 
         let newFilePath = imageName.length > 0 ? imageName : "React.png";
         if (req.file) {
-            if (req.file.originalname.split(".").reverse()[0] === "gif") {
-                imageName = [];
-                if (userNo === 0) {
-                    return res.status(400).send("fail");
-                } else {
-                    const [rows] = await mysql.query(`
-                    INSERT INTO
-                    board(userNo, title, contents, rgstrDate, tags, boardImgUrl, boardType)
-                    VALUES(?, ?, ?, now(), ?, ?, ?)
-                    `, [userNo, title, contents, tags, newFilePath, boardType]);
-                    return res.status(200).send("success");
-                }
-            }
-
-            newFilePath = new Date().valueOf() + '_' + Buffer.from(req.file.originalname, 'latin1').toString('utf8');
-            resizeHandler(req.file, newFilePath, imageName);
+            newFilePath = await resizeHandler(req.file, imageName);
         }
 
         imageName = [];
@@ -540,19 +491,10 @@ app.post("/api/signUp", imageUpload.single('thumbnail'), async (req, res) => {
     try {
         const { nickname, id, pw } = req.body;
 
-        let newFilePath = imageName;
-        if (req.file.originalname.split(".").reverse()[0] === "gif") {
-            imageName = [];
-            const [rows] = await mysql.query(`
-            INSERT INTO 
-            user(id, password, nickname, imgUrl) 
-            VALUES(?, ?, ?, ?)
-            `, [id, pw, nickname, newFilePath]);
-            return res.status(200).send("success");
+        let newFilePath = imageName.length > 0 ? imageName : "loopy.png";
+        if (req.file) {
+            newFilePath = await resizeHandler(req.file, imageName);
         }
-
-        newFilePath = new Date().valueOf() + '_' + Buffer.from(req.file.originalname, 'latin1').toString('utf8');
-        resizeHandler(req.file, newFilePath, imageName);
 
         const [rows] = await mysql.query(`
         INSERT INTO 

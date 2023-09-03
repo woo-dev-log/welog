@@ -102,7 +102,7 @@ const SignUp = () => {
     }, 500);
 
     const postSignUpOnClick = async () => {
-        if (nickname === "" || id === "" || pw === "" || !image) {
+        if (nickname === "" || id === "" || pw === "") {
             ToastWarn("모두 입력해주세요");
             return;
         } else if (dupCheckNickname === false || dupCheckId === false) {
@@ -125,7 +125,7 @@ const SignUp = () => {
                     formData.append('nickname', nickname);
                     formData.append('id', id);
                     formData.append('pw', pw);
-                    formData.append('thumbnail', image);
+                    image && formData.append('thumbnail', image);
 
                     const data = await postSignUpApi(formData);
 

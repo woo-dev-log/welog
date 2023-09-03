@@ -50,7 +50,7 @@ const BoardWrite = () => {
                     // @ts-ignore getEditor() 타입 오류가 생기지만 문제 없음. 
                     const quill = quillRef.current.getEditor();
                     const range = quill.getSelection(true);
-                    quill.insertEmbed(range.index, 'image', ServerImgUrl + "boardImg/" + data.fileName);
+                    quill.insertEmbed(range.index, 'image', ServerImgUrl + data.fileName);
                     quill.setSelection(range.index + 1);
                 } catch (error) {
                     console.error(error);

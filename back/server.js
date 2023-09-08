@@ -302,7 +302,7 @@ app.post("/api/deleteBoard", async (req, res) => {
 
 app.post("/api/updateBoard", imageUpload.single('thumbnail'), async (req, res) => {
     try {
-        const { title, contents, boardNo, userNo, tags, boardImgUrl } = req.body;
+        const { title, contents, boardNo, userNo, tags, boardImgUrl, boardType } = req.body;
 
         let newFilePath = boardImgUrl;
         if (req.file) {
@@ -315,9 +315,9 @@ app.post("/api/updateBoard", imageUpload.single('thumbnail'), async (req, res) =
             const [rows] = await mysql.query(`
             UPDATE board 
             SET title = ?, contents = ?, updateDate = now(), 
-            tags = ?, boardImgUrl = ?
+            tags = ?, boardImgUrl = ?, boardType = ? 
             WHERE boardNo = ? AND userNo = ?
-            `, [title, contents, tags, newFilePath, boardNo, userNo]);
+            `, [title, contents, tags, newFilePath, boardType, boardNo, userNo]);
             return res.status(200).send("success");
         }
     } catch (e) {

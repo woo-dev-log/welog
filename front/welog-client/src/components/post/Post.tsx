@@ -41,9 +41,19 @@ const Post = () => {
     const limit = 5;
     const contentsWordLength = window.innerWidth < 1199 ? 38 : 58;
 
-    const { data: post, isLoading } = useQuery<BoardType[]>(['boardList', page], async () => {
+    const { data: post, isLoading } = useQuery<BoardType[]>(['boardList', { boardTypeNum, page }], async () => {
         try {
             const data = await getBoardApi(boardTypeNum, page ? page : "1");
+            
+            const boardTopBlock = document.querySelector(".board-topBlock") as HTMLElement;
+            const boardArticle = document.querySelector(".board-article") as HTMLElement;
+            if (boardTopBlock) {
+                const TopBlockOffsetTop = boardTopBlock.offsetTop;
+                window.scrollTo({ top: TopBlockOffsetTop - 80, behavior: "smooth" });
+            } else if (boardArticle) {
+                const ArticleOffsetTop = boardArticle.offsetTop;
+                window.scrollTo({ top: ArticleOffsetTop - 80, behavior: "smooth" });
+            }
             return data;
         } catch (e) {
             ToastError("글 조회를 실패했어요");

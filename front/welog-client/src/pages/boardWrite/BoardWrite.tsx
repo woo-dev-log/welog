@@ -114,7 +114,6 @@ const BoardWrite = () => {
     };
 
     const WriteBoardOnClick = async (type: number) => {
-        console.log(boardTypeNum);
         if (title === "" || contents === "") {
             ToastWarn("모두 입력해주세요");
             return;

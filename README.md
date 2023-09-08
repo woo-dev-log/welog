@@ -14,7 +14,7 @@ https://welog.fly.dev/
 | Front-end      | React, TypeScript, Recoil, React-Query, Scss     |
 | Back-end       | Express, Node.js                                 |
 | Database       | Mysql - AWS RDS                                  |
-| Cloud Services | fly.io                                           |
+| Cloud Services | fly.io, AWS S3, AWS CloudFront                   |
 | Tool           | VsCode, GitHub                                   |
 
 ## 사용 모듈
@@ -55,7 +55,7 @@ multer & sharp
 이미지 업로드시 크기와 용량을 줄여 이미지 최적화를 하였어요
 
 lodash-es in debounce 
-회원가입시 중복 확인과 글 검색시 무분별한 호출을 제한하기 위해 사용했어요
+회원가입시 중복 확인과 글 검색시 무분별한 호출을 제한하여 서버 부담을 줄이기 위해 사용했어요
 ```
 
 ## 스크린샷

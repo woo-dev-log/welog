@@ -25,7 +25,7 @@ interface CommentType {
     userNo: number;
     contents: string;
     rgstrDate: string;
-    updateDate: string;
+    updateDate?: string;
     nickname: string;
     imgUrl: string;
     boardCommentCnt: number;
@@ -193,7 +193,7 @@ const BoardComment = ({ IntBoardNo, IntBoardUserNo }: { IntBoardNo: number, IntB
                 ? boardCommentList &&
                 <>
                     {boardCommentList.boardCommentCnt > 0 && <Label text={boardCommentList.boardCommentCnt + "개의 댓글이 있어요"} />}
-                    <textarea ref={textRef} value={boardCommentWrite} placeholder="댓글을 입력해주세요" disabled={commentCheckLogin}
+                    <textarea id="textarea" ref={textRef} value={boardCommentWrite} placeholder="댓글을 입력해주세요" disabled={commentCheckLogin}
                         onFocus={checkLoginBoardCommentOnFocus} onInput={autoHeightRef} onChange={e => setBoardCommentWrite(e.target.value)} />
                     <div className="boardComment-commentAddBtn">
                         <Button onClick={writeBoardCommentOnClick} text="댓글 작성" />
@@ -226,7 +226,7 @@ const BoardComment = ({ IntBoardNo, IntBoardUserNo }: { IntBoardNo: number, IntB
                                         </div>
                                     </header>
                                     {commentUpdateCheckNo === boardC.commentNo && userInfo[0].userNo !== 0
-                                        ? <textarea ref={textRef} value={boardCommentUpdate} placeholder="댓글을 입력해주세요"
+                                        ? <textarea id="textareab" ref={textRef} value={boardCommentUpdate} placeholder="댓글을 입력해주세요"
                                             onInput={autoHeightRef} onChange={e => setBoardCommentUpdate(e.target.value)} />
                                         : <p dangerouslySetInnerHTML={{ __html: boardC.contents.replaceAll(/(\n|\r\n)/g, '<br>') }} />}
 
@@ -249,7 +249,7 @@ const BoardComment = ({ IntBoardNo, IntBoardUserNo }: { IntBoardNo: number, IntB
 
                                     {subCommentCheckNo === boardC.commentNo &&
                                         <div className="boardComment-subCommentTextArea">
-                                            <textarea ref={textRef} value={boardSubCommentWrite} placeholder="대댓글을 입력해주세요"
+                                            <textarea id="textareabcbc" ref={textRef} value={boardSubCommentWrite} placeholder="대댓글을 입력해주세요"
                                                 onInput={autoHeightRef} onChange={e => setBoardSubCommentWrite(e.target.value)} />
                                             <Button onClick={() => writeBoardSubCommentOnClick(boardC.commentNo)} text="대댓글 작성" />
                                         </div>}
@@ -275,7 +275,7 @@ const BoardComment = ({ IntBoardNo, IntBoardUserNo }: { IntBoardNo: number, IntB
                                     </header>
 
                                     {commentUpdateCheckNo === subComment.commentNo && userInfo[0].userNo !== 0
-                                        ? <textarea ref={textRef} value={boardCommentUpdate} placeholder="댓글을 입력해주세요"
+                                        ? <textarea id="textareabc" ref={textRef} value={boardCommentUpdate} placeholder="댓글을 입력해주세요"
                                             onInput={autoHeightRef} onChange={e => setBoardCommentUpdate(e.target.value)} />
                                         : <p dangerouslySetInnerHTML={{ __html: subComment.contents.replaceAll(/(\n|\r\n)/g, '<br>') }} />}
 

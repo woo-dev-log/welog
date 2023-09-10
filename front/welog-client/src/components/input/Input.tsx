@@ -11,7 +11,7 @@ interface Props {
 }
 
 const Input = ({ placeholder, type, value, onChange, onKeyUp, onFocus, disabled }: Props) => {
-    return <input value={value} className="input" placeholder={placeholder} disabled={disabled}
+    return <input id={"input" + type} value={value} className="input" placeholder={placeholder} disabled={disabled}
         type={type} onChange={onChange} onKeyUp={onKeyUp} onFocus={onFocus} />
 }
 

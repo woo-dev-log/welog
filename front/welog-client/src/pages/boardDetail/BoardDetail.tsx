@@ -37,6 +37,19 @@ const BoardDetail = () => {
     const navigate = useNavigate();
     const ServerImgUrl = "https://d12uvkd7f5nrla.cloudfront.net/";
 
+    const boardTypeText = (type: number) => {
+        switch (type) {
+            case 1:
+                return '개발';
+            case 2:
+                return '하루';
+            case 3:
+                return '문의';
+            case 0:
+                return '테스트';
+        }
+    };
+
     const userBoardOnClick = (nickname: string) => {
         navigate("/userBoard/" + nickname);
     };
@@ -107,10 +120,7 @@ const BoardDetail = () => {
 
                         <div className="boardDetail-container">
                             <div className="boardDetail-titleContainer">
-                                {boardDetail[0].boardType === 1 && <div className="board-Type">개발</div>}
-                                {boardDetail[0].boardType === 2 && <div className="board-Type">하루</div>}
-                                {boardDetail[0].boardType === 3 && <div className="board-Type">문의</div>}
-                                {boardDetail[0].boardType === 0 && <div className="board-Type">테스트</div>}
+                                <div className="board-Type">{boardTypeText(boardDetail[0].boardType)}</div>
                                 <div className="boardDetail-titleBox">
                                     <h2 className="boardDetail-title">{boardDetail[0].title}</h2>
                                     <div className="board-views">

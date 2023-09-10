@@ -45,18 +45,14 @@ const Board = () => {
     const boardDailyWidth = boardDailyRef.current
         ? boardDailyRef.current.clientWidth + 10 : 600;
 
-    const { data: boardDailyList, isLoading: boardDailyLoading } = useQuery<BoardType[]>("boardDailyList", async () => {
-        try {
-            const data = await getBoardDailyApi();
-            return data;
-        } catch (e) {
-            ToastError("데일리 글 조회를 실패했어요");
-            console.error(e);
-        }
-    },
+    const { data: boardDailyList, isLoading: boardDailyLoading } = useQuery<BoardType[]>("boardDailyList", getBoardDailyApi,
         {
             keepPreviousData: true,
             cacheTime: 1000 * 60 * 10,
+            onError: (error) => {
+                ToastError("데일리 글 조회를 실패했어요");
+                console.error(error);
+            },
         }
     );
 
@@ -79,16 +75,11 @@ const Board = () => {
 
     const updateBoardViewsOnClick = useCallback(async (boardNo: number, views: number) => {
         try {
-            if (cookies.viewPost) {
-                if (!cookies.viewPost.includes(boardNo)) {
-                    await updateBoardViewsApi(boardNo, views);
-                    removeCookie("viewPost", { path: '/', sameSite: 'strict' });
-                    setCookie("viewPost", [...cookies.viewPost, boardNo], { path: '/', sameSite: 'strict' });
-                }
-            } else {
+            if (!cookies.viewPost || !cookies.viewPost.includes(boardNo)) {
                 await updateBoardViewsApi(boardNo, views);
+                const newViewPosts = cookies.viewPost ? [...cookies.viewPost, boardNo] : [boardNo];
                 removeCookie("viewPost", { path: '/', sameSite: 'strict' });
-                setCookie("viewPost", [boardNo], { path: '/', sameSite: 'strict' });
+                setCookie("viewPost", newViewPosts, { path: '/', sameSite: 'strict' });
             }
             navigate("/" + boardNo);
         } catch (e) {

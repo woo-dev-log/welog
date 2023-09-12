@@ -29,7 +29,7 @@ interface BoardType {
 
 const Post = () => {
     const { userNickname } = useParams();
-    const [cookies, setCookie, removeCookie] = useCookies(['viewPost']);
+    const [cookies, setCookie, removeCookie] = useCookies(['viewPost', 'isWrap']);
     const [boardList, setBoardList] = useRecoilState(board);
     const [currentPage, setCurrentPage] = useState(1);
     const [searchParams, setSearchParams] = useSearchParams();
@@ -41,6 +41,7 @@ const Post = () => {
     const boardType = searchParams.get("boardType");
     const limit = 5;
     const contentsWordLength = window.innerWidth < 1199 ? 38 : 58;
+    const [isWrap, setIsWrap] = useState(true);
 
     const { data: post, isLoading } = useQuery<BoardType[]>(['boardList', { boardType, page }],
         () => getBoardApi(boardType ? Number(boardType) : 1, page ? page : "1"),
@@ -121,63 +122,78 @@ const Post = () => {
     }, [page]);
 
     return (
-        <section>
+        <>
             {!postLoading
-                ? <div className="skeleton-article">
+                ? <section className="skeleton-section">
                     <div className="skeleton-block" />
                     <div className="skeleton-block" />
                     <div className="skeleton-block" />
                     <div className="skeleton-block" />
                     <div className="skeleton-block" />
-                </div>
+                </section>
                 : boardList.length > 0 &&
-                <article className="board-article">
-                    {!keyword && !userNickname && <Category />}
+                <section>
+                    <div className="category-container">
+                        {!keyword && !userNickname && <Category />}
+                        <div className="template-container">
+                            <button className={`template-button-wrap ${!isWrap ? "" : "disabled"}`}
+                                onClick={() => setIsWrap(true)} disabled={isWrap}>
+                                <img src="/wrap.svg" alt="wrap" />
+                            </button>
+                            <button className={`template-button-column ${!isWrap ? "disabled" : ""}`}
+                                onClick={() => setIsWrap(false)} disabled={!isWrap}>
+                                <img src="/column.svg" alt="column" />
+                            </button>
+                        </div>
+                    </div>
 
-                    {boardList.map((board, i) => (
-                        <div key={i} className="board-block">
-                            <aside className="board-asideBoardImg"
-                                onClick={() => updateBoardViewsOnClick(board.boardNo, board.views)}>
-                                <img src={`${ServerImgUrl}${board.boardImgUrl}`} alt="boardImgUrl" loading="lazy" />
-                            </aside>
-                            <div className="board-contentsContainer">
-                                <header onClick={() => updateBoardViewsOnClick(board.boardNo, board.views)}>
-                                    <p className="board-title">{board.title}</p>
-                                    <p className="board-contents">
-                                        {board.contents.replaceAll(/<[^>]*>?/g, "").length < contentsWordLength
-                                            ? board.contents.replaceAll(/<[^>]*>?/g, "")
-                                            : board.contents.replaceAll(/<[^>]*>?/g, "").substring(0, contentsWordLength) + " ..."}
-                                    </p>
-                                </header>
-                                <footer>
-                                    <div className="board-userBlock">
-                                        <img src={`${ServerImgUrl}${board.imgUrl}`} alt="userImg" loading="lazy"
-                                            className="board-userProfileImg" onClick={() => navigate("/userBoard/" + board.nickname)} />
-                                        <p className="board-nickname" onClick={() => navigate("/userBoard/" + board.nickname)}>{board.nickname}</p>
-                                    </div>
-                                    <div className="board-footer">
-                                        <p>{DayFormat(board.rgstrDate)}</p>
-                                        <div className="board-postInfo">
-                                            <div className="board-views">
-                                                <img src="/views.svg" alt="views" />
-                                                <p>{board.views}</p>
-                                            </div>
-                                            <div className="board-comment">
-                                                <img src="/comment.svg" alt="comment" />
-                                                <p>{board.commentCnt}</p>
+                    <article className={`board-article ${isWrap ? 'wrap' : 'column'}`}>
+                        {boardList.map((board, i) => (
+                            <div key={i} className={`board-block ${isWrap ? 'wrap' : 'column'}`}>
+                                <aside className={`board-asideBoardImg ${isWrap ? 'wrap' : 'column'}`}
+                                    onClick={() => updateBoardViewsOnClick(board.boardNo, board.views)}>
+                                    <img src={`${ServerImgUrl}${board.boardImgUrl}`} alt="boardImgUrl" loading="lazy" />
+                                </aside>
+                                <div className={`board-contentsContainer ${isWrap ? 'wrap' : 'column'}`}>
+                                    <header onClick={() => updateBoardViewsOnClick(board.boardNo, board.views)}>
+                                        <p className="board-title">{board.title}</p>
+                                        <p className="board-contents">
+                                            {board.contents.replaceAll(/<[^>]*>?/g, "").length < contentsWordLength
+                                                ? board.contents.replaceAll(/<[^>]*>?/g, "")
+                                                : board.contents.replaceAll(/<[^>]*>?/g, "").substring(0, contentsWordLength) + " ..."}
+                                        </p>
+                                    </header>
+                                    <footer>
+                                        <div className="board-userBlock">
+                                            <img src={`${ServerImgUrl}${board.imgUrl}`} alt="userImg" loading="lazy"
+                                                className="board-userProfileImg" onClick={() => navigate("/userBoard/" + board.nickname)} />
+                                            <p className="board-nickname" onClick={() => navigate("/userBoard/" + board.nickname)}>{board.nickname}</p>
+                                        </div>
+                                        <div className="board-footer">
+                                            <p>{DayFormat(board.rgstrDate)}</p>
+                                            <div className="board-postInfo">
+                                                <div className="board-views">
+                                                    <img src="/views.svg" alt="views" />
+                                                    <p>{board.views}</p>
+                                                </div>
+                                                <div className="board-comment">
+                                                    <img src="/comment.svg" alt="comment" />
+                                                    <p>{board.commentCnt}</p>
+                                                </div>
                                             </div>
                                         </div>
-                                    </div>
-                                </footer>
+                                    </footer>
 
-                                <div className="board-tagContainer">
-                                    {board.tags && board.tags.split(",").map((v, i) => (
-                                        <p key={i} className="board-tagBox">{v}</p>
-                                    ))}
+                                    {board.tags &&
+                                        <div className="board-tagContainer">
+                                            {board.tags && board.tags.split(",").map((v, i) => (
+                                                <p key={i} className="board-tagBox">{v}</p>
+                                            ))}
+                                        </div>}
                                 </div>
                             </div>
-                        </div>
-                    ))}
+                        ))}
+                    </article>
 
                     <Paging
                         total={boardList[0].boardCnt ? boardList[0].boardCnt : 1}
@@ -185,8 +201,8 @@ const Post = () => {
                         page={currentPage}
                         setCurrentPage={setCurrentPage}
                     />
-                </article>}
-        </section>
+                </section>}
+        </>
     )
 }
 

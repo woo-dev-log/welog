@@ -10,6 +10,7 @@ import Paging from "../paging/Paging";
 import { ToastError } from "../Toast";
 import './Post.scss';
 import Category from "../category/Category";
+import Scroll from "../Scroll";
 
 interface BoardType {
     boardNo: number;
@@ -41,47 +42,26 @@ const Post = () => {
     const limit = 5;
     const contentsWordLength = window.innerWidth < 1199 ? 38 : 58;
 
-    const { data: post, isLoading } = useQuery<BoardType[]>(['boardList', { boardTypeNum, page }], async () => {
-        try {
-            const data = await getBoardApi(boardTypeNum, page ? page : "1");
-            
-            const boardTopBlock = document.querySelector(".board-topBlock") as HTMLElement;
-            const boardArticle = document.querySelector(".board-article") as HTMLElement;
-            if (boardTopBlock) {
-                const TopBlockOffsetTop = boardTopBlock.offsetTop;
-                window.scrollTo({ top: TopBlockOffsetTop - 80, behavior: "smooth" });
-            } else if (boardArticle) {
-                const ArticleOffsetTop = boardArticle.offsetTop;
-                window.scrollTo({ top: ArticleOffsetTop - 80, behavior: "smooth" });
-            }
-            return data;
-        } catch (e) {
-            ToastError("글 조회를 실패했어요");
-            console.error(e);
-        }
-    },
+    const { data: post, isLoading } = useQuery<BoardType[]>(['boardList', { boardTypeNum, page }],
+        () => getBoardApi(boardTypeNum, page ? page : "1"),
         {
             keepPreviousData: true,
             cacheTime: 1000 * 60 * 10,
+            onError: (error) => {
+                ToastError("글 조회를 실패했어요");
+                console.error(error);
+            }
         }
     );
 
     const searchBoardApi = async () => {
         try {
             if (keyword) {
-                const boardTopBlock = document.querySelector(".board-topBlock") as HTMLElement;
-                const boardArticle = document.querySelector(".board-article") as HTMLElement;
-                if (boardTopBlock) {
-                    const TopBlockOffsetTop = boardTopBlock.offsetTop;
-                    window.scrollTo({ top: TopBlockOffsetTop - 80, behavior: "smooth" });
-                } else if (boardArticle) {
-                    const ArticleOffsetTop = boardArticle.offsetTop;
-                    window.scrollTo({ top: ArticleOffsetTop - 80, behavior: "smooth" });
-                }
                 setPostLoading(false);
                 const data = await postBoardApi(keyword, page ? page : "1");
                 setBoardList(data);
                 setPostLoading(true);
+                Scroll();
             }
         } catch (e) {
             console.error(e);
@@ -95,6 +75,7 @@ const Post = () => {
                 const data = await getUserBoardApi(userNickname, page ? page : "1");
                 setBoardList(data);
                 setPostLoading(true);
+                Scroll();
             }
         } catch (e) {
             console.error(e);
@@ -134,6 +115,7 @@ const Post = () => {
             setPostLoading(false);
             setBoardList(post);
             setPostLoading(true);
+            Scroll();
         }
     }, [post, keyword]);
 

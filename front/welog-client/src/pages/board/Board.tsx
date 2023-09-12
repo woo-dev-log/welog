@@ -45,7 +45,8 @@ const Board = () => {
     const boardDailyWidth = boardDailyRef.current
         ? boardDailyRef.current.clientWidth + 10 : 600;
 
-    const { data: boardDailyList, isLoading: boardDailyLoading } = useQuery<BoardType[]>("boardDailyList", getBoardDailyApi,
+    const { data: boardDailyList, isLoading: boardDailyLoading } = useQuery<BoardType[]>("boardDailyList",
+        getBoardDailyApi,
         {
             keepPreviousData: true,
             cacheTime: 1000 * 60 * 10,

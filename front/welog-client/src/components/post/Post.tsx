@@ -4,7 +4,7 @@ import { useQuery } from "react-query";
 import { useNavigate, useParams, useSearchParams } from "react-router-dom";
 import { useRecoilState } from "recoil";
 import { getBoardApi, getUserBoardApi, postBoardApi, updateBoardViewsApi } from "../../api/board";
-import { board, boardType } from "../../store/atoms";
+import { board } from "../../store/atoms";
 import DayFormat from "../DayFormat";
 import Paging from "../paging/Paging";
 import { ToastError } from "../Toast";
@@ -31,7 +31,6 @@ const Post = () => {
     const { userNickname } = useParams();
     const [cookies, setCookie, removeCookie] = useCookies(['viewPost']);
     const [boardList, setBoardList] = useRecoilState(board);
-    const [boardTypeNum, setBoardTypeNum] = useRecoilState(boardType);
     const [currentPage, setCurrentPage] = useState(1);
     const [searchParams, setSearchParams] = useSearchParams();
     const [postLoading, setPostLoading] = useState(false);
@@ -39,11 +38,12 @@ const Post = () => {
     const ServerImgUrl = "https://d12uvkd7f5nrla.cloudfront.net/";
     const keyword = searchParams.get("keyword");
     const page = searchParams.get("page");
+    const boardType = searchParams.get("boardType");
     const limit = 5;
     const contentsWordLength = window.innerWidth < 1199 ? 38 : 58;
 
-    const { data: post, isLoading } = useQuery<BoardType[]>(['boardList', { boardTypeNum, page }],
-        () => getBoardApi(boardTypeNum, page ? page : "1"),
+    const { data: post, isLoading } = useQuery<BoardType[]>(['boardList', { boardType, page }],
+        () => getBoardApi(boardType ? Number(boardType) : 1, page ? page : "1"),
         {
             keepPreviousData: true,
             cacheTime: 1000 * 60 * 10,
@@ -84,16 +84,11 @@ const Post = () => {
 
     const updateBoardViewsOnClick = useCallback(async (boardNo: number, views: number) => {
         try {
-            if (cookies.viewPost) {
-                if (!cookies.viewPost.includes(boardNo)) {
-                    await updateBoardViewsApi(boardNo, views);
-                    removeCookie("viewPost", { path: '/', sameSite: 'strict' });
-                    setCookie("viewPost", [...cookies.viewPost, boardNo], { path: '/', sameSite: 'strict' });
-                }
-            } else {
+            if (!cookies.viewPost || !cookies.viewPost.includes(boardNo)) {
                 await updateBoardViewsApi(boardNo, views);
+                const newViewPosts = cookies.viewPost ? [...cookies.viewPost, boardNo] : [boardNo];
                 removeCookie("viewPost", { path: '/', sameSite: 'strict' });
-                setCookie("viewPost", [boardNo], { path: '/', sameSite: 'strict' });
+                setCookie("viewPost", newViewPosts, { path: '/', sameSite: 'strict' });
             }
             navigate("/" + boardNo);
         } catch (e) {

@@ -36,10 +36,13 @@ const Paging = ({ total, limit, page, setCurrentPage }: Props) => {
 
     const keyword = searchParams.get("keyword");
     const type = searchParams.get("type");
+    const boardType = searchParams.get("boardType");
     if (keyword) {
       setSearchParams({ "keyword": keyword, "page": String(page) })
     } else if (type) {
       setSearchParams({ "type": type, "page": String(page) })
+    } else if (boardType) {
+      setSearchParams({ "boardType": boardType, "page": String(page) })
     } else setSearchParams({ "page": String(page) });
   };
 

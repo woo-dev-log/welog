@@ -47,7 +47,6 @@ export const ToastError = (text: string) => {
 }
 
 export const Toast = () => {
-
     return (
         <ToastContainer
             position="top-center"

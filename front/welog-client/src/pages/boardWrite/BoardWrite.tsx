@@ -10,12 +10,11 @@ import Line from "../../components/line/Line";
 import Label from "../../components/label/Label";
 import Input from "../../components/input/Input";
 import Button from "../../components/button/Button";
+import Category from "../../components/category/Category";
 import "./BoardWrite.scss"
-import 'react-quill/dist/quill.snow.css';
-const ReactQuill = lazy(() => import('react-quill'));
 import hljs from 'highlight.js';
 import 'highlight.js/styles/atom-one-dark.css';
-import Category from "../../components/category/Category";
+const ReactQuill = lazy(() => import('../../components/ReactQuill'));
 
 const BoardWrite = () => {
     const [title, setTitle] = useState("");
@@ -80,6 +79,9 @@ const BoardWrite = () => {
             syntax: {
                 highlight: (text: string) => hljs.highlightAuto(text).value
             },
+            ImageResize: {
+                modules: ['Resize', 'DisplaySize']
+            }
         }
     }, []);
 

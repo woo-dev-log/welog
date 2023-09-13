@@ -24,8 +24,8 @@ interface CommentType {
     parentCommentNo: number;
     userNo: number;
     contents: string;
-    rgstrDate: string;
-    updateDate?: string;
+    rgstrDate: Date;
+    updateDate?: Date;
     nickname: string;
     imgUrl: string;
     boardCommentCnt: number;

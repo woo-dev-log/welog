@@ -17,7 +17,7 @@ interface BoardType {
     userNo: number;
     title: string;
     contents: string;
-    rgstrDate: string;
+    rgstrDate: Date;
     views: number;
     tags: string;
     boardImgUrl: string;

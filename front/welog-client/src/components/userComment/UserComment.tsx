@@ -13,8 +13,8 @@ interface UserCommentType {
     boardNo: number;
     userNo: number;
     contents: string;
-    rgstrDate: string;
-    updateDate: string;
+    rgstrDate: Date;
+    updateDate: Date;
     userCommentCnt: number;
 }
 

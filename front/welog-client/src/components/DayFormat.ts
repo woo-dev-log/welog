@@ -7,7 +7,7 @@ dayjs.extend(relativeTime);
 dayjs.extend(utc);
 dayjs.extend(timezone);
 
-const DayFormat = (date: string) => {
+const DayFormat = (date: Date) => {
     const now = dayjs().tz('Asia/Seoul');
     const localDate = dayjs(date).tz('Asia/Seoul');
 

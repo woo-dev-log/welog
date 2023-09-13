@@ -1,13 +1,15 @@
 import dayjs from 'dayjs';
 import relativeTime from 'dayjs/plugin/relativeTime';
 import utc from 'dayjs/plugin/utc';
+import timezone from 'dayjs/plugin/timezone';
 
 dayjs.extend(relativeTime);
 dayjs.extend(utc);
+dayjs.extend(timezone);
 
 const DayFormat = (date: string) => {
-    const now = dayjs();
-    const localDate = dayjs.utc(date).local();
+    const now = dayjs().tz('Asia/Seoul');
+    const localDate = dayjs(date).tz('Asia/Seoul');
 
     if (now.diff(localDate, 'year') !== 0 || now.diff(localDate, 'month') > 1) {
         return localDate.format('YY.MM.DD HH:mm');

@@ -24,6 +24,14 @@
             &.disabled {
                 cursor: default;
                 background-color: coral;
+
+                &:hover {
+                    background-color: coral;
+                }
+            }
+
+            &:hover {
+                background-color: var(--element-hover-color);
             }
         }
     }

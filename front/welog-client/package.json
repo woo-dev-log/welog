@@ -13,6 +13,7 @@
     "@types/node": "^18.14.2",
     "axios": "^1.2.2",
     "dayjs": "^1.11.7",
+    "dotenv": "^16.3.1",
     "highlight.js": "^11.7.0",
     "lodash-es": "^4.17.21",
     "quill-image-resize-module-ts": "^3.0.3",

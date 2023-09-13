@@ -1,33 +1,33 @@
-import dayjs from "dayjs";
+import dayjs from 'dayjs';
+import relativeTime from 'dayjs/plugin/relativeTime';
+import utc from 'dayjs/plugin/utc';
+import timezone from 'dayjs/plugin/timezone';
+
+dayjs.extend(relativeTime);
+dayjs.extend(utc);
+dayjs.extend(timezone);
 
 const DayFormat = (date: string) => {
-    const now = {
-        year: dayjs().get("year"),
-        month: dayjs().get("month") + 1,
-        day: dayjs().get("date"),
-        hour: dayjs().get("hour"),
-        minute: dayjs().get("minute"),
-        second: dayjs().get("second")
+    const now = dayjs().tz('Asia/Seoul');
+    const localDate = dayjs(date).tz('Asia/Seoul');
+
+    if (now.diff(localDate, 'year') !== 0 || now.diff(localDate, 'month') > 1) {
+        return localDate.format('YY.MM.DD HH:mm');
     }
 
-    const localDate = dayjs(date).subtract(9, "hour");
-    const rgstrDate = {
-        year: dayjs(localDate).get("year"),
-        month: dayjs(localDate).get("month") + 1,
-        day: dayjs(localDate).get("date"),
-        hour: dayjs(localDate).get("hour"),
-        minute: dayjs(localDate).get("minute"),
-        second: dayjs(localDate).get("second")
-    }
-    if (now.year !== rgstrDate.year) return localDate.format('YY.MM.DD HH:mm');
-    if (dayjs().diff(localDate, "day") > 31) return localDate.format('YY.MM.DD HH:mm');
-    if (now.day !== rgstrDate.day) return dayjs().diff(localDate, "day") + "일전";
+    const diffInSeconds = now.diff(localDate, 'second');
+    const diffInMinutes = now.diff(localDate, 'minute');
+    const diffInHours = now.diff(localDate, 'hour');
+    const diffInDays = now.diff(localDate, 'day');
 
-    if (now.hour === rgstrDate.hour) {
-        if (now.minute === rgstrDate.minute) return now.second - rgstrDate.second + "초전";
-        return now.minute - rgstrDate.minute + "분전";
-    } else {
-        return now.hour - rgstrDate.hour + "시간전";
+    if (diffInSeconds < 60) {
+        return `${diffInSeconds}초 전`;
+    } else if (diffInMinutes < 60) {
+        return `${diffInMinutes}분 전`;
+    } else if (diffInHours < 24) {
+        return `${diffInHours}시간 전`;
+    } else if (diffInDays < 31) {
+        return `${diffInDays}일 전`;
     }
 }
 

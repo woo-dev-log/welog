@@ -432,10 +432,10 @@ app.post("/api/boardSearch", async (req, res) => {
             FROM board b 
             INNER JOIN user u 
             ON b.userNo = u.userNo 
-            WHERE b.title LIKE ? OR b.contents LIKE ? OR u.nickname LIKE ?
+            WHERE b.title LIKE ? OR b.contents LIKE ? OR u.nickname LIKE ? OR b.tags LIKE ?
             ORDER BY b.rgstrDate DESC
             LIMIT ?, 5
-            `, [value, value, value, pageNum]);
+            `, [value, value, value, value, pageNum]);
 
         return res.status(200).send(rows);
     } catch (e) {

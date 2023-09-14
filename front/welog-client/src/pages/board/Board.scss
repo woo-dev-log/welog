@@ -51,73 +51,43 @@
         overflow: hidden;
         margin-bottom: 50px;
 
-        .boardDaily-prevBtn,
-        .boardDaily-nextBtn {
-            position: absolute;
-            top: 50%;
-            transform: translateY(-50%);
-            width: 50px;
-            height: 100%;
-            border: none;
-            background: var(--element-color);
-            color: var(--font-color);
-            font-size: 20px;
-            opacity: 0.9;
-
-            &:hover {
-                background-color: var(--element-hover-color);
-            }
-        }
-
-        .boardDaily-prevBtn {
-            left: 0;
-        }
-
-        .boardDaily-nextBtn {
-            right: 0;
-        }
-
         .boardDaily-article {
-            display: flex;
-            transition: transform 0.5s;
-            gap: 30px;
+            &:hover {
+                transition: 0.3s;
+                transform: scale(1.02);
+            }
 
-            .boardDaily-block {
+            main {
+                margin: 0 10px;
+            }
+
+            header {
+                .board-title {
+                    display: flex;
+                    justify-content: space-between;
+
+                    .boardDaily-weekComment {
+                        font-size: 18px;
+                        color: coral;
+                        width: 30%;
+                        text-align: right;
+                    }
+                }
+            }
+
+            .board-asideBoardImg {
+                cursor: pointer;
+                width: 100%;
+
+                img {
+                    height: 220px;
+                }
+            }
+
+            .board-contentsContainer {
+                width: 100%;
+                min-height: 250px;
                 background-color: var(--board-color);
-                flex: 0 0 40%;
-                width: 40%;
-
-                &:hover {
-                    transition: 0.3s;
-                    transform: scale(1.02);
-                }
-
-                header {
-                    .board-title {
-                        display: flex;
-                        justify-content: space-between;
-
-                        .boardDaily-weekComment {
-                            font-size: 18px;
-                            color: coral;
-                            width: 30%;
-                            text-align: right;
-                        }
-                    }
-                }
-
-                .board-asideBoardImg {
-                    cursor: pointer;
-                    width: 100%;
-
-                    img {
-                        height: 220px;
-                    }
-                }
-
-                .board-contentsContainer {
-                    width: 100%;
-                }
             }
         }
     }
@@ -169,36 +139,10 @@
             background-color: var(--element-color);
         }
     }
-
-    // .skeleton-boardDailyText,
-    // .skeleton-boardDailyBlock,
-    // .skeleton-boardInput,
-    // .skeleton-boardText,
-    // .skeleton-boardBtn {
-    //     background: linear-gradient(120deg, var(--element-color) 0%,
-    //             var(--element-color) 40%, var(--element-hover-color) 50%,
-    //             var(--element-color) 60%, var(--element-color) 100%);
-    //     background-size: 200% 100%;
-    //     animation: skeleton-flow 1.5s ease-in-out infinite;
-    // }
-
-    // @keyframes skeleton-flow {
-    //     0% {
-    //         background-position: 100% 0;
-    //     }
-    // }
 }
 
 @media (max-width: 1199px) {
     .board-postContainer {
-        .boardDaily-section {
-            .boardDaily-article {
-                .boardDaily-block {
-                    flex: 0 0 80%;
-                }
-            }
-        }
-
         .skeleton-boardDailySection {
             .skeleton-boardDailyBlock {
                 flex: 0 0 80%;
@@ -242,32 +186,22 @@
         .boardDaily-section {
             margin-bottom: 30px;
 
-            .boardDaily-prevBtn,
-            .boardDaily-nextBtn {
-                font-size: 16px;
-                width: 40px;
-                height: 40px;
-            }
-
             .boardDaily-article {
-                grid-template-columns: repeat(auto-fit, minmax(15rem, 1fr));
-                gap: 20px;
+                main {
+                    margin-right: 0;
+                }
 
-                .boardDaily-block {
-                    flex: 0 0 90%;
-
-                    header {
-                        .board-title {
-                            .boardDaily-weekComment {
-                                font-size: 16px;
-                            }
+                header {
+                    .board-title {
+                        .boardDaily-weekComment {
+                            font-size: 16px;
                         }
                     }
+                }
 
-                    .board-asideBoardImg {
-                        img {
-                            height: 150px;
-                        }
+                .board-asideBoardImg {
+                    img {
+                        height: 150px;
                     }
                 }
             }

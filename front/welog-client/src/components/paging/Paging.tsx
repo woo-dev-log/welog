@@ -2,6 +2,7 @@ import { useCookies } from 'react-cookie';
 import { useSearchParams } from 'react-router-dom';
 import Button from '../button/Button';
 import './Paging.scss';
+import Scroll from '../Scroll';
 
 interface Props {
   total: number,
@@ -44,6 +45,8 @@ const Paging = ({ total, limit, page, setCurrentPage }: Props) => {
     } else if (boardType) {
       setSearchParams({ "boardType": boardType, "page": String(page) })
     } else setSearchParams({ "page": String(page) });
+    
+    Scroll();
   };
 
   return (

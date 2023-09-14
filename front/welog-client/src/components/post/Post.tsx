@@ -111,7 +111,6 @@ const Post = () => {
             setPostLoading(false);
             setBoardList(post);
             setPostLoading(true);
-            Scroll();
         }
     }, [post, keyword]);
 
@@ -187,7 +186,8 @@ const Post = () => {
                                     {board.tags &&
                                         <div className="board-tagContainer">
                                             {board.tags && board.tags.split(",").map((v, i) => (
-                                                <p key={i} className="board-tagBox">{v}</p>
+                                                <p key={i} className="board-tagBox"
+                                                    onClick={() => setSearchParams({ "keyword": v })}>{v}</p>
                                             ))}
                                         </div>}
                                 </div>

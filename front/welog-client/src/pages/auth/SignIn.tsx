@@ -1,6 +1,5 @@
 import { useState } from "react";
 import { useCookies } from "react-cookie";
-import { useNavigate } from "react-router-dom";
 import { useRecoilState } from "recoil";
 import { postSignInApi } from "../../api/sign";
 import { loginCheckCnt, loginModalIsOpen, loginUser } from "../../store/atoms";
@@ -16,7 +15,6 @@ const SignIn = () => {
     const [userInfo, setUserInfo] = useRecoilState(loginUser);
     const [checkCnt, setCheckCnt] = useRecoilState(loginCheckCnt);
     const [cookies, setCookie, removeCookie] = useCookies(['welogJWT']);
-    const navigate = useNavigate();
     const [id, setId] = useState("");
     const [pw, setPw] = useState("");
     const [checkLogin, setCheckLogin] = useState("");

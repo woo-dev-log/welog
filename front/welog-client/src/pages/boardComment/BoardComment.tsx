@@ -199,13 +199,6 @@ const BoardComment = ({ IntBoardNo, IntBoardUserNo }: { IntBoardNo: number, IntB
                         <Button onClick={writeBoardCommentOnClick} text="댓글 작성" />
                     </div>
 
-                    {boardCommentList.boardCommentCnt > 0 && <Paging
-                        total={boardCommentList.commentRows[0].boardCommentCnt}
-                        limit={limit}
-                        page={currentPage}
-                        setCurrentPage={setCurrentPage} />
-                    }
-
                     {boardCommentList.commentRows.map((boardC, i) => (
                         <article key={i} className="boardComment-commentContainer">
                             {boardC.parentCommentNo === 0 &&
@@ -292,6 +285,13 @@ const BoardComment = ({ IntBoardNo, IntBoardUserNo }: { IntBoardNo: number, IntB
                                     </footer>
                                 </div>))}
                         </article>))}
+                    
+                    {boardCommentList.boardCommentCnt > 0 && <Paging
+                    total={boardCommentList.commentRows[0].boardCommentCnt}
+                    limit={limit}
+                    page={currentPage}
+                    setCurrentPage={setCurrentPage} />
+                }
                 </>
                 : <>
                     <div className="skeleton-boardCommentLabel" />

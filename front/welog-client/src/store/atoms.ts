@@ -45,6 +45,11 @@ export const board = atom<BoardProps[]>({
     default: []
 });
 
+export const loginModalIsOpen = atom({
+    key: 'loginModalIsOpenKey',
+    default: false
+});
+
 export const loginCheckCnt = atom({
     key: 'loginCheckCntKey',
     default: 1

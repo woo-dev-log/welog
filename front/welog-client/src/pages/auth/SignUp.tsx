@@ -161,7 +161,7 @@ const SignUp = () => {
             <label className="signUp-imgSelect" htmlFor="profileImg">사진 선택</label>
             <input type="file" accept="image/*" onChange={uploadImageOnChange} id="profileImg" />
             <div className="signUp-nickname">
-                <Input placeholder='닉네임' onChange={nicknameCheckOnChange} />
+                <Input type="text" placeholder='닉네임' onChange={nicknameCheckOnChange} />
                 {checkNickname &&
                     <div style={dupCheckNickname
                         ? { marginTop: '10px', color: 'green', fontSize: '14px' }
@@ -170,7 +170,7 @@ const SignUp = () => {
                     </div>}
             </div>
             <div className="signUp-id">
-                <Input placeholder="아이디" onChange={idCheckOnChange} />
+                <Input type="text" placeholder="아이디" onChange={idCheckOnChange} />
                 {checkId &&
                     <div style={dupCheckId
                         ? { marginTop: '10px', color: 'green', fontSize: '14px' }

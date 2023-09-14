@@ -3,7 +3,7 @@ import { useCookies } from 'react-cookie';
 import { useNavigate } from 'react-router-dom';
 import { useRecoilState } from 'recoil';
 import Swal from 'sweetalert2';
-import { loginUser } from '../../store/atoms';
+import { loginModalIsOpen, loginUser } from '../../store/atoms';
 import { ToastSuccess } from '../Toast';
 import './Header.scss';
 
@@ -12,6 +12,7 @@ const Header = () => {
     const [userInfo, setUserInfo] = useRecoilState(loginUser);
     const [cookies, setCookie, removeCookie] = useCookies(['welogJWT', 'themeColor']);
     const [themeColor, setThemeColor] = useState(document.body.dataset.theme);
+    const [modalIsOpen, setIsOpen] = useRecoilState(loginModalIsOpen);
     const ServerImgUrl = "https://d12uvkd7f5nrla.cloudfront.net/";
 
     const themeOnClick = (color: string) => {
@@ -64,7 +65,7 @@ const Header = () => {
                     </div>
                     :
                     <div className="header-block">
-                        <div className="header-signIn" onClick={() => navigate("/SignIn")}>로그인</div>
+                        <div className="header-signIn" onClick={() => setIsOpen(true)}>로그인</div>
                         <div className="header-signUp" onClick={() => navigate("/SignUp")}>회원가입</div>
                     </div >
                 }

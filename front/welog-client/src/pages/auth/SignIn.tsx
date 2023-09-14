@@ -3,12 +3,14 @@ import { useCookies } from "react-cookie";
 import { useNavigate } from "react-router-dom";
 import { useRecoilState } from "recoil";
 import { postSignInApi } from "../../api/sign";
-import { loginCheckCnt, loginUser } from "../../store/atoms";
+import { loginCheckCnt, loginModalIsOpen, loginUser } from "../../store/atoms";
 import { ToastError, ToastSuccess, ToastWarn } from "../../components/Toast";
 import SEO from "../../components/SEO";
 import Button from "../../components/button/Button";
 import Input from "../../components/input/Input";
 import './Sign.scss';
+import Modal from 'react-modal';
+Modal.setAppElement('#root')
 
 const SignIn = () => {
     const [userInfo, setUserInfo] = useRecoilState(loginUser);
@@ -18,6 +20,7 @@ const SignIn = () => {
     const [id, setId] = useState("");
     const [pw, setPw] = useState("");
     const [checkLogin, setCheckLogin] = useState("");
+    const [modalIsOpen, setIsOpen] = useRecoilState(loginModalIsOpen);
 
     const enterCheckOnKeyUp = (e: React.KeyboardEvent<HTMLInputElement>) => {
         if (e.key === "Enter") {
@@ -50,14 +53,16 @@ const SignIn = () => {
                     if (checkLogin === "유저 정보와 일치하지 않아요"
                         || checkLogin === "유저 정보와 일치하지 않아요 x " + (checkCnt)) {
                         setCheckLogin("유저 정보와 일치하지 않아요 x " + (checkCnt + 1));
-                        setCheckCnt(checkCnt+1);
+                        setCheckCnt(checkCnt + 1);
                     } else setCheckLogin("유저 정보와 일치하지 않아요");
                 } else {
                     removeCookie("welogJWT", { path: '/', sameSite: 'strict' });
                     setCookie("welogJWT", data.token, { path: '/', sameSite: 'strict' });
                     setUserInfo(data.user);
                     ToastSuccess(data.user[0].nickname + "님 안녕하세요!");
-                    navigate(-1);
+                    setIsOpen(false);
+                    setId("");
+                    setPw("");
                     return;
                 }
             } catch (e) {
@@ -68,7 +73,13 @@ const SignIn = () => {
     }
 
     return (
-        <>
+        <Modal
+            isOpen={modalIsOpen}
+            onRequestClose={() => setIsOpen(false)}
+            contentLabel="Example Modal"
+            className="Modal"
+            overlayClassName="Overlay"
+        >
             <SEO title="로그인" contents="로그인" />
             <div className="container">
                 {checkLogin && <div style={{ color: "red" }}>{checkLogin}</div>}
@@ -77,7 +88,7 @@ const SignIn = () => {
                     onChange={pwCheckOnChange} onKeyUp={enterCheckOnKeyUp} />
                 <Button onClick={postLoginOnClick} text="로그인" />
             </div>
-        </>
+        </Modal>
     )
 }
 

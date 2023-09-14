@@ -43,6 +43,7 @@ function App() {
   return (
     <>
       <Toast />
+      <SignIn />
       <Header />
       <div className='app-block'>
         <Routes>
@@ -50,7 +51,6 @@ function App() {
           <Route path='/:boardNo' element={<BoardDetail />} />
           <Route path='/userBoard/:userNickname' element={<UserBoard />} />
           <Route path='/BoardWrite' element={<BoardWrite />} />
-          <Route path='/SignIn' element={<SignIn />} />
           <Route path='/SignUp' element={<SignUp />} />
         </Routes>
       </div>

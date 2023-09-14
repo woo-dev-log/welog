@@ -8,6 +8,26 @@
     color: var(--font-color);
 }
 
+.Modal {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 800px;
+    border-radius: 15px;
+    background-color: var(--board-color);
+}
+
+.Overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: rgba(0, 0, 0, 0.8);
+    z-index: 2;
+}
+
 .container {
     height: 70vh;
     display: flex;
@@ -35,7 +55,7 @@
         margin-top: 10px;
         display: flex;
         justify-content: center;
-        align-items: center;        
+        align-items: center;
         background-color: var(--element-color);
         width: 100px;
         height: 30px;

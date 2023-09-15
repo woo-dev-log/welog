@@ -92,7 +92,7 @@ export const getBoardDetailApi = async (boardNo: number) => {
     return data;
 }
 
-export const getBoardApi = async (boardType: number, page: string) => {
-    const { data } = await axios.post("/board", { boardType, page });
+export const getBoardApi = async (boardType: number, page: string, sortBy: string) => {
+    const { data } = await axios.post("/board", { boardType, page, sortBy });
     return data;
 };

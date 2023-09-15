@@ -4,7 +4,7 @@ import { useQuery } from "react-query";
 import { useNavigate, useParams, useSearchParams } from "react-router-dom";
 import { useRecoilState } from "recoil";
 import { getBoardApi, getUserBoardApi, postBoardApi, updateBoardViewsApi } from "../../api/board";
-import { board } from "../../store/atoms";
+import { board, boardSort } from "../../store/atoms";
 import DayFormat from "../DayFormat";
 import Paging from "../paging/Paging";
 import { ToastError } from "../Toast";
@@ -42,9 +42,10 @@ const Post = () => {
     const limit = 5;
     const contentsWordLength = window.innerWidth < 1199 ? 38 : 58;
     const [isWrap, setIsWrap] = useState(true);
+    const [sortBy, setSortBy] = useRecoilState(boardSort);
 
-    const { data: post, isLoading } = useQuery<BoardType[]>(['boardList', { boardType, page }],
-        () => getBoardApi(boardType ? Number(boardType) : 1, page ? page : "1"),
+    const { data: post, isLoading } = useQuery<BoardType[]>(['boardList', { boardType, page, sortBy }],
+        () => getBoardApi(boardType ? Number(boardType) : 1, page ? page : "1", sortBy),
         {
             keepPreviousData: true,
             cacheTime: 1000 * 60 * 10,
@@ -112,7 +113,7 @@ const Post = () => {
             setBoardList(post);
             setPostLoading(true);
         }
-    }, [post, keyword]);
+    }, [post, keyword, sortBy]);
 
     useEffect(() => {
         if (page) {
@@ -132,6 +133,9 @@ const Post = () => {
                 </section>
                 : boardList.length > 0 &&
                 <section>
+                    <button onClick={() => setSortBy('rgstrDate')}>최신순</button>
+                    <button onClick={() => setSortBy('commentCnt')}>댓글순</button>
+                    <button onClick={() => setSortBy('views')}>조회순</button>
                     <div className="category-container">
                         {!keyword && !userNickname && <Category />}
                         <div className="template-container">

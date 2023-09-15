@@ -45,6 +45,11 @@ export const board = atom<BoardProps[]>({
     default: []
 });
 
+export const boardSort = atom({
+    key: 'boardSortKey',
+    default: 'rgstrDate'
+});
+
 export const loginModalIsOpen = atom({
     key: 'loginModalIsOpenKey',
     default: false

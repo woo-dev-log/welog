@@ -446,8 +446,9 @@ app.post("/api/boardSearch", async (req, res) => {
 
 app.post("/api/board", async (req, res) => {
     try {
-        const { page, boardType } = req.body;
+        const { page, boardType, sortBy } = req.body;
         const pageNum = page * 5 - 5;
+        const sort = sortBy === 'commentCnt' ? sortBy : "b." + sortBy;
 
         const [rows] = await mysql.query(`
         SELECT b.boardNo, b.userNo, b.title, b.contents, b.rgstrDate, b.boardType, 
@@ -458,7 +459,7 @@ app.post("/api/board", async (req, res) => {
         INNER JOIN user u 
         ON b.userNo = u.userNo
         WHERE b.boardType = ? 
-        ORDER BY b.rgstrDate DESC
+        ORDER BY ${sort} DESC
         LIMIT ?, 5
         `, [boardType, pageNum]);
         return res.status(200).send(rows);

@@ -108,10 +108,10 @@ const BoardDetail = () => {
 
     return (
         <>
-            <SEO title="상세 글" contents="상세 글" />
             {isLoading
                 ? boardDetail[0] &&
                 <>
+                    <SEO title="상세 글" contents={boardDetail[0].title} />
                     <button className="boardDetail-backbutton" onClick={() => navigate(-1)}>&lt;&nbsp;&nbsp;이전으로</button>
                     <section className="boardDetail-section">
                         <aside className="boarDetail-boardThumbnail">

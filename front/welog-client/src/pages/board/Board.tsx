@@ -107,7 +107,7 @@ const Board = () => {
 
     return (
         <div className="board-postContainer">
-            <SEO title="메인" contents="리스트" />
+            <SEO title="메인" contents="메인" />
             {boardDailyLoading
                 ? <>
                     <div className="skeleton-boardDailyText" />

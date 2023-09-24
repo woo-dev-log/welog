@@ -3,7 +3,7 @@ import { useCookies } from "react-cookie";
 import { useQuery } from "react-query";
 import { useNavigate, useSearchParams } from "react-router-dom";
 import { useRecoilState } from "recoil";
-import { board, boardUpdate, loginUser } from "../../store/atoms";
+import { board, boardType, boardUpdate, loginUser } from "../../store/atoms";
 import { getBoardDailyApi, updateBoardViewsApi } from "../../api/board";
 import { ToastError, ToastWarn } from "../../components/Toast";
 import { debounce } from "lodash-es";
@@ -39,9 +39,10 @@ const Board = () => {
     const [updateValue, setUpdateValue] = useRecoilState(boardUpdate);
     const [cookies, setCookie, removeCookie] = useCookies(['viewPost']);
     const [searchParams, setSearchParams] = useSearchParams();
+    const [boardTypeNum, setBoardTypeNum] = useRecoilState(boardType);
     const navigate = useNavigate();
     const ServerImgUrl = "https://d12uvkd7f5nrla.cloudfront.net/";
-    const contentsWordLength = window.innerWidth < 1199 ? 38 : 38;
+    const contentsWordLength = window.innerWidth < 1024 ? 38 : 38;
     const boardCnt = boardList.length > 0 ? boardList[0].boardCnt : 0;
     const settings = {
         dots: true,
@@ -57,8 +58,8 @@ const Board = () => {
             </div>
         ),
         infinite: false,
-        slidesToShow: window.innerWidth < 767 ? 1 : 2,
-        slidesToScroll: window.innerWidth < 767 ? 1 : 2
+        slidesToShow: window.innerWidth < 768 ? 1 : 2,
+        slidesToScroll: window.innerWidth < 768 ? 1 : 2
     };
 
     const { data: boardDailyList, isLoading: boardDailyLoading } = useQuery<BoardType[]>("boardDailyList",
@@ -87,7 +88,7 @@ const Board = () => {
     const searchBoardListOnChange = debounce(async (e: React.ChangeEvent<HTMLInputElement>) => {
         if (e.target.value) {
             setSearchParams({ "keyword": e.target.value });
-        } else navigate("/");
+        } else setSearchParams({ "boardType": String(boardTypeNum), "page": "1" });
     }, 500);
 
     const updateBoardViewsOnClick = useCallback(async (boardNo: number, views: number) => {

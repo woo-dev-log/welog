@@ -4,6 +4,7 @@
     }
 
     input {
+        transition: 0.3s ease;
         background-color: var(--board-color);
         color: var(--font-color);
         font-size: 16px;
@@ -30,6 +31,7 @@
 
             button {
                 cursor: pointer;
+                transition: 0.3s ease;
                 background-color: var(--element-color);
                 width: 120px;
                 height: 40px;
@@ -88,6 +90,7 @@
                 width: 100%;
                 min-height: 250px;
                 background-color: var(--board-color);
+                transition: 0.3s ease;
             }
         }
     }
@@ -141,7 +144,7 @@
     }
 }
 
-@media (max-width: 1199px) {
+@media (max-width: 1024px) {
     .board-postContainer {
         .skeleton-boardDailySection {
             .skeleton-boardDailyBlock {
@@ -152,7 +155,7 @@
     }
 }
 
-@media (max-width: 767px) {
+@media (max-width: 768px) {
     .board-postContainer {
         h2 {
             font-size: 1.1rem;

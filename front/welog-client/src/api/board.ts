@@ -72,8 +72,8 @@ export const updateBoardViewsApi = async (boardNo: number, views: number) => {
     return data;
 };
 
-export const getUserBoardApi = async (userNickname: string, page: string) => {
-    const { data } = await axios.post("/userBoard", { userNickname, page });
+export const getUserBoardApi = async (userNickname: string, page: string, sortBy: string) => {
+    const { data } = await axios.post("/userBoard", { userNickname, page, sortBy });
     return data;
 };
 
@@ -82,8 +82,8 @@ export const getBoardDailyApi = async () => {
     return data;
 }
 
-export const postBoardApi = async (search: string, page: string) => {
-    const { data } = await axios.post("/boardSearch", { search, page });
+export const postBoardApi = async (search: string, page: string, sortBy: string) => {
+    const { data } = await axios.post("/boardSearch", { search, page, sortBy });
     return data;
 }
 

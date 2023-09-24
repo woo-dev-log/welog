@@ -11,6 +11,7 @@ import { ToastError } from "../Toast";
 import './Post.scss';
 import Category from "../category/Category";
 import Scroll from "../Scroll";
+import Select from "react-select";
 
 interface BoardType {
     boardNo: number;
@@ -33,16 +34,36 @@ const Post = () => {
     const [boardList, setBoardList] = useRecoilState(board);
     const [currentPage, setCurrentPage] = useState(1);
     const [searchParams, setSearchParams] = useSearchParams();
-    const [postLoading, setPostLoading] = useState(false);
     const navigate = useNavigate();
     const ServerImgUrl = "https://d12uvkd7f5nrla.cloudfront.net/";
     const keyword = searchParams.get("keyword");
     const page = searchParams.get("page");
     const boardType = searchParams.get("boardType");
     const limit = 5;
-    const contentsWordLength = window.innerWidth < 1199 ? 38 : 58;
+    const contentsWordLength = window.innerWidth < 1024 ? 38 : 58;
     const [isWrap, setIsWrap] = useState(true);
     const [sortBy, setSortBy] = useRecoilState(boardSort);
+
+    const sortOption = [
+        { value: "rgstrDate", label: "최신순" },
+        { value: "commentCnt", label: "댓글순" },
+        { value: "views", label: "조회순" }
+    ]
+
+    const dot = (color = 'transparent') => ({
+        display: 'flex',
+        alignItems: 'center',
+
+        ':before': {
+            backgroundColor: color,
+            borderRadius: 10,
+            content: '" "',
+            display: 'block',
+            marginRight: 8,
+            height: 10,
+            width: 10,
+        },
+    });
 
     const { data: post, isLoading } = useQuery<BoardType[]>(['boardList', { boardType, page, sortBy }],
         () => getBoardApi(boardType ? Number(boardType) : 1, page ? page : "1", sortBy),
@@ -56,33 +77,29 @@ const Post = () => {
         }
     );
 
-    const searchBoardApi = async () => {
-        try {
-            if (keyword) {
-                setPostLoading(false);
-                const data = await postBoardApi(keyword, page ? page : "1");
-                setBoardList(data);
-                setPostLoading(true);
-                Scroll();
+    const { data: searchPost } = useQuery<BoardType[]>(['boardList', { keyword, page, sortBy }],
+        () => postBoardApi(keyword ? keyword : "", page ? page : "1", sortBy),
+        {
+            keepPreviousData: true,
+            cacheTime: 1000 * 60 * 10,
+            onError: (error) => {
+                ToastError("글 검색을 실패했어요");
+                console.error(error);
             }
-        } catch (e) {
-            console.error(e);
         }
-    }
+    );
 
-    const userBoardApi = async () => {
-        try {
-            if (userNickname) {
-                setPostLoading(false);
-                const data = await getUserBoardApi(userNickname, page ? page : "1");
-                setBoardList(data);
-                setPostLoading(true);
-                Scroll();
+    const { data: userBoardPost } = useQuery<BoardType[]>(['boardList', { userNickname, page, sortBy }],
+        () => getUserBoardApi(userNickname ? userNickname : "", page ? page : "1", sortBy),
+        {
+            keepPreviousData: true,
+            cacheTime: 1000 * 60 * 10,
+            onError: (error) => {
+                ToastError("유저 조회를 실패했어요");
+                console.error(error);
             }
-        } catch (e) {
-            console.error(e);
         }
-    }
+    );
 
     const updateBoardViewsOnClick = useCallback(async (boardNo: number, views: number) => {
         try {
@@ -100,20 +117,14 @@ const Post = () => {
     }, []);
 
     useEffect(() => {
-        userBoardApi();
-    }, [userNickname, page]);
-
-    useEffect(() => {
-        if (userNickname) return;
-
-        if (keyword) {
-            searchBoardApi();
+        if (userNickname && userBoardPost) {
+            setBoardList(userBoardPost);
+        } else if (keyword && searchPost) {
+            setBoardList(searchPost);
         } else if (post) {
-            setPostLoading(false);
             setBoardList(post);
-            setPostLoading(true);
         }
-    }, [post, keyword, sortBy]);
+    }, [userNickname, userBoardPost, post, keyword, searchPost]);
 
     useEffect(() => {
         if (page) {
@@ -123,7 +134,7 @@ const Post = () => {
 
     return (
         <>
-            {!postLoading
+            {isLoading
                 ? <section className="skeleton-section">
                     <div className="skeleton-block" />
                     <div className="skeleton-block" />
@@ -135,11 +146,24 @@ const Post = () => {
                 <section>
                     <div className="category-container">
                         {!keyword && !userNickname && <Category />}
-                        <select className="select-container" onChange={(e) => setSortBy(e.target.value)}>
-                            <option value="rgstrDate">최신순</option>
-                            <option value="commentCnt">댓글순</option>
-                            <option value="views">조회순</option>
-                        </select>
+                        <Select className="select-container"
+                            options={sortOption}
+                            defaultValue={sortOption[0]}
+                            isDisabled={false}
+                            isLoading={false}
+                            isClearable={false}
+                            isRtl={false}
+                            styles={{
+                                option: (provided, state) => ({
+                                    ...provided,
+                                    backgroundColor: state.isSelected ? 'coral' : state.isFocused ? 'lightsteelblue' : 'white',
+                                    color: state.isSelected || state.isFocused ? 'white' : 'black',
+                                }),
+                                input: (styles) => ({ ...styles, ...dot() }),
+                                placeholder: (styles) => ({ ...styles, ...dot('coral') }),
+                                singleValue: (styles) => ({ ...styles, ...dot('coral') }),
+                            }}
+                            onChange={(option) => option && setSortBy(option.value)} />
                         <div className="template-container">
                             <button className={`template-button-wrap ${!isWrap ? "" : "disabled"}`}
                                 onClick={() => setIsWrap(true)} disabled={isWrap}>

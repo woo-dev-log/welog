@@ -28,6 +28,7 @@
     cursor: pointer;
     border: none;
     background-color: var(--back-color);
+    transition: 0.3s ease;
     color: var(--font-color);
     font-size: 24px;
     margin-bottom: 20px;
@@ -36,6 +37,7 @@
 
 .boardDetail-section {
     background-color: var(--board-color);
+    transition: 0.3s ease;
 
     .boarDetail-boardThumbnail {
         img {
@@ -196,7 +198,7 @@
     margin-bottom: 20px;
 }
 
-@media (max-width: 767px) {
+@media (max-width: 768px) {
     .boardDetail-backbutton {
         font-size: 18px;
         margin-bottom: 10px;

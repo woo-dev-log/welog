@@ -1,6 +1,7 @@
 .header-container {
     height: 70px;
     background-color: var(--board-color);
+    transition: 0.3s ease;
     color: var(--font-color);
     display: flex;
     align-items: center;
@@ -107,13 +108,13 @@
     }
 }
 
-@media (max-width: 1199px) {
+@media (max-width: 1024px) {
     .header-container {
         padding: 0 50px;
     }
 }
 
-@media (max-width: 767px) {
+@media (max-width: 768px) {
     .header-container {
         height: 60px;
         padding: 0 30px;

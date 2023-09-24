@@ -124,8 +124,9 @@ app.post("/api/userProfile", async (req, res) => {
 
 app.post("/api/userBoard", async (req, res) => {
     try {
-        const { userNickname, page } = req.body;
+        const { userNickname, page, sortBy } = req.body;
         const pageNum = page * 5 - 5;
+        const sort = sortBy === 'commentCnt' ? sortBy : "b." + sortBy;
 
         const [rows] = await mysql.query(`
             SELECT b.boardNo, b.userNo, b.title, b.contents, b.rgstrDate, b.views, 
@@ -136,7 +137,7 @@ app.post("/api/userBoard", async (req, res) => {
             INNER JOIN user u 
             ON b.userNo = u.userNo 
             where u.nickname = ? 
-            ORDER BY b.rgstrDate DESC
+            ORDER BY ${sort} DESC
             LIMIT ?, 5
             `, [userNickname, pageNum]);
 
@@ -420,9 +421,10 @@ app.get("/api/boardDaily", async (req, res) => {
 
 app.post("/api/boardSearch", async (req, res) => {
     try {
-        const { search, page } = req.body;
+        const { search, page, sortBy } = req.body;
         const pageNum = page * 5 - 5;
         const value = "%" + search + "%";
+        const sort = sortBy === 'commentCnt' ? sortBy : "b." + sortBy;
 
         const [rows] = await mysql.query(`
             SELECT b.boardNo, b.userNo, b.title, b.contents, b.rgstrDate, 
@@ -433,7 +435,7 @@ app.post("/api/boardSearch", async (req, res) => {
             INNER JOIN user u 
             ON b.userNo = u.userNo 
             WHERE b.title LIKE ? OR b.contents LIKE ? OR u.nickname LIKE ? OR b.tags LIKE ?
-            ORDER BY b.rgstrDate DESC
+            ORDER BY ${sort} DESC
             LIMIT ?, 5
             `, [value, value, value, value, pageNum]);
 

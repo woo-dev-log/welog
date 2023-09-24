@@ -1,6 +1,7 @@
 body[data-theme='light'] {
     color: #121212;
     background-color: #F1F3F5;
+    transition: 0.3s ease;
 
     --back-color: #F1F3F5;
     --font-color: #121212;
@@ -48,13 +49,13 @@ input {
     box-sizing: border-box;
 }
 
-@media (max-width: 1199px) {
+@media (max-width: 1024px) {
     .app-block {
         margin: 100px 50px 50px;
     }
 }
 
-@media (max-width: 767px) {
+@media (max-width: 768px) {
     .app-block {
         margin: 80px 30px 30px;
     }

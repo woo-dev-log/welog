@@ -26,7 +26,7 @@ const UserBoard = () => {
     const type = searchParams.get("type");
     const navigate = useNavigate();
     const ServerImgUrl = "https://d12uvkd7f5nrla.cloudfront.net/";
-    const textAreaCols = window.innerWidth < 1199 ? 30 : 50;
+    const textAreaCols = window.innerWidth < 1024 ? 30 : 50;
 
     const updateProfileContentsOnClick = async () => {
         if (updateProfileContents === "") {

@@ -3,7 +3,7 @@ import { useCookies } from 'react-cookie';
 import { useNavigate } from 'react-router-dom';
 import { useRecoilState } from 'recoil';
 import Swal from 'sweetalert2';
-import { loginModalIsOpen, loginUser } from '../../store/atoms';
+import { boardType, loginModalIsOpen, loginUser } from '../../store/atoms';
 import { ToastSuccess } from '../Toast';
 import './Header.scss';
 
@@ -13,6 +13,7 @@ const Header = () => {
     const [cookies, setCookie, removeCookie] = useCookies(['welogJWT', 'themeColor']);
     const [themeColor, setThemeColor] = useState(document.body.dataset.theme);
     const [modalIsOpen, setIsOpen] = useRecoilState(loginModalIsOpen);
+    const [boardTypeNum, setBoardTypeNum] = useRecoilState(boardType);
     const ServerImgUrl = "https://d12uvkd7f5nrla.cloudfront.net/";
 
     const themeOnClick = (color: string) => {
@@ -22,6 +23,7 @@ const Header = () => {
     }
 
     const homeOnClick = () => {
+        setBoardTypeNum(1);
         navigate("/");
     }
 

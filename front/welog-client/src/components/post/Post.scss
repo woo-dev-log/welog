@@ -1,6 +1,11 @@
 .category-container {
     display: flex;
-    justify-content: space-between;
+
+    .select-container {
+        display: flex;
+        margin-left: auto;
+        margin-right: 10px;
+    }
 
     .template-container {
         display: flex;
@@ -246,6 +251,10 @@
 @media (max-width: 767px) {
     .category-container {
         display: block;
+
+        .select-container {
+            margin: 20px auto;
+        }
 
         .template-container {
             margin-top: 20px;

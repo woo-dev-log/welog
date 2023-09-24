@@ -133,11 +133,13 @@ const Post = () => {
                 </section>
                 : boardList.length > 0 &&
                 <section>
-                    <button onClick={() => setSortBy('rgstrDate')}>최신순</button>
-                    <button onClick={() => setSortBy('commentCnt')}>댓글순</button>
-                    <button onClick={() => setSortBy('views')}>조회순</button>
                     <div className="category-container">
                         {!keyword && !userNickname && <Category />}
+                        <select className="select-container" onChange={(e) => setSortBy(e.target.value)}>
+                            <option value="rgstrDate">최신순</option>
+                            <option value="commentCnt">댓글순</option>
+                            <option value="views">조회순</option>
+                        </select>
                         <div className="template-container">
                             <button className={`template-button-wrap ${!isWrap ? "" : "disabled"}`}
                                 onClick={() => setIsWrap(true)} disabled={isWrap}>

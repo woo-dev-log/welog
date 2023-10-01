@@ -241,6 +241,12 @@
 // }
 
 @media (max-width: 1024px) {
+    .category-container {
+        .select-container {
+            margin-left: 10px;
+        }
+    }
+    
     .board-contentsContainer {
         header {
             .board-contents {

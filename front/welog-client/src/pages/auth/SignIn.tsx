@@ -81,7 +81,7 @@ const SignIn = () => {
             <SEO title="로그인" contents="로그인" />
             <div className="container">
                 {checkLogin && <div style={{ color: "red" }}>{checkLogin}</div>}
-                <Input placeholder="아이디" onChange={e => setId(e.target.value)} value={id} />
+                <Input autoFocus={true} placeholder="아이디" onChange={e => setId(e.target.value)} value={id} />
                 <Input placeholder="비밀번호" type="password" value={pw}
                     onChange={pwCheckOnChange} onKeyUp={enterCheckOnKeyUp} />
                 <Button onClick={postLoginOnClick} text="로그인" />

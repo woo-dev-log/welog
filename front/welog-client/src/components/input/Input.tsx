@@ -1,6 +1,7 @@
 import React from 'react';
 
 interface Props {
+    autoFocus?: boolean;
     placeholder: string;
     type?: string;
     value?: string;
@@ -10,8 +11,8 @@ interface Props {
     disabled?: boolean;
 }
 
-const Input = ({ placeholder, type, value, onChange, onKeyUp, onFocus, disabled }: Props) => {
-    return <input name="input" value={value} className="input" placeholder={placeholder} disabled={disabled}
+const Input = ({ autoFocus, placeholder, type, value, onChange, onKeyUp, onFocus, disabled }: Props) => {
+    return <input autoFocus={autoFocus} name="input" value={value} className="input" placeholder={placeholder} disabled={disabled}
         type={type} onChange={onChange} onKeyUp={onKeyUp} onFocus={onFocus} />
 }
 

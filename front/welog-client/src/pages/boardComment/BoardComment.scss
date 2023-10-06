@@ -37,8 +37,9 @@ textarea {
 .textArea-lock {
     display: flex;
     align-items: center;
-    gap: 10px;
+    gap: 5px;
     margin-left: 10px;
+    font-size: 16px;
     
     img {
         cursor: pointer;
@@ -50,7 +51,6 @@ textarea {
 .boardComment-commentAddBtn {
     display: flex;
     justify-content: space-between;
-    text-align: end;
     margin-bottom: 30px;
 
     button {
@@ -185,6 +185,15 @@ textarea {
     textarea {
         padding: 10px;
         font-size: 14px;
+    }
+
+    .textArea-lock {
+        font-size: 12px;
+
+        img {
+            width: 25px;
+            height: 25px;
+        }
     }
 
     .boardComment-commentAddBtn {

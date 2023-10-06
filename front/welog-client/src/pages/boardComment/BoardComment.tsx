@@ -26,6 +26,7 @@ interface CommentType {
     contents: string;
     rgstrDate: Date;
     updateDate?: Date;
+    lockState: number;
     nickname: string;
     imgUrl: string;
     boardCommentCnt: number;
@@ -43,6 +44,7 @@ const BoardComment = ({ IntBoardNo, IntBoardUserNo }: { IntBoardNo: number, IntB
     const [isLoading, setIsLoading] = useState(false);
     const [currentPage, setCurrentPage] = useState(1);
     const [lockState, setLockState] = useState(false);
+    const [subLockState, setSubLockState] = useState(false);
     const [searchParams, setSearchParams] = useSearchParams();
     const navigate = useNavigate();
     const ServerImgUrl = import.meta.env.VITE_SERVER_IMG_URL;
@@ -70,9 +72,10 @@ const BoardComment = ({ IntBoardNo, IntBoardUserNo }: { IntBoardNo: number, IntB
             setCommentCheckLogin(true);
             return;
         }
-
+        
+        const lock = subLockState ? 1 : 0;
         try {
-            await writeBoardSubCommentApi(IntBoardNo, IntCommentNo, boardSubCommentWrite, userInfo[0].userNo);
+            await writeBoardSubCommentApi(IntBoardNo, IntCommentNo, boardSubCommentWrite, userInfo[0].userNo, lock);
             setBoardSubCommentWrite("");
             setSubCommentCheckNo(0);
             ToastSuccess("대댓글이 작성되었어요!");
@@ -127,7 +130,7 @@ const BoardComment = ({ IntBoardNo, IntBoardUserNo }: { IntBoardNo: number, IntB
                 console.error(e);
             }
         }
-    }, [boardCommentUpdate, userInfo]);
+    }, [boardCommentUpdate, userInfo, subLockState]);
 
     const updateCheckBoardCommentOnClick = (boardCContents: string, boardCNo: number) => {
         setBoardCommentUpdate(boardCContents);
@@ -145,8 +148,9 @@ const BoardComment = ({ IntBoardNo, IntBoardUserNo }: { IntBoardNo: number, IntB
             return;
         }
 
+        const lock = lockState ? 1 : 0;
         try {
-            await writeBoardCommentApi(IntBoardNo, boardCommentWrite, userInfo[0].userNo);
+            await writeBoardCommentApi(IntBoardNo, boardCommentWrite, userInfo[0].userNo, lock);
             setBoardCommentWrite("");
             ToastSuccess("댓글이 작성되었어요!");
             getBoardComment();
@@ -154,7 +158,7 @@ const BoardComment = ({ IntBoardNo, IntBoardUserNo }: { IntBoardNo: number, IntB
             ToastError("댓글 작성을 실패했어요");
             console.error(e);
         }
-    }, [boardCommentWrite, userInfo]);
+    }, [boardCommentWrite, userInfo, lockState]);
 
     const checkLoginBoardCommentOnFocus = () => {
         if (userInfo[0].userNo === 0) {
@@ -200,7 +204,7 @@ const BoardComment = ({ IntBoardNo, IntBoardUserNo }: { IntBoardNo: number, IntB
                         {lockState
                             ? <div className="textArea-lock">
                                 <img src="/lock.svg" alt="lock" onClick={() => setLockState(!lockState)} />
-                                <span>작성자만 보기</span>
+                                <span>글 작성자만 보기</span>
                             </div>
                             : <div className="textArea-lock">
                                 <img src="/unlock.svg" alt="unlock" onClick={() => setLockState(!lockState)} />
@@ -214,6 +218,7 @@ const BoardComment = ({ IntBoardNo, IntBoardUserNo }: { IntBoardNo: number, IntB
                             {boardC.parentCommentNo === 0 &&
                                 <div className="boardComment-commentContainer">
                                     <Line />
+                                    {boardC.lockState}
                                     <header className="boardComment-commentBlock">
                                         <div className="boardComment-commentLabel">
                                             <img src={`${ServerImgUrl}${boardC.imgUrl}`} alt={boardC.imgUrl}
@@ -255,13 +260,13 @@ const BoardComment = ({ IntBoardNo, IntBoardUserNo }: { IntBoardNo: number, IntB
                                             <textarea id="textareabcbc" ref={textRef} value={boardSubCommentWrite} placeholder="대댓글을 입력해주세요"
                                                 onInput={autoHeightRef} onChange={e => setBoardSubCommentWrite(e.target.value)} />
                                             <div className="boardComment-subCommentAddBtn">
-                                            {lockState
+                                            {subLockState
                                                 ? <div className="textArea-lock">
-                                                    <img src="/lock.svg" alt="lock" onClick={() => setLockState(!lockState)} />
-                                                    <span>작성자만 보기</span>
+                                                    <img src="/lock.svg" alt="lock" onClick={() => setSubLockState(!subLockState)} />
+                                                    <span>댓글 작성자만 보기</span>
                                                 </div>
                                                 : <div className="textArea-lock">
-                                                    <img src="/unlock.svg" alt="unlock" onClick={() => setLockState(!lockState)} />
+                                                    <img src="/unlock.svg" alt="unlock" onClick={() => setSubLockState(!subLockState)} />
                                                     <span>전체 보기</span>
                                                 </div>}
                                             <Button onClick={() => writeBoardSubCommentOnClick(boardC.commentNo)} text="대댓글 작성" />

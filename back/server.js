@@ -177,15 +177,15 @@ app.post("/api/loginToken", async (req, res) => {
 
 app.post("/api/writeBoardSubComment", async (req, res) => {
     try {
-        const { boardNo, commentNo, boardSubCommentAdd, userNo } = req.body;
+        const { boardNo, commentNo, boardSubCommentAdd, userNo, lockState } = req.body;
         if (userNo === 0) {
             return res.status(400).send("fail");
         } else {
             const [rows] = await mysql.query(`
             INSERT INTO
-            comment(boardNo, parentCommentNo, userNo, contents, rgstrDate)   
-            VALUES(?, ?, ?, ?, now())
-            `, [boardNo, commentNo, userNo, boardSubCommentAdd]);
+            comment(boardNo, parentCommentNo, userNo, contents, rgstrDate, lockState)   
+            VALUES(?, ?, ?, ?, now(), ?)
+            `, [boardNo, commentNo, userNo, boardSubCommentAdd, lockState]);
 
             return res.status(200).send("success");
         }
@@ -215,7 +215,7 @@ app.post("/api/updateBoardComment", async (req, res) => {
         } else {
             const [rows] = await mysql.query(`
             UPDATE comment 
-            SET contents = ?, updateDate = now() 
+            SET contents = ?, updateDate = now(), lockState = ? 
             WHERE boardNo = ? AND userNo = ? AND commentNo = ?
             `, [boardCommentUpdate, boardNo, userNo, commentNo]);
 
@@ -229,15 +229,15 @@ app.post("/api/updateBoardComment", async (req, res) => {
 
 app.post("/api/writeBoardComment", async (req, res) => {
     try {
-        const { boardNo, boardCommentAdd, userNo } = req.body;
+        const { boardNo, boardCommentAdd, userNo, lockState } = req.body;
         if (userNo === 0) {
             return res.status(400).send("fail");
         } else {
             const [rows] = await mysql.query(`
             INSERT INTO
-            comment(boardNo, userNo, contents, rgstrDate)   
-            VALUES(?, ?, ?, now())
-            `, [boardNo, userNo, boardCommentAdd]);
+            comment(boardNo, userNo, contents, rgstrDate, lockState)   
+            VALUES(?, ?, ?, now(), ?)
+            `, [boardNo, userNo, boardCommentAdd, lockState]);
 
             return res.status(200).send("success");
         }
@@ -253,7 +253,7 @@ app.post("/api/boardComment", async (req, res) => {
         const pageNum = page * 5 - 5;
 
         const [commentRows] = await mysql.query(`
-        SELECT c.commentNo, c.boardNo, c.parentCommentNo, c.userNo, c.contents, c.rgstrDate, c.updateDate, 
+        SELECT c.commentNo, c.boardNo, c.parentCommentNo, c.userNo, c.contents, c.rgstrDate, c.updateDate, c.lockState, 
         u.nickname, u.imgUrl, COUNT(*) OVER() AS boardCommentCnt 
         FROM comment c 
         INNER JOIN user u
@@ -264,7 +264,7 @@ app.post("/api/boardComment", async (req, res) => {
         `, [boardNo, pageNum]);
 
         const [subCommentRows] = await mysql.query(`
-        SELECT c.commentNo, c.boardNo, c.parentCommentNo, c.userNo, c.contents, c.rgstrDate, c.updateDate, 
+        SELECT c.commentNo, c.boardNo, c.parentCommentNo, c.userNo, c.contents, c.rgstrDate, c.updateDate, c.lockState, 
         u.nickname, u.imgUrl, COUNT(*) OVER() AS boardCommentCnt 
         FROM comment c 
         INNER JOIN user u

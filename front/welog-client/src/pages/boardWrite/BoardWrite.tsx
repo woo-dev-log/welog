@@ -28,7 +28,7 @@ const BoardWrite = () => {
     const [image, setImage] = useState<File>();
     const [blobImg, setBlobImg] = useState("");
     const navigate = useNavigate();
-    const ServerImgUrl = "https://d12uvkd7f5nrla.cloudfront.net/";
+    const ServerImgUrl = import.meta.env.VITE_SERVER_IMG_URL;
     const quillRef = useRef(null);
 
     const imageHandler = () => {

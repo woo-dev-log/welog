@@ -32,17 +32,17 @@
             button {
                 cursor: pointer;
                 transition: 0.3s ease;
-                background-color: var(--element-color);
+                background-color: coral;
                 width: 120px;
                 height: 40px;
                 border: none;
                 border-radius: 10px;
                 font-size: 16px;
                 font-family: "LINESeedKR-Bd";
-                color: var(--font-color);
+                color: white;
 
                 &:hover {
-                    background-color: var(--element-hover-color);
+                    opacity: 0.8;
                 }
             }
         }

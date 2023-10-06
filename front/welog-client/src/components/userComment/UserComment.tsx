@@ -23,7 +23,7 @@ const UserComment = ({ userNo }: { userNo: number }) => {
     const [userProfile, setUserProfile] = useRecoilState(user);
     const [searchParams, setSearchParams] = useSearchParams();
     const [currentPage, setCurrentPage] = useState(1);
-    const ServerImgUrl = "https://d12uvkd7f5nrla.cloudfront.net/";
+    const ServerImgUrl = import.meta.env.VITE_SERVER_IMG_URL;
     const navigate = useNavigate();
     const page = searchParams.get("page");
     const limit = 5;

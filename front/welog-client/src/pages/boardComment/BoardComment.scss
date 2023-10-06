@@ -1,16 +1,16 @@
 @mixin buttonCss($width, $height, $font-size) {
     cursor: pointer;
-    background-color: var(--element-color);
+    background-color: coral;
     width: $width;
     height: $height;
     border: none;
     border-radius: 10px;
     font-size: $font-size;
     font-family: "LINESeedKR-Bd";
-    color: var(--font-color);
+    color: white;
 
     &:hover {
-        background-color: var(--element-hover-color);
+        opacity: 0.8;
     }
 }
 

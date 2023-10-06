@@ -14,7 +14,7 @@ const Header = () => {
     const [themeColor, setThemeColor] = useState(document.body.dataset.theme);
     const [modalIsOpen, setIsOpen] = useRecoilState(loginModalIsOpen);
     const [boardTypeNum, setBoardTypeNum] = useRecoilState(boardType);
-    const ServerImgUrl = "https://d12uvkd7f5nrla.cloudfront.net/";
+    const ServerImgUrl = import.meta.env.VITE_SERVER_IMG_URL;
 
     const themeOnClick = (color: string) => {
         setThemeColor(color);

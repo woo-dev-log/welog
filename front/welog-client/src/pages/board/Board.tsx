@@ -41,7 +41,7 @@ const Board = () => {
     const [searchParams, setSearchParams] = useSearchParams();
     const [boardTypeNum, setBoardTypeNum] = useRecoilState(boardType);
     const navigate = useNavigate();
-    const ServerImgUrl = "https://d12uvkd7f5nrla.cloudfront.net/";
+    const ServerImgUrl = import.meta.env.VITE_SERVER_IMG_URL;
     const contentsWordLength = window.innerWidth < 1024 ? 38 : 38;
     const boardCnt = boardList.length > 0 ? boardList[0].boardCnt : 0;
     const settings = {

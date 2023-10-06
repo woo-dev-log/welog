@@ -10,7 +10,6 @@ import Paging from "../paging/Paging";
 import { ToastError } from "../Toast";
 import './Post.scss';
 import Category from "../category/Category";
-import Scroll from "../Scroll";
 import Select from "react-select";
 
 interface BoardType {
@@ -35,7 +34,7 @@ const Post = () => {
     const [currentPage, setCurrentPage] = useState(1);
     const [searchParams, setSearchParams] = useSearchParams();
     const navigate = useNavigate();
-    const ServerImgUrl = "https://d12uvkd7f5nrla.cloudfront.net/";
+    const ServerImgUrl = import.meta.env.VITE_SERVER_IMG_URL;
     const keyword = searchParams.get("keyword");
     const page = searchParams.get("page");
     const boardType = searchParams.get("boardType");

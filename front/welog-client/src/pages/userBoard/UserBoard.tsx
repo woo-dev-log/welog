@@ -25,7 +25,7 @@ const UserBoard = () => {
     const [searchParams, setSearchParams] = useSearchParams({ "type": "post" });
     const type = searchParams.get("type");
     const navigate = useNavigate();
-    const ServerImgUrl = "https://d12uvkd7f5nrla.cloudfront.net/";
+    const ServerImgUrl = import.meta.env.VITE_SERVER_IMG_URL;
     const textAreaCols = window.innerWidth < 1024 ? 30 : 50;
 
     const updateProfileContentsOnClick = async () => {

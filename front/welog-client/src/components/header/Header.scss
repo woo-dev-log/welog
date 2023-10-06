@@ -66,10 +66,18 @@
 
             .header-signIn {
                 cursor: pointer;
+
+                &:hover {
+                    color: coral;
+                }
             }
 
             .header-signUp {
                 cursor: pointer;
+
+                &:hover {
+                    color: coral;
+                }
             }
 
             img {

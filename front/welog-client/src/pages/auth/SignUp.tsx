@@ -20,7 +20,7 @@ const SignUp = () => {
     const [dupCheckNickname, setDupCheckNickname] = useState(false);
     const [checkNickname, setCheckNickName] = useState("");
     const [checkId, setCheckId] = useState("");
-    const ServerImgUrl = "https://d12uvkd7f5nrla.cloudfront.net/";
+    const ServerImgUrl = import.meta.env.VITE_SERVER_IMG_URL;
 
     const pwCheckOnChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         const hangul = /[ㄱ-ㅎ|ㅏ-ㅣ|가-힣]/g;

@@ -35,7 +35,7 @@ const BoardDetail = () => {
     const { boardNo } = useParams();
     const IntBoardNo = Number(boardNo);
     const navigate = useNavigate();
-    const ServerImgUrl = "https://d12uvkd7f5nrla.cloudfront.net/";
+    const ServerImgUrl = import.meta.env.VITE_SERVER_IMG_URL;
 
     const boardTypeText = (type: number) => {
         switch (type) {

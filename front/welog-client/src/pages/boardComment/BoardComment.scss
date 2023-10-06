@@ -1,6 +1,6 @@
-@mixin buttonCss($width, $height, $font-size) {
+@mixin buttonCss($backColor, $width, $height, $font-size) {
     cursor: pointer;
-    background-color: coral;
+    background-color: $backColor;
     width: $width;
     height: $height;
     border: none;
@@ -34,13 +34,28 @@ textarea {
     font-size: 16px;
 }
 
+.textArea-lock {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-left: 10px;
+    
+    img {
+        cursor: pointer;
+        width: 35px;
+        height: 35px;
+    }
+}
+
 .boardComment-commentAddBtn {
+    display: flex;
+    justify-content: space-between;
     text-align: end;
-    margin-top: 20px;
     margin-bottom: 30px;
 
     button {
-        @include buttonCss(190px, 40px, 16px);
+        margin-top: 10px;
+        @include buttonCss(coral, 190px, 40px, 16px);
     }
 }
 
@@ -109,7 +124,7 @@ textarea {
         .boardcomment-btn {
             button {
                 margin-left: 10px;
-                @include buttonCss(90px, 40px, 14px);
+                @include buttonCss(var(--element-hover-color), 90px, 40px, 14px);
             }
         }
     }
@@ -117,12 +132,16 @@ textarea {
     .boardComment-subCommentTextArea {
         display: flex;
         flex-direction: column;
-        align-items: end;
         padding-left: 30px;
+
+        .boardComment-subCommentAddBtn {
+            display: flex;
+            justify-content: space-between;
+        }
 
         button {
             margin-top: 10px;
-            @include buttonCss(190px, 40px, 16px);
+            @include buttonCss(coral, 190px, 40px, 16px);
         }
     }
 }
@@ -169,10 +188,8 @@ textarea {
     }
 
     .boardComment-commentAddBtn {
-        margin-top: 10px;
-
         button {
-            @include buttonCss(120px, 30px, 12px);
+            @include buttonCss(coral, 120px, 30px, 12px);
         }
     }
 
@@ -200,7 +217,7 @@ textarea {
         .boardComment-footer {
             .boardcomment-btn {
                 button {
-                    @include buttonCss(70px, 30px, 12px);
+                    @include buttonCss(var(--element-hover-color), 70px, 30px, 12px);
                 }
             }
         }
@@ -212,7 +229,7 @@ textarea {
         .boardComment-subCommentTextArea {
             button {
                 margin-top: 10px;
-                @include buttonCss(120px, 30px, 12px);
+                @include buttonCss(coral, 120px, 30px, 12px);
             }
         }
     }

@@ -42,6 +42,7 @@ const BoardComment = ({ IntBoardNo, IntBoardUserNo }: { IntBoardNo: number, IntB
     const [commentUpdateCheckNo, setCommentUpdateCheckNo] = useState(0);
     const [isLoading, setIsLoading] = useState(false);
     const [currentPage, setCurrentPage] = useState(1);
+    const [lockState, setLockState] = useState(false);
     const [searchParams, setSearchParams] = useSearchParams();
     const navigate = useNavigate();
     const ServerImgUrl = import.meta.env.VITE_SERVER_IMG_URL;
@@ -196,6 +197,15 @@ const BoardComment = ({ IntBoardNo, IntBoardUserNo }: { IntBoardNo: number, IntB
                     <textarea id="textarea" ref={textRef} value={boardCommentWrite} placeholder="댓글을 입력해주세요" disabled={commentCheckLogin}
                         onFocus={checkLoginBoardCommentOnFocus} onInput={autoHeightRef} onChange={e => setBoardCommentWrite(e.target.value)} />
                     <div className="boardComment-commentAddBtn">
+                        {lockState
+                            ? <div className="textArea-lock">
+                                <img src="/lock.svg" alt="lock" onClick={() => setLockState(!lockState)} />
+                                <span>작성자만 보기</span>
+                            </div>
+                            : <div className="textArea-lock">
+                                <img src="/unlock.svg" alt="unlock" onClick={() => setLockState(!lockState)} />
+                                <span>전체 보기</span>
+                            </div>}
                         <Button onClick={writeBoardCommentOnClick} text="댓글 작성" />
                     </div>
 
@@ -244,7 +254,18 @@ const BoardComment = ({ IntBoardNo, IntBoardUserNo }: { IntBoardNo: number, IntB
                                         <div className="boardComment-subCommentTextArea">
                                             <textarea id="textareabcbc" ref={textRef} value={boardSubCommentWrite} placeholder="대댓글을 입력해주세요"
                                                 onInput={autoHeightRef} onChange={e => setBoardSubCommentWrite(e.target.value)} />
+                                            <div className="boardComment-subCommentAddBtn">
+                                            {lockState
+                                                ? <div className="textArea-lock">
+                                                    <img src="/lock.svg" alt="lock" onClick={() => setLockState(!lockState)} />
+                                                    <span>작성자만 보기</span>
+                                                </div>
+                                                : <div className="textArea-lock">
+                                                    <img src="/unlock.svg" alt="unlock" onClick={() => setLockState(!lockState)} />
+                                                    <span>전체 보기</span>
+                                                </div>}
                                             <Button onClick={() => writeBoardSubCommentOnClick(boardC.commentNo)} text="대댓글 작성" />
+                                            </div>
                                         </div>}
                                 </div>}
 
@@ -285,13 +306,13 @@ const BoardComment = ({ IntBoardNo, IntBoardUserNo }: { IntBoardNo: number, IntB
                                     </footer>
                                 </div>))}
                         </article>))}
-                    
+
                     {boardCommentList.boardCommentCnt > 0 && <Paging
-                    total={boardCommentList.commentRows[0].boardCommentCnt}
-                    limit={limit}
-                    page={currentPage}
-                    setCurrentPage={setCurrentPage} />
-                }
+                        total={boardCommentList.commentRows[0].boardCommentCnt}
+                        limit={limit}
+                        page={currentPage}
+                        setCurrentPage={setCurrentPage} />
+                    }
                 </>
                 : <>
                     <div className="skeleton-boardCommentLabel" />

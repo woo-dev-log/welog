@@ -61,6 +61,7 @@ const SignIn = () => {
                     setIsOpen(false);
                     setId("");
                     setPw("");
+                    setCheckLogin("");
                     return;
                 }
             } catch (e) {

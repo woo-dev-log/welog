@@ -231,11 +231,17 @@ const BoardComment = ({ IntBoardNo, IntBoardUserNo }: { IntBoardNo: number, IntB
                                     {commentUpdateCheckNo === boardC.commentNo && userInfo[0].userNo !== 0
                                         ? <textarea id="textareab" ref={textRef} value={boardCommentUpdate} placeholder="댓글을 입력해주세요"
                                             onInput={autoHeightRef} onChange={e => setBoardCommentUpdate(e.target.value)} />
-                                        : IntBoardUserNo === userInfo[0].userNo || boardC.userNo === userInfo[0].userNo
+                                        : boardC.lockState === 0
                                             ? <p dangerouslySetInnerHTML={{ __html: boardC.contents.replaceAll(/(\n|\r\n)/g, '<br>') }} />
-                                            : boardC.lockState === 0
-                                                ? <p dangerouslySetInnerHTML={{ __html: boardC.contents.replaceAll(/(\n|\r\n)/g, '<br>') }} />
-                                                : <p>비밀 댓글입니다.</p>}
+                                            : IntBoardUserNo === userInfo[0].userNo || boardC.userNo === userInfo[0].userNo
+                                                ? <div className="boardComment-lock">
+                                                    <img src="/lock.svg" alt="lock" onClick={() => setLockState(!lockState)} />
+                                                    <p dangerouslySetInnerHTML={{ __html: boardC.contents.replaceAll(/(\n|\r\n)/g, '<br>') }} />
+                                                </div>
+                                                : <div className="boardComment-lock">
+                                                    <img src="/lock.svg" alt="lock" onClick={() => setLockState(!lockState)} />
+                                                    <p className="boardComment-lockComment">비밀 댓글입니다.</p>
+                                                </div>}
 
                                     <footer className="boardComment-footer">
                                         {subCommentCheckNo !== boardC.commentNo
@@ -291,15 +297,20 @@ const BoardComment = ({ IntBoardNo, IntBoardUserNo }: { IntBoardNo: number, IntB
                                                 <p className="boardComment-commentRgstrDate">{DayFormat(subComment.updateDate)} 수정</p>}
                                         </div>
                                     </header>
-
                                     {commentUpdateCheckNo === subComment.commentNo && userInfo[0].userNo !== 0
                                         ? <textarea id="textareabc" ref={textRef} value={boardCommentUpdate} placeholder="댓글을 입력해주세요"
                                             onInput={autoHeightRef} onChange={e => setBoardCommentUpdate(e.target.value)} />
-                                        : IntBoardUserNo === userInfo[0].userNo || boardC.userNo === userInfo[0].userNo
-                                            ? <p dangerouslySetInnerHTML={{ __html: boardC.contents.replaceAll(/(\n|\r\n)/g, '<br>') }} />
-                                            : boardC.lockState === 0
-                                                ? <p dangerouslySetInnerHTML={{ __html: boardC.contents.replaceAll(/(\n|\r\n)/g, '<br>') }} />
-                                                : <p>비밀 댓글입니다.</p>}
+                                        : subComment.lockState === 0
+                                            ? <p dangerouslySetInnerHTML={{ __html: subComment.contents.replaceAll(/(\n|\r\n)/g, '<br>') }} />
+                                            : boardC.userNo === userInfo[0].userNo || subComment.userNo === userInfo[0].userNo
+                                                ? <div className="boardComment-lock">
+                                                    <img src="/lock.svg" alt="lock" onClick={() => setLockState(!lockState)} />
+                                                    <p dangerouslySetInnerHTML={{ __html: subComment.contents.replaceAll(/(\n|\r\n)/g, '<br>') }} />
+                                                </div>
+                                                : <div className="boardComment-lock">
+                                                    <img src="/lock.svg" alt="lock" onClick={() => setLockState(!lockState)} />
+                                                    <p className="boardComment-lockComment">비밀 대댓글입니다.</p>
+                                                </div>}
 
                                     <footer className="boardComment-footer" style={{ justifyContent: "end" }}>
                                         {userInfo[0].userNo === subComment.userNo &&

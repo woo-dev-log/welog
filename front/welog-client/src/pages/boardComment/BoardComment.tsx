@@ -38,7 +38,6 @@ const BoardComment = ({ IntBoardNo, IntBoardUserNo }: { IntBoardNo: number, IntB
     const [boardCommentWrite, setBoardCommentWrite] = useState("");
     const [boardSubCommentWrite, setBoardSubCommentWrite] = useState("");
     const [boardCommentUpdate, setBoardCommentUpdate] = useState("");
-    const [commentCheckLogin, setCommentCheckLogin] = useState(false);
     const [subCommentCheckNo, setSubCommentCheckNo] = useState(0);
     const [commentUpdateCheckNo, setCommentUpdateCheckNo] = useState(0);
     const [isLoading, setIsLoading] = useState(false);
@@ -69,10 +68,9 @@ const BoardComment = ({ IntBoardNo, IntBoardUserNo }: { IntBoardNo: number, IntB
         }
         if (userInfo[0].userNo === 0) {
             ToastWarn("로그인을 해주세요");
-            setCommentCheckLogin(true);
             return;
         }
-        
+
         const lock = subLockState ? 1 : 0;
         try {
             await writeBoardSubCommentApi(IntBoardNo, IntCommentNo, boardSubCommentWrite, userInfo[0].userNo, lock);
@@ -144,7 +142,6 @@ const BoardComment = ({ IntBoardNo, IntBoardUserNo }: { IntBoardNo: number, IntB
         }
         if (userInfo[0].userNo === 0) {
             ToastWarn("로그인을 해주세요");
-            setCommentCheckLogin(true);
             return;
         }
 
@@ -163,7 +160,6 @@ const BoardComment = ({ IntBoardNo, IntBoardUserNo }: { IntBoardNo: number, IntB
     const checkLoginBoardCommentOnFocus = () => {
         if (userInfo[0].userNo === 0) {
             ToastWarn("로그인을 해주세요");
-            setCommentCheckLogin(true);
             return;
         }
     }
@@ -198,7 +194,7 @@ const BoardComment = ({ IntBoardNo, IntBoardUserNo }: { IntBoardNo: number, IntB
                 ? boardCommentList &&
                 <>
                     {boardCommentList.boardCommentCnt > 0 && <Label text={boardCommentList.boardCommentCnt + "개의 댓글이 있어요"} />}
-                    <textarea id="textarea" ref={textRef} value={boardCommentWrite} placeholder="댓글을 입력해주세요" disabled={commentCheckLogin}
+                    <textarea id="textarea" ref={textRef} value={boardCommentWrite} placeholder="댓글을 입력해주세요"
                         onFocus={checkLoginBoardCommentOnFocus} onInput={autoHeightRef} onChange={e => setBoardCommentWrite(e.target.value)} />
                     <div className="boardComment-commentAddBtn">
                         {lockState
@@ -218,7 +214,6 @@ const BoardComment = ({ IntBoardNo, IntBoardUserNo }: { IntBoardNo: number, IntB
                             {boardC.parentCommentNo === 0 &&
                                 <div className="boardComment-commentContainer">
                                     <Line />
-                                    {boardC.lockState}
                                     <header className="boardComment-commentBlock">
                                         <div className="boardComment-commentLabel">
                                             <img src={`${ServerImgUrl}${boardC.imgUrl}`} alt={boardC.imgUrl}
@@ -236,7 +231,11 @@ const BoardComment = ({ IntBoardNo, IntBoardUserNo }: { IntBoardNo: number, IntB
                                     {commentUpdateCheckNo === boardC.commentNo && userInfo[0].userNo !== 0
                                         ? <textarea id="textareab" ref={textRef} value={boardCommentUpdate} placeholder="댓글을 입력해주세요"
                                             onInput={autoHeightRef} onChange={e => setBoardCommentUpdate(e.target.value)} />
-                                        : <p dangerouslySetInnerHTML={{ __html: boardC.contents.replaceAll(/(\n|\r\n)/g, '<br>') }} />}
+                                        : IntBoardUserNo === userInfo[0].userNo || boardC.userNo === userInfo[0].userNo
+                                            ? <p dangerouslySetInnerHTML={{ __html: boardC.contents.replaceAll(/(\n|\r\n)/g, '<br>') }} />
+                                            : boardC.lockState === 0
+                                                ? <p dangerouslySetInnerHTML={{ __html: boardC.contents.replaceAll(/(\n|\r\n)/g, '<br>') }} />
+                                                : <p>비밀 댓글입니다.</p>}
 
                                     <footer className="boardComment-footer">
                                         {subCommentCheckNo !== boardC.commentNo
@@ -260,16 +259,16 @@ const BoardComment = ({ IntBoardNo, IntBoardUserNo }: { IntBoardNo: number, IntB
                                             <textarea id="textareabcbc" ref={textRef} value={boardSubCommentWrite} placeholder="대댓글을 입력해주세요"
                                                 onInput={autoHeightRef} onChange={e => setBoardSubCommentWrite(e.target.value)} />
                                             <div className="boardComment-subCommentAddBtn">
-                                            {subLockState
-                                                ? <div className="textArea-lock">
-                                                    <img src="/lock.svg" alt="lock" onClick={() => setSubLockState(!subLockState)} />
-                                                    <span>댓글 작성자만 보기</span>
-                                                </div>
-                                                : <div className="textArea-lock">
-                                                    <img src="/unlock.svg" alt="unlock" onClick={() => setSubLockState(!subLockState)} />
-                                                    <span>전체 보기</span>
-                                                </div>}
-                                            <Button onClick={() => writeBoardSubCommentOnClick(boardC.commentNo)} text="대댓글 작성" />
+                                                {subLockState
+                                                    ? <div className="textArea-lock">
+                                                        <img src="/lock.svg" alt="lock" onClick={() => setSubLockState(!subLockState)} />
+                                                        <span>댓글 작성자만 보기</span>
+                                                    </div>
+                                                    : <div className="textArea-lock">
+                                                        <img src="/unlock.svg" alt="unlock" onClick={() => setSubLockState(!subLockState)} />
+                                                        <span>전체 보기</span>
+                                                    </div>}
+                                                <Button onClick={() => writeBoardSubCommentOnClick(boardC.commentNo)} text="대댓글 작성" />
                                             </div>
                                         </div>}
                                 </div>}
@@ -296,7 +295,11 @@ const BoardComment = ({ IntBoardNo, IntBoardUserNo }: { IntBoardNo: number, IntB
                                     {commentUpdateCheckNo === subComment.commentNo && userInfo[0].userNo !== 0
                                         ? <textarea id="textareabc" ref={textRef} value={boardCommentUpdate} placeholder="댓글을 입력해주세요"
                                             onInput={autoHeightRef} onChange={e => setBoardCommentUpdate(e.target.value)} />
-                                        : <p dangerouslySetInnerHTML={{ __html: subComment.contents.replaceAll(/(\n|\r\n)/g, '<br>') }} />}
+                                        : IntBoardUserNo === userInfo[0].userNo || boardC.userNo === userInfo[0].userNo
+                                            ? <p dangerouslySetInnerHTML={{ __html: boardC.contents.replaceAll(/(\n|\r\n)/g, '<br>') }} />
+                                            : boardC.lockState === 0
+                                                ? <p dangerouslySetInnerHTML={{ __html: boardC.contents.replaceAll(/(\n|\r\n)/g, '<br>') }} />
+                                                : <p>비밀 댓글입니다.</p>}
 
                                     <footer className="boardComment-footer" style={{ justifyContent: "end" }}>
                                         {userInfo[0].userNo === subComment.userNo &&

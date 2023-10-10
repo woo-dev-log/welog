@@ -3,7 +3,7 @@ import { useNavigate, useParams, useSearchParams } from "react-router-dom";
 import { postUserProfileApi, updateUserProfileApi } from "../../api/board";
 import SEO from "../../components/SEO";
 import { useRecoilState } from "recoil";
-import { loginUser, user } from "../../store/atoms";
+import { chatModalIsOpen, loginUser, user } from "../../store/atoms";
 import './UserBoard.scss';
 import Post from "../../components/post/Post";
 import { ToastError, ToastSuccess, ToastWarn } from "../../components/Toast";
@@ -22,6 +22,7 @@ const UserBoard = () => {
     const [image, setImage] = useState<File>();
     const [blobImg, setBlobImg] = useState("");
     const [profileLoading, setProfileLoading] = useState(false);
+    const [chatIsOpen, setChatIsOpen] = useRecoilState(chatModalIsOpen);
     const [searchParams, setSearchParams] = useSearchParams({ "type": "post" });
     const type = searchParams.get("type");
     const navigate = useNavigate();
@@ -153,6 +154,8 @@ const UserBoard = () => {
                             <p>작성한 댓글</p>
                             <p><span>{userProfile[0].userCommentCnt}</span> 개</p>
                         </button>
+                        {/* <button onClick={() => setChatIsOpen(true)}>chat</button> */}
+                        <button onClick={() => navigate("/Chat")}>chat</button>
                     </section>
 
                     {type === "post"

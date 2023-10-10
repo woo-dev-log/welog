@@ -13,6 +13,7 @@ import BoardWrite from './pages/boardWrite/BoardWrite'
 import BoardDetail from './pages/boardDetail/BoardDetail'
 import UserBoard from './pages/userBoard/UserBoard'
 import './App.scss'
+import Chat from './components/chat/chat'
 
 function App() {
   const [cookies] = useCookies(['welogJWT', 'themeColor']);
@@ -51,6 +52,7 @@ function App() {
           <Route path='/userBoard/:userNickname' element={<UserBoard />} />
           <Route path='/BoardWrite' element={<BoardWrite />} />
           <Route path='/SignUp' element={<SignUp />} />
+          <Route path='/Chat' element={<Chat />} />
         </Routes>
       </div>
     </>

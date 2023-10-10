@@ -75,7 +75,7 @@ const SignIn = () => {
         <Modal
             isOpen={modalIsOpen}
             onRequestClose={() => setIsOpen(false)}
-            contentLabel="Example Modal"
+            contentLabel="Login Modal"
             className="Modal"
             overlayClassName="Overlay"
         >

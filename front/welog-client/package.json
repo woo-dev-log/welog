@@ -33,6 +33,7 @@
     "recoil": "^0.7.6",
     "sass": "^1.57.1",
     "slick-carousel": "^1.8.1",
+    "socket.io-client": "^4.7.2",
     "sweetalert2": "^11.7.1"
   },
   "devDependencies": {

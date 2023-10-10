@@ -85,3 +85,8 @@ export const boardType = atom({
     key: 'boardTypeKey',
     default: 1
 });
+
+export const chatModalIsOpen = atom({
+    key: 'chatModalIsOpenKey',
+    default: false
+});

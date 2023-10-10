@@ -6,16 +6,39 @@ const jwt = require("jsonwebtoken");
 const multer = require('multer');
 const sharp = require('sharp');
 const path = require('path');
-const fs = require('fs');
 const cors = require('cors');
 const { S3, PutObjectCommand, DeleteObjectCommand } = require('@aws-sdk/client-s3');
 const awsConfig = require('./s3.json');
 const s3 = new S3(awsConfig);
+const http = require('http');
 
 app.use(cors());
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 app.use(express.static(path.join(__dirname, "./dist")));
+
+const server = http.createServer(app);
+const io = require("socket.io")(server, {
+    cors: {
+        origin: "*"
+    }
+});
+
+io.on('connection', (socket) => {
+    // console.log('a user connected');
+
+    socket.on('join room', (roomNumber) => {
+        socket.join(roomNumber);
+    });
+
+    socket.on('private message', ({ msg, roomNo }) => {
+        socket.to(roomNo).emit('private message', { msg, from: socket.id });
+    });
+
+    // socket.on('disconnect', () => {
+    //     console.log('user disconnected');
+    // });
+});
 
 const imageUpload = multer({
     storage: multer.memoryStorage()
@@ -515,6 +538,6 @@ app.get('*', (req, res) => {
     return res.sendFile(path.join(__dirname, './dist', 'index.html'));
 });
 
-app.listen(port, () => {
+server.listen(port, () => {
     console.log(port + " port listening on!!");
 })

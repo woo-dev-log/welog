@@ -118,7 +118,7 @@ const UserBoard = () => {
                                     ? <textarea rows={3} cols={textAreaCols} placeholder="90자 이내로 본인을 소개해보세요!"
                                         value={updateProfileContents} onChange={e => {
                                             if (e.target.value.length > 90) {
-                                                ToastWarn("100자 이내로 소개해주세요");
+                                                ToastWarn("90자 이내로 소개해주세요");
                                             } else setUpdateProfileContents(e.target.value)
                                         }
                                         } />

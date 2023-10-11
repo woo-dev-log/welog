@@ -27,12 +27,32 @@ const io = require("socket.io")(server, {
 io.on('connection', (socket) => {
     // console.log('a user connected');
 
-    socket.on('join room', (roomNumber) => {
+    socket.on('join room', async (roomNumber) => {
         socket.join(roomNumber);
+
+        const [rows] = await mysql.query(`
+            SELECT * 
+            FROM chat 
+            WHERE roomNo = ? 
+            ORDER BY sendDate DESC 
+        `, [roomNumber]);
+        console.log(rows);
+        socket.to(roomNumber).emit('private message', rows);
     });
 
-    socket.on('private message', ({ msg, roomNo }) => {
-        socket.to(roomNo).emit('private message', { msg, from: socket.id });
+    socket.on('private message', async ({ message, roomNo, user }) => {
+        try {
+            const nowDate = new Date();
+
+            const [rows] = await mysql.query(`
+            INSERT INTO
+            chat(roomNo, userNo, message, sendDate) 
+            VALUES(?, ?, ?, ?)
+            `, [roomNo, user[0].userNo, message, nowDate]);
+            socket.to(roomNo).emit('private message', { message, user, sendDate: nowDate });
+        } catch (e) {
+            console.error(e);
+        }
     });
 
     // socket.on('disconnect', () => {

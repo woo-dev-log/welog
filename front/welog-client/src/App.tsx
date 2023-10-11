@@ -13,18 +13,18 @@ import BoardWrite from './pages/boardWrite/BoardWrite'
 import BoardDetail from './pages/boardDetail/BoardDetail'
 import UserBoard from './pages/userBoard/UserBoard'
 import './App.scss'
-import Chat from './components/chat/chat'
+import Chat from './components/chat/Chat'
 
 function App() {
   const [cookies] = useCookies(['welogJWT', 'themeColor']);
   const [userInfo, setUserInfo] = useRecoilState(loginUser);
   axios.defaults.baseURL = import.meta.env.VITE_TEST_API_URL;
 
-  let osTheme = window.matchMedia("(prefers-color-scheme: dark)").matches ? 'dark': 'light';
-  if(cookies.themeColor) {
+  let osTheme = window.matchMedia("(prefers-color-scheme: dark)").matches ? 'dark' : 'light';
+  if (cookies.themeColor) {
     document.body.dataset.theme = cookies.themeColor;
   } else {
-    if(osTheme === "dark"){
+    if (osTheme === "dark") {
       document.body.dataset.theme = osTheme;
     } else document.body.dataset.theme = 'light';
   }

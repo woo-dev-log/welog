@@ -31,15 +31,6 @@ interface BoardUpdateProps {
     boardImgUrl?: string
 }
 
-interface UserProfileType {
-    userNo: number;
-    nickname: string;
-    imgUrl: string;
-    profileContents: string;
-    userBoardCnt: number;
-    userCommentCnt: number;
-}
-
 export const board = atom<BoardProps[]>({
     key: 'boardKey',
     default: []

@@ -1,0 +1,48 @@
+@mixin chatMsgCss ($color) {
+    max-width: 50%;
+    overflow-wrap: break-word;
+    border: 1px solid $color;
+    border-radius: 10px;
+    padding: 0 10px;
+    background-color: $color;
+}
+
+.chat-img {
+    width: 30px;
+    height: 30px;
+    object-fit: cover;
+    background-color: white;
+    border-radius: 1000px;
+    border: 1px solid var(--element-color);
+}
+
+.chat-myProfile {
+    display: grid;
+    justify-items: end;
+    margin-bottom: 10px;
+
+    .chat-profileHeader {
+        display: flex;
+        margin-bottom: 10px;
+    }
+    
+    .chat-msg {
+        @include chatMsgCss(coral);
+    }
+}
+
+.chat-otherProfile {
+    display: grid;
+    justify-items: start;
+    margin-bottom: 10px;
+
+    .chat-profileHeader {
+        display: flex;
+        flex-direction: row-reverse;
+        margin-bottom: 10px;
+    }    
+
+    .chat-msg {
+        @include chatMsgCss(lightcoral);
+    }
+}

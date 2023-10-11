@@ -25,9 +25,10 @@ const io = require("socket.io")(server, {
 });
 
 io.on('connection', (socket) => {
-    // console.log('a user connected');
-
+    console.log('a user connected');
+    
     socket.on('join room', async (roomNumber) => {
+        console.log(roomNumber + ' user connected');
         socket.join(roomNumber);
 
         const [rows] = await mysql.query(`
@@ -36,8 +37,7 @@ io.on('connection', (socket) => {
             WHERE roomNo = ? 
             ORDER BY sendDate DESC 
         `, [roomNumber]);
-        console.log(rows);
-        socket.to(roomNumber).emit('private message', rows);
+        socket.emit('join room', rows);
     });
 
     socket.on('private message', async ({ message, roomNo, user }) => {
@@ -49,15 +49,15 @@ io.on('connection', (socket) => {
             chat(roomNo, userNo, message, sendDate) 
             VALUES(?, ?, ?, ?)
             `, [roomNo, user[0].userNo, message, nowDate]);
-            socket.to(roomNo).emit('private message', { message, user, sendDate: nowDate });
+            // socket.to(roomNo).emit('private message', { message, user, sendDate: nowDate });
         } catch (e) {
             console.error(e);
         }
     });
 
-    // socket.on('disconnect', () => {
-    //     console.log('user disconnected');
-    // });
+    socket.on('disconnect', () => {
+        console.log('user disconnected');
+    });
 });
 
 const imageUpload = multer({

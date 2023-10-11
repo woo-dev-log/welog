@@ -9,9 +9,9 @@ import './Chat.scss';
 Modal.setAppElement('#root')
 
 interface MsgType {
-    msg: string;
-    user: UserProfileType[];
-    date: string;
+    message: string;
+    sendDate: string;
+    user?: UserProfileType[];
 }
 
 const Chat = () => {
@@ -21,22 +21,23 @@ const Chat = () => {
     const [userInfo, setUserInfo] = useRecoilState(loginUser);
     const [userProfile, setUserProfile] = useRecoilState(user);
     const ServerImgUrl = import.meta.env.VITE_SERVER_IMG_URL;
-
     const socket = io(import.meta.env.VITE_CHAT_TEST_API_URL);
-    const roomNumber = [userProfile[0].userNo, userInfo[0].userNo].sort((a, b) => a - b).join('');
-    socket.emit("join room", roomNumber);
+    // const roomNumber = [userProfile[0].userNo, userInfo[0].userNo].sort((a, b) => a - b).join('');
+    const roomNumber = 1118;
 
     const sendMessage = () => {
         if (message !== '') {
             socket.emit('private message', { message, roomNo: roomNumber, user: userInfo });
+            setMessages(messages => [...messages, {message, sendDate: 'sd'}]);
             setMessage('');
         }
     };
 
     useEffect(() => {
-        socket.on("private message", (data) => {
-            console.log(data);
-            setMessages(messages => [...messages, data]);
+        socket.emit("join room", roomNumber);
+        
+        socket.on("join room", (data) => {
+            setMessages(data);
         });
 
         return () => {
@@ -53,17 +54,19 @@ const Chat = () => {
         //     overlayClassName="Overlay"
         // >
         <>
-            {messages.map((data, i) =>
-                <div key={i} className={userInfo[0].userNo === data.user[0].userNo ? 'chat-myProfile' : 'chat-otherProfile'}>
-                    <div className='chat-profileHeader'>
+            {messages && messages.map((data, i) =>
+                // <div key={i} className={userInfo[0].userNo === data.user[0].userNo ? 'chat-myProfile' : 'chat-otherProfile'}>
+                <div key={i} className='chat-otherProfile'>
+                    {/* <div className='chat-profileHeader'>
                         <p>{data.user[0].nickname}</p>
                         <img src={`${ServerImgUrl}${data.user[0].imgUrl}`} alt="userImg" loading="lazy"
                             className='chat-img' />
-                    </div>
+                    </div> */}
                     <div className='chat-msg'>
-                        <p dangerouslySetInnerHTML={{ __html: data.msg.replaceAll(/(\n|\r\n)/g, '<br>') }} />
+                        {/* <p dangerouslySetInnerHTML={{ __html: data.message.replaceAll(/(\n|\r\n)/g, '<br>') }} /> */}
+                        <p>{data.message}</p>
                     </div>
-                    {data.date}
+                    {data.sendDate}
                 </div>
             )}
             <textarea autoFocus={true} placeholder="메시지" onChange={(e) => setMessage(e.target.value)} value={message} />

@@ -37,6 +37,14 @@ io.on('connection', (socket) => {
             WHERE roomNo = ? 
             ORDER BY sendDate DESC 
         `, [roomNumber]);
+
+        for(let i = 0; i<rows.length; i++) {
+            const [userInfo] = await mysql.query(`
+                SELECT userNo, id, nickname, imgUrl 
+                FROM user WHERE userNo = ?
+            `, [rows[i].userNo]);
+            rows[i].user = userInfo[0];
+        }
         socket.emit('join room', rows);
     });
 

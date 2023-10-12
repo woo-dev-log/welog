@@ -35,7 +35,7 @@ io.on('connection', (socket) => {
             SELECT * 
             FROM chat 
             WHERE roomNo = ? 
-            ORDER BY sendDate DESC 
+            ORDER BY sendDate 
         `, [roomNumber]);
 
         for(let i = 0; i<rows.length; i++) {
@@ -51,13 +51,14 @@ io.on('connection', (socket) => {
     socket.on('private message', async ({ message, roomNo, user }) => {
         try {
             const nowDate = new Date();
+            const userInfo = user[0];
 
             const [rows] = await mysql.query(`
             INSERT INTO
             chat(roomNo, userNo, message, sendDate) 
             VALUES(?, ?, ?, ?)
-            `, [roomNo, user[0].userNo, message, nowDate]);
-            // socket.to(roomNo).emit('private message', { message, user, sendDate: nowDate });
+            `, [roomNo, userInfo.userNo, message, nowDate]);
+            io.to(roomNo).emit('private message', { message, user: userInfo, sendDate: nowDate });
         } catch (e) {
             console.error(e);
         }
@@ -113,6 +114,21 @@ const jsonWebToken = async (userRows) => {
 
     return { user, token };
 }
+
+app.post("/api/chatUserInfo", async(req, res) => {
+    try {
+        const { userNo } = req.body;
+        const [rows] = await mysql.query(`
+            SELECT userNo, id, nickname, imgUrl, profileContents 
+            FROM user 
+            WHERE userNo = ?
+        `, [userNo]);
+        return res.status(200).send(rows);
+    } catch(e) {
+        console.error(e);
+        return res.status(400).send("fail");
+    }
+});
 
 app.post("/api/updateUserProfile", imageUpload.single('userProfileImg'), async (req, res) => {
     try {

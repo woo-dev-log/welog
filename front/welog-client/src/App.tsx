@@ -52,7 +52,7 @@ function App() {
           <Route path='/userBoard/:userNickname' element={<UserBoard />} />
           <Route path='/BoardWrite' element={<BoardWrite />} />
           <Route path='/SignUp' element={<SignUp />} />
-          <Route path='/Chat' element={<Chat />} />
+          <Route path='/Chat/:chatNo' element={<Chat />} />
         </Routes>
       </div>
     </>

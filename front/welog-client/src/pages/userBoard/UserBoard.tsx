@@ -155,7 +155,7 @@ const UserBoard = () => {
                             <p><span>{userProfile[0].userCommentCnt}</span> 개</p>
                         </button>
                         {/* <button onClick={() => setChatIsOpen(true)}>chat</button> */}
-                        <button onClick={() => navigate("/Chat")}>chat</button>
+                        <button onClick={() => navigate("/Chat/" + userProfile[0].userNo)}>chat</button>
                     </section>
 
                     {type === "post"

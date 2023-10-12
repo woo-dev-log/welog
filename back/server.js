@@ -26,10 +26,15 @@ const io = require("socket.io")(server, {
 
 io.on('connection', (socket) => {
     console.log('a user connected');
-    
-    socket.on('join room', async (roomNumber) => {
+
+    socket.on('join room', async ({ roomNumber, fromUserNo }) => {
         console.log(roomNumber + ' user connected');
         socket.join(roomNumber);
+
+        await mysql.query(`
+            UPDATE chat SET readStatus = 1 
+            WHERE roomNo = ? AND toUserNo = ?
+        `, [roomNumber, fromUserNo]);
 
         const [rows] = await mysql.query(`
             SELECT * 
@@ -38,27 +43,28 @@ io.on('connection', (socket) => {
             ORDER BY sendDate 
         `, [roomNumber]);
 
-        for(let i = 0; i<rows.length; i++) {
+        for (let i = 0; i < rows.length; i++) {
             const [userInfo] = await mysql.query(`
                 SELECT userNo, id, nickname, imgUrl 
                 FROM user WHERE userNo = ?
             `, [rows[i].userNo]);
             rows[i].user = userInfo[0];
         }
-        socket.emit('join room', rows);
+
+        io.to(roomNumber).emit('join room', rows);
     });
 
-    socket.on('private message', async ({ message, roomNo, user }) => {
+    socket.on('private message', async ({ message, roomNo, user, chatNo }) => {
         try {
             const nowDate = new Date();
             const userInfo = user[0];
 
             const [rows] = await mysql.query(`
             INSERT INTO
-            chat(roomNo, userNo, message, sendDate) 
-            VALUES(?, ?, ?, ?)
-            `, [roomNo, userInfo.userNo, message, nowDate]);
-            io.to(roomNo).emit('private message', { message, user: userInfo, sendDate: nowDate });
+            chat(roomNo, userNo, toUserNo, message, sendDate) 
+            VALUES(?, ?, ?, ?, ?)
+            `, [roomNo, userInfo.userNo, chatNo, message, nowDate]);
+            io.to(roomNo).emit('private message', { message, user: userInfo, sendDate: nowDate, readStatus: 0 });
         } catch (e) {
             console.error(e);
         }
@@ -115,7 +121,7 @@ const jsonWebToken = async (userRows) => {
     return { user, token };
 }
 
-app.post("/api/chatUserInfo", async(req, res) => {
+app.post("/api/chatUserInfo", async (req, res) => {
     try {
         const { userNo } = req.body;
         const [rows] = await mysql.query(`
@@ -124,7 +130,7 @@ app.post("/api/chatUserInfo", async(req, res) => {
             WHERE userNo = ?
         `, [userNo]);
         return res.status(200).send(rows);
-    } catch(e) {
+    } catch (e) {
         console.error(e);
         return res.status(400).send("fail");
     }

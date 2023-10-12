@@ -1,19 +1,16 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { useRecoilState } from 'recoil';
-import { chatModalIsOpen, loginUser } from '../../store/atoms';
-import Button from '../button/Button';
+import { loginUser } from '../../store/atoms';
 import { io, Socket } from 'socket.io-client';
-import Modal from 'react-modal';
 import './Chat.scss';
 import { useParams } from 'react-router-dom';
 import DayFormat from '../DayFormat';
 import { chatUserInfoApi } from '../../api/board';
-import Line from '../line/Line';
-// Modal.setAppElement('#root')
 
 interface MsgType {
     message: string;
     sendDate: Date;
+    readStatus: number;
     user?: UserProfileType;
 }
 
@@ -26,7 +23,6 @@ interface userInfoType {
 }
 
 const Chat = () => {
-    // const [modalIsOpen, setModalIsOpen] = useRecoilState(chatModalIsOpen);
     const [message, setMessage] = useState<string>('');
     const [messages, setMessages] = useState<MsgType[]>([]);
     const [userInfo, setUserInfo] = useRecoilState(loginUser);
@@ -35,10 +31,11 @@ const Chat = () => {
     const [socket, setSocket] = useState<Socket | undefined>();
     const { chatNo } = useParams();
     const ServerImgUrl = import.meta.env.VITE_SERVER_IMG_URL;
+    const scrollRef = useRef<HTMLDivElement | null>(null);
 
     const sendMessage = () => {
         if (message !== '' && socket) {
-            socket.emit('private message', { message, roomNo: roomNumber, user: userInfo });
+            socket.emit('private message', { message, roomNo: roomNumber, user: userInfo, chatNo });
             setMessage('');
         }
     };
@@ -51,7 +48,20 @@ const Chat = () => {
     }
 
     useEffect(() => {
-        if (userInfo[0].userNo) {
+        if (scrollRef.current) {
+            const { scrollHeight } = scrollRef.current;
+            scrollRef.current.scrollTop = scrollHeight;
+        }
+    }, [messages]);
+
+    useEffect(() => {
+        if (socket && roomNumber !== '') {
+            socket.emit("join room", {roomNumber, fromUserNo: userInfo[0].userNo});
+        }
+    }, [socket, roomNumber]);
+
+    useEffect(() => {
+        if (userInfo[0].userNo !== 0) {
             const roomNo = [Number(chatNo), userInfo[0].userNo].sort((a, b) => a - b).join('');
             setRoomNumber(roomNo);
         }
@@ -59,37 +69,26 @@ const Chat = () => {
 
     useEffect(() => {
         chatUserApi();
-        const newSocket = io(import.meta.env.VITE_CHAT_TEST_API_URL);
-        setSocket(newSocket);
 
-        newSocket.on("join room", (data) => {
-            setMessages(data);
-        });
+        if (userInfo[0].userNo !== 0) {
+            const newSocket = io(import.meta.env.VITE_CHAT_TEST_API_URL);
+            setSocket(newSocket);
 
-        newSocket.on("private message", (data) => {
-            setMessages(messages => [...messages, data]);
-        });
+            newSocket.on("join room", (data) => {
+                setMessages(data);
+            });
 
-        return () => {
-            newSocket.disconnect();
-            console.log('disconnect');
-        };
-    }, []);
+            newSocket.on("private message", (data) => {
+                setMessages(messages => [...messages, data]);
+            });
 
-    useEffect(() => {
-        if (socket && roomNumber !== '') {
-            socket.emit("join room", roomNumber);
+            return () => {
+                newSocket.disconnect();
+            };
         }
-    }, [socket, roomNumber]);
+    }, [userInfo]);
 
     return (
-        // <Modal
-        //     isOpen={modalIsOpen}
-        //     onRequestClose={() => setModalIsOpen(false)}
-        //     contentLabel="Chat Modal"
-        //     className="Modal"
-        //     overlayClassName="Overlay"
-        // >
         <>
             {chatUserInfo &&
                 <div className='chatUser-container'>
@@ -101,26 +100,33 @@ const Chat = () => {
                     <div>{chatUserInfo.profileContents}</div>
                 </div>}
 
-            <div className='chatMsg-container'>
-                {messages && userInfo.length > 0 && messages.map((data, i) =>
-                    <div key={i} className={userInfo[0].userNo === data.user?.userNo ? 'chat-myProfile' : 'chat-otherProfile'}>
-                        <div className='chat-profileHeader'>
-                            <p>{data.user?.nickname}</p>
-                            <img src={`${ServerImgUrl}${data.user?.imgUrl}`} alt="userImg" loading="lazy"
-                                className='chat-img' />
-                        </div>
-                        <div className='chat-msg'>
-                            <p dangerouslySetInnerHTML={{ __html: data.message.replaceAll(/(\n|\r\n)/g, '<br>') }} />
-                        </div>
-                        <p className='chat-date'>{DayFormat(data.sendDate)}</p>
-                    </div>
-                )}
+            <div ref={scrollRef} className='chatMsg-container'>
+                {userInfo[0].userNo === 0
+                    ? <div>로그인이 필요합니다</div>
+                    : messages.map((data, i) =>
+                        <div key={i} className={userInfo[0].userNo === data.user?.userNo ? 'chat-myProfile' : 'chat-otherProfile'}>
+                            <div className='chat-profileHeader'>
+                                <p>{data.user?.nickname}</p>
+                                <img src={`${ServerImgUrl}${data.user?.imgUrl}`} alt="userImg" loading="lazy"
+                                    className='chat-img' />
+                            </div>
+                            <div className='chat-msgBlock'>
+                                <p className='chat-readStatusMsg'>{data.readStatus === 0 ? "읽지 않음" : "읽음"}</p>
+                                <div className='chat-msg'>
+                                    <p dangerouslySetInnerHTML={{ __html: data.message.replaceAll(/(\n|\r\n)/g, '<br>') }} />
+                                </div>
+                            </div>
+                            <p className='chat-date'>{DayFormat(data.sendDate)}</p>
+                        </div>)}
             </div>
-            
-            <textarea className='chat-textArea' placeholder="메시지" onChange={(e) => setMessage(e.target.value)} value={message} />
-            <Button onClick={sendMessage} text="보내기" />
+
+            {userInfo[0].userNo !== 0 &&
+                <div className='chat-send'>
+                    <textarea className='chat-textArea' placeholder="내용을 입력해주세요"
+                        onChange={(e) => setMessage(e.target.value)} value={message} />
+                    <button className='chat-sendBtn' onClick={sendMessage}>보내기</button>
+                </div>}
         </>
-        // </Modal>
     )
 }
 

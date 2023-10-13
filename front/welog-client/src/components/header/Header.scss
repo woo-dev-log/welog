@@ -16,8 +16,18 @@
     z-index: 1;
 
     .header-home {
-        cursor: pointer;
-        font-size: 22px;
+        display: flex;
+        align-items: center;
+        gap: 10px;
+
+        p {
+            cursor: pointer;
+            font-size: 22px;
+
+            &:hover {
+                color: coral;
+            }
+        }
     }
 
     .themeColorBtn {
@@ -48,10 +58,25 @@
         height: 100%;
         gap: 20px;
 
-        &:hover {
-            ul {
-                display: block;
-                z-index: 1;
+        .header-loginBlock {
+            display: flex;
+            gap: 5px;
+            align-items: center;
+
+            background-color: white;
+            border-radius: 10px;
+            padding: 0 10px;
+
+            .header-chatImg {
+                cursor: pointer;
+                width: 35px;
+                height: 35px;
+            }
+
+            .header-notificationImg {
+                cursor: pointer;
+                width: 40px;
+                height: 40px;
             }
         }
 
@@ -59,6 +84,13 @@
             display: flex;
             align-items: center;
             gap: 10px;
+
+            &:hover {
+                ul {
+                    display: block;
+                    z-index: 1;
+                }
+            }
 
             .header-nickname {
                 cursor: pointer;
@@ -80,39 +112,39 @@
                 }
             }
 
-            img {
+            .header-userImg {
                 cursor: pointer;
                 object-fit: cover;
-                background-color: white;
+                background-color: var(--font-color);
                 width: 40px;
                 height: 40px;
                 border-radius: 1000px;
-                border: 1px solid var(--element-color);
             }
-        }
 
-        ul {
-            display: none;
-            position: absolute;
-            list-style: none;
-            background-color: var(--element-color);
-            top: 45px;
-            right: 0px;
-            width: 100px;
-            padding: 20px 20px 10px;
-            font-size: 18px;
+            ul {
+                display: none;
+                position: absolute;
+                list-style: none;
+                background-color: var(--element-color);
+                top: 45px;
+                right: 0px;
+                width: 100px;
+                padding: 20px 20px 10px;
+                font-size: 18px;
 
-            li {
-                margin-bottom: 10px;
+                li {
+                    margin-bottom: 10px;
 
-                span {
-                    &:hover {
-                        cursor: pointer;
-                        color: coral;
+                    span {
+                        &:hover {
+                            cursor: pointer;
+                            color: coral;
+                        }
                     }
                 }
             }
         }
+
     }
 }
 
@@ -129,10 +161,17 @@
         font-size: 16px;
 
         .header-home {
-            font-size: 18px;
+            gap: 5px;
+
+            p {
+                font-size: 18px;
+            }
         }
 
         .themeColorBtn {
+            width: 40px;
+            height: 40px;
+
             .header-themeImg {
                 width: 30px;
                 height: 30px;
@@ -140,16 +179,30 @@
         }
 
         .header-box {
-            .header-block {
-                img {
-                    width: 35px;
-                    height: 35px;
+            gap: 10px;
+
+            .header-loginBlock {
+                .header-chatImg {
+                    width: 25px;
+                    height: 25px;
+                }
+    
+                .header-notificationImg {
+                    width: 30px;
+                    height: 30px;
                 }
             }
 
-            ul {
-                top: 35px;
-                font-size: 16px;
+            .header-block {
+                .header-userImg {
+                    width: 30px;
+                    height: 30px;
+                }
+
+                ul {
+                    top: 35px;
+                    font-size: 16px;
+                }
             }
         }
     }

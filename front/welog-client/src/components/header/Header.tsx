@@ -47,24 +47,34 @@ const Header = () => {
 
     return (
         <div className="header-container">
-            <div className="header-home" onClick={homeOnClick}>우리의 하루</div>
-            <button className='themeColorBtn'>
-                {themeColor === 'dark'
-                    ? <img onClick={() => themeOnClick('light')}
-                        className='header-themeImg' src="/dark-mode.svg" alt="dark-mode" />
-                    : <img onClick={() => themeOnClick('dark')}
-                        className='header-themeImg' src="/light-mode.svg" alt="light-mode" />}
-            </button>
+            <div className="header-home" onClick={homeOnClick}>
+                <p>우리의 하루</p>
+                <button className='themeColorBtn'>
+                    {themeColor === 'dark'
+                        ? <img onClick={() => themeOnClick('light')}
+                            className='header-themeImg' src="/dark-mode.svg" alt="dark-mode" />
+                        : <img onClick={() => themeOnClick('dark')}
+                            className='header-themeImg' src="/light-mode.svg" alt="light-mode" />}
+                </button>
+            </div>
+
             <div className='header-box'>
                 {userInfo[0].userNo !== 0 ?
-                    <div className="header-block">
-                        <img src={`${ServerImgUrl}${userInfo[0].imgUrl}`} alt={userInfo[0].imgUrl} />
-                        <div className="header-nickname">{userInfo[0].nickname}</div>
-                        <ul>
-                            <li><span onClick={() => navigate("/userBoard/" + userInfo[0].nickname)}>마이페이지</span></li>
-                            <li><span onClick={logOut}>로그아웃</span></li>
-                        </ul>
-                    </div>
+                    <>
+                        <div className='header-loginBlock'>
+                            <img className="header-notificationImg" src="/notification.svg" alt="notification" />
+                            <img className="header-chatImg" onClick={() => navigate("/Chat")}
+                                src="/chat.svg" alt="chat" />
+                        </div>
+                        <div className="header-block">
+                            <img className="header-userImg" src={`${ServerImgUrl}${userInfo[0].imgUrl}`} alt={userInfo[0].imgUrl} />
+                            <div className="header-nickname">{userInfo[0].nickname}</div>
+                            <ul>
+                                <li><span onClick={() => navigate("/userBoard/" + userInfo[0].nickname)}>마이페이지</span></li>
+                                <li><span onClick={logOut}>로그아웃</span></li>
+                            </ul>
+                        </div>
+                    </>
                     :
                     <div className="header-block">
                         <div className="header-signIn" onClick={() => setIsOpen(true)}>로그인</div>

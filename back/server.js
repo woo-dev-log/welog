@@ -37,19 +37,12 @@ io.on('connection', (socket) => {
         `, [roomNumber, fromUserNo]);
 
         const [rows] = await mysql.query(`
-            SELECT * 
+            SELECT chat.*, user.id, user.nickname, user.imgUrl 
             FROM chat 
-            WHERE roomNo = ? 
-            ORDER BY sendDate 
+            LEFT JOIN user ON chat.userNo = user.userNo
+            WHERE chat.roomNo = ? 
+            ORDER BY chat.sendDate
         `, [roomNumber]);
-
-        for (let i = 0; i < rows.length; i++) {
-            const [userInfo] = await mysql.query(`
-                SELECT userNo, id, nickname, imgUrl 
-                FROM user WHERE userNo = ?
-            `, [rows[i].userNo]);
-            rows[i].user = userInfo[0];
-        }
 
         io.to(roomNumber).emit('join room', rows);
     });
@@ -64,10 +57,25 @@ io.on('connection', (socket) => {
             chat(roomNo, userNo, toUserNo, message, sendDate) 
             VALUES(?, ?, ?, ?, ?)
             `, [roomNo, userInfo.userNo, chatNo, message, nowDate]);
-            io.to(roomNo).emit('private message', { message, user: userInfo, sendDate: nowDate, readStatus: 0 });
+            io.to(roomNo).emit('private message', { 
+                chatNo, 
+                message, 
+                userNo: userInfo.userNo, 
+                id: userInfo.id, 
+                nickname: userInfo.nickname, 
+                imgUrl: userInfo.imgUrl, 
+                sendDate: nowDate, readStatus: 0 });
         } catch (e) {
             console.error(e);
         }
+    });
+
+    socket.on('read message', async ({ roomNo, chatNo }) => {
+        await mysql.query(`
+            UPDATE chat SET readStatus = 1 
+            WHERE chatNo = ?
+        `, [chatNo]);
+        io.to(roomNo).emit('read message', {chatNo, readStatus: 1});
     });
 
     socket.on('disconnect', () => {
@@ -120,6 +128,28 @@ const jsonWebToken = async (userRows) => {
 
     return { user, token };
 }
+
+app.post("/api/chatList", async (req, res) => {
+    try {
+        const { userNo } = req.body;
+
+        const [rows] = await mysql.query(`
+            SELECT c.*, u.*
+            FROM (
+                SELECT MAX(chatNo) as maxChatNo, userNo
+                FROM chat 
+                WHERE toUserNo = ? 
+                GROUP BY userNo
+            ) as latestChats
+            JOIN chat c ON c.chatNo = latestChats.maxChatNo
+            LEFT JOIN user u ON c.userNo = u.userNo;
+        `, [userNo]);
+        return res.status(200).send(rows);
+    } catch (e) {
+        console.error(e);
+        return res.status(400).send("fail");
+    }
+});
 
 app.post("/api/chatUserInfo", async (req, res) => {
     try {

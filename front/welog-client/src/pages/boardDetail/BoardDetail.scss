@@ -16,11 +16,11 @@
     border-radius: 10px;
     font-size: $font-size;
     font-family: "LINESeedKR-Bd";
-    color: var(--font-color);
+    color: white;
     transition: .2s ease-in;
 
     &:hover {
-        background-color: var(--element-hover-color);
+        background-color: coral;
     }
 }
 
@@ -172,7 +172,7 @@
 
             button {
                 margin-left: 10px;
-                @include buttonCss(90px, 40px, 16px);
+                @include buttonCss(90px, 40px, 14px);
             }
         }
     }

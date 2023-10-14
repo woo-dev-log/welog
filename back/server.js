@@ -147,8 +147,9 @@ app.post("/api/chatList", async (req, res) => {
                 GROUP BY userNo
             ) as latestChats
             JOIN chat c ON c.chatNo = latestChats.maxChatNo
-            LEFT JOIN user u ON c.userNo = u.userNo;
-        `, [userNo]);
+            LEFT JOIN user u ON c.userNo = u.userNo 
+            ORDER BY c.chatNo DESC;
+        `, [userNo, userNo]);
         return res.status(200).send(rows);
     } catch (e) {
         console.error(e);

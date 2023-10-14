@@ -1,5 +1,5 @@
 @mixin chatMsgCss ($color) {
-    word-break : break-all;
+    word-break: break-all;
     border: 1px solid $color;
     border-radius: 10px;
     padding: 0 10px;
@@ -34,7 +34,7 @@
     background-color: var(--element-color);
     padding: 20px;
     border-radius: 20px;
-    height: 500px;
+    max-height: 400px;
     overflow: scroll;
     margin-bottom: 10px;
 }
@@ -58,12 +58,14 @@
         display: flex;
         gap: 5px;
         margin-bottom: 10px;
+        font-size: 16px;
     }
 
     .chat-msgBlock {
         display: flex;
         gap: 5px;
         max-width: 60%;
+        font-size: 16px;
     }
 
     .chat-msg {
@@ -82,6 +84,7 @@
         gap: 5px;
         flex-direction: row-reverse;
         margin-bottom: 10px;
+        font-size: 16px;
     }
 
     .chat-msgBlock {
@@ -89,6 +92,7 @@
         display: flex;
         gap: 5px;
         flex-direction: row-reverse;
+        font-size: 16px;
     }
 
     .chat-msg {
@@ -100,6 +104,7 @@
     white-space: nowrap;
     display: flex;
     align-items: end;
+    font-size: 14px;
 }
 
 .chat-send {
@@ -134,4 +139,95 @@
 
 .chat-date {
     opacity: 0.7;
+    font-size: 14px;
+}
+
+.chatUserRoom-container {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    background-color: var(--element-color);
+    padding: 20px;
+    border-radius: 20px;
+    max-height: 500px;
+    overflow: scroll;
+}
+
+.chatUserRoom {
+    display: flex;
+    align-items: center;
+    gap: 20px;
+    font-size: 18px;
+    padding: 10px;
+    border-radius: 20px;
+    cursor: pointer;
+
+    &:hover {
+        background-color: var(--element-hover-color);
+    }
+}
+
+.chatUserheader {
+    display: flex;
+    align-items: center;
+}
+
+.chatUserRoom-msg {
+    opacity: 0.7;
+    font-size: 16px;
+    margin-left: auto;
+}
+
+@media (max-width: 768px) {
+    .chatUser-header {
+        font-size: 18px;    
+    }
+
+    .chat-myProfile {
+        .chat-profileHeader {
+            font-size: 14px;
+        }
+
+        .chat-msg{
+            font-size: 14px;
+        }
+    }
+
+    .chat-otherProfile {
+        .chat-profileHeader {
+            font-size: 14px;
+        }
+
+        .chat-msg{
+            font-size: 14px;
+        }
+    }
+
+    .chat-readStatusMsg {
+        font-size: 12px;
+    }
+
+    .chatUser-img {
+        width: 40px;
+        height: 40px;
+    }
+
+    .chat-date {
+        font-size: 12px;
+    }
+
+    .chatUserRoom-container {
+        max-height: 600px;
+        padding: 10px;
+        gap: 0;
+    }
+
+    .chatUserRoom {
+        font-size: 16px;
+        gap: 10px;
+    }
+
+    .chatUserRoom-msg {
+        font-size: 14px;
+    }
 }

@@ -47,8 +47,8 @@ const Header = () => {
 
     return (
         <div className="header-container">
-            <div className="header-home" onClick={homeOnClick}>
-                <p>우리의 하루</p>
+            <div className="header-home">
+                <p onClick={homeOnClick}>우리의 하루</p>
                 <button className='themeColorBtn'>
                     {themeColor === 'dark'
                         ? <img onClick={() => themeOnClick('light')}
@@ -62,7 +62,7 @@ const Header = () => {
                 {userInfo[0].userNo !== 0 ?
                     <>
                         <div className='header-loginBlock'>
-                            <img className="header-notificationImg" src="/notification.svg" alt="notification" />
+                            {/* <img className="header-notificationImg" src="/notification.svg" alt="notification" /> */}
                             <img className="header-chatImg" onClick={() => navigate("/Chat")}
                                 src="/chat.svg" alt="chat" />
                         </div>

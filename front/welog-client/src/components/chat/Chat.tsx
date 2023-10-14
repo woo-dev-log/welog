@@ -58,8 +58,10 @@ const Chat = () => {
 
     const chatListApiEvent = async () => {
         try {
-            const data = await chatListApi(userInfo[0].userNo);
-            setChatList(data);
+            if (userInfo[0].userNo !== 0) {
+                const data = await chatListApi(userInfo[0].userNo);
+                setChatList(data);
+            }
         } catch (e) {
             ToastError("채팅방 목록 조회를 실패했어요");
             console.error(e);
@@ -174,27 +176,21 @@ const Chat = () => {
                         </div>}
                 </>
                 : <>
-                    <div className='chatUser-container'>
-                        {userInfo[0].userNo !== 0
-                            ? <header className='chatUser-header'>
-                                <img src={`${ServerImgUrl}${userInfo[0].imgUrl}`} alt="userImg"
-                                    loading="lazy" className='chatUser-img' />
-                                <p>{userInfo[0].nickname} 채팅방 목록</p>
-                            </header>
+                    <div className='chatUserRoom-container'>
+                        {userInfo[0].userNo !== 0 && chatList
+                            ? chatList.map((data, i) =>
+                                <div key={i} className='chatUserRoom' onClick={() => navigate("/Chat/" + data.userNo)}>
+                                    <img src={`${ServerImgUrl}${data.imgUrl}`} alt="userImg"
+                                        loading="lazy" className='chatUser-img' />
+                                    <div className='chatUserRoom-header'>
+                                        <p>{data.nickname}</p>
+                                        <p className='chatUserRoom-msg'>{data.message}</p>
+                                    </div>
+                                    <p className='chatUserRoom-msg'>{DayFormat(data.sendDate)}</p>
+                                </div>)
                             : <header className='chatUser-header'>
                                 <p>로그인을 해주세요</p>
                             </header>}
-                    </div>
-                    <div className='chatMsg-container'>
-                        {chatList?.map((data, i) =>
-                            <div key={i} className='chatUserRoom' onClick={() => navigate("/Chat/" + data.userNo)}>
-                                <img src={`${ServerImgUrl}${data.imgUrl}`} alt="userImg"
-                                    loading="lazy" className='chatUser-img' />
-                                <p>{data.nickname}</p>
-                                <p>{data.message}</p>
-                                <p>{DayFormat(data.sendDate)}</p>
-                            </div>
-                        )}
                     </div>
                 </>}
         </>

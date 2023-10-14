@@ -44,20 +44,14 @@ const Chat = () => {
     const [chatList, setChatList] = useState<chatListType[]>();
     const [roomNumber, setRoomNumber] = useState('');
     const [socket, setSocket] = useState<Socket | undefined>();
-    const { chatNo } = useParams();
+    const { toUserNo } = useParams();
     const ServerImgUrl = import.meta.env.VITE_SERVER_IMG_URL;
     const scrollRef = useRef<HTMLDivElement | null>(null);
     const navigate = useNavigate();
 
-    const readMessage = (readChatNo: number) => {
-        if(socket) {
-            socket.emit('read message', { roomNo: roomNumber, readChatNo });
-        }
-    }
-
     const sendMessage = () => {
         if (message !== '' && socket) {
-            socket.emit('private message', { message, roomNo: roomNumber, user: userInfo, chatNo });
+            socket.emit('private message', { message, roomNo: roomNumber, user: userInfo, toUserNo });
             setMessage('');
         }
     };
@@ -70,19 +64,19 @@ const Chat = () => {
             ToastError("채팅방 목록 조회를 실패했어요");
             console.error(e);
         }
-    }
+    };
 
     const chatUserApi = async () => {
         try {
-            if (chatNo) {
-                const user = await chatUserInfoApi(chatNo);
+            if (toUserNo) {
+                const user = await chatUserInfoApi(toUserNo);
                 setChatUserInfo(user[0]);
             }
         } catch (e) {
             ToastError("채팅방 유저 조회를 실패했어요");
             console.error(e);
         }
-    }
+    };
 
     useEffect(() => {
         if (scrollRef.current) {
@@ -95,51 +89,48 @@ const Chat = () => {
         if (socket && roomNumber !== '') {
             socket.emit("join room", { roomNumber, fromUserNo: userInfo[0].userNo });
             chatUserApi();
+
+            socket.on("join room", (data) => {
+                setMessages(data);
+            });
+
+            socket.on("private message", (data) => {
+                setMessages(messages => [...messages, data]);
+
+                if (userInfo[0].userNo !== data.userNo) {
+                    socket.emit('read message', { roomNumber, chatNo: data.chatNo });
+                }
+            });
+
+            socket.on("read message", (data) => {
+                setMessages(messages => messages.map(value =>
+                    value.chatNo === data.chatNo ? { ...value, readStatus: data.readStatus } : value
+                ));
+            });
+
+            return () => {
+                socket.off("join room");
+                socket.off("private message");
+                socket.disconnect();
+            };
         }
     }, [socket, roomNumber]);
 
     useEffect(() => {
-        if (userInfo[0].userNo !== 0 && chatNo) {
-            const roomNo = [Number(chatNo), userInfo[0].userNo].sort((a, b) => a - b).join('');
-            setRoomNumber(roomNo);
-        }
-
-        if(!chatNo) {
-            setChatUserInfo(undefined);
-        }
-    }, [chatNo, userInfo]);
-
-    useEffect(() => {
-        if (userInfo[0].userNo !== 0) {
-            chatListApiEvent();
-
+        if (userInfo[0].userNo !== 0 && toUserNo) {
             const newSocket = io(import.meta.env.VITE_CHAT_TEST_API_URL);
             setSocket(newSocket);
 
-            newSocket.on("join room", (data) => {
-                setMessages(data);
-            });
-
-            newSocket.on("private message", (data) => {
-                setMessages(messages => [...messages, data]);
-
-                readMessage(data.chatNo);
-            });
-
-            newSocket.on("read message", (data) => {
-                console.log("test");
-                // setMessages(messages => messages.map(value =>
-                //     value.chatNo === data.chatNo ? { ...value, readStatus: data.readStatus } : value
-                // ));
-            });
-
-            return () => {
-                newSocket.off("join room");
-                newSocket.off("private message");
-                newSocket.disconnect();
-            };
+            const roomNo = [Number(toUserNo), userInfo[0].userNo].sort((a, b) => a - b).join('');
+            setRoomNumber(roomNo);
         }
-    }, [userInfo]);
+
+        if (!toUserNo) {
+            setRoomNumber('');
+            setChatUserInfo(undefined);
+            chatListApiEvent();
+        }
+    }, [toUserNo, userInfo]);
 
     return (
         <>
@@ -151,12 +142,12 @@ const Chat = () => {
                                 loading="lazy" className='chatUser-img' />
                             <p>{chatUserInfo.nickname} 채팅방</p>
                         </header>
-                        <div>{chatUserInfo.profileContents}</div>
+                        <p>{chatUserInfo.profileContents}</p>
                     </div>
 
                     <div ref={scrollRef} className='chatMsg-container'>
                         {userInfo[0].userNo === 0
-                            ? <div>로그인이 필요합니다</div>
+                            ? <div>로그인을 해주세요</div>
                             : messages.map((data, i) =>
                                 <div key={i} className={userInfo[0].userNo === data.userNo ? 'chat-myProfile' : 'chat-otherProfile'}>
                                     <div className='chat-profileHeader'>
@@ -165,7 +156,8 @@ const Chat = () => {
                                             className='chat-img' />
                                     </div>
                                     <div className='chat-msgBlock'>
-                                        <p className='chat-readStatusMsg'>{data.readStatus === 0 ? "읽지 않음" : "읽음"}</p>
+                                        {userInfo[0].userNo !== Number(toUserNo) &&
+                                            <p className='chat-readStatusMsg'>{data.readStatus === 0 ? "읽지 않음" : "읽음"}</p>}
                                         <div className='chat-msg'>
                                             <p dangerouslySetInnerHTML={{ __html: data.message.replaceAll(/(\n|\r\n)/g, '<br>') }} />
                                         </div>
@@ -183,11 +175,15 @@ const Chat = () => {
                 </>
                 : <>
                     <div className='chatUser-container'>
-                        <header className='chatUser-header'>
-                            <img src={`${ServerImgUrl}${userInfo[0].imgUrl}`} alt="userImg"
-                                loading="lazy" className='chatUser-img' />
-                            <p>{userInfo[0].nickname} 채팅방 목록</p>
-                        </header>
+                        {userInfo[0].userNo !== 0
+                            ? <header className='chatUser-header'>
+                                <img src={`${ServerImgUrl}${userInfo[0].imgUrl}`} alt="userImg"
+                                    loading="lazy" className='chatUser-img' />
+                                <p>{userInfo[0].nickname} 채팅방 목록</p>
+                            </header>
+                            : <header className='chatUser-header'>
+                                <p>로그인을 해주세요</p>
+                            </header>}
                     </div>
                     <div className='chatMsg-container'>
                         {chatList?.map((data, i) =>

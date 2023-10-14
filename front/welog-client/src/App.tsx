@@ -53,7 +53,7 @@ function App() {
           <Route path='/BoardWrite' element={<BoardWrite />} />
           <Route path='/SignUp' element={<SignUp />} />
           <Route path='/Chat' element={<Chat />} />
-          <Route path='/Chat/:chatNo' element={<Chat />} />
+          <Route path='/Chat/:toUserNo' element={<Chat />} />
         </Routes>
       </div>
     </>

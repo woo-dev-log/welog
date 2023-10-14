@@ -47,7 +47,7 @@ io.on('connection', (socket) => {
         io.to(roomNumber).emit('join room', rows);
     });
 
-    socket.on('private message', async ({ message, roomNo, user, chatNo }) => {
+    socket.on('private message', async ({ message, roomNo, user, toUserNo }) => {
         try {
             const nowDate = new Date();
             const userInfo = user[0];
@@ -56,26 +56,31 @@ io.on('connection', (socket) => {
             INSERT INTO
             chat(roomNo, userNo, toUserNo, message, sendDate) 
             VALUES(?, ?, ?, ?, ?)
-            `, [roomNo, userInfo.userNo, chatNo, message, nowDate]);
-            io.to(roomNo).emit('private message', { 
-                chatNo, 
-                message, 
-                userNo: userInfo.userNo, 
-                id: userInfo.id, 
-                nickname: userInfo.nickname, 
-                imgUrl: userInfo.imgUrl, 
-                sendDate: nowDate, readStatus: 0 });
+            `, [roomNo, userInfo.userNo, toUserNo, message, nowDate]);
+
+            io.to(roomNo).emit('private message', {
+                chatNo: rows.insertId,
+                roomNo,
+                toUserNo,
+                message,
+                userNo: userInfo.userNo,
+                id: userInfo.id,
+                nickname: userInfo.nickname,
+                imgUrl: userInfo.imgUrl,
+                sendDate: nowDate, readStatus: 0
+            });
         } catch (e) {
             console.error(e);
         }
     });
 
-    socket.on('read message', async ({ roomNo, chatNo }) => {
+    socket.on('read message', async ({ roomNumber, chatNo }) => {
         await mysql.query(`
             UPDATE chat SET readStatus = 1 
             WHERE chatNo = ?
         `, [chatNo]);
-        io.to(roomNo).emit('read message', {chatNo, readStatus: 1});
+
+        io.to(roomNumber).emit('read message', { chatNo, readStatus: 1 });
     });
 
     socket.on('disconnect', () => {

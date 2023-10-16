@@ -89,7 +89,7 @@ const Chat = () => {
 
     useEffect(() => {
         if (socket && roomNumber !== '') {
-            socket.emit("join room", { roomNumber, fromUserNo: userInfo[0].userNo });
+            socket.emit("join room", { roomNo: roomNumber, fromUserNo: userInfo[0].userNo });
             chatUserApi();
 
             socket.on("join room", (data) => {
@@ -100,7 +100,7 @@ const Chat = () => {
                 setMessages(messages => [...messages, data]);
 
                 if (userInfo[0].userNo !== data.userNo) {
-                    socket.emit('read message', { roomNumber, chatNo: data.chatNo });
+                    socket.emit('read message', { roomNo: roomNumber, chatNo: data.chatNo });
                 }
             });
 

@@ -27,14 +27,18 @@ const io = require("socket.io")(server, {
 io.on('connection', (socket) => {
     console.log('a user connected');
 
-    socket.on('join room', async ({ roomNumber, fromUserNo }) => {
-        console.log(roomNumber + ' user connected');
-        socket.join(roomNumber);
+    socket.on('userList room', async ({ userNo }) => {
+        socket.emit("userList room", { userList: await chatListApi(userNo) });
+    });
+
+    socket.on('join room', async ({ roomNo, fromUserNo }) => {
+        console.log(roomNo + ' user connected');
+        socket.join(roomNo);
 
         await mysql.query(`
             UPDATE chat SET readStatus = 1 
             WHERE roomNo = ? AND toUserNo = ?
-        `, [roomNumber, fromUserNo]);
+        `, [roomNo, fromUserNo]);
 
         const [rows] = await mysql.query(`
             SELECT chat.*, user.id, user.nickname, user.imgUrl 
@@ -42,21 +46,24 @@ io.on('connection', (socket) => {
             LEFT JOIN user ON chat.userNo = user.userNo
             WHERE chat.roomNo = ? 
             ORDER BY chat.sendDate
-        `, [roomNumber]);
+        `, [roomNo]);
 
-        io.to(roomNumber).emit('join room', rows);
+        io.to(roomNo).emit('join room', rows);
     });
 
     socket.on('private message', async ({ message, roomNo, user, toUserNo }) => {
         try {
             const nowDate = new Date();
             const userInfo = user[0];
+            const roomUsers = userInfo.userNo + "," + toUserNo;
 
             const [rows] = await mysql.query(`
             INSERT INTO
-            chat(roomNo, userNo, toUserNo, message, sendDate) 
-            VALUES(?, ?, ?, ?, ?)
-            `, [roomNo, userInfo.userNo, toUserNo, message, nowDate]);
+            chat(roomNo, userNo, toUserNo, message, sendDate, roomUsers) 
+            VALUES(?, ?, ?, ?, ?, ?)
+            `, [roomNo, userInfo.userNo, toUserNo, message, nowDate, roomUsers]);
+
+            socket.emit("userList room", { userList: await chatListApi(userInfo.userNo) });
 
             io.to(roomNo).emit('private message', {
                 chatNo: rows.insertId,
@@ -67,20 +74,21 @@ io.on('connection', (socket) => {
                 id: userInfo.id,
                 nickname: userInfo.nickname,
                 imgUrl: userInfo.imgUrl,
-                sendDate: nowDate, readStatus: 0
+                sendDate: nowDate, readStatus: 0,
+                roomUsers
             });
         } catch (e) {
             console.error(e);
         }
     });
 
-    socket.on('read message', async ({ roomNumber, chatNo }) => {
+    socket.on('read message', async ({ roomNo, chatNo }) => {
         await mysql.query(`
             UPDATE chat SET readStatus = 1 
             WHERE chatNo = ?
         `, [chatNo]);
 
-        io.to(roomNumber).emit('read message', { chatNo, readStatus: 1 });
+        io.to(roomNo).emit('read message', { chatNo, readStatus: 1 });
     });
 
     socket.on('disconnect', () => {
@@ -134,23 +142,31 @@ const jsonWebToken = async (userRows) => {
     return { user, token };
 }
 
-app.post("/api/chatList", async (req, res) => {
+const chatListApi = async (userNo) => {
     try {
-        const { userNo } = req.body;
-
         const [rows] = await mysql.query(`
             SELECT c.*, u.*
             FROM (
-                SELECT MAX(chatNo) as maxChatNo, userNo
+                SELECT MAX(chatNo) as maxChatNo, userNo  
                 FROM chat 
-                WHERE toUserNo = ? 
-                GROUP BY userNo
+                WHERE FIND_IN_SET(?, roomUsers) 
+                GROUP BY roomNo
             ) as latestChats
             JOIN chat c ON c.chatNo = latestChats.maxChatNo
-            LEFT JOIN user u ON c.userNo = u.userNo 
+            LEFT JOIN user u ON u.userNo = CASE WHEN c.userNo = ? THEN c.toUserNo ELSE c.userNo END
             ORDER BY c.chatNo DESC;
         `, [userNo, userNo]);
-        return res.status(200).send(rows);
+
+        return rows;
+    } catch (e) {
+        console.error(e);
+    }
+};
+
+app.post("/api/chatList", async (req, res) => {
+    try {
+        const { userNo } = req.body;
+        return res.status(200).send(await chatListApi(userNo));
     } catch (e) {
         console.error(e);
         return res.status(400).send("fail");

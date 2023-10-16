@@ -154,8 +154,7 @@ const UserBoard = () => {
                             <p>작성한 댓글</p>
                             <p><span>{userProfile[0].userCommentCnt}</span> 개</p>
                         </button>
-                        {/* <button onClick={() => setChatIsOpen(true)}>chat</button> */}
-                        <button onClick={() => navigate("/Chat/" + userProfile[0].userNo)}>chat</button>
+                        <button onClick={() => navigate("/Chat/" + userProfile[0].userNo)}>대화하기</button>
                     </section>
 
                     {type === "post"

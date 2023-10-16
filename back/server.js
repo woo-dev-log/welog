@@ -54,6 +54,9 @@ io.on('connection', (socket) => {
     socket.on('private message', async ({ message, roomNo, user, toUserNo }) => {
         try {
             const nowDate = new Date();
+            const kstOffset = 9 * 60 * 60 * 1000;
+            const kstDate = new Date(now.getTime() + kstOffset);
+
             const userInfo = user[0];
             const roomUsers = userInfo.userNo + "," + toUserNo;
 

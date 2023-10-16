@@ -1,4 +1,4 @@
-interface UserProfileType {
+export interface UserProfileType {
     userNo: number;
     nickname: string;
     imgUrl: string;

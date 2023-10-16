@@ -1,4 +1,5 @@
 import { atom } from "recoil";
+import { UserProfileType } from "../types/UserProfileType";
 
 interface BoardProps {
     boardNo: number;

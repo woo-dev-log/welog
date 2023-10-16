@@ -55,7 +55,7 @@ io.on('connection', (socket) => {
         try {
             const nowDate = new Date();
             const kstOffset = 9 * 60 * 60 * 1000;
-            const kstDate = new Date(now.getTime() + kstOffset);
+            const kstDate = new Date(nowDate.getTime() + kstOffset);
 
             const userInfo = user[0];
             const roomUsers = userInfo.userNo + "," + toUserNo;
@@ -64,7 +64,7 @@ io.on('connection', (socket) => {
             INSERT INTO
             chat(roomNo, userNo, toUserNo, message, sendDate, roomUsers) 
             VALUES(?, ?, ?, ?, ?, ?)
-            `, [roomNo, userInfo.userNo, toUserNo, message, nowDate, roomUsers]);
+            `, [roomNo, userInfo.userNo, toUserNo, message, kstDate, roomUsers]);
 
             socket.emit("userList room", { userList: await chatListApi(userInfo.userNo) });
 
@@ -77,7 +77,7 @@ io.on('connection', (socket) => {
                 id: userInfo.id,
                 nickname: userInfo.nickname,
                 imgUrl: userInfo.imgUrl,
-                sendDate: nowDate, readStatus: 0,
+                sendDate: kstDate, readStatus: 0,
                 roomUsers
             });
         } catch (e) {

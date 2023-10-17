@@ -220,6 +220,7 @@ const Chat = () => {
                                 placeholder: (styles) => ({ ...styles, ...dot('coral') }),
                                 singleValue: (styles) => ({ ...styles, ...dot('coral') }),
                             }}
+                            placeholder="유저 선택"
                             onChange={(sortOption) => sortOption && setSortBy(sortOption.value)} />
                         <button onClick={() => {
                             if (sortBy) {

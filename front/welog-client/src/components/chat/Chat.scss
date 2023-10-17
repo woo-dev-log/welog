@@ -34,6 +34,7 @@
     background-color: var(--element-color);
     padding: 20px;
     border-radius: 20px;
+    min-height: 100px;
     max-height: 400px;
     overflow: scroll;
     margin-bottom: 10px;
@@ -142,6 +143,25 @@
     font-size: 14px;
 }
 
+.select-container {
+    display: flex;
+    justify-content: center;
+}
+
+.selectBtn {
+    cursor: pointer;
+    border: none;
+    background-color: coral;
+    color: var(--font-color);
+    width: 100px;
+    margin-left: 20px;
+    border-radius: 5px;
+
+    &:hover {
+        opacity: 0.8;
+    }
+}
+
 .chatUserRoom-container {
     display: flex;
     flex-direction: column;
@@ -149,8 +169,10 @@
     background-color: var(--element-color);
     padding: 20px;
     border-radius: 20px;
+    min-height: 100px;
     max-height: 500px;
     overflow: scroll;
+    margin-top: 20px;
 }
 
 .chatUserRoom {

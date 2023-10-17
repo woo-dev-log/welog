@@ -1,5 +1,10 @@
 import axios from "axios";
 
+export const userListApi = async () => {
+    const { data } = await axios.get("/userList");
+    return data;
+}
+
 export const chatListApi = async (userNo: number) => {
     const { data } = await axios.post("/chatList", { userNo });
     return data;

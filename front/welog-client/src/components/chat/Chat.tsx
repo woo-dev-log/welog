@@ -5,8 +5,9 @@ import { io, Socket } from 'socket.io-client';
 import './Chat.scss';
 import { useNavigate, useParams } from 'react-router-dom';
 import DayFormat from '../DayFormat';
-import { chatListApi, chatUserInfoApi } from '../../api/board';
-import { ToastError } from '../Toast';
+import { chatListApi, chatUserInfoApi, userListApi } from '../../api/board';
+import { ToastError, ToastWarn } from '../Toast';
+import Select from "react-select";
 
 interface MsgType {
     chatNo: number;
@@ -36,18 +37,40 @@ interface chatListType {
     sendDate: Date;
 }
 
+interface sortOptionType {
+    value: string;
+    label: string;
+}
+
 const Chat = () => {
     const [message, setMessage] = useState<string>('');
     const [messages, setMessages] = useState<MsgType[]>([]);
     const [userInfo, setUserInfo] = useRecoilState(loginUser);
     const [chatUserInfo, setChatUserInfo] = useState<userInfoType>();
-    const [chatList, setChatList] = useState<chatListType[]>();
+    const [chatList, setChatList] = useState<chatListType[]>([]);
     const [roomNumber, setRoomNumber] = useState('');
     const [socket, setSocket] = useState<Socket | undefined>();
+    const [sortBy, setSortBy] = useState<string>();
+    const [sortOption, setSortOption] = useState<sortOptionType[]>([{ "value": "11", "label": "신우혁" }]);
     const { toUserNo } = useParams();
     const ServerImgUrl = import.meta.env.VITE_SERVER_IMG_URL;
     const scrollRef = useRef<HTMLDivElement | null>(null);
     const navigate = useNavigate();
+
+    const dot = (color = 'transparent') => ({
+        display: 'flex',
+        alignItems: 'center',
+
+        ':before': {
+            backgroundColor: color,
+            borderRadius: 10,
+            content: '" "',
+            display: 'block',
+            marginRight: 8,
+            height: 10,
+            width: 10,
+        },
+    });
 
     const sendMessage = () => {
         if (message !== '' && socket) {
@@ -61,6 +84,9 @@ const Chat = () => {
             if (userInfo[0].userNo !== 0) {
                 const data = await chatListApi(userInfo[0].userNo);
                 setChatList(data);
+
+                const userList = await userListApi();
+                setSortOption(userList);
             }
         } catch (e) {
             ToastError("채팅방 목록 조회를 실패했어요");
@@ -176,6 +202,31 @@ const Chat = () => {
                         </div>}
                 </>
                 : <>
+                    <div className='select-container'>
+                        <Select
+                            options={sortOption}
+                            isDisabled={false}
+                            isLoading={false}
+                            isClearable={false}
+                            isRtl={false}
+                            styles={{
+                                option: (provided, state) => ({
+                                    ...provided,
+                                    backgroundColor: state.isSelected ? 'coral' : state.isFocused ? 'lightsteelblue' : 'white',
+                                    color: state.isSelected || state.isFocused ? 'white' : 'black',
+                                }),
+                                input: (styles) => ({ ...styles, ...dot() }),
+                                placeholder: (styles) => ({ ...styles, ...dot('coral') }),
+                                singleValue: (styles) => ({ ...styles, ...dot('coral') }),
+                            }}
+                            onChange={(sortOption) => sortOption && setSortBy(sortOption.value)} />
+                        <button onClick={() => {
+                            if (sortBy) {
+                                navigate("/Chat/" + sortBy)
+                                setSortBy("");
+                            } else ToastWarn("유저를 선택해주세요");
+                        }} className='selectBtn'>대화하기</button>
+                    </div>
                     <div className='chatUserRoom-container'>
                         {userInfo[0].userNo !== 0 && chatList
                             ? chatList.map((data, i) =>

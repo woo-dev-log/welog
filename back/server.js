@@ -166,6 +166,16 @@ const chatListApi = async (userNo) => {
     }
 };
 
+app.get("/api/userList", async (req, res) => {
+    try {
+        const [rows] = await mysql.query("SELECT nickname label, userNo value FROM user");
+        return res.status(200).send(rows);
+    } catch (e) {
+        console.error(e);
+        return res.status(400).send("fail");
+    }
+})
+
 app.post("/api/chatList", async (req, res) => {
     try {
         const { userNo } = req.body;

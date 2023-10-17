@@ -35,6 +35,7 @@ interface chatListType {
     imgUrl: string;
     message: string;
     sendDate: Date;
+    readStatus: number;
 }
 
 interface sortOptionType {
@@ -76,7 +77,7 @@ const Chat = () => {
         if (message !== '' && socket) {
             socket.emit('private message', { message, roomNo: roomNumber, user: userInfo, toUserNo });
             setMessage('');
-        }
+        } else ToastWarn("내용을 입력해주세요");
     };
 
     const chatListApiEvent = async () => {
@@ -167,8 +168,8 @@ const Chat = () => {
                     <div className='chatUser-container'>
                         <header className='chatUser-header'>
                             <img src={`${ServerImgUrl}${chatUserInfo.imgUrl}`} alt="userImg"
-                                loading="lazy" className='chatUser-img' />
-                            <p>{chatUserInfo.nickname} 채팅방</p>
+                                loading="lazy" className='chatUser-img' onClick={() => navigate("/userBoard/" + chatUserInfo.nickname)} />
+                            <p onClick={() => navigate("/userBoard/" + chatUserInfo.nickname)}>{chatUserInfo.nickname} 채팅방</p>
                         </header>
                         <p>{chatUserInfo.profileContents}</p>
                     </div>
@@ -238,6 +239,7 @@ const Chat = () => {
                                         <p className='chatUserRoom-msg'>{data.message}</p>
                                     </div>
                                     <p className='chatUserRoom-msg'>{DayFormat(data.sendDate)}</p>
+                                    {data.readStatus === 0 && <div className='readStatus-dot' />}
                                 </div>)
                             : <header className='chatUser-header'>
                                 <p>로그인을 해주세요</p>

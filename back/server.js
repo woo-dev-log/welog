@@ -25,14 +25,11 @@ const io = require("socket.io")(server, {
 });
 
 io.on('connection', (socket) => {
-    console.log('a user connected');
-
     socket.on('userList room', async ({ userNo }) => {
         socket.emit("userList room", { userList: await chatListApi(userNo) });
     });
 
     socket.on('join room', async ({ roomNo, fromUserNo }) => {
-        console.log(roomNo + ' user connected');
         socket.join(roomNo);
 
         await mysql.query(`
@@ -95,7 +92,7 @@ io.on('connection', (socket) => {
     });
 
     socket.on('disconnect', () => {
-        console.log('user disconnected');
+        // console.log('user disconnected');
     });
 });
 
@@ -150,13 +147,13 @@ const chatListApi = async (userNo) => {
         const [rows] = await mysql.query(`
             SELECT c.*, u.*
             FROM (
-                SELECT MAX(chatNo) as maxChatNo, userNo  
+                SELECT MAX(chatNo) as maxChatNo, userNo, readStatus 
                 FROM chat 
                 WHERE FIND_IN_SET(?, roomUsers) 
                 GROUP BY roomNo
             ) as latestChats
-            JOIN chat c ON c.chatNo = latestChats.maxChatNo
-            LEFT JOIN user u ON u.userNo = CASE WHEN c.userNo = ? THEN c.toUserNo ELSE c.userNo END
+            JOIN chat c ON c.chatNo = latestChats.maxChatNo 
+            LEFT JOIN user u ON u.userNo = CASE WHEN c.userNo = ? THEN c.toUserNo ELSE c.userNo END 
             ORDER BY c.chatNo DESC;
         `, [userNo, userNo]);
 

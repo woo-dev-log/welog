@@ -13,8 +13,6 @@
 }
 
 .boardWrite-container {
-    display: flex;
-
     .boardWrite-titleContainer {
         box-sizing: border-box;
         background-color: var(--board-color);
@@ -66,7 +64,7 @@
     }
 
     aside {
-        margin-left: 50px;
+        margin-top: 40px;
         border-radius: 10px;
         padding: 20px;
         min-width: 300px;
@@ -91,11 +89,11 @@
                 border-radius: 10px;
                 font-size: 16px;
                 font-family: "LINESeedKR-Bd";
-                background-color: var(--element-color);
+                background-color: coral;
                 color: var(--font-color);
 
                 &:hover {
-                    background-color: var(--element-hover-color);
+                    opacity: 0.8;
                 }
             }
         }
@@ -119,13 +117,17 @@
                 display: flex;
                 justify-content: center;
                 align-items: center;
-                background-color: var(--element-color);
+                background-color: coral;
                 color: var(--font-color);
                 width: 100px;
                 height: 30px;
                 font-family: "LINESeedKR-Bd";
                 font-size: 14px;
                 border-radius: 10px;
+
+                &:hover {
+                    opacity: 0.8;
+                }
             }
 
             input[type="file"] {
@@ -166,8 +168,6 @@
 
 @media (max-width: 1024px) {
     .boardWrite-container {
-        flex-direction: column;
-
         aside {
             margin-left: 0;
             margin-top: 30px;

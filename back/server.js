@@ -163,6 +163,23 @@ const chatListApi = async (userNo) => {
     }
 };
 
+app.post("/api/statusChat", async (req, res) => {
+    try {
+        const { userNo } = req.body;
+        
+        const [rows] = await mysql.query(`
+            SELECT COUNT(*) readStatus 
+            FROM chat 
+            WHERE userNo != ? AND toUserNo = ? AND readStatus = 0;
+        `, [userNo, userNo]);
+        
+        return res.status(200).send(rows);
+    } catch (e) {
+        console.error(e);
+        return res.status(400).send("fail");
+    }
+});
+
 app.get("/api/userList", async (req, res) => {
     try {
         // const [rows] = await mysql.query("SELECT nickname label, userNo value FROM user");
@@ -172,7 +189,7 @@ app.get("/api/userList", async (req, res) => {
         console.error(e);
         return res.status(400).send("fail");
     }
-})
+});
 
 app.post("/api/chatList", async (req, res) => {
     try {

@@ -29,7 +29,7 @@ interface userInfoType {
 }
 
 interface chatListType {
-    userNo: string;
+    userNo: number;
     toUserNo: number;
     id: string;
     nickname: string;
@@ -195,7 +195,8 @@ const Chat = () => {
                                         <p className='chatUserRoom-msg'>{data.message}</p>
                                     </div>
                                     <p className='chatUserRoom-msg'>{DayFormat(data.sendDate)}</p>
-                                    {data.readStatus === 0 && data.toUserNo === userInfo[0].userNo &&
+                                    {data.readStatus === 0 && data.toUserNo === userInfo[0].userNo
+                                        && data.userNo !== userInfo[0].userNo &&
                                         <div className='readStatus-dot' />}
                                 </div>)
                             : <header className='chatUser-header'>

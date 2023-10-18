@@ -66,6 +66,7 @@
             background-color: white;
             border-radius: 10px;
             padding: 0 10px;
+            position: relative;
 
             .header-chatImg {
                 cursor: pointer;
@@ -77,6 +78,12 @@
                 cursor: pointer;
                 width: 40px;
                 height: 40px;
+            }
+
+            .readStatus-dot {
+                position: absolute;
+                left: 35px;
+                top: 20px;
             }
         }
 
@@ -191,6 +198,11 @@
                 .header-notificationImg {
                     width: 30px;
                     height: 30px;
+                }
+
+                .readStatus-dot {
+                    left: 26px;
+                    top: 13px;
                 }
             }
 

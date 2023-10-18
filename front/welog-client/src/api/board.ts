@@ -1,5 +1,10 @@
 import axios from "axios";
 
+export const statusChatApi = async (userNo: number) => {
+    const { data } = await axios.post("/statusChat", { userNo });
+    return data;
+}
+
 export const userListApi = async () => {
     const { data } = await axios.get("/userList");
     return data;

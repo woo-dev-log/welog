@@ -1,11 +1,12 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useCookies } from 'react-cookie';
 import { useNavigate } from 'react-router-dom';
 import { useRecoilState } from 'recoil';
 import Swal from 'sweetalert2';
 import { boardType, loginModalIsOpen, loginUser } from '../../store/atoms';
-import { ToastSuccess } from '../Toast';
+import { ToastError, ToastSuccess } from '../Toast';
 import './Header.scss';
+import { statusChatApi } from '../../api/board';
 
 const Header = () => {
     const navigate = useNavigate();
@@ -14,6 +15,7 @@ const Header = () => {
     const [themeColor, setThemeColor] = useState(document.body.dataset.theme);
     const [modalIsOpen, setIsOpen] = useRecoilState(loginModalIsOpen);
     const [boardTypeNum, setBoardTypeNum] = useRecoilState(boardType);
+    const [readStatus, setReadStatus] = useState(0);
     const ServerImgUrl = import.meta.env.VITE_SERVER_IMG_URL;
 
     const themeOnClick = (color: string) => {
@@ -45,6 +47,19 @@ const Header = () => {
         }
     }
 
+    const statusChat = async () => {
+        try {
+            const data = await statusChatApi(userInfo[0].userNo);
+            setReadStatus(data[0].readStatus);
+        } catch (e) {
+            ToastError("채팅 상태를 가져올 수 없어요");
+        }
+    }
+
+    useEffect(() => {
+        if (userInfo[0].userNo !== 0) statusChat();
+    }, [userInfo]);
+
     return (
         <div className="header-container">
             <div className="header-home">
@@ -65,6 +80,7 @@ const Header = () => {
                             {/* <img className="header-notificationImg" src="/notification.svg" alt="notification" /> */}
                             <img className="header-chatImg" onClick={() => navigate("/Chat")}
                                 src="/chat.svg" alt="chat" />
+                            {readStatus > 0 && <div className='readStatus-dot' />}
                         </div>
                         <div className="header-block">
                             <img className="header-userImg" src={`${ServerImgUrl}${userInfo[0].imgUrl}`} alt={userInfo[0].imgUrl} />

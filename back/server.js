@@ -165,7 +165,8 @@ const chatListApi = async (userNo) => {
 
 app.get("/api/userList", async (req, res) => {
     try {
-        const [rows] = await mysql.query("SELECT nickname label, userNo value FROM user");
+        // const [rows] = await mysql.query("SELECT nickname label, userNo value FROM user");
+        const [rows] = await mysql.query("SELECT imgUrl, nickname, userNo, profileContents FROM user");
         return res.status(200).send(rows);
     } catch (e) {
         console.error(e);

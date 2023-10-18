@@ -159,7 +159,8 @@
     background-color: coral;
     color: var(--font-color);
     width: 100px;
-    margin-left: 20px;
+    margin-top: 20px;
+    height: 40px;
     border-radius: 5px;
 
     &:hover {
@@ -179,6 +180,7 @@
     overflow: scroll;
     margin-top: 20px;
     box-sizing: border-box;
+    width: 70%;
 }
 
 .chatUserRoom {
@@ -211,6 +213,66 @@
     opacity: 0.7;
     font-size: 16px;
     margin-left: auto;
+}
+
+.chatUserRoom-flex {
+    display: flex;
+}
+
+.chatUserSelect {
+    width: 30%;
+    margin-top: 20px;
+    margin-left: 20px;
+}
+
+.chatUserSelect-img {
+    width: 100px;
+    height: 100px;
+    object-fit: cover;
+    background-color: white;
+    border-radius: 1000px;
+    border: 1px solid var(--element-color);
+}
+
+.chatUserSelect-box {
+    padding: 20px;
+    text-align: center;
+    background-color: var(--element-color);
+    border-radius: 20px;
+    margin-bottom: 20px;
+    font-size: 18px;
+
+    img,
+    p {
+        cursor: pointer;
+    }
+}
+
+.chatUserSelect-profileContents {
+    font-size: 16px;
+}
+
+.chatUserSelectList {
+    background-color: var(--element-color);
+    padding: 20px;
+    font-size: 18px;
+    max-height: 400px;
+    overflow: scroll;
+    box-sizing: border-box;
+    border-radius: 20px;
+}
+
+.chatUserList {
+    display: flex;
+    align-items: center;
+    gap: 20px;
+    padding: 10px;
+    border-radius: 20px;
+    cursor: pointer;
+
+    &:hover {
+        background-color: var(--element-hover-color);
+    }
 }
 
 @media (max-width: 768px) {
@@ -255,10 +317,14 @@
         font-size: 12px;
     }
 
+    .selectBtn {
+        height: 30px;
+    }
+
     .chatUserRoom-container {
-        max-height: 600px;
         padding: 10px;
         gap: 0;
+        width: 100%;
     }
 
     .chatUserRoom {
@@ -268,5 +334,37 @@
 
     .chatUserRoom-msg {
         font-size: 14px;
+    }
+
+    .chatUserRoom-flex {
+        display: block;
+    }
+
+    .chatUserSelect {
+        width: 100%;
+        margin-left: 0;
+    }
+
+    .chatUserSelect-img {
+        width: 80px;
+        height: 80px;
+    }
+
+    .chatUserSelect-box {
+        font-size: 16px;
+    }
+
+    .chatUserSelect-profileContents {
+        font-size: 14px;
+    }
+
+    .chatUserSelectList {
+        max-height: 300px;
+        font-size: 16px;
+        padding: 10px;
+    }
+
+    .chatUserList {
+        gap: 10px;
     }
 }

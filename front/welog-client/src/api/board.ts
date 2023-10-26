@@ -1,5 +1,10 @@
 import axios from "axios";
 
+export const statusAlramApi = async (userNo: number) => {
+    const { data } = await axios.post("/statusAlram", { userNo });
+    return data;
+}
+
 export const statusChatApi = async (userNo: number) => {
     const { data } = await axios.post("/statusChat", { userNo });
     return data;
@@ -39,7 +44,8 @@ export const postUserProfileApi = async (userNickname: string) => {
     return data;
 }
 
-export const writeBoardSubCommentApi = async (boardNo: number, commentNo: number, boardSubCommentAdd: string, userNo: number, lockState: number) => {
+export const writeBoardSubCommentApi = async (boardNo: number, commentNo: number, boardSubCommentAdd: string,
+    userNo: number, lockState: number) => {
     const { data } = await axios.post("/writeBoardSubComment", { boardNo, commentNo, boardSubCommentAdd, userNo, lockState });
     return data;
 }
@@ -49,7 +55,8 @@ export const deleteBoardCommentApi = async (boardNo: number, commentNo: number) 
     return data;
 }
 
-export const updateBoardCommentApi = async (boardNo: number, boardCommentUpdate: string, userNo: number, commentNo: number) => {
+export const updateBoardCommentApi = async (boardNo: number, boardCommentUpdate: string,
+    userNo: number, commentNo: number) => {
     const { data } = await axios.post("/updateBoardComment", { boardNo, boardCommentUpdate, userNo, commentNo });
     return data;
 }

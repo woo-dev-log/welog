@@ -163,6 +163,23 @@ const chatListApi = async (userNo) => {
     }
 };
 
+app.post("/api/statusAlram", async (req, res) => {
+    try {
+        const { userNo } = req.body;
+        
+        const [rows] = await mysql.query(`
+            SELECT * 
+            FROM notification 
+            WHERE userNo != ? AND toUserNo = ?
+        `, [userNo, userNo]);
+        
+        return res.status(200).send(rows);
+    } catch (e) {
+        console.error(e);
+        return res.status(400).send("fail");
+    }
+});
+
 app.post("/api/statusChat", async (req, res) => {
     try {
         const { userNo } = req.body;
@@ -362,13 +379,13 @@ app.post("/api/deleteBoardComment", async (req, res) => {
 
 app.post("/api/updateBoardComment", async (req, res) => {
     try {
-        const { boardNo, boardCommentUpdate, userNo, commentNo } = req.body;
+        const { boardNo, boardCommentUpdate, userNo, commentNo, lockState } = req.body;
         if (userNo === 0) {
             return res.status(400).send("fail");
         } else {
             const [rows] = await mysql.query(`
             UPDATE comment 
-            SET contents = ?, updateDate = now(), lockState = ? 
+            SET contents = ?, updateDate = now() 
             WHERE boardNo = ? AND userNo = ? AND commentNo = ?
             `, [boardCommentUpdate, boardNo, userNo, commentNo]);
 

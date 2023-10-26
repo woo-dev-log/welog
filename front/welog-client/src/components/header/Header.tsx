@@ -6,7 +6,15 @@ import Swal from 'sweetalert2';
 import { boardType, loginModalIsOpen, loginUser } from '../../store/atoms';
 import { ToastError, ToastSuccess } from '../Toast';
 import './Header.scss';
-import { statusChatApi } from '../../api/board';
+import { statusAlramApi, statusChatApi } from '../../api/board';
+
+interface alramMessageType {
+    userNo: number;
+    toUserNo: number;
+    contents: string;
+    sendDate: Date;
+    readStatus: number;
+}
 
 const Header = () => {
     const navigate = useNavigate();
@@ -15,7 +23,8 @@ const Header = () => {
     const [themeColor, setThemeColor] = useState(document.body.dataset.theme);
     const [modalIsOpen, setIsOpen] = useRecoilState(loginModalIsOpen);
     const [boardTypeNum, setBoardTypeNum] = useRecoilState(boardType);
-    const [readStatus, setReadStatus] = useState(0);
+    const [readStatusChat, setReadStatusChat] = useState(0);
+    const [alramMessage, setAlramMessage] = useState<alramMessageType[]>([]);
     const ServerImgUrl = import.meta.env.VITE_SERVER_IMG_URL;
 
     const themeOnClick = (color: string) => {
@@ -50,7 +59,17 @@ const Header = () => {
     const statusChat = async () => {
         try {
             const data = await statusChatApi(userInfo[0].userNo);
-            setReadStatus(data[0].readStatus);
+            setReadStatusChat(data[0].readStatusChat);
+        } catch (e) {
+            ToastError("채팅 상태를 가져올 수 없어요");
+        }
+    }
+
+    const statusAlram = async () => {
+        try {
+            const data = await statusAlramApi(userInfo[0].userNo);
+            setAlramMessage(data);
+            console.log(data);
         } catch (e) {
             ToastError("채팅 상태를 가져올 수 없어요");
         }
@@ -58,6 +77,7 @@ const Header = () => {
 
     useEffect(() => {
         if (userInfo[0].userNo !== 0) statusChat();
+        if (userInfo[0].userNo !== 0) statusAlram();
     }, [userInfo]);
 
     return (
@@ -77,11 +97,18 @@ const Header = () => {
                 {userInfo[0].userNo !== 0 ?
                     <>
                         <div className='header-loginBlock'>
-                            {/* <img className="header-notificationImg" src="/notification.svg" alt="notification" /> */}
+                            <div className='header-alram'>
+                                <img className="header-notificationImg" src="/notification.svg" alt="notification" />
+                                <ul>
+                                    {alramMessage.map((d, i) => <li key={i}>{d.contents}</li>)}
+                                </ul>
+                            </div>
+
                             <img className="header-chatImg" onClick={() => navigate("/Chat")}
                                 src="/chat.svg" alt="chat" />
-                            {readStatus > 0 && <div className='readStatus-dot' />}
+                            {readStatusChat > 0 && <div className='readStatus-dot' />}
                         </div>
+
                         <div className="header-block">
                             <img className="header-userImg" src={`${ServerImgUrl}${userInfo[0].imgUrl}`} alt={userInfo[0].imgUrl} />
                             <div className="header-nickname">{userInfo[0].nickname}</div>

@@ -74,6 +74,38 @@
                 height: 35px;
             }
 
+            .header-alram {
+                &:hover{
+                    ul {
+                        display: block;
+                        z-index: 1;
+                    }
+                }
+
+                ul {
+                    display: none;
+                    position: absolute;
+                    list-style: none;
+                    background-color: var(--element-color);
+                    top: 25px;
+                    right: 55px;
+                    width: 100px;
+                    padding: 20px 20px 10px;
+                    font-size: 18px;
+    
+                    li {
+                        margin-bottom: 10px;
+    
+                        span {
+                            &:hover {
+                                cursor: pointer;
+                                color: coral;
+                            }
+                        }
+                    }
+                }
+            }
+
             .header-notificationImg {
                 cursor: pointer;
                 width: 40px;

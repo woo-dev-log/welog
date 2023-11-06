@@ -163,16 +163,33 @@ const chatListApi = async (userNo) => {
     }
 };
 
+app.post("/api/statusUpdateAlram", async (req, res) => {
+    try {
+        const { alramNo } = req.body;
+
+        const [rows] = await mysql.query(`
+            UPDATE notification SET readStatus = 1 WHERE notificationNo = ?
+        `, [alramNo]);
+        return res.status(200).send(rows);
+    } catch (e) {
+        console.error(e);
+        return res.status(400).send("fail");
+    }
+});
+
 app.post("/api/statusAlram", async (req, res) => {
     try {
         const { userNo } = req.body;
-        
+
         const [rows] = await mysql.query(`
-            SELECT * 
-            FROM notification 
-            WHERE userNo != ? AND toUserNo = ?
-        `, [userNo, userNo]);
-        
+            SELECT *, (SELECT COUNT(*) FROM notification WHERE readStatus = 0 AND userNo != ? AND toUserNo = ?) as unreadCount 
+            FROM notification n 
+            LEFT JOIN board b ON n.boardNo = b.boardNo 
+            LEFT JOIN user u ON n.userNo = u.userNo 
+            WHERE n.userNo != ? AND n.toUserNo = ?
+            ORDER BY n.sendDate DESC;
+        `, [userNo, userNo, userNo, userNo]);
+
         return res.status(200).send(rows);
     } catch (e) {
         console.error(e);
@@ -183,13 +200,13 @@ app.post("/api/statusAlram", async (req, res) => {
 app.post("/api/statusChat", async (req, res) => {
     try {
         const { userNo } = req.body;
-        
+
         const [rows] = await mysql.query(`
             SELECT COUNT(*) readStatus 
             FROM chat 
             WHERE userNo != ? AND toUserNo = ? AND readStatus = 0;
         `, [userNo, userNo]);
-        
+
         return res.status(200).send(rows);
     } catch (e) {
         console.error(e);
@@ -399,7 +416,7 @@ app.post("/api/updateBoardComment", async (req, res) => {
 
 app.post("/api/writeBoardComment", async (req, res) => {
     try {
-        const { boardNo, boardCommentAdd, userNo, lockState } = req.body;
+        const { boardNo, boardCommentAdd, userNo, toUserNo, lockState } = req.body;
         if (userNo === 0) {
             return res.status(400).send("fail");
         } else {
@@ -408,6 +425,12 @@ app.post("/api/writeBoardComment", async (req, res) => {
             comment(boardNo, userNo, contents, rgstrDate, lockState)   
             VALUES(?, ?, ?, now(), ?)
             `, [boardNo, userNo, boardCommentAdd, lockState]);
+
+            await mysql.query(`
+            INSERT INTO
+            notification(boardNo, userNo, toUserNo, contents, sendDate)   
+            VALUES(?, ?, ?, ?, now())
+            `, [boardNo, userNo, toUserNo, boardCommentAdd]);
 
             return res.status(200).send("success");
         }

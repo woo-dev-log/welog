@@ -147,7 +147,7 @@ const BoardComment = ({ IntBoardNo, IntBoardUserNo }: { IntBoardNo: number, IntB
 
         const lock = lockState ? 1 : 0;
         try {
-            await writeBoardCommentApi(IntBoardNo, boardCommentWrite, userInfo[0].userNo, lock);
+            await writeBoardCommentApi(IntBoardNo, boardCommentWrite, userInfo[0].userNo, IntBoardUserNo, lock);
             setBoardCommentWrite("");
             ToastSuccess("댓글이 작성되었어요!");
             getBoardComment();

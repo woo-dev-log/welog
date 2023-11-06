@@ -88,21 +88,40 @@
                     list-style: none;
                     background-color: var(--element-color);
                     top: 25px;
-                    right: 55px;
-                    width: 100px;
+                    right: 10px;
+                    width: 200px;
                     padding: 20px 20px 10px;
-                    font-size: 18px;
+                    font-size: 14px;
     
                     li {
                         margin-bottom: 10px;
     
                         span {
+                            .alramMessageTitle {
+                                display: flex;
+                                justify-content: space-between;
+                                align-items: center;
+                                font-size: 16px;
+
+                                .readStatusAlram-dot {
+                                    width: 10px;
+                                    height: 10px;
+                                    border-radius: 1000px;
+                                    background-color: coral;
+                                }
+                            }
+
                             &:hover {
                                 cursor: pointer;
                                 color: coral;
                             }
                         }
                     }
+                }
+
+                .readStatus-dot {
+                    position: absolute;
+                    left: 35px;
                 }
             }
 
@@ -114,8 +133,8 @@
 
             .readStatus-dot {
                 position: absolute;
-                left: 35px;
-                top: 20px;
+                left: 80px;
+                top: 25px;
             }
         }
 
@@ -170,7 +189,7 @@
                 right: 0px;
                 width: 100px;
                 padding: 20px 20px 10px;
-                font-size: 18px;
+                font-size: 16px;
 
                 li {
                     margin-bottom: 10px;
@@ -232,9 +251,30 @@
                     height: 30px;
                 }
 
+                .header-alram {
+                    ul {
+                        top: 25px;
+                        font-size: 12px;
+                        padding: 20px 10px 10px;
+                        right: 5px;
+
+                        li {
+                            span {
+                                .alramMessageTitle {
+                                    font-size: 14px;
+                                }
+                            }
+                        }
+                    }
+
+                    .readStatus-dot {
+                        left: 62px;
+                    }
+                }
+
                 .readStatus-dot {
-                    left: 26px;
-                    top: 13px;
+                    left: 28px;
+                    top: 18px;
                 }
             }
 
@@ -245,8 +285,9 @@
                 }
 
                 ul {
-                    top: 29px;
-                    font-size: 16px;
+                    top: 35px;
+                    font-size: 14px;
+                    padding: 20px 10px 10px;
                 }
             }
         }

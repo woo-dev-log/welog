@@ -1,5 +1,10 @@
 import axios from "axios";
 
+export const statusUpdateAlramApi = async (alramNo: number) => {
+    const { data } = await axios.post("/statusUpdateAlram", { alramNo });
+    return data;
+}
+
 export const statusAlramApi = async (userNo: number) => {
     const { data } = await axios.post("/statusAlram", { userNo });
     return data;
@@ -61,8 +66,9 @@ export const updateBoardCommentApi = async (boardNo: number, boardCommentUpdate:
     return data;
 }
 
-export const writeBoardCommentApi = async (boardNo: number, boardCommentAdd: string, userNo: number, lockState: number) => {
-    const { data } = await axios.post("/writeBoardComment", { boardNo, boardCommentAdd, userNo, lockState });
+export const writeBoardCommentApi = async (boardNo: number, boardCommentAdd: string,
+    userNo: number, toUserNo: number, lockState: number) => {
+    const { data } = await axios.post("/writeBoardComment", { boardNo, boardCommentAdd, userNo, toUserNo, lockState });
     return data;
 }
 

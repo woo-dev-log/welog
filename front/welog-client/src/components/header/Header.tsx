@@ -6,14 +6,19 @@ import Swal from 'sweetalert2';
 import { boardType, loginModalIsOpen, loginUser } from '../../store/atoms';
 import { ToastError, ToastSuccess } from '../Toast';
 import './Header.scss';
-import { statusAlramApi, statusChatApi } from '../../api/board';
+import { statusAlramApi, statusChatApi, statusUpdateAlramApi } from '../../api/board';
 
 interface alramMessageType {
+    notificationNo: number;
     userNo: number;
+    boardNo: number;
     toUserNo: number;
     contents: string;
     sendDate: Date;
     readStatus: number;
+    title: string;
+    nickname: string;
+    unreadCount: number;
 }
 
 const Header = () => {
@@ -24,6 +29,7 @@ const Header = () => {
     const [modalIsOpen, setIsOpen] = useRecoilState(loginModalIsOpen);
     const [boardTypeNum, setBoardTypeNum] = useRecoilState(boardType);
     const [readStatusChat, setReadStatusChat] = useState(0);
+    const [readStatusAlram, setReadStatusAlram] = useState(0);
     const [alramMessage, setAlramMessage] = useState<alramMessageType[]>([]);
     const ServerImgUrl = import.meta.env.VITE_SERVER_IMG_URL;
 
@@ -54,30 +60,46 @@ const Header = () => {
             removeCookie("welogJWT", { path: '/', sameSite: 'strict' });
             setUserInfo([{ userNo: 0, nickname: "", id: "", imgUrl: "" }]);
         }
-    }
+    };
 
     const statusChat = async () => {
         try {
             const data = await statusChatApi(userInfo[0].userNo);
-            setReadStatusChat(data[0].readStatusChat);
+            setReadStatusChat(data[0].readStatus);
         } catch (e) {
             ToastError("채팅 상태를 가져올 수 없어요");
         }
-    }
+    };
 
     const statusAlram = async () => {
         try {
             const data = await statusAlramApi(userInfo[0].userNo);
             setAlramMessage(data);
-            console.log(data);
+            data[0] && setReadStatusAlram(data[0].unreadCount);
         } catch (e) {
-            ToastError("채팅 상태를 가져올 수 없어요");
+            console.log(e);
+            ToastError("알림 상태를 가져올 수 없어요");
         }
-    }
+    };
+
+    const onClickAlram = async (no: number, status: number, alramNo: number, boardNo: number) => {
+        try {
+            if (status === 0) {
+                await statusUpdateAlramApi(alramNo);
+                alramMessage[no].readStatus = 1;
+                setReadStatusAlram(readStatusAlram - 1);
+            }
+            navigate("/" + boardNo);
+        } catch (e) {
+            ToastError("알림 상태를 변경할 수 없어요");
+        }
+    };
 
     useEffect(() => {
-        if (userInfo[0].userNo !== 0) statusChat();
-        if (userInfo[0].userNo !== 0) statusAlram();
+        if (userInfo[0].userNo !== 0) {
+            statusChat();
+            statusAlram();
+        }
     }, [userInfo]);
 
     return (
@@ -100,8 +122,16 @@ const Header = () => {
                             <div className='header-alram'>
                                 <img className="header-notificationImg" src="/notification.svg" alt="notification" />
                                 <ul>
-                                    {alramMessage.map((d, i) => <li key={i}>{d.contents}</li>)}
+                                    {alramMessage.map((d, i) => <li key={i}>
+                                        <span onClick={() => onClickAlram(i, d.readStatus, d.notificationNo, d.boardNo)}>
+                                            <div className='alramMessageTitle'>{d.title}
+                                                {d.readStatus === 0 && <div className='readStatusAlram-dot' />}
+                                            </div>
+                                            <div>{d.nickname}님이 새 댓글을 작성했어요</div>
+                                        </span>
+                                    </li>)}
                                 </ul>
+                                {readStatusAlram > 0 && <div className='readStatus-dot' />}
                             </div>
 
                             <img className="header-chatImg" onClick={() => navigate("/Chat")}

@@ -7,9 +7,11 @@ dayjs.extend(relativeTime);
 dayjs.extend(utc);
 dayjs.extend(timezone);
 
-const DayFormat = (date: Date) => {
+const DayFormat = (date: Date, type?: number) => {
     const now = dayjs().tz('Asia/Seoul');
     const localDate = dayjs.utc(date).tz('Asia/Seoul').subtract(9, 'hour');
+
+    if(type === 1) return localDate.format('YY.MM.DD HH:mm');
 
     if (now.diff(localDate, 'year') !== 0 || now.diff(localDate, 'month') >= 1) {
         return localDate.format('YY.MM.DD HH:mm');

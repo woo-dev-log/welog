@@ -7,6 +7,7 @@ import { boardType, loginModalIsOpen, loginUser } from '../../store/atoms';
 import { ToastError, ToastSuccess } from '../Toast';
 import './Header.scss';
 import { statusAlramApi, statusChatApi, statusUpdateAlramApi } from '../../api/board';
+import DayFormat from '../DayFormat';
 
 interface alramMessageType {
     notificationNo: number;
@@ -122,21 +123,29 @@ const Header = () => {
                             <div className='header-alram'>
                                 <img className="header-notificationImg" src="/notification.svg" alt="notification" />
                                 <ul>
-                                    {alramMessage.map((d, i) => <li key={i}>
+                                    {alramMessage.length > 0 ? alramMessage.map((d, i) => <li key={i}>
                                         <span onClick={() => onClickAlram(i, d.readStatus, d.notificationNo, d.boardNo)}>
-                                            <div className='alramMessageTitle'>{d.title}
+                                            <div className='alramMessageHeader'>
+                                                {DayFormat(d.sendDate, 1)}
                                                 {d.readStatus === 0 && <div className='readStatusAlram-dot' />}
                                             </div>
-                                            <div>{d.nickname}님이 새 댓글을 작성했어요</div>
+                                            <div className='alramMessageTitle'>{d.title}</div>
+                                            <div>
+                                                <span className='alramMessageNickname'>{d.nickname}</span>
+                                                님이 새 댓글을 작성했어요
+                                            </div>
                                         </span>
-                                    </li>)}
+                                    </li>)
+                                        : <li><span><div className='alramMessageTitle'>알림이 없어요</div></span></li>}
                                 </ul>
                                 {readStatusAlram > 0 && <div className='readStatus-dot' />}
                             </div>
 
-                            <img className="header-chatImg" onClick={() => navigate("/Chat")}
-                                src="/chat.svg" alt="chat" />
-                            {readStatusChat > 0 && <div className='readStatus-dot' />}
+                            <div>
+                                <img className="header-chatImg" onClick={() => navigate("/Chat")}
+                                    src="/chat.svg" alt="chat" />
+                                {readStatusChat > 0 && <div className='readStatus-dot' />}
+                            </div>
                         </div>
 
                         <div className="header-block">

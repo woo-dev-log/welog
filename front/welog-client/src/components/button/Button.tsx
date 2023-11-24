@@ -7,7 +7,7 @@ interface Props {
     text: string;
 }
 
-const Button = ({ className, disabled, onClick, text }: Props) => {
+const Button = ({ className = "button", disabled, onClick, text }: Props) => {
     return (
         <button
             className={className}

@@ -161,7 +161,7 @@ const SignUp = () => {
             <label className="signUp-imgSelect" htmlFor="profileImg">사진 선택</label>
             <input type="file" accept="image/*" onChange={uploadImageOnChange} id="profileImg" />
             <div className="signUp-nickname">
-                <Input type="text" placeholder='닉네임' onChange={nicknameCheckOnChange} />
+                <Input type="text" placeholder='닉네임' onChange={nicknameCheckOnChange} autoFocus={true} />
                 {checkNickname &&
                     <div style={dupCheckNickname
                         ? { marginTop: '10px', color: 'green', fontSize: '14px' }

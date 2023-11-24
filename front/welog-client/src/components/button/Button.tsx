@@ -1,14 +1,21 @@
 import React from "react";
 
 interface Props {
+    className?: string;
+    disabled?: boolean;
     onClick: React.MouseEventHandler<HTMLButtonElement>;
-    // onClick: (e: React.MouseEvent<HTMLButtonElement>) => void;
     text: string;
-    disabled? : boolean;
 }
 
-const Button = ({ onClick, text, disabled }: Props) => {
-    return <button className="button" onClick={onClick} disabled={disabled}>{text}</button>
+const Button = ({ className, disabled, onClick, text }: Props) => {
+    return (
+        <button
+            className={className}
+            disabled={disabled}
+            onClick={onClick}>
+            {text}
+        </button>
+    )
 }
 
 export default Button;

@@ -183,6 +183,11 @@
     width: 70%;
 }
 
+.chatUserRoom-container::-webkit-scrollbar {
+    display: none;
+    width: 0px;
+}
+
 .chatUserRoom {
     display: flex;
     align-items: center;
@@ -260,6 +265,12 @@
     overflow: scroll;
     box-sizing: border-box;
     border-radius: 20px;
+
+}
+
+.chatUserSelectList::-webkit-scrollbar {
+    display: none;
+    width: 0px;
 }
 
 .chatUserList {

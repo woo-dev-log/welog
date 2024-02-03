@@ -45,6 +45,11 @@
     margin-bottom: 10px;
 }
 
+.chatMsg-container::-webkit-scrollbar {
+    display: none;
+    width: 0;
+}
+
 .chat-img {
     width: 30px;
     height: 30px;

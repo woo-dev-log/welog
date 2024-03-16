@@ -53,6 +53,7 @@ const BoardWrite = () => {
                     quill.setSelection(range.index + 1);
                 } catch (error) {
                     console.error(error);
+                    ToastError("이미지 업로드에 실패했어요");
                 }
             }
         };
@@ -201,9 +202,7 @@ const BoardWrite = () => {
         } else setContents("");
 
         if (updateValue.tags) {
-            let tagsValue: string[] = []
-            updateValue.tags.split(",").map((v, i) => tagsValue.push(v));
-            setTags([...tagsValue]);
+            setTags(updateValue.tags.split(","));
         } else setTags([]);
     }, [updateValue.titleValue, updateValue.contentsValue, updateValue.tags]);
 

@@ -153,8 +153,12 @@
             .boardDetail-contents {
                 min-height: 100px;
 
+                a {
+                    color: coral;
+                }
+
                 .ql-syntax {
-                    background-color: var(--element-hover-color);
+                    background-color: #2E2E2E;
                     border-radius: 5px;
                     padding: 10px;
                     overflow: auto;
@@ -222,7 +226,7 @@
                     height: 30px;
                 }
 
-                .boardDetail-titleBox {                    
+                .boardDetail-titleBox {
                     .boardDetail-title {
                         font-size: 16px;
                         width: 75%;

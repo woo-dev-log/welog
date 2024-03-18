@@ -132,8 +132,8 @@ const BoardDetail = () => {
 
                             <div className="boardDetail-writerContainer">
                                 <div className="boardDetail-date">
-                                    <p className="boardDetail-rgstrDate">{dayjs(boardDetail[0].rgstrDate).subtract(9, "hour").format('YY.MM.DD HH:mm')} 작성</p>
-                                    {boardDetail[0].updateDate && <p className="boardDetail-rgstrDate">{dayjs(boardDetail[0].updateDate).subtract(9, "hour").format('YY.MM.DD HH:mm')} 수정</p>}
+                                    <p className="boardDetail-rgstrDate">{dayjs(boardDetail[0].rgstrDate).format('YY.MM.DD HH:mm')} 작성</p>
+                                    {boardDetail[0].updateDate && <p className="boardDetail-rgstrDate">{dayjs(boardDetail[0].updateDate).format('YY.MM.DD HH:mm')} 수정</p>}
                                 </div>
                                 <div className="boardDetail-userProfile">
                                     <img src={`${ServerImgUrl}${boardDetail[0].imgUrl}`} alt="userProfileImg" loading="lazy"

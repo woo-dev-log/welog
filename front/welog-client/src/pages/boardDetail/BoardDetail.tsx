@@ -11,14 +11,15 @@ import Line from "../../components/line/Line";
 import Button from "../../components/button/Button";
 import BoardComment from "../boardComment/BoardComment";
 import "./BoardDetail.scss";
+import DayFormat from "../../components/DayFormat";
 
 interface BoardDetailType {
     boardNo: number;
     userNo: number;
     title: string;
     contents: string;
-    rgstrDate: string;
-    updateDate: string;
+    rgstrDate: Date;
+    updateDate: Date;
     views: number;
     tags: string,
     boardImgUrl: string;
@@ -132,8 +133,8 @@ const BoardDetail = () => {
 
                             <div className="boardDetail-writerContainer">
                                 <div className="boardDetail-date">
-                                    <p className="boardDetail-rgstrDate">{dayjs(boardDetail[0].rgstrDate).format('YY.MM.DD HH:mm')} 작성</p>
-                                    {boardDetail[0].updateDate && <p className="boardDetail-rgstrDate">{dayjs(boardDetail[0].updateDate).format('YY.MM.DD HH:mm')} 수정</p>}
+                                    <p className="boardDetail-rgstrDate">{DayFormat(boardDetail[0].rgstrDate, 1)} 작성</p>
+                                    {boardDetail[0].updateDate && <p className="boardDetail-rgstrDate">{DayFormat(boardDetail[0].updateDate, 1)} 수정</p>}
                                 </div>
                                 <div className="boardDetail-userProfile">
                                     <img src={`${ServerImgUrl}${boardDetail[0].imgUrl}`} alt="userProfileImg" loading="lazy"

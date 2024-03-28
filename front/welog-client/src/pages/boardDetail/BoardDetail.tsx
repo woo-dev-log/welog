@@ -12,6 +12,7 @@ import Button from "../../components/button/Button";
 import BoardComment from "../boardComment/BoardComment";
 import "./BoardDetail.scss";
 import DayFormat from "../../components/DayFormat";
+import ProgressBar from "../../components/progressBar/ProgressBar";
 
 interface BoardDetailType {
     boardNo: number;
@@ -112,6 +113,7 @@ const BoardDetail = () => {
             {isLoading
                 ? boardDetail[0] &&
                 <>
+                    <ProgressBar />
                     <SEO title="상세 글" contents={boardDetail[0].title} />
                     <button className="boardDetail-backbutton" onClick={() => navigate(-1)}>&lt;&nbsp;&nbsp;이전으로</button>
                     <section className="boardDetail-section">

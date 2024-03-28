@@ -1,0 +1,14 @@
+.progressbar-read {
+    position: fixed;
+    width: 100%;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    border: none;
+    height: 10px;
+}
+
+// 진행 막대 색상 변경
+.progressbar-read::-webkit-progress-value {
+    background-color: coral;
+}

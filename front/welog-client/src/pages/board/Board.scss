@@ -209,6 +209,22 @@
                 height: 440px;
             }
         }
+
+        .main-section {
+            display: block;
+        }
+
+        .link-section {
+            width: 100%;
+            padding: 30px 20px;
+            border-radius: 10px;
+            box-sizing: border-box;
+            margin-bottom: 30px;
+        }
+    
+        .boardDaily-section {
+            width: 100%;
+        }
     }
 }
 

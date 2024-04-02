@@ -1,4 +1,5 @@
 .progressbar-read {
+    appearance: none; // 모바일 대응, 기존 버튼 css제거
     position: fixed;
     width: 100%;
     left: 0;

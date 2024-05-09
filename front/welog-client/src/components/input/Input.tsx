@@ -12,7 +12,7 @@ interface Props {
     onFocus?: React.FocusEventHandler<HTMLInputElement>;
 }
 
-const Input = ({ type = "text", className = "input", placeholder, autoFocus, disabled, value = "", ...rest }: Props) => {
+const Input = ({ type = "text", className = "input", placeholder, autoFocus, disabled, ...rest }: Props) => {
     return (
         <input
             name="input"
@@ -21,7 +21,6 @@ const Input = ({ type = "text", className = "input", placeholder, autoFocus, dis
             placeholder={placeholder}
             autoFocus={autoFocus}
             disabled={disabled}
-            value={value}
             {...rest}
         />
     );

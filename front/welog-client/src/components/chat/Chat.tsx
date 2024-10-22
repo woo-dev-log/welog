@@ -50,6 +50,7 @@ const Chat = () => {
     const [sortOption, setSortOption] = useState<UserProfileType[]>([]);
     const [selectUser, setSelectUser] = useState<UserProfileType>();
     const { toUserNo } = useParams();
+    const [isLoggedIn, setIsLoggedIn] = useState<Boolean>(false);
     const ServerImgUrl = import.meta.env.VITE_SERVER_IMG_URL;
     const scrollRef = useRef<HTMLDivElement | null>(null);
     const navigate = useNavigate();
@@ -87,6 +88,10 @@ const Chat = () => {
             console.error(e);
         }
     };
+
+    useEffect(() => {
+        userInfo[0].userNo !== 0 ? setIsLoggedIn(true) : setIsLoggedIn(false);
+    }, [userInfo]);
 
     useEffect(() => {
         if (scrollRef.current) {
@@ -156,7 +161,7 @@ const Chat = () => {
                     </div>
 
                     <div ref={scrollRef} className='chatMsg-container'>
-                        {userInfo[0].userNo === 0
+                        {!isLoggedIn
                             ? <div>로그인을 해주세요</div>
                             : messages.map((data, i) =>
                                 <div key={i} className={userInfo[0].userNo === data.userNo ? 'chat-myProfile' : 'chat-otherProfile'}>
@@ -176,7 +181,7 @@ const Chat = () => {
                                 </div>)}
                     </div>
 
-                    {userInfo[0].userNo !== 0 &&
+                    {isLoggedIn &&
                         <div className='chat-send'>
                             <textarea className='chat-textArea' placeholder="내용을 입력해주세요"
                                 onChange={(e) => setMessage(e.target.value)} value={message} />
@@ -185,7 +190,7 @@ const Chat = () => {
                 </>
                 : <div className='chatUserRoom-flex'>
                     <div className='chatUserRoom-container'>
-                        {userInfo[0].userNo !== 0 && chatList
+                        {isLoggedIn && chatList
                             ? chatList.map((data, i) =>
                                 <div key={i} className='chatUserRoom' onClick={() => navigate("/Chat/" + data.userNo)}>
                                     <img src={`${ServerImgUrl}${data.imgUrl}`} alt="userImg"

@@ -151,7 +151,8 @@ const Board = () => {
                                 </div>
                             </section>
                             <section className="boardDaily-section">
-                                <h2>이번주 댓글 Top {boardDailyList.length}</h2>
+                                {/* <h2>이번주 댓글 Top {boardDailyList.length}</h2> */}
+                                <h2>최근에 댓글이 달린 글</h2>
                                 <Slider {...settings}>
                                     {boardDailyList.map((boardDaily, i) => (
                                         <article key={i} className="boardDaily-article">

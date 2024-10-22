@@ -600,11 +600,12 @@ app.get("/api/boardDaily", async (req, res) => {
         FROM board b 
         INNER JOIN comment c ON b.boardNo = c.boardNo 
         INNER JOIN user u ON u.userNo = b.userNo 
-        WHERE c.rgstrDate BETWEEN DATE_SUB(NOW(), INTERVAL 1 WEEK) AND NOW() 
         GROUP BY c.boardNo  
         ORDER BY weekCommentCnt DESC
-        LIMIT 5;
+        LIMIT 3;
         `);
+        // WHERE c.rgstrDate BETWEEN DATE_SUB(NOW(), INTERVAL 1 WEEK) AND NOW() 
+        // LIMIT 5;
         return res.status(200).send(rows);
     } catch (e) {
         console.error(e);

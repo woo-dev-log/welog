@@ -147,15 +147,19 @@ const chatListApi = async (userNo) => {
         const [rows] = await mysql.query(`
             SELECT c.*, u.*
             FROM (
-                SELECT MAX(chatNo) as maxChatNo, userNo, readStatus 
-                FROM chat 
-                WHERE FIND_IN_SET(?, roomUsers) 
-                GROUP BY roomNo
-            ) as latestChats
-            JOIN chat c ON c.chatNo = latestChats.maxChatNo 
-            LEFT JOIN user u ON u.userNo = CASE WHEN c.userNo = ? THEN c.toUserNo ELSE c.userNo END 
+                SELECT chatNo
+                FROM chat as outerChat
+                WHERE FIND_IN_SET(?, roomUsers)
+                AND chatNo = (
+                    SELECT MAX(chatNo)
+                    FROM chat
+                    WHERE FIND_IN_SET(?, roomUsers) AND roomNo = outerChat.roomNo
+                )
+            ) AS latestChats
+            JOIN chat c ON c.chatNo = latestChats.chatNo
+            LEFT JOIN user u ON u.userNo = CASE WHEN c.userNo = ? THEN c.toUserNo ELSE c.userNo END
             ORDER BY c.chatNo DESC;
-        `, [userNo, userNo]);
+        `, [userNo, userNo, userNo]);
 
         return rows;
     } catch (e) {

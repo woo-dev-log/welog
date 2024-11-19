@@ -4,7 +4,7 @@ import { useQuery } from "react-query";
 import { useNavigate, useParams, useSearchParams } from "react-router-dom";
 import { useRecoilState } from "recoil";
 import { getBoardApi, getUserBoardApi, postBoardApi, updateBoardViewsApi } from "../../api/board";
-import { board, boardSort } from "../../store/atoms";
+import { board, boardSort, boardType } from "../../store/atoms";
 import DayFormat from "../DayFormat";
 import Paging from "../paging/Paging";
 import { ToastError } from "../Toast";
@@ -32,12 +32,13 @@ const Post = () => {
     const [cookies, setCookie, removeCookie] = useCookies(['viewPost', 'isWrap']);
     const [boardList, setBoardList] = useRecoilState(board);
     const [currentPage, setCurrentPage] = useState(1);
+    const [boardTypeNum, setBoardTypeNum] = useRecoilState(boardType);
     const [searchParams, setSearchParams] = useSearchParams();
     const navigate = useNavigate();
     const ServerImgUrl = import.meta.env.VITE_SERVER_IMG_URL;
     const keyword = searchParams.get("keyword");
     const page = searchParams.get("page");
-    const boardType = searchParams.get("boardType");
+    const boardTypeParam = searchParams.get("boardType");
     const limit = 5;
     const contentsWordLength = window.innerWidth < 1024 ? 38 : 58;
     const [isWrap, setIsWrap] = useState(true);
@@ -64,8 +65,8 @@ const Post = () => {
         },
     });
 
-    const { data: post, isLoading } = useQuery<BoardType[]>(['boardList', { boardType, page, sortBy }],
-        () => getBoardApi(boardType ? Number(boardType) : 1, page ? page : "1", sortBy),
+    const { data: post, isLoading } = useQuery<BoardType[]>(['boardList', { boardTypeParam, page, sortBy }],
+        () => getBoardApi(boardTypeParam ? Number(boardTypeParam) : 1, page ? page : "1", sortBy),
         {
             keepPreviousData: true,
             cacheTime: 1000 * 60 * 10,
@@ -130,6 +131,10 @@ const Post = () => {
             setCurrentPage(Number(page));
         } else setCurrentPage(1);
     }, [page]);
+
+    useEffect(() => {
+        setSearchParams({ "boardType": String(boardTypeNum), "page": "1" })
+    }, [boardTypeNum]);
 
     return (
         <>

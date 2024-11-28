@@ -597,19 +597,24 @@ app.post("/api/boardDetail", async (req, res) => {
 app.get("/api/boardDaily", async (req, res) => {
     try {
         const [rows] = await mysql.query(`
-        SELECT b.boardNo, b.userNo, b.title, b.contents, b.rgstrDate, 
-        b.views, b.tags, b.boardImgUrl, u.nickname, u.imgUrl, 
-        (SELECT count(*) FROM comment c WHERE c.boardNo = b.boardNo) commentCnt, 
-        COUNT(*) AS weekCommentCnt 
-        FROM board b 
-        INNER JOIN comment c ON b.boardNo = c.boardNo 
-        INNER JOIN user u ON u.userNo = b.userNo 
-        GROUP BY c.boardNo  
-        ORDER BY weekCommentCnt DESC
-        LIMIT 3;
+    SELECT 
+        b.boardNo, b.userNo, b.title, 
+        b.contents, b.rgstrDate, b.views, 
+        b.tags, b.boardImgUrl, 
+        u.nickname, u.imgUrl, 
+        (SELECT count(*) FROM comment c WHERE c.boardNo = b.boardNo) AS commentCnt
+    FROM 
+        board b
+    LEFT JOIN 
+        comment c ON b.boardNo = c.boardNo
+    INNER JOIN 
+        user u ON u.userNo = b.userNo
+    GROUP BY 
+        b.boardNo
+    ORDER BY 
+        MAX(c.rgstrDate) DESC
+    LIMIT 5;
         `);
-        // WHERE c.rgstrDate BETWEEN DATE_SUB(NOW(), INTERVAL 1 WEEK) AND NOW() 
-        // LIMIT 5;
         return res.status(200).send(rows);
     } catch (e) {
         console.error(e);

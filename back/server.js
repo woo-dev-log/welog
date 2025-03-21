@@ -11,11 +11,14 @@ const { S3, PutObjectCommand, DeleteObjectCommand } = require('@aws-sdk/client-s
 const awsConfig = require('./s3.json');
 const s3 = new S3(awsConfig);
 const http = require('http');
+const crypto = require('crypto');
+const compression = require('compression');
 
 app.use(cors());
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 app.use(express.static(path.join(__dirname, "./dist")));
+app.use(compression());
 
 const server = http.createServer(app);
 const io = require("socket.io")(server, {
@@ -102,21 +105,36 @@ const imageUpload = multer({
 
 const resizeHandler = async (file) => {
     try {
-        let newFilePath = new Date().valueOf() + '_' + Buffer.from(file.originalname, 'latin1').toString('utf8');
+        const encodedOriginalName = Buffer.from(file.originalname, 'latin1').toString('utf8');
+        const newRandomName = crypto.randomBytes(16).toString('hex');
+        let newFilePath = `${newRandomName}_${encodedOriginalName}`;
         let outputBuffer = file.buffer;
-        const extension = file.originalname.split('.').reverse()[0];
+        const extension = file.originalname.split('.').pop().toLowerCase();
+        let contentType = `image/${extension}`
 
         const { width } = await sharp(outputBuffer).metadata();
-        if (width > 500 && extension !== "gif") {
+        if (extension === "gif") {
             newFilePath = newFilePath.replace(`.${extension}`, '.webp');
-            outputBuffer = await sharp(outputBuffer).resize({ width: 800 }).webp().toBuffer();
+            outputBuffer = await sharp(outputBuffer, { animated: true })
+                .webp({ quality: 80 })
+                .withMetadata(false)
+                .toBuffer()
+            contentType = 'image/webp';
+        } else if (width > 500) {
+            newFilePath = newFilePath.replace(`.${extension}`, '.webp');
+            outputBuffer = await sharp(outputBuffer)
+                .resize({ width: 800 })
+                .webp({ quality: 80 })
+                .withMetadata(false)
+                .toBuffer();
+            contentType = 'image/webp';
         }
 
         await s3.send(new PutObjectCommand({
             Bucket: 'welog-seoul',
             Key: newFilePath,
             Body: outputBuffer,
-            ContentType: `image/${extension}`,
+            ContentType: contentType,
             ACL: 'public-read'
         }));
 

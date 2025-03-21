@@ -14,6 +14,7 @@ import Category from "../../components/category/Category";
 import "./BoardWrite.scss"
 import hljs from 'highlight.js';
 import 'highlight.js/styles/atom-one-dark.css';
+import Scroll from "../../components/Scroll";
 const ReactQuill = lazy(() => import('../../components/ReactQuill'));
 
 const BoardWrite = () => {
@@ -205,6 +206,10 @@ const BoardWrite = () => {
             setTags(updateValue.tags.split(","));
         } else setTags([]);
     }, [updateValue.titleValue, updateValue.contentsValue, updateValue.tags]);
+
+    useEffect(() => {
+        Scroll();
+    }, [])
 
     return (
         <>

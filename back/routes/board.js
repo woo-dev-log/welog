@@ -8,7 +8,7 @@ const { resizeAndUploadImage, deleteImage } = require('../utils/imageUtils');
 router.post('/board', async (req, res) => {
     try {
         const { page, boardType, sortBy } = req.body;
-        const pageNum = page * 5 - 5;
+        const pageNum = (page - 1) * 6;
         const sort = sortBy === 'commentCnt' ? sortBy : "b." + sortBy;
 
         const [rows] = await mysql.query(`
@@ -21,7 +21,7 @@ router.post('/board', async (req, res) => {
         ON b.userNo = u.userNo
         WHERE b.boardType = ? 
         ORDER BY ${sort} DESC
-        LIMIT ?, 5
+        LIMIT ?, 6
         `, [boardType, pageNum]);
         return res.status(200).send(rows);
     } catch (e) {
@@ -34,7 +34,7 @@ router.post('/board', async (req, res) => {
 router.post('/boardSearch', async (req, res) => {
     try {
         const { search, page, sortBy } = req.body;
-        const pageNum = page * 5 - 5;
+        const pageNum = (page - 1) * 6;
         const value = "%" + search + "%";
         const sort = sortBy === 'commentCnt' ? sortBy : "b." + sortBy;
 
@@ -48,38 +48,9 @@ router.post('/boardSearch', async (req, res) => {
             ON b.userNo = u.userNo 
             WHERE b.title LIKE ? OR b.contents LIKE ? OR u.nickname LIKE ? OR b.tags LIKE ?
             ORDER BY ${sort} DESC
-            LIMIT ?, 5
+            LIMIT ?, 6
             `, [value, value, value, value, pageNum]);
 
-        return res.status(200).send(rows);
-    } catch (e) {
-        console.error(e);
-        return res.status(400).send("fail");
-    }
-});
-
-// 일일 인기 게시물 조회
-router.get('/boardDaily', async (req, res) => {
-    try {
-        const [rows] = await mysql.query(`
-    SELECT 
-        b.boardNo, b.userNo, b.title, 
-        b.contents, b.rgstrDate, b.views, 
-        b.tags, b.boardImgUrl, 
-        u.nickname, u.imgUrl, 
-        (SELECT count(*) FROM comment c WHERE c.boardNo = b.boardNo) AS commentCnt
-    FROM 
-        board b
-    LEFT JOIN 
-        comment c ON b.boardNo = c.boardNo
-    INNER JOIN 
-        user u ON u.userNo = b.userNo
-    GROUP BY 
-        b.boardNo
-    ORDER BY 
-        MAX(c.rgstrDate) DESC
-    LIMIT 5;
-        `);
         return res.status(200).send(rows);
     } catch (e) {
         console.error(e);
@@ -211,7 +182,7 @@ router.post('/deleteBoard', async (req, res) => {
 router.post('/userBoard', async (req, res) => {
     try {
         const { userNickname, page, sortBy } = req.body;
-        const pageNum = page * 5 - 5;
+        const pageNum = (page - 1) * 6;
         const sort = sortBy === 'commentCnt' ? sortBy : "b." + sortBy;
 
         const [rows] = await mysql.query(`
@@ -224,7 +195,7 @@ router.post('/userBoard', async (req, res) => {
             ON b.userNo = u.userNo 
             where u.nickname = ? 
             ORDER BY ${sort} DESC
-            LIMIT ?, 5
+            LIMIT ?, 6
             `, [userNickname, pageNum]);
 
         return res.status(200).send(rows);

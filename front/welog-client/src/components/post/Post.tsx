@@ -158,16 +158,16 @@ const Post = () => {
                             isClearable={false}
                             isRtl={false}
                             styles={{
-                                option: (provided, state) => ({
+                                option: (provided: any, state: { isSelected: boolean; isFocused: boolean }) => ({
                                     ...provided,
                                     backgroundColor: state.isSelected ? 'coral' : state.isFocused ? 'lightsteelblue' : 'white',
                                     color: state.isSelected || state.isFocused ? 'white' : 'black',
                                 }),
-                                input: (styles) => ({ ...styles, ...dot() }),
-                                placeholder: (styles) => ({ ...styles, ...dot('coral') }),
-                                singleValue: (styles) => ({ ...styles, ...dot('coral') }),
+                                input: (styles: any) => ({ ...styles, ...dot() }),
+                                placeholder: (styles: any) => ({ ...styles, ...dot('coral') }),
+                                singleValue: (styles: any) => ({ ...styles, ...dot('coral') }),
                             }}
-                            onChange={(option) => option && setSortBy(option.value)} />
+                            onChange={(option: any) => option && setSortBy(option.value)} />
                         <div className="template-container">
                             <button className={`template-button-wrap ${!isWrap ? "" : "disabled"}`}
                                 onClick={() => setIsWrap(true)} disabled={isWrap}>

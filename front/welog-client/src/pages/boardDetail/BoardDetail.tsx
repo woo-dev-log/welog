@@ -115,7 +115,7 @@ const BoardDetail = () => {
                 <>
                     <ProgressBar />
                     <SEO title="상세 글" contents={boardDetail[0].title} />
-                    <button className="boardDetail-backbutton" onClick={() => navigate(-1)}>&lt;&nbsp;&nbsp;이전으로</button>
+                    <p className="boardDetail-backbutton" onClick={() => navigate(-1)}>&lt;&nbsp;&nbsp;이전으로</p>
                     <section className="boardDetail-section">
                         <aside className="boarDetail-boardThumbnail">
                             <img src={`${ServerImgUrl}${boardDetail[0].boardImgUrl}`} alt="boardThumbnail" loading="lazy" />

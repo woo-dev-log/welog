@@ -39,7 +39,7 @@ const Post = () => {
     const keyword = searchParams.get("keyword");
     const page = searchParams.get("page");
     const boardTypeParam = searchParams.get("boardType");
-    const limit = 5;
+    const limit = 6;
     const contentsWordLength = window.innerWidth < 1024 ? 38 : 58;
     const [isWrap, setIsWrap] = useState(true);
     const [sortBy, setSortBy] = useRecoilState(boardSort);

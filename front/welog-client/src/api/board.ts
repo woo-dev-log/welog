@@ -110,11 +110,6 @@ export const getUserBoardApi = async (userNickname: string, page: string, sortBy
     return data;
 };
 
-export const getBoardDailyApi = async () => {
-    const { data } = await axios.get("/boardDaily");
-    return data;
-}
-
 export const postBoardApi = async (search: string, page: string, sortBy: string) => {
     const { data } = await axios.post("/boardSearch", { search, page, sortBy });
     return data;

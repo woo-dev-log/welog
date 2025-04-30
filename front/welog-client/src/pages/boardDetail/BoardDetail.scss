@@ -26,7 +26,7 @@
 
 .boardDetail-backbutton {
     cursor: pointer;
-    border: none;
+    display: inline-block;
     background-color: var(--back-color);
     transition: 0.3s ease;
     color: var(--font-color);

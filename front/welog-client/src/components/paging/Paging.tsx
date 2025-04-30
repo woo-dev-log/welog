@@ -1,4 +1,3 @@
-import { useCookies } from 'react-cookie';
 import { useSearchParams } from 'react-router-dom';
 import Button from '../button/Button';
 import './Paging.scss';
@@ -13,56 +12,63 @@ interface Props {
 
 const Paging = ({ total, limit, page, setCurrentPage }: Props) => {
   const [searchParams, setSearchParams] = useSearchParams();
-  // const [totalPageArray, setTotalPageArray] = useState<number[][]>([]);
-  // const [currentPageArray, setCurrentPageArray] = useState<number[]>([]);
   const numPages = Math.ceil(total / limit);
+  const maxVisiblePages = 5;
+  const halfVisiblePages = Math.floor(maxVisiblePages / 2);
 
-  // useEffect(() => {
-  //   const totalPageArray = Array(total).fill(undefined).map((_, i) => i);
-  //   const slicePageArray = Array(numPages).fill(undefined).map(() => totalPageArray.splice(0, 5));
-  //   setTotalPageArray(slicePageArray);
-  //   setCurrentPageArray(slicePageArray[0]);
-  // }, [total])
+  const getVisiblePages = () => {
+    let startPage = Math.max(1, page - halfVisiblePages);
+    let endPage = Math.min(numPages, startPage + maxVisiblePages - 1);
 
-  // useEffect(() => {
-  //   if (page % limit === 1) {
-  //     setCurrentPageArray(totalPageArray[Math.floor(page / limit)]);
-  //   } else if (page % limit === 0) {
-  //     setCurrentPageArray(totalPageArray[Math.floor(page / limit) - 1]);
-  //   }
-  // }, [page])
+    if (endPage - startPage + 1 < maxVisiblePages) {
+      startPage = Math.max(1, endPage - maxVisiblePages + 1);
+    }
+
+    return Array.from({ length: endPage - startPage + 1 }, (_, i) => startPage + i);
+  };
 
   const handleOnClickPageChange = (page: number) => {
+    if (page < 1 || page > numPages) return;
+    
     setCurrentPage(page);
 
     const keyword = searchParams.get("keyword");
     const type = searchParams.get("type");
     const boardType = searchParams.get("boardType");
-    if (keyword) {
-      setSearchParams({ "keyword": keyword, "page": String(page) })
-    } else if (type) {
-      setSearchParams({ "type": type, "page": String(page) })
-    } else if (boardType) {
-      setSearchParams({ "boardType": boardType, "page": String(page) })
-    } else setSearchParams({ "page": String(page) });
     
+    const params: Record<string, string> = { page: String(page) };
+    if (keyword) params.keyword = keyword;
+    if (type) params.type = type;
+    if (boardType) params.boardType = boardType;
+    
+    setSearchParams(params);
     Scroll();
   };
 
+  const visiblePages = getVisiblePages();
+
   return (
     <div className='paging-container'>
-      <Button text={"<"} onClick={() => handleOnClickPageChange(page - 1)} disabled={page === 1} />
-      {/* {totalPageArray && totalPageArray.map((d, i) => ( */}
-      {Array(numPages).fill(undefined).map((_, i) => (
-        <div key={i} className={page === i + 1 ? "paging-currentpageNum" : ""}>
-          <Button text={String(i + 1)} onClick={() => handleOnClickPageChange(i + 1)} />
-          {/* aria-current={page === i + 1 ? "page" : null} /> */}
+      <Button 
+        text={"<"} 
+        onClick={() => handleOnClickPageChange(page - 1)} 
+        disabled={page === 1} 
+      />
+      {visiblePages.map((pageNum) => (
+        <div key={pageNum} className={page === pageNum ? "paging-currentpageNum" : ""}>
+          <Button 
+            text={String(pageNum)} 
+            onClick={() => handleOnClickPageChange(pageNum)} 
+          />
         </div>
       ))}
-      <Button text={">"} onClick={() => handleOnClickPageChange(page + 1)} disabled={page === numPages} />
+      <Button 
+        text={">"} 
+        onClick={() => handleOnClickPageChange(page + 1)} 
+        disabled={page === numPages} 
+      />
     </div>
   );
-
 }
 
 export default Paging;

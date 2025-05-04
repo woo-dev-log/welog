@@ -165,6 +165,23 @@
                     color: #F1F3F5;
                 }
 
+                blockquote {
+                    border-left: 4px solid #ccc;
+                    background-color: #2E2E2E;
+                    border-left-color: coral;
+                    margin: 0px 0px;
+                    color: white;
+                    padding: 5px 20px;
+                }
+        
+                code {
+                    font-size: 85%;
+                    padding: 2px 4px;
+                    border-radius: 3px;
+                    background-color: coral;
+                    color: white;
+                }
+
                 img {
                     max-width: 100%;
                 }

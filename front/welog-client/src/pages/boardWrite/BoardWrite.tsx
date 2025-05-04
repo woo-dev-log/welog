@@ -16,6 +16,7 @@ import hljs from 'highlight.js';
 import 'highlight.js/styles/atom-one-dark.css';
 import Scroll from "../../components/Scroll";
 const ReactQuill = lazy(() => import('../../components/ReactQuill'));
+import Spinner from "../../components/Spinner/Spinner";
 
 const BoardWrite = () => {
     const [title, setTitle] = useState("");
@@ -28,6 +29,7 @@ const BoardWrite = () => {
     const [tags, setTags] = useState<String[]>([]);
     const [image, setImage] = useState<File>();
     const [blobImg, setBlobImg] = useState("");
+    const [isUploading, setIsUploading] = useState(false);
     const navigate = useNavigate();
     const ServerImgUrl = import.meta.env.VITE_SERVER_IMG_URL;
     const quillRef = useRef(null);
@@ -45,6 +47,7 @@ const BoardWrite = () => {
                 formData.append('boardImg', file);
 
                 try {
+                    setIsUploading(true);
                     const data = await writeBoardImgApi(formData);
 
                     // @ts-ignore getEditor() 타입 오류가 생기지만 문제 없음. 
@@ -55,6 +58,8 @@ const BoardWrite = () => {
                 } catch (error) {
                     console.error(error);
                     ToastError("이미지 업로드에 실패했어요");
+                } finally {
+                    setIsUploading(false);
                 }
             }
         };
@@ -66,7 +71,7 @@ const BoardWrite = () => {
                 container: [
                     [{ 'header': [1, 2, 3, false] }],
                     [{ 'color': [] }, { 'background': [] }],
-                    ['bold', 'italic', 'underline', 'strike'],
+                    ['bold', 'italic', 'underline', 'strike', 'code'],
                     ['blockquote', 'code-block'],
                     [{ 'list': 'ordered' }, { 'list': 'bullet' }],
                     [{ 'align': [] }],
@@ -147,6 +152,7 @@ const BoardWrite = () => {
 
             if (result.isConfirmed) {
                 try {
+                    setIsUploading(true);
                     let formData = new FormData();
                     formData.append('title', typeData.title);
                     formData.append('contents', typeData.contents);
@@ -171,6 +177,8 @@ const BoardWrite = () => {
                         ToastError("수정을 실패했어요");
                     } else ToastError("작성을 실패했어요");
                     console.error(e);
+                } finally {
+                    setIsUploading(false);
                 }
             }
         }
@@ -213,6 +221,7 @@ const BoardWrite = () => {
 
     return (
         <>
+            <Spinner isLoading={isUploading} />
             <button className="boardWrite-backbutton" onClick={() => navigate(-1)}>&lt;&nbsp;&nbsp;이전으로</button>
             <SEO title="글쓰기" contents="글쓰기" />
             <section className="boardWrite-container">

@@ -12,13 +12,12 @@
     border-radius: 4px;
     font-size: 16px;
     font-family: "LINESeedKR-Bd";
-    // color: coral;
     color: #F1F3F5;
 }
 
 .board-TypeBtnOff {
     cursor: pointer;
-    background-color: var(--element-color);
+    background-color: var(--board-color);
     transition: 0.3s ease;
     width: 80px;
     height: 40px;
@@ -26,15 +25,17 @@
     border-radius: 4px;
     font-size: 16px;
     font-family: "LINESeedKR-Bd";
-    color: #F1F3F5;
+    color: var(--font-color);
 
     &:hover {
         background-color: coral;
+        color: #F1F3F5;
     }
 }
 
 @media (max-width: 768px) {
-    .board-TypeBtnOn, 
+
+    .board-TypeBtnOn,
     .board-TypeBtnOff {
         font-size: 14px;
         width: 70px;

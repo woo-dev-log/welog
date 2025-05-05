@@ -130,11 +130,11 @@ const Post = () => {
         if (page) {
             setCurrentPage(Number(page));
         } else setCurrentPage(1);
-    }, [page]);
 
-    useEffect(() => {
-        setSearchParams({ "boardType": String(boardTypeNum), "page": "1" })
-    }, [boardTypeNum]);
+        if (boardTypeParam) {
+            setBoardTypeNum(Number(boardTypeParam));
+        }
+    }, [page, boardTypeParam]);
 
     return (
         <>

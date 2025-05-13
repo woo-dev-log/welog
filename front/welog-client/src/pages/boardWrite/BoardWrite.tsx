@@ -42,6 +42,7 @@ const BoardWrite = () => {
     const [image, setImage] = useState<File>();
     const [blobImg, setBlobImg] = useState("");
     const [isUploading, setIsUploading] = useState(false);
+    const [isEditing, setIsEditing] = useState(false);
     const navigate = useNavigate();
     const ServerImgUrl = import.meta.env.VITE_SERVER_IMG_URL;
     const quillRef = useRef(null);
@@ -164,6 +165,7 @@ const BoardWrite = () => {
 
             if (result.isConfirmed) {
                 try {
+                    setIsEditing(false);
                     setIsUploading(true);
                     let formData = new FormData();
                     formData.append('title', typeData.title);
@@ -212,6 +214,11 @@ const BoardWrite = () => {
         setBlobImg(URL.createObjectURL(e.target.files[0]));
     };
 
+    const handleChange = (value: string) => {
+        setContents(value);
+        setIsEditing(true);
+    };
+
     // 수정시
     useEffect(() => {
         if (updateValue.titleValue) {
@@ -243,7 +250,11 @@ const BoardWrite = () => {
     }, []);
 
     useBlocker(({ currentLocation, nextLocation }) => {
-        return !window.confirm('페이지를 나가시겠습니까?');
+        if (isEditing) {
+            return !window.confirm('페이지를 나가시겠습니까?');
+        }
+
+        return false;
     });
 
     return (
@@ -265,7 +276,7 @@ const BoardWrite = () => {
                     <Label text="내용" />
                     <Line />
                     <Suspense fallback={<div>Loading...</div>}>
-                        <ReactQuill modules={modules} onChange={setContents} value={contents}
+                        <ReactQuill modules={modules} onChange={handleChange} value={contents}
                             ref={quillRef} placeholder="내용을 입력해주세요" />
                     </Suspense>
                 </article>

@@ -152,9 +152,13 @@
 
             .boardDetail-contents {
                 min-height: 100px;
-
+                
                 a {
                     color: coral;
+                }
+
+                .ql-container {
+                    font-size: 16px;
                 }
 
                 .ql-syntax {
@@ -163,6 +167,7 @@
                     padding: 10px;
                     overflow: auto;
                     color: #F1F3F5;
+                    font-family: "LINESeedKR-Rg";
                 }
 
                 blockquote {
@@ -262,6 +267,14 @@
                             width: 20px;
                             height: 20px;
                         }
+                    }
+                }
+            }
+
+            .boardDetail-contentsContainer {
+                .boardDetail-contents {
+                    .ql-container {
+                        font-size: 14px;
                     }
                 }
             }

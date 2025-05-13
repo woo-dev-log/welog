@@ -1,6 +1,6 @@
 import Swal from "sweetalert2";
 import { lazy, Suspense, useEffect, useMemo, useRef, useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useBlocker } from "react-router-dom";
 import { useRecoilState } from "recoil";
 import { boardType, boardUpdate, loginUser } from "../../store/atoms";
 import { ToastError, ToastSuccess, ToastWarn } from "../../components/Toast";
@@ -12,11 +12,23 @@ import Input from "../../components/input/Input";
 import Button from "../../components/button/Button";
 import Category from "../../components/category/Category";
 import "./BoardWrite.scss"
-import hljs from 'highlight.js';
-import 'highlight.js/styles/atom-one-dark.css';
 import Scroll from "../../components/Scroll";
-const ReactQuill = lazy(() => import('../../components/ReactQuill'));
 import Spinner from "../../components/Spinner/Spinner";
+const ReactQuill = lazy(() => import('../../components/ReactQuill'));
+import hljs from 'highlight.js/lib/core';
+import javascript from 'highlight.js/lib/languages/javascript';
+import typescript from 'highlight.js/lib/languages/typescript';
+import json from 'highlight.js/lib/languages/json';
+import xml from 'highlight.js/lib/languages/xml';
+import css from 'highlight.js/lib/languages/css';
+import scss from 'highlight.js/lib/languages/scss';
+import 'highlight.js/styles/github-dark.css';
+hljs.registerLanguage('javascript', javascript);
+hljs.registerLanguage('typescript', typescript);
+hljs.registerLanguage('json', json);
+hljs.registerLanguage('xml', xml);
+hljs.registerLanguage('css', css);
+hljs.registerLanguage('scss', scss);
 
 const BoardWrite = () => {
     const [title, setTitle] = useState("");
@@ -217,7 +229,22 @@ const BoardWrite = () => {
 
     useEffect(() => {
         Scroll();
-    }, [])
+
+        const handleBeforeUnload = (e: BeforeUnloadEvent) => {
+            e.preventDefault();
+            return '페이지를 나가시겠습니까?';
+        };
+
+        window.addEventListener('beforeunload', handleBeforeUnload);
+
+        return () => {
+            window.removeEventListener('beforeunload', handleBeforeUnload);
+        };
+    }, []);
+
+    useBlocker(({ currentLocation, nextLocation }) => {
+        return !window.confirm('페이지를 나가시겠습니까?');
+    });
 
     return (
         <>

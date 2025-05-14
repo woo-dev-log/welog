@@ -94,7 +94,10 @@ const BoardWrite = () => {
                 ],
                 handlers: {
                     image: imageHandler
-                }
+                },
+                clipboard: {
+                    matchVisual: false
+                },
             },
             syntax: {
                 highlight: (text: string) => hljs.highlightAuto(text).value

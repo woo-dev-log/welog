@@ -76,8 +76,41 @@
 
     &.wrap {
         width: 30%;
-        max-height: 430px;
+        height: 450px;
         flex-direction: column;
+    }
+}
+
+.board-asideBlock {
+    &.column {
+        width: 40%;
+    }
+}
+
+.board-userBlock {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 10px;
+
+    .board-userProfileImg {
+        cursor: pointer;
+        object-fit: cover;
+        background-color: white;
+        width: 30px;
+        height: 30px;
+        border-radius: 1000px;
+        border: 1px solid var(--element-color);
+    }
+
+    .board-nickname {
+        cursor: pointer;
+        font-family: "LINESeedKR-Bd";
+        font-size: 16px;
+
+        &:hover {
+            color: coral;
+        }
     }
 }
 
@@ -93,12 +126,12 @@
     }
 
     &.column {
-        width: 40%;
+        height: 198px;
     }
 
     &.wrap {
         width: 100%;
-        height: 150px;
+        height: 180px;
     }
 }
 
@@ -107,7 +140,7 @@
     display: flex;
     flex-direction: column;
     justify-content: space-between;
-    padding: 20px;
+    padding: 10px 20px;
 
     &.column {
         width: 60%;
@@ -132,33 +165,6 @@
     }
 
     footer {
-        .board-userBlock {
-            display: flex;
-            align-items: center;
-            justify-content: end;
-            gap: 10px;
-
-            .board-userProfileImg {
-                cursor: pointer;
-                object-fit: cover;
-                background-color: white;
-                width: 35px;
-                height: 35px;
-                border-radius: 1000px;
-                border: 1px solid var(--element-color);
-            }
-
-            .board-nickname {
-                cursor: pointer;
-                font-family: "LINESeedKR-Bd";
-                font-size: 18px;
-            }
-
-            &:hover {
-                color: coral;
-            }
-        }
-
         .board-footer {
             display: flex;
             justify-content: space-between;
@@ -166,7 +172,6 @@
             font-size: 16px;
             color: var(--font-color);
             opacity: 0.7;
-            margin: 10px 0;
 
             .board-postInfo {
                 display: flex;
@@ -198,6 +203,7 @@
         white-space: nowrap;
         overflow: auto;
         user-select: none;
+        margin: 10px 0;
 
         &::-webkit-scrollbar {
             display: none;
@@ -209,7 +215,7 @@
             align-items: center;
             padding: 0 10px;
             height: 30px;
-            background-color: #121212;
+            background-color: #2A629A;
             color: white;
             border-radius: 5px;
             font-size: 14px;
@@ -230,24 +236,16 @@
     }
 }
 
-// .skeleton-block {
-//     background: linear-gradient(120deg, var(--element-color) 0%,
-//             var(--element-color) 40%, var(--element-hover-color) 50%,
-//             var(--element-color) 60%, var(--element-color) 100%);
-//     background-size: 200% 100%;
-//     animation: skeleton-flow 1.5s ease-in-out infinite;
-// }
-
-// @keyframes skeleton-flow {
-//     0% {
-//         background-position: 100% 0;
-//     }
-// }
-
 @media (max-width: 1024px) {
     .category-container {
         .select-container {
             margin-left: 10px;
+        }
+    }
+
+    .board-block {
+        &.wrap {
+            width: 45%;
         }
     }
     
@@ -302,20 +300,29 @@
     }
 
     .board-block {
-        flex-direction: column;
-        margin: 0;
-        height: auto;
+        &.column {
+            flex-direction: column;
+        }
 
         &.wrap {
             width: 100%;
         }
     }
 
-    .board-asideBoardImg {
-        img {
-            height: 150px;
+    .board-userBlock {
+        font-size: 14px;
+
+        .board-userProfileImg {
+            width: 28px;
+            height: 28px;
         }
 
+        .board-nickname {
+            font-size: 14px;
+        }
+    }
+
+    .board-asideBoardImg {
         &.column {
             display: none;
         }
@@ -330,6 +337,7 @@
 
         &.column {
             width: 100%;
+            height: 100%;
         }
 
         header {
@@ -343,19 +351,6 @@
         }
 
         footer {
-            .board-userBlock {
-                font-size: 14px;
-
-                .board-userProfileImg {
-                    width: 30px;
-                    height: 30px;
-                }
-
-                .board-nickname {
-                    font-size: 14px;
-                }
-            }
-
             .board-footer {
                 font-size: 14px;
 

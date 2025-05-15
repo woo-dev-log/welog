@@ -183,10 +183,17 @@ const Post = () => {
                     <article className={`board-article ${isWrap ? 'wrap' : 'column'}`}>
                         {boardList.map((board, i) => (
                             <div key={i} className={`board-block ${isWrap ? 'wrap' : 'column'}`}>
-                                <aside className={`board-asideBoardImg ${isWrap ? 'wrap' : 'column'}`}
-                                    onClick={() => updateBoardViewsOnClick(board.boardNo, board.views)}>
-                                    <img src={`${ServerImgUrl}${board.boardImgUrl}`} alt="boardImgUrl" loading="lazy" />
-                                </aside>
+                                <div className={`board-asideBlock ${isWrap ? 'wrap' : 'column'}`}>
+                                    <div className="board-userBlock">
+                                        <img src={`${ServerImgUrl}${board.imgUrl}`} alt="userImg" loading="lazy"
+                                            className="board-userProfileImg" onClick={() => navigate("/userBoard/" + board.nickname)} />
+                                        <p className="board-nickname" onClick={() => navigate("/userBoard/" + board.nickname)}>{board.nickname}</p>
+                                    </div>
+                                    <aside className={`board-asideBoardImg ${isWrap ? 'wrap' : 'column'}`}
+                                        onClick={() => updateBoardViewsOnClick(board.boardNo, board.views)}>
+                                        <img src={`${ServerImgUrl}${board.boardImgUrl}`} alt="boardImgUrl" loading="lazy" />
+                                    </aside>
+                                </div>
                                 <div className={`board-contentsContainer ${isWrap ? 'wrap' : 'column'}`}>
                                     <header onClick={() => updateBoardViewsOnClick(board.boardNo, board.views)}>
                                         <p className="board-title">{board.title}</p>
@@ -197,11 +204,14 @@ const Post = () => {
                                         </p>
                                     </header>
                                     <footer>
-                                        <div className="board-userBlock">
-                                            <img src={`${ServerImgUrl}${board.imgUrl}`} alt="userImg" loading="lazy"
-                                                className="board-userProfileImg" onClick={() => navigate("/userBoard/" + board.nickname)} />
-                                            <p className="board-nickname" onClick={() => navigate("/userBoard/" + board.nickname)}>{board.nickname}</p>
-                                        </div>
+                                        {board.tags &&
+                                            <div className="board-tagContainer">
+                                                {board.tags && board.tags.split(",").map((v, i) => (
+                                                    <p key={i} className="board-tagBox"
+                                                        onClick={() => setSearchParams({ "keyword": v })}>{v}</p>
+                                                ))}
+                                            </div>
+                                        }
                                         <div className="board-footer">
                                             <p>{DayFormat(board.rgstrDate)}</p>
                                             <div className="board-postInfo">
@@ -217,13 +227,6 @@ const Post = () => {
                                         </div>
                                     </footer>
 
-                                    {board.tags &&
-                                        <div className="board-tagContainer">
-                                            {board.tags && board.tags.split(",").map((v, i) => (
-                                                <p key={i} className="board-tagBox"
-                                                    onClick={() => setSearchParams({ "keyword": v })}>{v}</p>
-                                            ))}
-                                        </div>}
                                 </div>
                             </div>
                         ))}

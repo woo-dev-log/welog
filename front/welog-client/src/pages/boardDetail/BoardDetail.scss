@@ -39,126 +39,117 @@
     background-color: var(--board-color);
     transition: 0.3s ease;
 
-    .boarDetail-boardThumbnail {
+    .boardDetail-topContainer {
+        display: flex;
+        flex-direction: row-reverse;
+        width: 100%;
+        height: 300px;
+    }
+
+    .boardDetail-profileContainer {
+        display: flex;
+        flex-direction: column;
+        justify-content: space-between;
+        padding: 20px 20px 0;
+        width: 40%;
+        height: 100%;
+        box-sizing: border-box;
+    }
+
+    .boardDetail-boardThumbnail {
+        width: 60%;
+        height: 100%;
+    }
+
+    .boardDetail-titleContainer {
+        .board-Type {
+            color: coral;
+            font-size: 18px;
+        }
+
+        .boardDetail-title {
+            font-family: "LINESeedKR-Bd";
+            font-size: 20px;
+        }
+    }
+
+    .board-views {
+        display: flex;
+        align-items: center;
+        justify-content: end;
+        gap: 5px;
+        width: 15%;
+        font-size: 18px;
+        color: var(--font-color);
+        opacity: 0.7;
+
         img {
-            object-fit: cover;
-            width: 100%;
-            height: 300px;
+            width: 25px;
+            height: 25px;
+        }
+    }
+
+    .boardDetail-date {
+        display: flex;
+        gap: 10px;
+        color: var(--font-color);
+        opacity: 0.7;
+    }
+
+    .boardDetail-writerContainer {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+
+        .boardDetail-userProfile {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+
+            img {
+                cursor: pointer;
+                @include imgCss(40px, 40px);
+            }
+
+            .boardDetail-nickname {
+                cursor: pointer;
+                font-family: "LINESeedKR-Bd";
+                font-size: 18px;
+            }
+        }
+    }
+
+    .boardDetail-tagContainer {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        white-space: nowrap;
+        overflow: auto;
+
+        .boardDetail-tagBox {
+            display: flex;
+            align-items: center;
+            padding: 0 10px;
+            height: 30px;
+            background-color: #2A629A;
+            color: white;
+            border-radius: 5px;
+            font-size: 14px;
         }
     }
 
     .boardDetail-container {
         padding: 10px 20px 20px;
 
-        .boardDetail-titleContainer {
-            display: flex;
-            align-items: center;
-            margin-bottom: 20px;
-
-            .board-Type {
-                background-color: coral;
-                width: 80px;
-                height: 35px;
-                border: none;
-                border-radius: 4px;
-                font-size: 16px;
-                font-family: "LINESeedKR-Bd";
-                color: #F1F3F5;
-                margin-right: 10px;
-                justify-content: center;
-                align-items: center;
-            }
-
-            .boardDetail-titleBox {
-                display: flex;
-                align-items: center;
-                justify-content: space-between;
-                width: 100%;
-
-                .boardDetail-title {
-                    font-family: "LINESeedKR-Bd";
-                    font-size: 20px;
-                    width: 85%;
-                }
-
-                .board-views {
-                    display: flex;
-                    align-items: center;
-                    justify-content: end;
-                    gap: 5px;
-                    width: 15%;
-                    font-size: 18px;
-                    color: var(--font-color);
-                    opacity: 0.7;
-
-                    img {
-                        width: 25px;
-                        height: 25px;
-                    }
-                }
-            }
-        }
-
-        .boardDetail-writerContainer {
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-
-            .boardDetail-date {
-                display: flex;
-                gap: 10px;
-                color: var(--font-color);
-                opacity: 0.7;
-            }
-
-            .boardDetail-userProfile {
-                display: flex;
-                align-items: center;
-                gap: 10px;
-
-                img {
-                    cursor: pointer;
-                    @include imgCss(40px, 40px);
-                }
-
-                .boardDetail-nickname {
-                    cursor: pointer;
-                    font-family: "LINESeedKR-Bd";
-                    font-size: 18px;
-                }
-            }
-        }
-
-        .boardDetail-tagContainer {
-            display: flex;
-            flex-wrap: wrap;
-            align-items: center;
-            gap: 10px;
-
-            .boardDetail-tagBox {
-                display: flex;
-                align-items: center;
-                padding: 0 10px;
-                height: 30px;
-                background-color: #2A629A;
-                color: white;
-                border-radius: 5px;
-                font-size: 14px;
-            }
-        }
-
         .boardDetail-contentsContainer {
             margin: 30px 0 50px 0;
+            font-size: 16px;
 
             .boardDetail-contents {
                 min-height: 100px;
-                
+
                 a {
                     color: coral;
-                }
-
-                .ql-container {
-                    font-size: 16px;
                 }
 
                 .ql-syntax {
@@ -178,7 +169,7 @@
                     color: white;
                     padding: 5px 20px;
                 }
-        
+
                 code {
                     font-size: 85%;
                     padding: 2px 4px;
@@ -236,77 +227,77 @@
     }
 
     .boardDetail-section {
-        .boarDetail-boardThumbnail {
+        .boardDetail-topContainer {
+            display: block;
+            height: auto;
+        }
+
+        .boardDetail-boardThumbnail {
+            width: 100%;
+            height: 180px;
+            object-fit: cover;
+        }
+
+        .boardDetail-profileContainer {
+            width: 100%;
+            height: 220px;
+            padding: 10px 10px 0;
+        }
+
+        .boardDetail-titleContainer {
+            .board-Type {
+                display: flex;
+                flex-direction: column;
+                justify-content: end;
+                font-size: 14px;
+                width: 70px;
+                height: 30px;
+            }
+
+            .boardDetail-title {
+                font-size: 16px;
+            }
+        }
+
+        .board-views {
+            width: 25%;
+            font-size: 14px;
+
             img {
-                height: 150px;
+                width: 20px;
+                height: 20px;
+            }
+        }
+
+        .boardDetail-date {
+            font-size: 12px;
+        }
+
+        .boardDetail-writerContainer {
+            font-size: 14px;
+
+            .boardDetail-userProfile {
+                img {
+                    width: 30px;
+                    height: 30px;
+                }
+
+                .boardDetail-nickname {
+                    font-size: 14px;
+                }
+            }
+        }
+
+        .boardDetail-tagContainer {
+            .boardDetail-tagBox {
+                font-size: 12px;
+                height: 25px;
             }
         }
 
         .boardDetail-container {
-            .boardDetail-titleContainer {
-                display: block;
-                margin-bottom: 0;
-
-                .board-Type {
-                    font-size: 14px;
-                    width: 70px;
-                    height: 30px;
-                }
-
-                .boardDetail-titleBox {
-                    .boardDetail-title {
-                        font-size: 16px;
-                        width: 75%;
-                    }
-
-                    .board-views {
-                        width: 25%;
-                        font-size: 14px;
-
-                        img {
-                            width: 20px;
-                            height: 20px;
-                        }
-                    }
-                }
-            }
-
             .boardDetail-contentsContainer {
-                .boardDetail-contents {
-                    .ql-container {
-                        font-size: 14px;
-                    }
-                }
-            }
-
-            .boardDetail-writerContainer {
-                font-size: 14px;
-
-                .boardDetail-date {
-                    display: block;
-                }
-
-                .boardDetail-userProfile {
-                    img {
-                        width: 35px;
-                        height: 35px;
-                    }
-
-                    .boardDetail-nickname {
-                        font-size: 14px;
-                    }
-                }
-            }
-
-            .boardDetail-tagContainer {
-                .boardDetail-tagBox {
-                    font-size: 12px;
-                    height: 25px;
-                }
-            }
-
-            .boardDetail-contentsContainer {
-                margin: 10px 0 30px 0;
+                margin: 20px 0 30px 0;
                 font-size: 14px;
             }
 
@@ -317,7 +308,12 @@
                 }
             }
         }
+
+        .boardDetail-container {
+            padding: 10px 10px;
+        }
     }
+
 
     .skeleton-boardDetailBackBtn {
         width: 40%;

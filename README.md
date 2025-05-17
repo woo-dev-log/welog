@@ -63,7 +63,10 @@ lodash-es in debounce
 ## 스크린샷
 
 ### 메인 화면
-![메인-상단](https://github.com/woo-dev-log/welog/assets/110772642/272f3f66-fed7-4382-99ed-b3185e776d23)
+<div align="center">
+  <img src="https://github.com/user-attachments/assets/24260c28-8191-4fe5-800e-434baba7b600" width="49%">
+  <img src="https://github.com/user-attachments/assets/dfe5516d-647b-429e-afdd-4d6719831902" width="49%">
+</div>
 
 ### 유저 화면
 ![유저보드](https://github.com/woo-dev-log/welog/assets/110772642/d2b06569-f1d6-4d99-bf5e-790c8dc7e022)

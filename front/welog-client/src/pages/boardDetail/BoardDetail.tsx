@@ -139,19 +139,28 @@ const BoardDetail = () => {
                                         <p>{boardDetail[0].views}</p>
                                     </div>
                                 </div>
-                                <div className="boardDetail-titleContainer">
-                                    <div className="board-Type">{boardTypeText(boardDetail[0].boardType)}</div>
-                                    <h2 className="boardDetail-title">{boardDetail[0].title}</h2>
+
+                                <div className="boardDetail-subContainer">
+                                    <div className="boardDetail-titleContainer">
+                                        <div className="board-Type">{boardTypeText(boardDetail[0].boardType)}</div>
+                                        <h2 className="boardDetail-title">{boardDetail[0].title}</h2>
+                                    </div>
+
+                                    <div className="boardDetail-tagContainer">
+                                        {boardDetail[0].tags && boardDetail[0].tags.split(",").map((v, i) => (
+                                            <p key={i}
+                                                className="boardDetail-tagBox"
+                                                onClick={() => {
+                                                    navigate("/?keyword=" + v)
+                                                }}
+                                            >{v}</p>
+                                        ))}
+                                    </div>
                                 </div>
 
                                 <div className="boardDetail-date">
                                     <p className="boardDetail-rgstrDate">{DayFormat(boardDetail[0].rgstrDate, 1)} 작성</p>
                                     {boardDetail[0].updateDate && <p className="boardDetail-rgstrDate">{DayFormat(boardDetail[0].updateDate, 1)} 수정</p>}
-                                </div>
-                                <div className="boardDetail-tagContainer">
-                                    {boardDetail[0].tags && boardDetail[0].tags.split(",").map((v, i) => (
-                                        <p key={i} className="boardDetail-tagBox">{v}</p>
-                                    ))}
                                 </div>
                             </div>
                         </div>

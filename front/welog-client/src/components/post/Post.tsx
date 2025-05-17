@@ -11,6 +11,7 @@ import { ToastError } from "../Toast";
 import './Post.scss';
 import Category from "../category/Category";
 import Select from "react-select";
+import Scroll from "../Scroll";
 
 interface BoardType {
     boardNo: number;
@@ -121,6 +122,7 @@ const Post = () => {
             setBoardList(userBoardPost);
         } else if (keyword && searchPost) {
             setBoardList(searchPost);
+            Scroll();
         } else if (post) {
             setBoardList(post);
         }

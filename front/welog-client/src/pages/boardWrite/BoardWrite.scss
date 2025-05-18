@@ -6,6 +6,10 @@
     font-size: 24px;
     margin-bottom: 20px;
     font-family: "LINESeedKR-Bd";
+
+    &:hover {
+        color: coral;
+    }
 }
 
 .boardWrite-CategoryBlock {
@@ -201,7 +205,7 @@
     }
 }
 
-@media (max-width: 768px) {
+@media (max-width: 767px) {
     .boardWrite-backbutton {
         font-size: 18px;
         margin-bottom: 10px;

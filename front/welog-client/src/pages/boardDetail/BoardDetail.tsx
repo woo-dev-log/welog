@@ -118,12 +118,13 @@ const BoardDetail = () => {
                     <p className="boardDetail-backbutton" onClick={() => navigate(-1)}>&lt;&nbsp;&nbsp;이전으로</p>
                     <section className="boardDetail-section">
                         <div className="boardDetail-topContainer">
-                            <img
-                                src={`${ServerImgUrl}${boardDetail[0].boardImgUrl}`}
-                                alt="boardThumbnail"
-                                loading="lazy"
-                                className="boardDetail-boardThumbnail"
-                            />
+                            <div className="boardDetail-boardThumbnail">
+                                <img
+                                    src={`${ServerImgUrl}${boardDetail[0].boardImgUrl}`}
+                                    alt="boardThumbnail"
+                                    loading="lazy"
+                                />
+                            </div>
 
                             <div className="boardDetail-profileContainer">
                                 <div className="boardDetail-writerContainer">

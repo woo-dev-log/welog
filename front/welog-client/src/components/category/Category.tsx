@@ -22,10 +22,10 @@ const Category = () => {
     }, [type]);
 
     return <div className="board-Type">
-        <button className={boardTypeNum === 1 ? "board-TypeBtnOn" : "board-TypeBtnOff"} onClick={() => boardTypeOnClick(1)}>개발</button>
-        <button className={boardTypeNum === 2 ? "board-TypeBtnOn" : "board-TypeBtnOff"} onClick={() => boardTypeOnClick(2)}>하루</button>
-        <button className={boardTypeNum === 3 ? "board-TypeBtnOn" : "board-TypeBtnOff"} onClick={() => boardTypeOnClick(3)}>문의</button>
-        <button className={boardTypeNum === 0 ? "board-TypeBtnOn" : "board-TypeBtnOff"} onClick={() => boardTypeOnClick(0)}>테스트</button>
+        <div className={`board-TypeBtn ${boardTypeNum === 1 ? "isActive" : ""}`} onClick={() => boardTypeOnClick(1)}>개발</div>
+        <div className={`board-TypeBtn ${boardTypeNum === 2 ? "isActive" : ""}`} onClick={() => boardTypeOnClick(2)}>하루</div>
+        <div className={`board-TypeBtn ${boardTypeNum === 3 ? "isActive" : ""}`} onClick={() => boardTypeOnClick(3)}>문의</div>
+        <div className={`board-TypeBtn ${boardTypeNum === 0 ? "isActive" : ""}`} onClick={() => boardTypeOnClick(0)}>테스트</div>
     </div>
 }
 

@@ -44,9 +44,7 @@ const Board = () => {
                     {searchParams.get("keyword")
                         ? <p>{searchParams.get("keyword")} 검색 결과 총 {boardCnt}개의 글을 찾았어요</p>
                         : <p>총 {boardCnt}개의 글이 있어요</p>}
-                    <div className="board-button">
-                        <Button onClick={writeBoardOnclick} text="글쓰기" />
-                    </div>
+                    {userInfo[0].userNo !== 0 && <div className="board-button" onClick={writeBoardOnclick}>글쓰기</div>}
                 </div>
             </div>
             <Post />

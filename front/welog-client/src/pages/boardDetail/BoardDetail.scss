@@ -33,17 +33,22 @@
     font-size: 24px;
     margin-bottom: 20px;
     font-family: "LINESeedKR-Bd";
+
+    &:hover {
+        color: coral;
+    }
 }
 
 .boardDetail-section {
     background-color: var(--board-color);
     transition: 0.3s ease;
+    border-radius: 10px;
 
     .boardDetail-topContainer {
         display: flex;
         flex-direction: row-reverse;
         width: 100%;
-        height: 400px;
+        height: 350px;
     }
 
     .boardDetail-profileContainer {
@@ -58,7 +63,16 @@
 
     .boardDetail-boardThumbnail {
         width: 60%;
-        height: 100%;
+        padding: 30px 30px 10px;
+        box-sizing: border-box;
+        object-fit: cover;
+
+        img {
+            object-fit: cover;
+            border-radius: 10px;
+            width: 100%;
+            height: 100%;
+        }
     }
 
     .boardDetail-subContainer {
@@ -168,7 +182,7 @@
                 }
 
                 .ql-syntax {
-                    background-color: #2E2E2E;
+                    background-color: #2f2f2f;
                     border-radius: 5px;
                     padding: 10px;
                     overflow: auto;
@@ -178,10 +192,10 @@
 
                 blockquote {
                     border-left: 4px solid #ccc;
-                    background-color: #2E2E2E;
+                    background-color: #2f2f2f;
                     border-left-color: coral;
                     margin: 0px 0px;
-                    color: white;
+                    color: #F1F3F5;
                     padding: 5px 20px;
                 }
 
@@ -190,7 +204,7 @@
                     padding: 2px 4px;
                     border-radius: 3px;
                     background-color: coral;
-                    color: white;
+                    color: #F1F3F5;
                 }
 
                 img {
@@ -243,7 +257,7 @@
     }
 }
 
-@media (max-width: 768px) {
+@media (max-width: 767px) {
     .boardDetail-backbutton {
         font-size: 18px;
         margin-bottom: 10px;
@@ -258,7 +272,7 @@
         .boardDetail-boardThumbnail {
             width: 100%;
             height: 180px;
-            object-fit: cover;
+            padding: 20px;
         }
 
         .boardDetail-profileContainer {

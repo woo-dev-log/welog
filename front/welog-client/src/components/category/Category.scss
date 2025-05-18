@@ -1,44 +1,51 @@
 .board-Type {
     display: flex;
-    gap: 10px;
+    overflow-x: auto;
+    white-space: nowrap;
+    width: 90%;
 }
 
-.board-TypeBtnOn {
+.board-TypeBtn {
+    display: flex;
+    justify-content: center;
+    align-items: center;
     cursor: pointer;
-    background-color: coral;
-    width: 80px;
-    height: 40px;
-    border: none;
-    border-radius: 4px;
-    font-size: 16px;
-    font-family: "LINESeedKR-Bd";
-    color: #F1F3F5;
-}
-
-.board-TypeBtnOff {
-    cursor: pointer;
-    background-color: var(--board-color);
-    border: 1px solid rgba(128, 128, 128, 0.3);
-    transition: 0.3s ease;
-    width: 80px;
-    height: 40px;
-    border-radius: 4px;
-    font-size: 16px;
+    font-size: 18px;
     font-family: "LINESeedKR-Bd";
     color: var(--font-color);
+    padding: 10px 20px;
+    position: relative;
 
     &:hover {
+        color: coral;
+    }
+
+    &.isActive {
+        color: coral;
+    }
+
+    &::after {
+        content: '';
+        position: absolute;
+        bottom: 0;
+        left: 50%;
+        width: 0;
+        height: 2px;
         background-color: coral;
-        color: #F1F3F5;
+        transition: all 0.3s ease;
+    }
+
+    &.isActive::after {
+        width: 100%;
+        left: 0;
     }
 }
 
-@media (max-width: 768px) {
-
-    .board-TypeBtnOn,
-    .board-TypeBtnOff {
+@media (max-width: 767px) {
+    .board-TypeBtn {
         font-size: 14px;
         width: 70px;
         height: 35px;
+        padding: 0;
     }
 }

@@ -4,7 +4,7 @@ body[data-theme='light'] {
     transition: 0.3s ease;
 
     --back-color: #F1F3F5;
-    --font-color: #121212;
+    --font-color: #2f2f2f;
     --board-color: #FFFFFF;
     --element-color: #DEE2E6;
     --element-hover-color: #E9ECEF;
@@ -12,13 +12,13 @@ body[data-theme='light'] {
 
 body[data-theme='dark'] {
     color: #F1F3F5;
-    background-color: #121212;
+    background-color: #2f2f2f;
 
-    --back-color: #121212;
+    --back-color: #2f2f2f;
     --font-color: #F1F3F5;
-    --board-color: #1E1E1E;
-    --element-color: #252525;
-    --element-hover-color: #2E2E2E;
+    --board-color: #232323;
+    --element-color: #323232;
+    --element-hover-color: #383838;
 }
 
 .app-block {
@@ -55,7 +55,7 @@ input {
     }
 }
 
-@media (max-width: 768px) {
+@media (max-width: 767px) {
     .app-block {
         margin: 80px 20px 20px;
     }

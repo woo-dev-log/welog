@@ -23,29 +23,19 @@
         }
 
         .board-button {
-            text-align: center;
+            cursor: pointer;
+            font-size: 18px;
+            font-family: "LINESeedKR-Bd";
+            color: var(--font-color);
 
-            button {
-                cursor: pointer;
-                transition: 0.3s ease;
-                background-color: coral;
-                width: 120px;
-                height: 40px;
-                border: none;
-                border-radius: 10px;
-                font-size: 16px;
-                font-family: "LINESeedKR-Bd";
-                color: white;
-
-                &:hover {
-                    opacity: 0.8;
-                }
+            &:hover {
+                color: coral;
             }
         }
     }
 }
 
-@media (max-width: 768px) {
+@media (max-width: 767px) {
     .board-postContainer {
         input {
             width: 100%;

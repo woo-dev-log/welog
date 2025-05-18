@@ -12,6 +12,7 @@ import './Post.scss';
 import Category from "../category/Category";
 import Select from "react-select";
 import Scroll from "../Scroll";
+import Line from "../line/Line";
 
 interface BoardType {
     boardNo: number;

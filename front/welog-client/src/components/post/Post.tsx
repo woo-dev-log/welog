@@ -10,9 +10,7 @@ import Paging from "../paging/Paging";
 import { ToastError } from "../Toast";
 import './Post.scss';
 import Category from "../category/Category";
-import Select from "react-select";
 import Scroll from "../Scroll";
-import Line from "../line/Line";
 
 interface BoardType {
     boardNo: number;
@@ -45,27 +43,7 @@ const Post = () => {
     const contentsWordLength = window.innerWidth < 1024 ? 38 : 58;
     const [isWrap, setIsWrap] = useState(true);
     const [sortBy, setSortBy] = useRecoilState(boardSort);
-
-    const sortOption = [
-        { value: "rgstrDate", label: "최신순" },
-        { value: "commentCnt", label: "댓글순" },
-        { value: "views", label: "조회순" }
-    ]
-
-    const dot = (color = 'transparent') => ({
-        display: 'flex',
-        alignItems: 'center',
-
-        ':before': {
-            backgroundColor: color,
-            borderRadius: 10,
-            content: '" "',
-            display: 'block',
-            marginRight: 8,
-            height: 10,
-            width: 10,
-        },
-    });
+    const [filterIsOpen, setFilterIsOpen] = useState(false);
 
     const { data: post, isLoading } = useQuery<BoardType[]>(['boardList', { boardTypeParam, page, sortBy }],
         () => getBoardApi(boardTypeParam ? Number(boardTypeParam) : 1, page ? page : "1", sortBy),
@@ -118,6 +96,15 @@ const Post = () => {
         }
     }, []);
 
+    const openFilter = (filter: string) => {
+        if (filterIsOpen) {
+            setSortBy(filter);
+            setFilterIsOpen(false);
+        } else {
+            setFilterIsOpen(true);
+        }
+    }
+
     useEffect(() => {
         if (userNickname && userBoardPost) {
             setBoardList(userBoardPost);
@@ -153,25 +140,17 @@ const Post = () => {
                 <section>
                     <div className="category-container">
                         {!keyword && !userNickname && <Category />}
-                        <Select className="select-container"
-                            options={sortOption}
-                            defaultValue={sortOption[0]}
-                            isDisabled={false}
-                            isLoading={false}
-                            isClearable={false}
-                            isRtl={false}
-                            styles={{
-                                option: (provided: any, state: { isSelected: boolean; isFocused: boolean }) => ({
-                                    ...provided,
-                                    backgroundColor: state.isSelected ? 'coral' : state.isFocused ? 'lightsteelblue' : 'white',
-                                    color: state.isSelected || state.isFocused ? 'white' : 'black',
-                                }),
-                                input: (styles: any) => ({ ...styles, ...dot() }),
-                                placeholder: (styles: any) => ({ ...styles, ...dot('coral') }),
-                                singleValue: (styles: any) => ({ ...styles, ...dot('coral') }),
-                            }}
-                            onChange={(option: any) => option && setSortBy(option.value)} />
                         <div className="template-container">
+                            <div className="filter-button"
+                                onClick={() => setFilterIsOpen(!filterIsOpen)}>필터</div>
+                            {filterIsOpen && <div className="filter-container">
+                                <div className={`filter-option ${sortBy === "rgstrDate" ? "active" : ""}`}
+                                    onClick={() => openFilter("rgstrDate")}>최신순</div>
+                                <div className={`filter-option ${sortBy === "commentCnt" ? "active" : ""}`}
+                                    onClick={() => openFilter("commentCnt")}>댓글순</div>
+                                <div className={`filter-option ${sortBy === "views" ? "active" : ""}`}
+                                    onClick={() => openFilter("views")}>조회순</div>
+                            </div>}
                             <button className={`template-button-wrap ${!isWrap ? "" : "disabled"}`}
                                 onClick={() => setIsWrap(true)} disabled={isWrap}>
                                 <img src="/wrap.svg" alt="wrap" />
@@ -241,7 +220,7 @@ const Post = () => {
                         page={currentPage}
                         setCurrentPage={setCurrentPage}
                     />
-                </section>}
+                </section >}
         </>
     )
 }

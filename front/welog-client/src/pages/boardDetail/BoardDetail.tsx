@@ -44,7 +44,7 @@ const BoardDetail = () => {
             case 1:
                 return '개발';
             case 2:
-                return '하루';
+                return '학습';
             case 3:
                 return '문의';
             case 0:

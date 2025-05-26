@@ -1,10 +1,51 @@
 .category-container {
     display: flex;
+    justify-content: space-between;
+    position: relative;
 
-    .select-container {
+    .filter-button {
+        cursor: pointer;
+        font-size: 18px;
+        padding: 0 20px;
+        height: 40px;
         display: flex;
-        margin-left: auto;
+        align-items: center;
         margin-right: 10px;
+        color: dodgerblue;
+
+        &:hover {
+            border-radius: 5px;
+            background-color: var(--element-hover-color);
+        }
+    }
+
+    .filter-container {
+        position: absolute;
+        top: 100%;
+        right: 170px;
+        width: 120px;
+        padding: 5px;
+        background-color: var(--board-color);
+        border-radius: 10px;
+        border: 1px solid var(--element-hover-color);
+        z-index: 1;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+    }
+
+    .filter-option {
+        cursor: pointer;
+        padding: 10px;
+
+        &:hover {
+            border-radius: 5px;
+            background-color: var(--element-hover-color);
+        }
+
+        &.active {
+            color: dodgerblue;
+        }
     }
 
     .template-container {
@@ -245,12 +286,6 @@
 }
 
 @media (max-width: 1024px) {
-    .category-container {
-        .select-container {
-            margin-left: 10px;
-        }
-    }
-
     .board-block {
         &.wrap {
             width: 45%;
@@ -268,16 +303,24 @@
 
 @media (max-width: 767px) {
     .category-container {
-        display: block;
+        flex-direction: column-reverse;
 
-        .select-container {
+        .filter-container {
+            top: 50%;
+            right: 120px;
+        }
+
+        .filter-option {
             font-size: 14px;
-            margin: 20px auto;
-            justify-content: center;
+        }
+
+        .filter-button {
+            font-size: 14px;
+            height: 35px;
         }
 
         .template-container {
-            margin-top: 20px;
+            margin-bottom: 10px;
             justify-content: center;
 
             button {

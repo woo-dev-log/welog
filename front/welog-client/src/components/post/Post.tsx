@@ -139,7 +139,9 @@ const Post = () => {
                 : boardList.length > 0 &&
                 <section>
                     <div className="category-container">
-                        {!keyword && !userNickname && <Category />}
+                        {!keyword && !userNickname
+                            ? <Category />
+                            : <div />}
                         <div className="template-container">
                             <div className="filter-button"
                                 onClick={() => setFilterIsOpen(!filterIsOpen)}>필터</div>
